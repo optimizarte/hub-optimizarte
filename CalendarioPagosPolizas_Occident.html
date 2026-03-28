@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calendari de Pagaments · OPTIMIZARTE by Occident</title>
+<title>Calendari de Pagaments &middot; OPTIMIZARTE by Occident</title>
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--red:#DC0028;--red-d:#b8001e;--red-l:#fff0f2;--dark:#202020;--gray:#414141;--gray-3:#BEBEBE;--gray-4:#E7E6E6;--border:#E0E0E0;--bg:#F2F2F2;--radius:8px;--shadow:0 2px 12px rgba(0,0,0,.10);}
@@ -18,9 +18,10 @@ body{font-family:'Open Sans',Arial,sans-serif;background:var(--bg);color:var(--d
 .hdr-r{text-align:right;}
 .hdr-title{font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;color:#fff;}
 .hdr-sub{font-size:11px;color:rgba(255,255,255,.65);margin-top:2px;}
-.wrap{max-width:1700px;margin:0 auto;padding:20px 24px;}
+.wrap{max-width:1720px;margin:0 auto;padding:20px 24px;}
 .notice{background:#FFF8DC;border:1px solid #F0C040;border-radius:6px;padding:8px 14px;font-size:11px;color:#7A6000;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:8px;margin-bottom:14px;}
 .notice svg{width:15px;height:15px;flex-shrink:0;}
+/* CLIENT CARD - prenedor +60% */
 .client-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);border-left:6px solid var(--red);padding:12px 20px;margin-bottom:14px;display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;}
 .c-icon{width:40px;height:40px;background:var(--red-l);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .c-icon svg{width:20px;height:20px;}
@@ -28,23 +29,24 @@ body{font-family:'Open Sans',Arial,sans-serif;background:var(--bg);color:var(--d
 .pren-block{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0;}
 .pren-label{font-size:9px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.9px;font-family:'Inter',sans-serif;white-space:nowrap;}
 .pren-row{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap;}
-.pren-entry{display:flex;align-items:flex-end;gap:8px;background:#FAFAFA;border-radius:6px;padding:6px 10px;border:1px solid var(--border);flex-shrink:0;}
-.pren-n{width:20px;height:20px;border-radius:50%;background:var(--red);color:#fff;font-size:10px;font-weight:700;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-bottom:3px;}
+.pren-entry{display:flex;align-items:flex-end;gap:8px;background:#FAFAFA;border-radius:6px;padding:10px 12px;border:1px solid var(--border);flex-shrink:0;}
+.pren-n{width:26px;height:26px;border-radius:50%;background:var(--red);color:#fff;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-bottom:3px;}
 .fs{display:flex;flex-direction:column;gap:3px;}
-.fs label{font-size:9px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.8px;font-family:'Inter',sans-serif;}
-.fs input{border:none;border-bottom:1.5px solid var(--gray-4);padding:3px 2px;font-size:12.5px;font-weight:600;color:var(--dark);font-family:'Poppins',sans-serif;background:transparent;outline:none;transition:border-color .2s;width:100%;}
+.fs label{font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.8px;font-family:'Inter',sans-serif;}
+.fs input{border:none;border-bottom:1.5px solid var(--gray-4);padding:4px 2px;font-size:14px;font-weight:600;color:var(--dark);font-family:'Poppins',sans-serif;background:transparent;outline:none;transition:border-color .2s;width:100%;}
 .fs input:focus{border-bottom-color:var(--red);}
-.fs input::placeholder{font-weight:400;color:var(--gray-3);font-size:10.5px;}
-.fs.wn{min-width:160px;}.fs.wi{min-width:100px;}
-.pren-del{background:none;border:1.5px solid var(--gray-4);color:var(--gray-3);border-radius:5px;width:24px;height:24px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;margin-bottom:3px;}
+.fs input::placeholder{font-weight:400;color:var(--gray-3);font-size:12px;}
+.fs.wn{min-width:200px;}.fs.wi{min-width:130px;}
+.pren-del{background:none;border:1.5px solid var(--gray-4);color:var(--gray-3);border-radius:5px;width:28px;height:28px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;margin-bottom:3px;}
 .pren-del:hover{border-color:var(--red);color:var(--red);background:var(--red-l);}
-.btn-ap{display:inline-flex;align-items:center;gap:5px;background:var(--red);color:#fff;border:none;border-radius:5px;padding:6px 12px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:background .15s;white-space:nowrap;align-self:flex-end;margin-bottom:3px;flex-shrink:0;}
+.btn-ap{display:inline-flex;align-items:center;gap:5px;background:var(--red);color:#fff;border:none;border-radius:5px;padding:8px 14px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s;white-space:nowrap;align-self:flex-end;margin-bottom:3px;flex-shrink:0;}
 .btn-ap:hover{background:var(--red-d);}
-.btn-ap svg{width:12px;height:12px;}
+.btn-ap svg{width:14px;height:14px;}
 .fld{display:flex;flex-direction:column;gap:3px;flex-shrink:0;}
 .fld label{font-size:9px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.9px;font-family:'Inter',sans-serif;}
 .fld input{border:none;border-bottom:2px solid var(--gray-4);padding:4px 2px;font-size:13px;font-weight:600;color:var(--dark);font-family:'Poppins',sans-serif;background:transparent;outline:none;transition:border-color .2s;}
 .fld input:focus{border-bottom-color:var(--red);}
+/* FLAG DROPDOWN */
 .flag-wrap{position:relative;flex-shrink:0;align-self:flex-end;margin-bottom:5px;}
 .flag-btn{display:flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--border);border-radius:6px;padding:5px 8px;cursor:pointer;user-select:none;white-space:nowrap;transition:border-color .15s;}
 .flag-btn:hover{border-color:var(--red);}
@@ -59,57 +61,68 @@ body{font-family:'Open Sans',Arial,sans-serif;background:var(--bg);color:var(--d
 .flag-opt:hover{background:var(--red-l);color:var(--red);}
 .flag-opt.is-active{background:var(--red);color:#fff;font-weight:600;}
 .flag-opt svg{display:block;width:22px;height:auto;border-radius:1px;flex-shrink:0;}
+/* SECTION BOX */
 .sbox{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:14px;}
 .shdr{background:var(--dark);padding:11px 16px;display:flex;align-items:center;gap:9px;}
 .shdr h2{font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;color:#fff;}
 .shdr svg.hi{width:17px;height:17px;opacity:.7;flex-shrink:0;}
 .tblwrap,.calwrap{overflow-x:auto;}
-table.cal{width:100%;border-collapse:collapse;table-layout:fixed;min-width:1200px;}
+/* CALENDAR - row height +25% (11->14px padding), permanent column stripes, no conditional amber */
+table.cal{width:100%;border-collapse:collapse;table-layout:auto;min-width:1400px;}
 table.cal thead tr{background:var(--red);}
-table.cal th{color:#fff;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:9px 5px;text-align:center;white-space:nowrap;}
-table.cal th.c-pren{text-align:left;padding-left:10px;width:140px;}
-table.cal th.c-ico{width:30px;padding:9px 3px;}
+table.cal th{color:#fff;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:10px 5px;text-align:center;white-space:nowrap;}
+table.cal th.c-pren{text-align:left;padding-left:10px;min-width:36px;}
+table.cal th.c-ico{width:28px;padding:10px 3px;}
 table.cal th.c-mon{width:84px;}
+table.cal th.c-notes{text-align:left;padding-left:8px;min-width:120px;}
 table.cal th small{font-size:9px;opacity:.7;margin-left:2px;font-weight:400;}
-table.cal th.c-curr{background:#b00020;}table.cal th.c-newy{background:#a00018;}
-.cal-pren-hide{display:none!important;}
-.cal-eye{background:none;border:none;color:rgba(255,255,255,.55);cursor:pointer;font-size:12px;padding:0 0 0 4px;line-height:1;vertical-align:middle;}
-.cal-eye:hover{color:#fff;}
-table.cal tbody tr:nth-child(even){background:#FAFAFA;}
-table.cal tbody tr:hover{background:#fff4f6;}
-table.cal td{padding:11px 5px;font-size:13px;color:var(--gray);border-bottom:1px solid var(--border);text-align:center;font-family:'Inter',sans-serif;vertical-align:middle;}
-table.cal td.c-pren{text-align:left;padding-left:10px;font-size:13px;color:var(--dark);font-weight:600;font-family:'Poppins',sans-serif;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-table.cal td.c-ico{padding:5px 3px;text-align:center;}
-table.cal td.c-amt{font-size:15px;}
-table.cal td.c-has{background:#fffbf0;color:#b45309;font-weight:700;font-size:15px;}
-table.cal td.c-now{background:rgba(220,0,40,.04);}
-table.cal td.c-has.c-now{background:#fff0e6;color:#c2410c;}
-table.cal tfoot tr{background:var(--dark);}
-table.cal tfoot td{color:rgba(255,255,255,.5);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:9px 5px;text-align:center;border:none;}
-table.cal tfoot td.cf-pren{text-align:left;padding-left:10px;opacity:.2;font-size:10px;letter-spacing:.8px;text-transform:uppercase;}
-table.cal tfoot td.cf-ico{padding:3px;}
-table.cal tfoot td.cf-lbl{text-align:left;padding-left:8px;font-size:10px;letter-spacing:.8px;text-transform:uppercase;opacity:.4;}
-table.cal tfoot td.cf-has{color:#fbbf24;font-size:15px;}
-table.cal tfoot td.cf-nil{opacity:.15;font-weight:400;}
+table.cal th.c-curr{background:#b00020;}
+table.cal th.c-newy{background:#a00018;}
+/* permanent alternating column stripes on month+notes cols */
+table.cal tbody td.c-amt:nth-child(odd){background:#F2F6FA;}
+table.cal tbody td.c-amt:nth-child(even){background:#FFFFFF;}
+table.cal td.c-amt{font-weight:500;font-size:16px;}
+table.cal td.c-has{color:#0055a5;font-weight:700;font-size:14px;}
+table.cal td.c-notes{text-align:left;padding-left:8px;color:var(--gray);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;background:#fff!important;}
+/* eye button: always visible */
+.cal-eye{background:none;border:1px solid rgba(255,255,255,.35);border-radius:4px;color:rgba(255,255,255,.8);cursor:pointer;font-size:11px;padding:1px 4px;line-height:1.3;vertical-align:middle;display:inline!important;}
+.cal-eye:hover{border-color:#fff;color:#fff;}
+/* hide only body/foot cells, NOT the header */
+.c-pren-cell.cal-pren-hide,.cf-pren-cell.cal-pren-hide{display:none!important;}
+table.cal tbody tr:hover{background:rgba(220,0,40,.03);}
+table.cal td{padding:14px 5px;font-size:12px;color:var(--gray);border-bottom:1px solid var(--border);text-align:center;font-family:'Inter',sans-serif;vertical-align:middle;}
+table.cal td.c-pren-cell{text-align:left;padding-left:10px;font-size:12px;color:var(--dark);font-weight:600;font-family:'Inter',sans-serif;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+table.cal td.c-ico{padding:5px 3px;text-align:center;background:#fff;}
+
+table.cal tfoot tr{background:#202020;}
+table.cal tfoot td{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:7px 5px;text-align:center;border:none;background:#202020!important;color:rgba(255,255,255,.45);}
+table.cal tfoot td.cf-pren-cell{text-align:left;padding-left:10px;color:rgba(255,255,255,.25);font-size:9px;letter-spacing:.8px;text-transform:uppercase;background:#202020!important;}
+table.cal tfoot td.cf-ico{padding:3px;background:#202020!important;}
+table.cal tfoot td.cf-lbl{text-align:left;padding-left:8px;font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.35);background:#202020!important;}
+table.cal tfoot td.cf-has{color:#fbbf24;font-size:14px;font-weight:700;background:#202020!important;}
+table.cal tfoot td.cf-nil{color:rgba(255,255,255,.18);font-weight:400;background:#202020!important;}
+table.cal tfoot td.cf-notes{background:#202020!important;}
+/* COL VISIBILITY */
 .vis-box{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:14px;padding:10px 16px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
 .vis-lbl{font-size:9.5px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.7px;font-family:'Inter',sans-serif;white-space:nowrap;margin-right:4px;display:flex;align-items:center;gap:4px;}
 .vbtn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:16px;border:1.5px solid var(--red);font-size:10.5px;font-weight:600;color:var(--red);background:var(--red-l);font-family:'Inter',sans-serif;cursor:pointer;transition:all .16s;user-select:none;white-space:nowrap;}
 .vbtn.off{border-color:#D0D0D0;color:#AAAAAA;background:#fff;}
+/* FORM TABLE - row +50%, text+icons +30% */
 table.pt{width:100%;border-collapse:collapse;table-layout:fixed;}
-col.cn{width:28px;}col.ct{width:11%;}col.ci{width:30px;}col.cco{width:90px;}col.cr{width:10%;}col.cp{width:100px;}col.cm{width:92px;}col.cd{width:50px;}col.cv{width:125px;}col.cfp{width:104px;}col.co{}col.ca{width:30px;}
+col.cn{width:28px;}col.ct{width:11%;}col.ci{width:36px;}col.cco{width:90px;}col.cr{width:10%;}col.cp{width:100px;}col.cm{width:92px;}col.cd{width:50px;}col.cv{width:125px;}col.cfp{width:104px;}col.co{}col.ca{width:30px;}
 table.pt thead tr{background:var(--red);}
 table.pt th{color:#fff;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;padding:9px 7px;text-align:left;white-space:nowrap;}
 table.pt th.th-n{text-align:center;padding-left:0;}table.pt th.th-i{text-align:center;padding:9px 3px;}table.pt th.th-a{padding:0;}
 table.pt tbody tr:nth-child(even){background:#FAFAFA;}table.pt tbody tr:hover{background:#fff8f8;}
-table.pt td{padding:5px 6px;border-bottom:1px solid var(--border);vertical-align:middle;font-size:12px;font-family:'Inter',sans-serif;}
-table.pt td.td-n{text-align:center;font-size:11px;color:var(--gray-3);font-weight:700;background:#F8F8F8;border-right:1px solid var(--border);}
+table.pt td{padding:8px 6px;border-bottom:1px solid var(--border);vertical-align:middle;font-size:16px;font-family:'Inter',sans-serif;}
+table.pt td.td-n{text-align:center;font-size:13px;color:var(--gray-3);font-weight:700;background:#F8F8F8;border-right:1px solid var(--border);}
 table.pt td.td-i{text-align:center;padding:4px;background:#FAFAFA;}
 table.pt td.td-v input{text-align:right;}
-table.pt td input,table.pt td select{border:none;border-bottom:1.5px solid var(--gray-4);padding:4px 2px;font-size:11.5px;color:var(--dark);font-family:'Inter',sans-serif;background:transparent;outline:none;transition:border-color .2s;width:100%;-webkit-appearance:none;appearance:none;cursor:pointer;}
+table.pt td input,table.pt td select{border:none;border-bottom:1.5px solid var(--gray-4);padding:5px 2px;font-size:15px;color:var(--dark);font-family:'Inter',sans-serif;background:transparent;outline:none;transition:border-color .2s;width:100%;-webkit-appearance:none;appearance:none;cursor:pointer;}
 table.pt td input{cursor:text;}
 table.pt td input:focus,table.pt td select:focus{border-bottom-color:var(--red);}
-table.pt td input::placeholder{color:var(--gray-3);font-size:10.5px;}
-.co-badge{display:inline-flex;align-items:center;gap:5px;border-radius:4px;padding:2px 7px;font-size:10.5px;font-weight:700;font-family:'Inter',sans-serif;white-space:nowrap;}
+table.pt td input::placeholder{color:var(--gray-3);font-size:13px;}
+.co-badge{display:inline-flex;align-items:center;gap:5px;border-radius:4px;padding:2px 7px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;white-space:nowrap;}
 .co-edit{background:none;border:none;cursor:pointer;font-size:11px;opacity:.6;padding:0 1px;line-height:1;flex-shrink:0;}
 .co-edit:hover{opacity:1;}
 .cc-hi{display:flex;align-items:center;gap:4px;}
@@ -120,9 +133,9 @@ table.pt td input::placeholder{color:var(--gray-3);font-size:10.5px;}
 .delbtn:hover{color:var(--red);background:var(--red-l);}
 .delbtn svg{width:14px;height:14px;}
 .col-off{display:none!important;}
-.trow td{padding:8px!important;font-family:'Inter',sans-serif;border-top:2px solid var(--gray-4)!important;border-bottom:none!important;background:#F5F5F5;}
-.tlbl{font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.8px;white-space:nowrap;}
-.tval{text-align:right;font-size:13px;font-weight:700;color:var(--red);padding-right:10px!important;white-space:nowrap;}
+.trow td{padding:6px!important;font-family:'Inter',sans-serif;border-top:2px solid var(--gray-4)!important;border-bottom:none!important;background:#F5F5F5;}
+.tlbl{font-size:9px;font-weight:700;font-family:'Inter',sans-serif;color:var(--gray);text-transform:uppercase;letter-spacing:.8px;white-space:nowrap;}
+.tval{text-align:right;font-size:11px;font-weight:700;font-family:'Inter',sans-serif;color:var(--red);padding-right:10px!important;white-space:nowrap;}
 .btn-ac{margin-left:auto;display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.12);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.2);border-radius:5px;padding:5px 12px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;}
 .btn-ac:hover{background:rgba(255,255,255,.22);color:#fff;}
 .btn-ac svg{width:12px;height:12px;}
@@ -145,20 +158,15 @@ table.pt td input::placeholder{color:var(--gray-3);font-size:10.5px;}
 .foot-lnk svg{width:13px;height:13px;flex-shrink:0;color:var(--red);}
 html[dir="rtl"] .client-card{border-left:none;border-right:6px solid var(--red);flex-direction:row-reverse;}
 html[dir="rtl"] .pren-block{align-items:flex-end;}
-html[dir="rtl"] .pren-row{flex-direction:row-reverse;}
-html[dir="rtl"] .pren-entry{flex-direction:row-reverse;}
+html[dir="rtl"] .pren-row,.html[dir="rtl"] .pren-entry{flex-direction:row-reverse;}
 html[dir="rtl"] .hdr-r{text-align:left;}
 html[dir="rtl"] .flag-menu{right:auto;left:0;}
-html[dir="rtl"] .shdr{flex-direction:row-reverse;}
+html[dir="rtl"] .shdr,.html[dir="rtl"] .actbar,.html[dir="rtl"] .vis-box{flex-direction:row-reverse;}
 html[dir="rtl"] .btn-ac{margin-left:0;margin-right:auto;}
-html[dir="rtl"] .actbar{flex-direction:row-reverse;}
 html[dir="rtl"] table.pt th,html[dir="rtl"] table.pt td{text-align:right;}
 html[dir="rtl"] table.pt th.th-n,html[dir="rtl"] table.pt td.td-n{text-align:center;}
 html[dir="rtl"] table.pt td.td-v input{text-align:left;}
 html[dir="rtl"] .tval{text-align:left;padding-left:10px!important;padding-right:8px!important;}
-html[dir="rtl"] table.cal th,html[dir="rtl"] table.cal td{text-align:right;}
-html[dir="rtl"] table.cal th.c-mon,html[dir="rtl"] table.cal td.c-amt{text-align:center;}
-html[dir="rtl"] table.cal td.c-pren,html[dir="rtl"] table.cal th.c-pren{padding-right:10px;padding-left:5px;text-align:right;}
 @media print{
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
   body{background:var(--bg);padding:0;}
@@ -172,18 +180,18 @@ html[dir="rtl"] table.cal td.c-pren,html[dir="rtl"] table.cal th.c-pren{padding-
 <body>
 <header class="hdr">
   <div class="logo-text">
-    <span class="logo-main">OPTIMIZART€</span>
+    <span class="logo-main">OPTIMIZART&#8364;</span>
     <div class="logo-sub"><span class="logo-by">by</span><span class="logo-occ">Occident</span></div>
   </div>
   <div class="hdr-r">
-    <div class="hdr-title" data-i18n="hdr_title">Calendari de Pagaments de Polisses</div>
-    <div class="hdr-sub" data-i18n="hdr_sub">Document informatiu · OPTIMIZARTE 3.0 · Mediador 17167</div>
+    <div class="hdr-title" data-i18n="hdr_title">Calendari de Pagaments de P&ograve;lisses</div>
+    <div class="hdr-sub" data-i18n="hdr_sub">Document informatiu &middot; OPTIMIZARTE 3.0 &middot; Mediador 17167</div>
   </div>
 </header>
 <div class="wrap">
   <div class="notice">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-    <span data-i18n-html="notice">Afegeix prenedors, introdueix polisses i la <strong>graella de distribucio</strong> s'actualitza automaticament.</span>
+    <span data-i18n-html="notice">Afegeix prenedors, introdueix p&ograve;lisses i la <strong>graella de distribuci&oacute;</strong> s'actualitza autom&agrave;ticament.</span>
   </div>
   <div class="client-card">
     <div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#DC0028" stroke-width="1.8" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
@@ -206,124 +214,110 @@ html[dir="rtl"] table.cal td.c-pren,html[dir="rtl"] table.cal th.c-pren{padding-
         <span class="arr">&#9660;</span>
       </button>
       <div class="flag-menu" id="flagMenu">
-        <div class="flag-opt is-active" data-lang="ca"><svg viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="14" fill="#FCDD09"/><rect y="1.56" width="22" height="1.55" fill="#CF2031"/><rect y="4.67" width="22" height="1.55" fill="#CF2031"/><rect y="7.78" width="22" height="1.55" fill="#CF2031"/><rect y="10.89" width="22" height="1.55" fill="#CF2031"/></svg>Catala</div>
-        <div class="flag-opt" data-lang="es"><svg viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="3.5" fill="#AA151B"/><rect y="3.5" width="22" height="7" fill="#F1BF00"/><rect y="10.5" width="22" height="3.5" fill="#AA151B"/></svg>Espanol</div>
-        <div class="flag-opt" data-lang="fr"><svg viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg"><rect width="7.34" height="14" fill="#002395"/><rect x="7.34" width="7.32" height="14" fill="#fff"/><rect x="14.66" width="7.34" height="14" fill="#ED2939"/></svg>Francais</div>
+        <div class="flag-opt is-active" data-lang="ca"><svg viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="14" fill="#FCDD09"/><rect y="1.56" width="22" height="1.55" fill="#CF2031"/><rect y="4.67" width="22" height="1.55" fill="#CF2031"/><rect y="7.78" width="22" height="1.55" fill="#CF2031"/><rect y="10.89" width="22" height="1.55" fill="#CF2031"/></svg>Catal&#224;</div>
+        <div class="flag-opt" data-lang="es"><svg viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="3.5" fill="#AA151B"/><rect y="3.5" width="22" height="7" fill="#F1BF00"/><rect y="10.5" width="22" height="3.5" fill="#AA151B"/></svg>Espa&#241;ol</div>
+        <div class="flag-opt" data-lang="fr"><svg viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg"><rect width="7.34" height="14" fill="#002395"/><rect x="7.34" width="7.32" height="14" fill="#fff"/><rect x="14.66" width="7.34" height="14" fill="#ED2939"/></svg>Fran&#231;ais</div>
         <div class="flag-opt" data-lang="en"><svg viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg" style="overflow:hidden"><rect width="22" height="14" fill="#012169"/><line x1="0" y1="0" x2="22" y2="14" stroke="#fff" stroke-width="5"/><line x1="22" y1="0" x2="0" y2="14" stroke="#fff" stroke-width="5"/><line x1="0" y1="0" x2="22" y2="14" stroke="#C8102E" stroke-width="2"/><line x1="22" y1="0" x2="0" y2="14" stroke="#C8102E" stroke-width="2"/><rect x="9" y="0" width="4" height="14" fill="#fff"/><rect x="0" y="5" width="22" height="4" fill="#fff"/><rect x="10" y="0" width="2" height="14" fill="#C8102E"/><rect x="0" y="6" width="22" height="2" fill="#C8102E"/></svg>English</div>
-        <div class="flag-opt" data-lang="ar"><svg viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="14" fill="#C1272D"/><polygon points="11,3.2 11.85,5.83 14.61,5.83 12.38,7.45 13.23,10.07 11,8.45 8.77,10.07 9.62,7.45 7.39,5.83 10.15,5.83" fill="none" stroke="#006233" stroke-width="0.75" stroke-linejoin="round"/></svg>&#x627;&#x644;&#x639;&#x631;&#x628;&#x64A;&#x629;</div>
+        <div class="flag-opt" data-lang="ar"><svg viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="14" fill="#C1272D"/><polygon points="11,3.2 11.85,5.83 14.61,5.83 12.38,7.45 13.23,10.07 11,8.45 8.77,10.07 9.62,7.45 7.39,5.83 10.15,5.83" fill="none" stroke="#006233" stroke-width="0.75" stroke-linejoin="round"/></svg>&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</div>
       </div>
     </div>
   </div>
   <div class="sbox">
-    <div class="shdr">
-      <svg class="hi" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
-      <h2 data-i18n="cal_title">Distribucio Mensual de Pagaments</h2>
-    </div>
-    <div class="calwrap"><table class="cal" id="calTable"><thead id="calHead"></thead><tbody id="calBody"><tr><td class="c-pren" colspan="15" style="color:var(--gray-3);font-style:italic;padding:20px 12px;" data-i18n="cal_empty">Introdueix polisses al formulari...</td></tr></tbody><tfoot id="calFoot"></tfoot></table></div>
+    <div class="shdr"><svg class="hi" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/></svg><h2 data-i18n="cal_title">Distribuci&oacute; Mensual de Pagaments</h2></div>
+    <div class="calwrap"><table class="cal" id="calTable"><thead id="calHead"></thead><tbody id="calBody"><tr><td colspan="16" style="color:var(--gray-3);font-style:italic;padding:20px 12px;" data-i18n="cal_empty">Introdueix p&ograve;lisses al formulari per veure la distribuci&oacute; mensual...</td></tr></tbody><tfoot id="calFoot"></tfoot></table></div>
   </div>
   <div class="vis-box" id="visBox">
     <span class="vis-lbl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span data-i18n="vis_lbl">Visible al imprimir:</span></span>
-    <button class="vbtn" id="b-ct" onclick="tc('ct','b-ct')">&#128065; <span data-i18n="v_pren">Prenedor</span></button>
-    <button class="vbtn" id="b-cr" onclick="tc('cr','b-cr')">&#128065; <span data-i18n="v_ram">Ram</span></button>
-    <button class="vbtn" id="b-cp" onclick="tc('cp','b-cp')">&#128065; <span data-i18n="v_pol">N Polissa</span></button>
-    <button class="vbtn" id="b-cm" onclick="tc('cm','b-cm')">&#128065; <span data-i18n="v_mes">Mes</span></button>
-    <button class="vbtn" id="b-cd" onclick="tc('cd','b-cd')">&#128065; <span data-i18n="v_dia">Dia</span></button>
-    <button class="vbtn" id="b-cv" onclick="tc('cv','b-cv')">&#128065; <span data-i18n="v_prima">Prima</span></button>
+    <button class="vbtn" id="b-ct"  onclick="tc('ct','b-ct')">&#128065; <span data-i18n="v_pren">Prenedor</span></button>
+    <button class="vbtn" id="b-cr"  onclick="tc('cr','b-cr')">&#128065; <span data-i18n="v_ram">Ram</span></button>
+    <button class="vbtn" id="b-cp"  onclick="tc('cp','b-cp')">&#128065; <span data-i18n="v_pol">N&ordm; P&ograve;lissa</span></button>
+    <button class="vbtn" id="b-cm"  onclick="tc('cm','b-cm')">&#128065; <span data-i18n="v_mes">Mes</span></button>
+    <button class="vbtn" id="b-cd"  onclick="tc('cd','b-cd')">&#128065; <span data-i18n="v_dia">Dia</span></button>
+    <button class="vbtn" id="b-cv"  onclick="tc('cv','b-cv')">&#128065; <span data-i18n="v_prima">Prima</span></button>
     <button class="vbtn" id="b-cfp" onclick="tc('cfp','b-cfp')">&#128065; <span data-i18n="v_forma">Forma</span></button>
-    <button class="vbtn" id="b-co" onclick="tc('co','b-co')">&#128065; <span data-i18n="v_risc">Risc</span></button>
+    <button class="vbtn" id="b-co"  onclick="tc('co','b-co')">&#128065; <span data-i18n="v_risc">Risc</span></button>
   </div>
   <div class="sbox">
-    <div class="shdr" id="polHdr">
-      <svg class="hi" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/></svg>
-      <h2 id="polTitle">Polisses en vigor / 1</h2>
-      <button class="btn-ac" onclick="addCustomCol()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span data-i18n="btn_col">Afegir columna</span></button>
-    </div>
+    <div class="shdr" id="polHdr"><svg class="hi" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/></svg><h2 id="polTitle">P&ograve;lisses en vigor / 1</h2><button class="btn-ac" onclick="addCustomCol()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span data-i18n="btn_col">Afegir columna</span></button></div>
     <div class="tblwrap">
       <table class="pt" id="pt">
         <colgroup><col class="cn"><col class="ct"><col class="ci"><col class="cco"><col class="cr"><col class="cp"><col class="cm"><col class="cd"><col class="cv"><col class="cfp"><col class="co"><col class="ca"></colgroup>
         <thead><tr id="ptHeadRow">
-          <th class="th-n cn">#</th>
-          <th class="ct" data-i18n="h_pren">Prenedor</th>
-          <th class="th-i ci"></th>
-          <th class="cco" data-i18n="h_co">Companyia</th>
-          <th class="cr" data-i18n="h_ram">Ram</th>
-          <th class="cp" data-i18n="h_pol">N Polissa</th>
-          <th class="cm" data-i18n="h_mes">Mes Venciment</th>
-          <th class="cd" style="text-align:center;" data-i18n="h_dia">Dia</th>
-          <th class="cv" style="text-align:right;padding-right:8px;" data-i18n="h_prima">Prima (EUR)</th>
+          <th class="th-n cn">#</th><th class="ct" data-i18n="h_pren">Prenedor</th>
+          <th class="th-i ci"></th><th class="cco" data-i18n="h_co">Companyia</th>
+          <th class="cr" data-i18n="h_ram">Ram</th><th class="cp" data-i18n="h_pol">N&ordm; P&ograve;lissa</th>
+          <th class="cm" data-i18n="h_mes">Mes Venciment</th><th class="cd" style="text-align:center;" data-i18n="h_dia">Dia</th>
+          <th class="cv" style="text-align:right;padding-right:8px;" data-i18n="h_prima">Prima (&euro;)</th>
           <th class="cfp" data-i18n="h_forma">Forma Pagament</th>
-          <th class="co" data-i18n="h_risc">Notes / Risc</th>
-          <th class="th-a ca"></th>
+          <th class="co" data-i18n="h_risc">Notes / Risc</th><th class="th-a ca"></th>
         </tr></thead>
         <tbody id="tbody"></tbody>
         <tfoot><tr class="trow" id="tfootRow">
           <td class="cn" style="background:#EEE;"></td>
           <td class="ct tlbl" colspan="7" data-i18n="total_lbl">TOTAL PRIMES ANUALS</td>
-          <td class="cv tval" id="tval">0,00 EUR</td>
-          <td class="cfp" style="background:#EEE;"></td>
-          <td class="co" style="background:#EEE;"></td>
-          <td class="ca" style="background:#EEE;"></td>
+          <td class="cv tval" id="tval">0,00 &euro;</td>
+          <td class="cfp" style="background:#EEE;"></td><td class="co" style="background:#EEE;"></td><td class="ca" style="background:#EEE;"></td>
         </tr></tfoot>
       </table>
     </div>
   </div>
   <div class="actbar">
     <div class="al">
-      <button class="btn btn-g" onclick="addRow()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span data-i18n="btn_add">Afegir Polissa</span></button>
+      <button class="btn btn-g" onclick="addRow()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span data-i18n="btn_add">Afegir P&ograve;lissa</span></button>
       <button class="btn btn-w" onclick="clearRows()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg><span data-i18n="btn_clr">Netejar Taula</span></button>
       <button class="btn btn-w" onclick="clearAll()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg><span data-i18n="btn_clrall">Netejar Tot</span></button>
     </div>
     <div class="ar">
       <button class="btn btn-s" onclick="saveDoc()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg><span data-i18n="btn_save">Guardar</span></button>
       <a class="btn btn-mail" id="btnMail" href="mailto:?subject=Calendari%20Pagaments"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span data-i18n="btn_mail">Enviar Mail</span></a>
-      <a class="btn btn-wa" id="btnWa" href="https://wa.me/?text=Calendari%20pagaments" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg><span data-i18n="btn_wa">WhatsApp</span></a>
+      <a class="btn btn-wa" id="btnWa" href="https://wa.me/?text=Calendari" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg><span data-i18n="btn_wa">WhatsApp</span></a>
       <button class="btn btn-r" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg><span data-i18n="btn_print">Imprimir</span></button>
     </div>
   </div>
 </div>
 <footer class="foot">
   <div class="foot-main">
-    <span class="foot-brand" data-i18n="foot_brand">OPTIMIZARTE 3.0 - SCO</span>
-    <span class="foot-sep">·</span>
+    <span class="foot-brand" data-i18n="foot_brand">OPTIMIZARTE 3.0 &mdash; SCO</span>
+    <span class="foot-sep">&middot;</span>
     <a class="foot-lnk" href="tel:972426665"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.28h3a2 2 0 0 1 2 1.72c.13.97.36 1.92.7 2.84a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.92.34 1.87.57 2.84.7a2 2 0 0 1 1.72 2.03z"/></svg>972 42 66 65</a>
-    <span class="foot-sep">·</span>
+    <span class="foot-sep">&middot;</span>
     <a class="foot-lnk" href="https://wa.me/34647568360" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>647 568 360</a>
-    <span class="foot-sep">·</span>
+    <span class="foot-sep">&middot;</span>
     <a class="foot-lnk" href="mailto:optimizarte@optimizarte.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>optimizarte@optimizarte.com</a>
   </div>
 </footer>
 <script>
 'use strict';
-const LANG={
-  ca:{hdr_title:'Calendari de Pagaments de Polisses',hdr_sub:'Document informatiu · OPTIMIZARTE 3.0 · Mediador 17167',notice:'Afegeix prenedors, introdueix polisses i la <strong>graella de distribucio</strong> s\'actualitza automaticament. Imprimeix en <strong>A4 apaisat</strong>.',lbl_pren:'Prenedors / Assegurats',lbl_date:'Data Document',btn_ap:'Afegir assegurat',fld_nom:'Prenedor',fld_nif:'NIF / CIF',ph_nom:'Nom complet o rao social...',ph_pol:'Num Polissa',ph_risc:'Risc assegurat...',ph_co:'Companyia...',cal_title:'Distribucio Mensual de Pagaments',cal_empty:'Introdueix polisses al formulari per veure la distribucio mensual...',cal_pren:'Prenedor',cal_total:'TOTAL MENSUAL',vis_lbl:'Visible al imprimir:',v_pren:'Prenedor',v_ram:'Ram',v_pol:'Num Polissa',v_mes:'Mes',v_dia:'Dia',v_prima:'Prima',v_forma:'Forma Pagament',v_risc:'Risc',pol_base:'Polisses en vigor',btn_col:'Afegir columna',h_pren:'Prenedor',h_co:'Companyia',h_ram:'Ram / Producte',h_pol:'Num Polissa',h_mes:'Mes Venciment',h_dia:'Dia',h_prima:'Prima (EUR)',h_forma:'Forma Pagament',h_risc:'Notes / Risc Assegurat',total_lbl:'TOTAL PRIMES ANUALS',btn_add:'Afegir Polissa',btn_clr:'Netejar Taula',btn_clrall:'Netejar Tot',btn_save:'Guardar',btn_mail:'Enviar Mail',btn_wa:'WhatsApp',btn_print:'Imprimir',foot_brand:'OPTIMIZARTE 3.0 - SCO',c_rows:'Netejar totes les polisses?',c_all:'Netejar tot el document?',ramo_ph:'Selecciona',pren_ph:'Sense nom',del_row:'Eliminar fila',del_pren:'Eliminar prenedor',del_col:'Eliminar columna',new_col:'Nova columna'},
-  es:{hdr_title:'Calendario de Pagos de Polizas',hdr_sub:'Documento informativo · OPTIMIZARTE 3.0 · Mediador 17167',notice:'Añade tomadores, introduce polizas y la <strong>cuadricula de distribucion</strong> se actualiza automaticamente.',lbl_pren:'Tomadores / Asegurados',lbl_date:'Fecha Documento',btn_ap:'Anadir asegurado',fld_nom:'Tomador',fld_nif:'NIF / CIF',ph_nom:'Nombre completo o razon social...',ph_pol:'Num Poliza',ph_risc:'Riesgo asegurado...',ph_co:'Compania...',cal_title:'Distribucion Mensual de Pagos',cal_empty:'Introduce polizas en el formulario...',cal_pren:'Tomador',cal_total:'TOTAL MENSUAL',vis_lbl:'Visible al imprimir:',v_pren:'Tomador',v_ram:'Ramo',v_pol:'Num Poliza',v_mes:'Mes',v_dia:'Dia',v_prima:'Prima',v_forma:'Forma Pago',v_risc:'Riesgo',pol_base:'Polizas en vigor',btn_col:'Anadir columna',h_pren:'Tomador',h_co:'Compania',h_ram:'Ramo / Producto',h_pol:'Num Poliza',h_mes:'Mes Vencimiento',h_dia:'Dia',h_prima:'Prima (EUR)',h_forma:'Forma de Pago',h_risc:'Notas / Riesgo',total_lbl:'TOTAL PRIMAS ANUALES',btn_add:'Anadir Poliza',btn_clr:'Limpiar Tabla',btn_clrall:'Limpiar Todo',btn_save:'Guardar',btn_mail:'Enviar Email',btn_wa:'WhatsApp',btn_print:'Imprimir',foot_brand:'OPTIMIZARTE 3.0 - SCO',c_rows:'Limpiar todas las polizas?',c_all:'Limpiar todo el documento?',ramo_ph:'Selecciona',pren_ph:'Sin nombre',del_row:'Eliminar fila',del_pren:'Eliminar tomador',del_col:'Eliminar columna',new_col:'Nueva columna'},
-  fr:{hdr_title:'Calendrier des Paiements',hdr_sub:'Document informatif · OPTIMIZARTE 3.0 · Intermediaire 17167',notice:'Ajoutez des souscripteurs, saisissez les polices et la <strong>grille de distribution</strong> se met a jour.',lbl_pren:'Souscripteurs / Assures',lbl_date:'Date du Document',btn_ap:'Ajouter un assure',fld_nom:'Souscripteur',fld_nif:'N ID / SIRET',ph_nom:'Nom complet...',ph_pol:'N Police',ph_risc:'Risque assure...',ph_co:'Compagnie...',cal_title:'Distribution Mensuelle',cal_empty:'Saisissez des polices...',cal_pren:'Souscripteur',cal_total:'TOTAL MENSUEL',vis_lbl:'Visible impression:',v_pren:'Souscripteur',v_ram:'Branche',v_pol:'N Police',v_mes:'Mois',v_dia:'Jour',v_prima:'Prime',v_forma:'Mode Paiement',v_risc:'Risque',pol_base:'Polices en vigueur',btn_col:'Ajouter colonne',h_pren:'Souscripteur',h_co:'Compagnie',h_ram:'Branche',h_pol:'N Police',h_mes:'Mois Echeance',h_dia:'Jour',h_prima:'Prime (EUR)',h_forma:'Mode de Paiement',h_risc:'Notes / Risque',total_lbl:'TOTAL PRIMES ANNUELLES',btn_add:'Ajouter Police',btn_clr:'Effacer Tableau',btn_clrall:'Tout Effacer',btn_save:'Enregistrer',btn_mail:'Envoyer Email',btn_wa:'WhatsApp',btn_print:'Imprimer',foot_brand:'OPTIMIZARTE 3.0 - SCO',c_rows:'Effacer les polices?',c_all:'Effacer tout?',ramo_ph:'Selectionner',pren_ph:'Sans nom',del_row:'Supprimer ligne',del_pren:'Supprimer souscripteur',del_col:'Supprimer colonne',new_col:'Nouvelle colonne'},
-  en:{hdr_title:'Policy Payment Calendar',hdr_sub:'Informational document · OPTIMIZARTE 3.0 · Broker 17167',notice:'Add policyholders, enter policies and the <strong>distribution grid</strong> updates automatically.',lbl_pren:'Policyholders / Insured',lbl_date:'Document Date',btn_ap:'Add insured',fld_nom:'Policyholder',fld_nif:'ID / Tax No.',ph_nom:'Full name or company...',ph_pol:'Policy No.',ph_risc:'Insured risk...',ph_co:'Insurer...',cal_title:'Monthly Payment Distribution',cal_empty:'Enter policies to view monthly distribution...',cal_pren:'Policyholder',cal_total:'MONTHLY TOTAL',vis_lbl:'Visible when printing:',v_pren:'Policyholder',v_ram:'Branch',v_pol:'Policy No.',v_mes:'Month',v_dia:'Day',v_prima:'Premium',v_forma:'Payment Method',v_risc:'Risk',pol_base:'Active Policies',btn_col:'Add column',h_pren:'Policyholder',h_co:'Insurer',h_ram:'Branch / Product',h_pol:'Policy No.',h_mes:'Due Month',h_dia:'Day',h_prima:'Premium (EUR)',h_forma:'Payment Method',h_risc:'Notes / Risk',total_lbl:'TOTAL ANNUAL PREMIUMS',btn_add:'Add Policy',btn_clr:'Clear Table',btn_clrall:'Clear All',btn_save:'Save',btn_mail:'Send Email',btn_wa:'WhatsApp',btn_print:'Print',foot_brand:'OPTIMIZARTE 3.0 - SCO',c_rows:'Clear all policies?',c_all:'Clear entire document?',ramo_ph:'Select',pren_ph:'No name',del_row:'Delete row',del_pren:'Delete policyholder',del_col:'Delete column',new_col:'New column'},
-  ar:{hdr_title:'جدول دفعات وثائق التامين',hdr_sub:'وثيقة معلومات · OPTIMIZARTE 3.0 · وسيط 17167',notice:'اضف المكتتبين، ادخل وثائق التامين وسيتحدث جدول التوزيع تلقائيا.',lbl_pren:'المكتتبون / المؤمن لهم',lbl_date:'تاريخ الوثيقة',btn_ap:'اضافة مؤمن',fld_nom:'المكتتب',fld_nif:'رقم التعريف',ph_nom:'الاسم الكامل...',ph_pol:'رقم الوثيقة',ph_risc:'الخطر المؤمن عليه...',ph_co:'شركة التامين...',cal_title:'التوزيع الشهري للدفعات',cal_empty:'ادخل وثائق التامين...',cal_pren:'المكتتب',cal_total:'المجموع الشهري',vis_lbl:'مرئي عند الطباعة:',v_pren:'المكتتب',v_ram:'الفرع',v_pol:'رقم الوثيقة',v_mes:'الشهر',v_dia:'اليوم',v_prima:'القسط',v_forma:'طريقة الدفع',v_risc:'الخطر',pol_base:'الوثائق السارية',btn_col:'اضافة عمود',h_pren:'المكتتب',h_co:'شركة التامين',h_ram:'الفرع / المنتج',h_pol:'رقم الوثيقة',h_mes:'شهر الاستحقاق',h_dia:'اليوم',h_prima:'القسط (EUR)',h_forma:'طريقة الدفع',h_risc:'ملاحظات / الخطر',total_lbl:'مجموع الاقساط السنوية',btn_add:'اضافة وثيقة',btn_clr:'مسح الجدول',btn_clrall:'مسح الكل',btn_save:'حفظ',btn_mail:'ارسال بريد',btn_wa:'واتساب',btn_print:'طباعة',foot_brand:'OPTIMIZARTE 3.0 - SCO',c_rows:'مسح جميع الوثائق?',c_all:'مسح كل الوثيقة?',ramo_ph:'اختر',pren_ph:'بدون اسم',del_row:'حذف السطر',del_pren:'حذف المكتتب',del_col:'حذف العمود',new_col:'عمود جديد'}
+var LANG={
+  ca:{hdr_title:'Calendari de Pagaments de P\u00f2lisses',hdr_sub:'Document informatiu \u00b7 OPTIMIZARTE 3.0 \u00b7 Mediador 17167',notice:'Afegeix prenedors, introdueix p\u00f2lisses i la <strong>graella de distribuci\u00f3</strong> s\'actualitza autom\u00e0ticament. Imprimeix en <strong>A4 apa\u00efsat</strong>.',lbl_pren:'Prenedors / Assegurats',lbl_date:'Data Document',btn_ap:'Afegir assegurat',fld_nom:'Prenedor',fld_nif:'NIF / CIF',ph_nom:'Nom complet o ra\u00f3 social\u2026',ph_pol:'N\u00ba P\u00f2lissa',ph_risc:'Risc assegurat\u2026',ph_co:'Companyia\u2026',cal_title:'Distribuci\u00f3 Mensual de Pagaments',cal_empty:'Introdueix p\u00f2lisses al formulari per veure la distribuci\u00f3 mensual\u2026',cal_pren:'Prenedor',cal_total:'TOTAL MENSUAL',vis_lbl:'Visible al imprimir:',v_pren:'Prenedor',v_ram:'Ram',v_pol:'N\u00ba P\u00f2lissa',v_mes:'Mes',v_dia:'Dia',v_prima:'Prima',v_forma:'Forma Pagament',v_risc:'Risc',pol_base:'P\u00f2lisses en vigor',btn_col:'Afegir columna',h_pren:'Prenedor',h_co:'Companyia',h_ram:'Ram / Producte',h_pol:'N\u00ba P\u00f2lissa',h_mes:'Mes Venciment',h_dia:'Dia',h_prima:'Prima (\u20ac)',h_forma:'Forma Pagament',h_risc:'Notes / Risc Assegurat',total_lbl:'TOTAL PRIMES ANUALS',btn_add:'Afegir P\u00f2lissa',btn_clr:'Netejar Taula',btn_clrall:'Netejar Tot',btn_save:'Guardar',btn_mail:'Enviar Mail',btn_wa:'WhatsApp',btn_print:'Imprimir',foot_brand:'OPTIMIZARTE 3.0 \u2014 SCO',c_rows:'Netejar totes les p\u00f2lisses?',c_all:'Netejar tot el document?',ramo_ph:'Selecciona',pren_ph:'Sense nom',del_row:'Eliminar fila',del_pren:'Eliminar prenedor',del_col:'Eliminar columna',new_col:'Nova columna'},
+  es:{hdr_title:'Calendario de Pagos de P\u00f3lizas',hdr_sub:'Documento informativo \u00b7 OPTIMIZARTE 3.0 \u00b7 Mediador 17167',notice:'A\u00f1ade tomadores, introduce p\u00f3lizas y la <strong>cuadr\u00edcula de distribuci\u00f3n</strong> se actualiza autom\u00e1ticamente.',lbl_pren:'Tomadores / Asegurados',lbl_date:'Fecha Documento',btn_ap:'A\u00f1adir asegurado',fld_nom:'Tomador',fld_nif:'NIF / CIF',ph_nom:'Nombre completo o raz\u00f3n social\u2026',ph_pol:'N\u00ba P\u00f3liza',ph_risc:'Riesgo asegurado\u2026',ph_co:'Compa\u00f1\u00eda\u2026',cal_title:'Distribuci\u00f3n Mensual de Pagos',cal_empty:'Introduce p\u00f3lizas en el formulario\u2026',cal_pren:'Tomador',cal_total:'TOTAL MENSUAL',vis_lbl:'Visible al imprimir:',v_pren:'Tomador',v_ram:'Ramo',v_pol:'N\u00ba P\u00f3liza',v_mes:'Mes',v_dia:'D\u00eda',v_prima:'Prima',v_forma:'Forma de Pago',v_risc:'Riesgo',pol_base:'P\u00f3lizas en vigor',btn_col:'A\u00f1adir columna',h_pren:'Tomador',h_co:'Compa\u00f1\u00eda',h_ram:'Ramo / Producto',h_pol:'N\u00ba P\u00f3liza',h_mes:'Mes de Vencimiento',h_dia:'D\u00eda',h_prima:'Prima (\u20ac)',h_forma:'Forma de Pago',h_risc:'Notas / Riesgo Asegurado',total_lbl:'TOTAL PRIMAS ANUALES',btn_add:'A\u00f1adir P\u00f3liza',btn_clr:'Limpiar Tabla',btn_clrall:'Limpiar Todo',btn_save:'Guardar',btn_mail:'Enviar Email',btn_wa:'WhatsApp',btn_print:'Imprimir',foot_brand:'OPTIMIZARTE 3.0 \u2014 SCO',c_rows:'\u00bfLimpiar todas las p\u00f3lizas?',c_all:'\u00bfLimpiar todo el documento?',ramo_ph:'Selecciona',pren_ph:'Sin nombre',del_row:'Eliminar fila',del_pren:'Eliminar tomador',del_col:'Eliminar columna',new_col:'Nueva columna'},
+  fr:{hdr_title:'Calendrier des Paiements de Polices',hdr_sub:'Document informatif \u00b7 OPTIMIZARTE 3.0 \u00b7 Interm\u00e9diaire 17167',notice:'Ajoutez des souscripteurs, saisissez les polices et la <strong>grille de distribution</strong> se met \u00e0 jour.',lbl_pren:'Souscripteurs / Assur\u00e9s',lbl_date:'Date du Document',btn_ap:'Ajouter un assur\u00e9',fld_nom:'Souscripteur',fld_nif:'N\u00b0 ID / SIRET',ph_nom:'Nom complet\u2026',ph_pol:'N\u00b0 Police',ph_risc:'Risque assur\u00e9\u2026',ph_co:'Compagnie\u2026',cal_title:'Distribution Mensuelle',cal_empty:'Saisissez des polices\u2026',cal_pren:'Souscripteur',cal_total:'TOTAL MENSUEL',vis_lbl:'Visible impression:',v_pren:'Souscripteur',v_ram:'Branche',v_pol:'N\u00b0 Police',v_mes:'Mois',v_dia:'Jour',v_prima:'Prime',v_forma:'Mode Paiement',v_risc:'Risque',pol_base:'Polices en vigueur',btn_col:'Ajouter colonne',h_pren:'Souscripteur',h_co:'Compagnie',h_ram:'Branche',h_pol:'N\u00b0 Police',h_mes:'Mois \u00c9ch\u00e9ance',h_dia:'Jour',h_prima:'Prime (\u20ac)',h_forma:'Mode de Paiement',h_risc:'Notes / Risque',total_lbl:'TOTAL PRIMES ANNUELLES',btn_add:'Ajouter Police',btn_clr:'Effacer Tableau',btn_clrall:'Tout Effacer',btn_save:'Enregistrer',btn_mail:'Envoyer Email',btn_wa:'WhatsApp',btn_print:'Imprimer',foot_brand:'OPTIMIZARTE 3.0 \u2014 SCO',c_rows:'Effacer les polices?',c_all:'Effacer tout?',ramo_ph:'S\u00e9lectionner',pren_ph:'Sans nom',del_row:'Supprimer ligne',del_pren:'Supprimer souscripteur',del_col:'Supprimer colonne',new_col:'Nouvelle colonne'},
+  en:{hdr_title:'Policy Payment Calendar',hdr_sub:'Informational document \u00b7 OPTIMIZARTE 3.0 \u00b7 Broker 17167',notice:'Add policyholders, enter policies and the <strong>distribution grid</strong> updates automatically.',lbl_pren:'Policyholders / Insured',lbl_date:'Document Date',btn_ap:'Add insured',fld_nom:'Policyholder',fld_nif:'ID / Tax No.',ph_nom:'Full name or company\u2026',ph_pol:'Policy No.',ph_risc:'Insured risk\u2026',ph_co:'Insurer\u2026',cal_title:'Monthly Payment Distribution',cal_empty:'Enter policies to view monthly distribution\u2026',cal_pren:'Policyholder',cal_total:'MONTHLY TOTAL',vis_lbl:'Visible when printing:',v_pren:'Policyholder',v_ram:'Branch',v_pol:'Policy No.',v_mes:'Month',v_dia:'Day',v_prima:'Premium',v_forma:'Payment Method',v_risc:'Risk',pol_base:'Active Policies',btn_col:'Add column',h_pren:'Policyholder',h_co:'Insurer',h_ram:'Branch / Product',h_pol:'Policy No.',h_mes:'Due Month',h_dia:'Day',h_prima:'Premium (\u20ac)',h_forma:'Payment Method',h_risc:'Notes / Risk',total_lbl:'TOTAL ANNUAL PREMIUMS',btn_add:'Add Policy',btn_clr:'Clear Table',btn_clrall:'Clear All',btn_save:'Save',btn_mail:'Send Email',btn_wa:'WhatsApp',btn_print:'Print',foot_brand:'OPTIMIZARTE 3.0 \u2014 SCO',c_rows:'Clear all policies?',c_all:'Clear entire document?',ramo_ph:'Select',pren_ph:'No name',del_row:'Delete row',del_pren:'Delete policyholder',del_col:'Delete column',new_col:'New column'},
+  ar:{hdr_title:'\u062c\u062f\u0648\u0644 \u062f\u0641\u0639\u0627\u062a \u0648\u062b\u0627\u0626\u0642 \u0627\u0644\u062a\u0623\u0645\u064a\u0646',hdr_sub:'\u0648\u062b\u064a\u0642\u0629 \u0645\u0639\u0644\u0648\u0645\u0627\u062a \u00b7 OPTIMIZARTE 3.0 \u00b7 \u0648\u0633\u064a\u0637 17167',notice:'\u0623\u0636\u0641 \u0627\u0644\u0645\u0643\u062a\u062a\u0628\u064a\u0646\u060c \u0623\u062f\u062e\u0644 \u0648\u062b\u0627\u0626\u0642 \u0627\u0644\u062a\u0623\u0645\u064a\u0646 \u0648\u0633\u064a\u062a\u062d\u062f\u062b <strong>\u062c\u062f\u0648\u0644 \u0627\u0644\u062a\u0648\u0632\u064a\u0639</strong> \u062a\u0644\u0642\u0627\u0626\u064a\u0627.',lbl_pren:'\u0627\u0644\u0645\u0643\u062a\u062a\u0628\u0648\u0646 / \u0627\u0644\u0645\u0624\u0645\u0651\u0646 \u0644\u0647\u0645',lbl_date:'\u062a\u0627\u0631\u064a\u062e \u0627\u0644\u0648\u062b\u064a\u0642\u0629',btn_ap:'\u0625\u0636\u0627\u0641\u0629 \u0645\u0624\u0645\u0651\u0646',fld_nom:'\u0627\u0644\u0645\u0643\u062a\u062a\u0628',fld_nif:'\u0631\u0642\u0645 \u0627\u0644\u062a\u0639\u0631\u064a\u0641',ph_nom:'\u0627\u0644\u0627\u0633\u0645 \u0627\u0644\u0643\u0627\u0645\u0644\u2026',ph_pol:'\u0631\u0642\u0645 \u0627\u0644\u0648\u062b\u064a\u0642\u0629',ph_risc:'\u0627\u0644\u062e\u0637\u0631 \u0627\u0644\u0645\u0624\u0645\u0651\u0646 \u0639\u0644\u064a\u0647\u2026',ph_co:'\u0634\u0631\u0643\u0629 \u0627\u0644\u062a\u0623\u0645\u064a\u0646\u2026',cal_title:'\u0627\u0644\u062a\u0648\u0632\u064a\u0639 \u0627\u0644\u0634\u0647\u0631\u064a \u0644\u0644\u062f\u0641\u0639\u0627\u062a',cal_empty:'\u0623\u062f\u062e\u0644 \u0648\u062b\u0627\u0626\u0642 \u0627\u0644\u062a\u0623\u0645\u064a\u0646\u2026',cal_pren:'\u0627\u0644\u0645\u0643\u062a\u062a\u0628',cal_total:'\u0627\u0644\u0645\u062c\u0645\u0648\u0639 \u0627\u0644\u0634\u0647\u0631\u064a',vis_lbl:'\u0645\u0631\u0626\u064a \u0639\u0646\u062f \u0627\u0644\u0637\u0628\u0627\u0639\u0629:',v_pren:'\u0627\u0644\u0645\u0643\u062a\u062a\u0628',v_ram:'\u0627\u0644\u0641\u0631\u0639',v_pol:'\u0631\u0642\u0645 \u0627\u0644\u0648\u062b\u064a\u0642\u0629',v_mes:'\u0627\u0644\u0634\u0647\u0631',v_dia:'\u0627\u0644\u064a\u0648\u0645',v_prima:'\u0627\u0644\u0642\u0633\u0637',v_forma:'\u0637\u0631\u064a\u0642\u0629 \u0627\u0644\u062f\u0641\u0639',v_risc:'\u0627\u0644\u062e\u0637\u0631',pol_base:'\u0627\u0644\u0648\u062b\u0627\u0626\u0642 \u0627\u0644\u0633\u0627\u0631\u064a\u0629',btn_col:'\u0625\u0636\u0627\u0641\u0629 \u0639\u0645\u0648\u062f',h_pren:'\u0627\u0644\u0645\u0643\u062a\u062a\u0628',h_co:'\u0634\u0631\u0643\u0629 \u0627\u0644\u062a\u0623\u0645\u064a\u0646',h_ram:'\u0627\u0644\u0641\u0631\u0639 / \u0627\u0644\u0645\u0646\u062a\u062c',h_pol:'\u0631\u0642\u0645 \u0627\u0644\u0648\u062b\u064a\u0642\u0629',h_mes:'\u0634\u0647\u0631 \u0627\u0644\u0627\u0633\u062a\u062d\u0642\u0627\u0642',h_dia:'\u0627\u0644\u064a\u0648\u0645',h_prima:'\u0627\u0644\u0642\u0633\u0637 (\u20ac)',h_forma:'\u0637\u0631\u064a\u0642\u0629 \u0627\u0644\u062f\u0641\u0639',h_risc:'\u0645\u0644\u0627\u062d\u0638\u0627\u062a / \u0627\u0644\u062e\u0637\u0631',total_lbl:'\u0645\u062c\u0645\u0648\u0639 \u0627\u0644\u0623\u0642\u0633\u0627\u0637 \u0627\u0644\u0633\u0646\u0648\u064a\u0629',btn_add:'\u0625\u0636\u0627\u0641\u0629 \u0648\u062b\u064a\u0642\u0629',btn_clr:'\u0645\u0633\u062d \u0627\u0644\u062c\u062f\u0648\u0644',btn_clrall:'\u0645\u0633\u062d \u0627\u0644\u0643\u0644',btn_save:'\u062d\u0641\u0638',btn_mail:'\u0625\u0631\u0633\u0627\u0644 \u0628\u0631\u064a\u062f',btn_wa:'\u0648\u0627\u062a\u0633\u0627\u0628',btn_print:'\u0637\u0628\u0627\u0639\u0629',foot_brand:'OPTIMIZARTE 3.0 \u2014 SCO',c_rows:'\u0645\u0633\u062d \u062c\u0645\u064a\u0639 \u0627\u0644\u0648\u062b\u0627\u0626\u0642?',c_all:'\u0645\u0633\u062d \u0643\u0644 \u0627\u0644\u0648\u062b\u064a\u0642\u0629?',ramo_ph:'\u0627\u062e\u062a\u0631',pren_ph:'\u0628\u062f\u0648\u0646 \u0627\u0633\u0645',del_row:'\u062d\u0630\u0641 \u0627\u0644\u0633\u0637\u0631',del_pren:'\u062d\u0630\u0641 \u0627\u0644\u0645\u0643\u062a\u062a\u0628',del_col:'\u062d\u0630\u0641 \u0627\u0644\u0639\u0645\u0648\u062f',new_col:'\u0639\u0645\u0648\u062f \u062c\u062f\u064a\u062f'}
 };
-const RAMOS_CA=['','Llar','Salut','Vida','Motor','Moto','Empresa / Comer','RC Professional','RC Patronal','Proteccio Juridica','Estalvis / Jubilacio','Accidents','Defuncio','Lloguer','Multiriscos','Comunitats','Altres'];
-const RAMOS={ca:RAMOS_CA,es:['','Hogar','Salud','Vida','Motor','Moto','Empresa','RC Profesional','RC Patronal','Proteccion Juridica','Ahorros / Jubilacion','Accidentes','Defuncion','Alquiler','Multiriesgos','Comunidades','Otros'],fr:['','Habitation','Sante','Vie','Auto','Moto','Entreprise','RC Professionnelle','RC Employeur','Protection Juridique','Epargne','Accidents','Deces','Location','Multirisques','Coproprietes','Autres'],en:['','Home','Health','Life','Motor','Motorcycle','Business','Professional Liability','Employer Liability','Legal Protection','Savings','Accidents','Death','Rental','Multi-risk','Communities','Others'],ar:['','السكن','الصحة','الحياة','السيارة','الدراجة','المقاولة','المسؤولية المهنية','مسؤولية صاحب العمل','الحماية القانونية','الادخار','الحوادث','الوفاة','الايجار','المخاطر المتعددة','الملكية المشتركة','اخرى']};
-const MONTHS={ca:{l:['Gener','Febrer','Marc','Abril','Maig','Juny','Juliol','Agost','Setembre','Octubre','Novembre','Desembre'],s:['Gen','Feb','Mar','Abr','Mai','Jun','Jul','Ago','Set','Oct','Nov','Des']},es:{l:['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],s:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']},fr:{l:['Janvier','Fevrier','Mars','Avril','Mai','Juin','Juillet','Aout','Septembre','Octobre','Novembre','Decembre'],s:['Jan','Fev','Mar','Avr','Mai','Jun','Jul','Aou','Sep','Oct','Nov','Dec']},en:{l:['January','February','March','April','May','June','July','August','September','October','November','December'],s:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']},ar:{l:['يناير','فبراير','مارس','ابريل','ماي','يونيو','يوليوز','غشت','شتنبر','اكتوبر','نونبر','دجنبر'],s:['ين','فب','مار','ابر','ماي','يون','يول','غش','شتن','اكت','نون','دجن']}};
-const FORMES={ca:[['anual','Anual'],['semestral','Semestral'],['quatrimestral','Quatrimestral'],['trimestral','Trimestral'],['bimestral','Bimestral'],['mensual','Mensual']],es:[['anual','Anual'],['semestral','Semestral'],['quatrimestral','Cuatrimestral'],['trimestral','Trimestral'],['bimestral','Bimestral'],['mensual','Mensual']],fr:[['anual','Annuel'],['semestral','Semestriel'],['quatrimestral','Quadrimestriel'],['trimestral','Trimestriel'],['bimestral','Bimestriel'],['mensual','Mensuel']],en:[['anual','Annual'],['semestral','Semi-annual'],['quatrimestral','Four-monthly'],['trimestral','Quarterly'],['bimestral','Bi-monthly'],['mensual','Monthly']],ar:[['anual','سنوي'],['semestral','كل ستة اشهر'],['quatrimestral','كل اربعة اشهر'],['trimestral','ربع سنوي'],['bimestral','كل شهرين'],['mensual','شهري']]};
-const RSVG={'Llar':'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>','Salut':'<rect x="9" y="3" width="6" height="18" rx="1.5"/><rect x="3" y="9" width="18" height="6" rx="1.5"/>','Vida':'<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>','Motor':'<rect x="1" y="10" width="22" height="8" rx="1.5"/><path d="M5 10V7h5l2 3"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>','Moto':'<circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M9 17h5M7 17 9 7h4l2 5h2"/>','Empresa / Comer':'<path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/><path d="M3 9l2-5h14l2 5"/><line x1="12" y1="9" x2="12" y2="21"/>','RC Professional':'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>','RC Patronal':'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>','Proteccio Juridica':'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>','Estalvis / Jubilacio':'<path d="M12 2a8 8 0 0 1 8 8c0 4.4-4 8-8 12C8 18 4 14.4 4 10a8 8 0 0 1 8-8z"/><circle cx="12" cy="10" r="2.5"/>','Accidents':'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/>','Defuncio':'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>','Lloguer':'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>','Multiriscos':'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>','Comunitats':'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><rect x="9" y="13" width="6" height="9"/>','Altres':'<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>'};
-const COMPANIES={'occident':{bg:'#DC0028',fg:'#fff',tx:'Occident'},'allianz':{bg:'#003781',fg:'#fff',tx:'Allianz'},'mapfre':{bg:'#CC0000',fg:'#fff',tx:'MAPFRE'},'axa':{bg:'#00008F',fg:'#fff',tx:'AXA'},'zurich':{bg:'#0066CC',fg:'#fff',tx:'Zurich'},'generali':{bg:'#C8102E',fg:'#fff',tx:'Generali'},'mutua':{bg:'#009639',fg:'#fff',tx:'Mutua'},'helvetia':{bg:'#DA2128',fg:'#fff',tx:'Helvetia'},'caser':{bg:'#E8A000',fg:'#000',tx:'CASER'},'liberty':{bg:'#005EB8',fg:'#fff',tx:'Liberty'},'sanitas':{bg:'#00A3E0',fg:'#fff',tx:'Sanitas'},'asisa':{bg:'#0066B3',fg:'#fff',tx:'ASISA'},'dkv':{bg:'#B5002D',fg:'#fff',tx:'DKV'},'reale':{bg:'#B22222',fg:'#fff',tx:'Reale'},'ageas':{bg:'#006633',fg:'#fff',tx:'Ageas'},'catalana':{bg:'#E4002B',fg:'#fff',tx:'Catalana'},'pelayo':{bg:'#FF6600',fg:'#fff',tx:'Pelayo'},'fiatc':{bg:'#003087',fg:'#fff',tx:'FIATC'},'adeslas':{bg:'#009B77',fg:'#fff',tx:'Adeslas'}};
-const FORMA_CFG={anual:{n:1,s:12},semestral:{n:2,s:6},quatrimestral:{n:3,s:4},trimestral:{n:4,s:3},bimestral:{n:6,s:2},mensual:{n:12,s:1}};
-let lang='ca',prenedors=[],pUid=0,rowUid=0,ccUid=0,customCols=[],calPrenHidden=false;
-const hiddenCols=new Set();
-const TODAY=new Date(),CM=TODAY.getMonth(),CY=TODAY.getFullYear();
-const $=function(id){return document.getElementById(id);};
-const $$=function(s){return document.querySelectorAll(s);};
+var RAMOS_CA=['','Llar','Salut','Vida','Motor','Moto','Empresa / Comer\u00e7','RC Professional','RC Patronal','Protecci\u00f3 Jur\u00eddica','Estalvis / Jubilaci\u00f3','Accidents','Defunci\u00f3','Lloguer','Multiriscos','Comunitats','Altres'];
+var RAMOS={ca:RAMOS_CA,es:['','Hogar','Salud','Vida','Motor','Moto','Empresa','RC Profesional','RC Patronal','Protecci\u00f3n Jur\u00eddica','Ahorros / Jubilaci\u00f3n','Accidentes','Defunci\u00f3n','Alquiler','Multiriesgos','Comunidades','Otros'],fr:['','Habitation','Sant\u00e9','Vie','Auto','Moto','Entreprise','RC Professionnelle','RC Employeur','Protection Juridique','\u00c9pargne','Accidents','D\u00e9c\u00e8s','Location','Multirisques','Copropri\u00e9t\u00e9s','Autres'],en:['','Home','Health','Life','Motor','Motorcycle','Business','Professional Liability','Employer Liability','Legal Protection','Savings','Accidents','Death','Rental','Multi-risk','Communities','Others'],ar:['',' \u0627\u0644\u0633\u0643\u0646','\u0627\u0644\u0635\u062d\u0629','\u0627\u0644\u062d\u064a\u0627\u0629','\u0627\u0644\u0633\u064a\u0627\u0631\u0629','\u0627\u0644\u062f\u0631\u0627\u062c\u0629','\u0645\u0642\u0627\u0648\u0644\u0629','\u0645\u0633\u0624\u0648\u0644\u064a\u0629 \u0645\u0647\u0646\u064a\u0629','\u0645\u0633\u0624\u0648\u0644\u064a\u0629','\u062d\u0645\u0627\u064a\u0629 \u0642\u0627\u0646\u0648\u0646\u064a\u0629','\u0627\u062f\u062e\u0627\u0631','\u062d\u0648\u0627\u062f\u062b','\u0648\u0641\u0627\u0629','\u0625\u064a\u062c\u0627\u0631','\u0645\u062e\u0627\u0637\u0631','\u0645\u0644\u0643\u064a\u0629','\u0623\u062e\u0631\u0649']};
+var MONTHS={ca:{l:['Gener','Febrer','Mar\u00e7','Abril','Maig','Juny','Juliol','Agost','Setembre','Octubre','Novembre','Desembre'],s:['Gen','Feb','Mar','Abr','Mai','Jun','Jul','Ago','Set','Oct','Nov','Des']},es:{l:['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],s:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']},fr:{l:['Janvier','F\u00e9vrier','Mars','Avril','Mai','Juin','Juillet','Ao\u00fbt','Septembre','Octobre','Novembre','D\u00e9cembre'],s:['Jan','F\u00e9v','Mar','Avr','Mai','Jun','Jul','Ao\u00fb','Sep','Oct','Nov','D\u00e9c']},en:{l:['January','February','March','April','May','June','July','August','September','October','November','December'],s:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']},ar:{l:['\u064a\u0646\u0627\u064a\u0631','\u0641\u0628\u0631\u0627\u064a\u0631','\u0645\u0627\u0631\u0633','\u0623\u0628\u0631\u064a\u0644','\u0645\u0627\u064a','\u064a\u0648\u0646\u064a\u0648','\u064a\u0648\u0644\u064a\u0648\u0632','\u063a\u0634\u062a','\u0634\u062a\u0646\u0628\u0631','\u0623\u0643\u062a\u0648\u0628\u0631','\u0646\u0648\u0646\u0628\u0631','\u062f\u062c\u0646\u0628\u0631'],s:['\u064a\u0646','\u0641\u0628','\u0645\u0627\u0631','\u0623\u0628\u0631','\u0645\u0627\u064a','\u064a\u0648\u0646','\u064a\u0648\u0644','\u063a\u0634','\u0634\u062a\u0646','\u0623\u0643\u062a','\u0646\u0648\u0646','\u062f\u062c\u0646']}};
+var FORMES={ca:[['anual','Anual'],['semestral','Semestral'],['quatrimestral','Quatrimestral'],['trimestral','Trimestral'],['bimestral','Bimestral'],['mensual','Mensual']],es:[['anual','Anual'],['semestral','Semestral'],['quatrimestral','Cuatrimestral'],['trimestral','Trimestral'],['bimestral','Bimestral'],['mensual','Mensual']],fr:[['anual','Annuel'],['semestral','Semestriel'],['quatrimestral','Quadrimestriel'],['trimestral','Trimestriel'],['bimestral','Bimestriel'],['mensual','Mensuel']],en:[['anual','Annual'],['semestral','Semi-annual'],['quatrimestral','Four-monthly'],['trimestral','Quarterly'],['bimestral','Bi-monthly'],['mensual','Monthly']],ar:[['anual','\u0633\u0646\u0648\u064a'],['semestral','\u0643\u0644 \u0633\u062a\u0629 \u0623\u0634\u0647\u0631'],['quatrimestral','\u0643\u0644 \u0623\u0631\u0628\u0639\u0629 \u0623\u0634\u0647\u0631'],['trimestral','\u0631\u0628\u0639 \u0633\u0646\u0648\u064a'],['bimestral','\u0643\u0644 \u0634\u0647\u0631\u064a\u0646'],['mensual','\u0634\u0647\u0631\u064a']]};
+var RSVG={'Llar':'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>','Salut':'<rect x="9" y="3" width="6" height="18" rx="1.5"/><rect x="3" y="9" width="18" height="6" rx="1.5"/>','Vida':'<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>','Motor':'<rect x="1" y="10" width="22" height="8" rx="1.5"/><path d="M5 10V7h5l2 3"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>','Moto':'<circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M9 17h5M7 17 9 7h4l2 5h2"/>','Empresa / Comer\u00e7':'<path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/><path d="M3 9l2-5h14l2 5"/><line x1="12" y1="9" x2="12" y2="21"/>','RC Professional':'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>','RC Patronal':'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>','Protecci\u00f3 Jur\u00eddica':'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>','Estalvis / Jubilaci\u00f3':'<path d="M12 2a8 8 0 0 1 8 8c0 4.4-4 8-8 12C8 18 4 14.4 4 10a8 8 0 0 1 8-8z"/><circle cx="12" cy="10" r="2.5"/>','Accidents':'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/>','Defunci\u00f3':'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>','Lloguer':'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>','Multiriscos':'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>','Comunitats':'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><rect x="9" y="13" width="6" height="9"/>','Altres':'<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>'};
+var COMPANIES={'occident':{bg:'#DC0028',fg:'#fff',tx:'Occident'},'allianz':{bg:'#003781',fg:'#fff',tx:'Allianz'},'mapfre':{bg:'#CC0000',fg:'#fff',tx:'MAPFRE'},'axa':{bg:'#00008F',fg:'#fff',tx:'AXA'},'zurich':{bg:'#0066CC',fg:'#fff',tx:'Zurich'},'generali':{bg:'#C8102E',fg:'#fff',tx:'Generali'},'mutua':{bg:'#009639',fg:'#fff',tx:'Mutua'},'helvetia':{bg:'#DA2128',fg:'#fff',tx:'Helvetia'},'caser':{bg:'#E8A000',fg:'#000',tx:'CASER'},'liberty':{bg:'#005EB8',fg:'#fff',tx:'Liberty'},'sanitas':{bg:'#00A3E0',fg:'#fff',tx:'Sanitas'},'asisa':{bg:'#0066B3',fg:'#fff',tx:'ASISA'},'dkv':{bg:'#B5002D',fg:'#fff',tx:'DKV'},'reale':{bg:'#B22222',fg:'#fff',tx:'Reale'},'ageas':{bg:'#006633',fg:'#fff',tx:'Ageas'},'catalana':{bg:'#E4002B',fg:'#fff',tx:'Catalana'},'pelayo':{bg:'#FF6600',fg:'#fff',tx:'Pelayo'},'fiatc':{bg:'#003087',fg:'#fff',tx:'FIATC'},'adeslas':{bg:'#009B77',fg:'#fff',tx:'Adeslas'}};
+var FORMA_CFG={anual:{n:1,s:12},semestral:{n:2,s:6},quatrimestral:{n:3,s:4},trimestral:{n:4,s:3},bimestral:{n:6,s:2},mensual:{n:12,s:1}};
+var lang='ca',prenedors=[],pUid=0,rowUid=0,ccUid=0,customCols=[],calPrenHidden=false;
+var hiddenCols=new Set();
+var TODAY=new Date(),CM=TODAY.getMonth(),CY=TODAY.getFullYear();
+var $=function(id){return document.getElementById(id);};
+var $$=function(s){return document.querySelectorAll(s);};
 function esc(v){if(v==null)return'';return String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function fmt(v){return v.toLocaleString('ca-ES',{minimumFractionDigits:2,maximumFractionDigits:2})+' EUR';}
+function fmt(v){return v.toLocaleString('ca-ES',{minimumFractionDigits:2,maximumFractionDigits:2})+'\u00a0\u20ac';}
 function daysInMonth(m){return new Date(CY,m+1,0).getDate();}
 function monSeq(){return Array.from({length:12},function(_,i){return(CM+i)%12;});}
 function payMonths(mv,f){var c=FORMA_CFG[f]||FORMA_CFG.anual;return Array.from({length:c.n},function(_,i){return(mv+i*c.s)%12;});}
 function tr(){return LANG[lang];}
-function rsvg(k){var p=RSVG[k];if(!p)return'';return '<svg viewBox="0 0 24 24" fill="none" stroke="#DC0028" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" style="display:block;margin:auto">'+p+'</svg>';}
+function rsvg(k){var p=RSVG[k];if(!p)return'';return '<svg viewBox="0 0 24 24" fill="none" stroke="#DC0028" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" style="display:block;margin:auto">'+p+'</svg>';}
 function coKey(text){if(!text)return null;var n=text.toLowerCase().trim();for(var k in COMPANIES){if(n.indexOf(k)>=0)return k;}return null;}
-function coBadge(text,rid){var k=coKey(text);if(!k)return null;var c=COMPANIES[k];return '<span class="co-badge" style="background:'+c.bg+';color:'+c.fg+';">'+c.tx+'<button class="co-edit" onclick="editCo('+rid+')" title="Editar">&#9998;</button></span>';}
+function coBadge(text,rid){var k=coKey(text);if(!k)return null;var c=COMPANIES[k];return '<span class="co-badge" style="background:'+c.bg+';color:'+c.fg+';">'+c.tx+'<button class="co-edit" onclick="editCo('+rid+')">\u270e</button></span>';}
 function tryConvertCo(input,rid){var txt=input.value.trim();if(!txt)return;var b=coBadge(txt,rid);if(b){var td=input.parentElement;td.innerHTML=b;td.dataset.rawco=txt;}}
-function editCo(rid){var td=document.querySelector('#r'+rid+' .cco');if(!td)return;var raw=td.dataset.rawco||'';td.innerHTML='<input type="text" placeholder="'+tr().ph_co+'" value="'+esc(raw)+'" style="border:none;border-bottom:1.5px solid var(--gray-4);padding:4px 2px;font-size:11.5px;color:var(--dark);font-family:Inter,sans-serif;background:transparent;outline:none;width:100%;" onblur="tryConvertCo(this,'+rid+')" onkeydown="if(event.key===\'Enter\')this.blur()">';td.querySelector('input').focus();}
+function editCo(rid){var td=document.querySelector('#r'+rid+' .cco');if(!td)return;var raw=td.dataset.rawco||'';td.innerHTML='<input type="text" placeholder="'+tr().ph_co+'" value="'+esc(raw)+'" style="border:none;border-bottom:1.5px solid var(--gray-4);padding:5px 2px;font-size:15px;color:var(--dark);font-family:Inter,sans-serif;background:transparent;outline:none;width:100%;" onblur="tryConvertCo(this,'+rid+')" onkeydown="if(event.key===\'Enter\')this.blur()">';td.querySelector('input').focus();}
 (function(){
   var btn=$('flagBtn'),menu=$('flagMenu');
   btn.addEventListener('click',function(e){e.stopPropagation();var open=menu.classList.contains('is-open');menu.classList.toggle('is-open',!open);btn.classList.toggle('is-open',!open);});
@@ -366,21 +360,31 @@ function delPrenedor(id){if(prenedors.length<=1)return;prenedors=prenedors.filte
 function onPrenInput(){prenedors.forEach(function(p){var n=$('pnom-'+p.id),i=$('pnif-'+p.id);if(n)p.nom=n.value;if(i)p.nif=i.value;});updatePrenDrops();updatePolTitle();refreshAll();updateContactBtns();}
 function renderPren(){
   var t=LANG[lang];
-  $('pren-list').innerHTML=prenedors.map(function(p,i){return '<div class="pren-entry" id="pe-'+p.id+'"><span class="pren-n">'+(i+1)+'</span><div class="fs wn"><label>'+t.fld_nom+'</label><input id="pnom-'+p.id+'" value="'+esc(p.nom)+'" placeholder="'+t.ph_nom+'" oninput="onPrenInput()"></div><div class="fs wi"><label>'+t.fld_nif+'</label><input id="pnif-'+p.id+'" value="'+esc(p.nif)+'" placeholder="00000000A" oninput="onPrenInput()"></div>'+(prenedors.length>1?'<button class="pren-del" onclick="delPrenedor('+p.id+')" title="'+t.del_pren+'">&#215;</button>':'')+'</div>';}).join('');
+  $('pren-list').innerHTML=prenedors.map(function(p,i){return '<div class="pren-entry" id="pe-'+p.id+'"><span class="pren-n">'+(i+1)+'</span><div class="fs wn"><label>'+t.fld_nom+'</label><input id="pnom-'+p.id+'" value="'+esc(p.nom)+'" placeholder="'+t.ph_nom+'" oninput="onPrenInput()"></div><div class="fs wi"><label>'+t.fld_nif+'</label><input id="pnif-'+p.id+'" value="'+esc(p.nif)+'" placeholder="00000000A" oninput="onPrenInput()"></div>'+(prenedors.length>1?'<button class="pren-del" onclick="delPrenedor('+p.id+')" title="'+t.del_pren+'">\u00d7</button>':'')+'</div>';}).join('');
 }
 function updatePrenDrops(){var t=LANG[lang];var opts=prenedors.map(function(p){return '<option value="'+p.id+'">'+esc(p.nom||t.pren_ph)+'</option>';}).join('');$$('#tbody .ct select').forEach(function(s){var v=s.value;s.innerHTML=opts;if(prenedors.find(function(p){return String(p.id)===String(v);}))s.value=v;else s.value=prenedors[0]?prenedors[0].id:'';});}
 function updatePolTitle(){var el=$('polTitle');if(el)el.textContent=LANG[lang].pol_base+' / '+prenedors.length;}
 function updateDays(rid){var ms=$('mes'+rid),ds=$('dia'+rid);if(!ms||!ds)return;var m=parseInt(ms.value),pd=parseInt(ds.value)||1,mx=daysInMonth(m),h='';for(var d=1;d<=mx;d++){h+='<option value="'+d+'"'+((d===pd||(pd>mx&&d===mx))?' selected':'')+'>'+d+'</option>';}ds.innerHTML=h;refreshAll();}
 function updateRamoIcon(rid){var s=document.querySelector('#r'+rid+' .cr select');var sp=$('ic-'+rid);if(s&&sp)sp.innerHTML=rsvg(s.value);}
+/* CALENDAR PRENEDOR TOGGLE: keeps header th (and button) always visible */
 function tcCalPren(){
   calPrenHidden=!calPrenHidden;
   var tbl=$('calTable');if(!tbl)return;
-  tbl.querySelectorAll('.c-pren,.cf-pren').forEach(function(el){el.classList.toggle('cal-pren-hide',calPrenHidden);});
-  var btn=$('calEyeBtn');if(btn)btn.textContent=calPrenHidden?'X':'O';
+  // hide/show only td body cells and tfoot cell, NOT the th
+  tbl.querySelectorAll('tbody .c-pren-cell,tfoot .cf-pren-cell').forEach(function(el){
+    el.classList.toggle('cal-pren-hide',calPrenHidden);
+  });
+  // toggle text span in header (button itself never hidden)
+  var txt=$('calPrenTxt');if(txt)txt.style.display=calPrenHidden?'none':'';
+  var btn=$('calEyeBtn');if(btn)btn.textContent=calPrenHidden?'\ud83d\udeab':'\ud83d\udc41';
 }
 function buildCalHead(){
   var seq=monSeq(),sh=MONTHS[lang].s,t=LANG[lang],year=CY,h='<tr>';
-  h+='<th class="c-pren">'+t.cal_pren+' <button class="cal-eye" id="calEyeBtn" onclick="tcCalPren()" title="Ocultar/mostrar">'+(calPrenHidden?'X':'O')+'</button></th>';
+  // Header: text in a toggleable span, button always visible
+  h+='<th class="c-pren">';
+  h+='<span id="calPrenTxt"'+(calPrenHidden?' style="display:none"':'')+'>'+t.cal_pren+'</span>';
+  h+=' <button class="cal-eye" id="calEyeBtn" onclick="tcCalPren()" style="display:inline!important;">'+(calPrenHidden?'\ud83d\udeab':'\ud83d\udc41')+'</button>';
+  h+='</th>';
   h+='<th class="c-ico"></th>';
   seq.forEach(function(m,i){
     if(i>0&&m===0)year++;
@@ -388,50 +392,60 @@ function buildCalHead(){
     var cls='c-mon';if(i===0)cls+=' c-curr';if(m===0&&i>0)cls+=' c-newy';
     h+='<th class="'+cls+'">'+sh[m]+yTag+'</th>';
   });
+  h+='<th class="c-notes" data-i18n="h_risc">'+t.h_risc+'</th>';
   h+='</tr>';
   $('calHead').innerHTML=h;
-  if(calPrenHidden){var tbl=$('calTable');if(tbl)tbl.querySelectorAll('.c-pren,.cf-pren').forEach(function(el){el.classList.add('cal-pren-hide');});}
+  // Re-apply hidden state to tbody/tfoot cells if needed
+  if(calPrenHidden){
+    var tbl=$('calTable');
+    if(tbl)tbl.querySelectorAll('tbody .c-pren-cell,tfoot .cf-pren-cell').forEach(function(el){el.classList.add('cal-pren-hide');});
+  }
 }
 function buildCal(){
   var seq=monSeq(),t=LANG[lang];
   var cb=$('calBody'),cf=$('calFoot'),rows=$$('#tbody tr');
-  if(!rows.length){cb.innerHTML='<tr><td class="c-pren" colspan="15" style="color:var(--gray-3);font-style:italic;padding:20px 12px;">'+t.cal_empty+'</td></tr>';cf.innerHTML='';return;}
+  if(!rows.length){cb.innerHTML='<tr><td colspan="16" style="color:var(--gray-3);font-style:italic;padding:20px 12px;">'+t.cal_empty+'</td></tr>';cf.innerHTML='';return;}
   var tots=new Array(12).fill(0),bh='';
   rows.forEach(function(row){
-    var ctS=row.querySelector('.ct select'),mS=row.querySelector('.cm select'),fpS=row.querySelector('.cfp select'),pI=row.querySelector('.cv input'),crS=row.querySelector('.cr select');
+    var ctS=row.querySelector('.ct select'),mS=row.querySelector('.cm select'),fpS=row.querySelector('.cfp select'),pI=row.querySelector('.cv input'),crS=row.querySelector('.cr select'),nI=row.querySelector('.co input');
     var pid=ctS?parseInt(ctS.value):null;
     var pr=prenedors.find(function(p){return p.id===pid;});
-    var pNom=pr?(pr.nom||'--'):'--';
+    var pNom=pr?(pr.nom||'\u2014'):'\u2014';
     var caRamo=crS?crS.value:'';
+    var notes2=nI?nI.value.trim():'';
     var mv=mS?parseInt(mS.value):CM,fo=fpS?fpS.value:'anual';
     var prima=pI?(parseFloat(pI.value)||0):0;
     var pm=payMonths(mv,fo),fr2=pm.length?prima/pm.length:0;
     var ga=new Array(12).fill(0);
     pm.forEach(function(mi){var pos=seq.indexOf(mi);if(pos!==-1)ga[pos]+=fr2;});
     ga.forEach(function(a,i){tots[i]+=a;});
-    var pClass='c-pren'+(calPrenHidden?' cal-pren-hide':'');
-    bh+='<tr><td class="'+pClass+'">'+esc(pNom)+'</td><td class="c-ico">'+rsvg(caRamo)+'</td>';
-    ga.forEach(function(a,i){var cc=(i===0)?' c-now':'';bh+=a>0?'<td class="c-amt c-has'+cc+'">'+fmt(a)+'</td>':'<td class="c-amt'+cc+'"></td>';});
+    var pHide=calPrenHidden?' cal-pren-hide':'';
+    bh+='<tr><td class="c-pren-cell'+pHide+'">'+esc(pNom)+'</td>';
+    bh+='<td class="c-ico">'+rsvg(caRamo)+'</td>';
+    ga.forEach(function(a,i){bh+=a>0?'<td class="c-amt c-has">'+fmt(a)+'</td>':'<td class="c-amt"></td>';});
+    bh+='<td class="c-notes">'+esc(notes2)+'</td>';
     bh+='</tr>';
   });
   cb.innerHTML=bh;
-  var fClass='cf-pren'+(calPrenHidden?' cal-pren-hide':'');
-  var fh='<tr><td class="'+fClass+'">--</td><td class="cf-ico"></td>';
-  tots.forEach(function(v){fh+=v>0?'<td class="cf-has">'+fmt(v)+'</td>':'<td class="cf-nil">--</td>';});
+  var pHide=calPrenHidden?' cal-pren-hide':'';
+  var fh='<tr><td class="cf-pren-cell'+pHide+'">&#8212;</td>';
+  fh+='<td class="cf-ico"></td>';
+  tots.forEach(function(v){fh+=v>0?'<td class="cf-has">'+fmt(v)+'</td>':'<td class="cf-nil">&#8212;</td>';});
+  fh+='<td class="cf-notes"></td>';
   fh+='</tr>';cf.innerHTML=fh;
 }
 function addCustomCol(){
   ccUid++;var id=ccUid;var ttl=LANG[lang].new_col;customCols.push({id:id,title:ttl});
   var hr=$('ptHeadRow'),la=hr.querySelector('.th-a');
   var th=document.createElement('th');th.className='cc-col cc-'+id;th.style.width='110px';
-  th.innerHTML='<div class="cc-hi"><input class="cc-tin" value="'+esc(ttl)+'" oninput="updateCC('+id+',this.value)"><button class="cc-x" onclick="delCC('+id+')">x</button></div>';
+  th.innerHTML='<div class="cc-hi"><input class="cc-tin" value="'+esc(ttl)+'" oninput="updateCC('+id+',this.value)"><button class="cc-x" onclick="delCC('+id+')">\u00d7</button></div>';
   hr.insertBefore(th,la);
-  $$('#tbody tr').forEach(function(row){var la2=row.querySelector('.ca');var td=document.createElement('td');td.className='cc-col cc-'+id+(hiddenCols.has('cc-'+id)?' col-off':'');td.innerHTML='<input type="text" placeholder="..." style="border:none;border-bottom:1.5px solid var(--gray-4);padding:4px 2px;font-size:11.5px;color:var(--dark);font-family:Inter,sans-serif;background:transparent;outline:none;width:100%;">';row.insertBefore(td,la2);});
+  $$('#tbody tr').forEach(function(row){var la2=row.querySelector('.ca');var td=document.createElement('td');td.className='cc-col cc-'+id+(hiddenCols.has('cc-'+id)?' col-off':'');td.innerHTML='<input type="text" placeholder="\u2026" style="border:none;border-bottom:1.5px solid var(--gray-4);padding:5px 2px;font-size:15px;color:var(--dark);font-family:Inter,sans-serif;background:transparent;outline:none;width:100%;">';row.insertBefore(td,la2);});
   var tf=$('tfootRow'),lt=tf.querySelector('.ca');var td2=document.createElement('td');td2.className='cc-col cc-'+id;td2.style.background='#EEE';tf.insertBefore(td2,lt);
-  var box=$('visBox');var nb=document.createElement('button');nb.className='vbtn';nb.id='b-cc-'+id;nb.innerHTML='O '+esc(ttl);nb.onclick=function(){tc('cc-'+id,'b-cc-'+id);};box.appendChild(nb);
+  var box=$('visBox');var nb=document.createElement('button');nb.className='vbtn';nb.id='b-cc-'+id;nb.innerHTML='\ud83d\udc41 '+esc(ttl);nb.onclick=function(){tc('cc-'+id,'b-cc-'+id);};box.appendChild(nb);
 }
 function delCC(id){customCols=customCols.filter(function(c){return c.id!==id;});$$('.cc-'+id).forEach(function(el){el.remove();});var b=$('b-cc-'+id);if(b)b.remove();}
-function updateCC(id,val){var c=customCols.find(function(c){return c.id===id;});if(c)c.title=val;var b=$('b-cc-'+id);if(b)b.innerHTML='O '+(val||'Col');}
+function updateCC(id,val){var c=customCols.find(function(c){return c.id===id;});if(c)c.title=val;var b=$('b-cc-'+id);if(b)b.innerHTML='\ud83d\udc41 '+(val||'Col');}
 function makeRow(d){
   d=d||{};rowUid++;var n=rowUid,t=LANG[lang];
   var pv=d.prenId||(prenedors[0]?prenedors[0].id:'');
@@ -443,9 +457,9 @@ function makeRow(d){
   for(var day=1;day<=mx;day++){dOpts+='<option value="'+day+'"'+((day===dv||(dv>mx&&day===mx))?' selected':'')+'>'+day+'</option>';}
   var fv=d.forma||'anual';
   var fOpts=FORMES[lang].map(function(pair){return '<option value="'+pair[0]+'"'+(fv===pair[0]?' selected':'')+'>'+pair[1]+'</option>';}).join('');
-  var ccCells=customCols.map(function(cc){return '<td class="cc-col cc-'+cc.id+(hiddenCols.has('cc-'+cc.id)?' col-off':'')+'"><input type="text" placeholder="..." style="border:none;border-bottom:1.5px solid var(--gray-4);padding:4px 2px;font-size:11.5px;color:var(--dark);font-family:Inter,sans-serif;background:transparent;outline:none;width:100%;"></td>';}).join('');
+  var ccCells=customCols.map(function(cc){return '<td class="cc-col cc-'+cc.id+(hiddenCols.has('cc-'+cc.id)?' col-off':'')+'"><input type="text" placeholder="\u2026" style="border:none;border-bottom:1.5px solid var(--gray-4);padding:5px 2px;font-size:15px;color:var(--dark);font-family:Inter,sans-serif;background:transparent;outline:none;width:100%;"></td>';}).join('');
   var coRaw=d.co||'';var bBadge=coBadge(coRaw,n);
-  var coCell=bBadge?'<td class="cco" data-rawco="'+esc(coRaw)+'">'+bBadge+'</td>':'<td class="cco"><input type="text" placeholder="'+t.ph_co+'" value="'+esc(coRaw)+'" style="border:none;border-bottom:1.5px solid var(--gray-4);padding:4px 2px;font-size:11.5px;color:var(--dark);font-family:Inter,sans-serif;background:transparent;outline:none;width:100%;" onblur="tryConvertCo(this,'+n+')" onkeydown="if(event.key===\'Enter\')this.blur()"></td>';
+  var coCell=bBadge?'<td class="cco" data-rawco="'+esc(coRaw)+'">'+bBadge+'</td>':'<td class="cco"><input type="text" placeholder="'+t.ph_co+'" value="'+esc(coRaw)+'" style="border:none;border-bottom:1.5px solid var(--gray-4);padding:5px 2px;font-size:15px;color:var(--dark);font-family:Inter,sans-serif;background:transparent;outline:none;width:100%;" onblur="tryConvertCo(this,'+n+')" onkeydown="if(event.key===\'Enter\')this.blur()"></td>';
   return '<tr id="r'+n+'"><td class="td-n cn">'+n+'</td><td class="ct"><select onchange="refreshAll()">'+pOpts+'</select></td><td class="ci td-i"><span id="ic-'+n+'">'+rsvg(d.ramo||'')+'</span></td>'+coCell+'<td class="cr"><select onchange="updateRamoIcon('+n+');refreshAll()">'+rOpts+'</select></td><td class="cp"><input type="text" id="pol'+n+'" placeholder="'+t.ph_pol+'" value="'+esc(d.poliza)+'" style="font-family:Inter,monospace;letter-spacing:.4px;" oninput="fmtPol(this)"></td><td class="cm"><select id="mes'+n+'" onchange="updateDays('+n+')">'+mOpts+'</select></td><td class="cd td-d" style="text-align:center;"><select id="dia'+n+'" onchange="refreshAll()" style="text-align:center;">'+dOpts+'</select></td><td class="cv td-v"><input type="number" step="0.01" min="0" placeholder="0,00" value="'+esc(d.prima)+'" oninput="refreshAll()"></td><td class="cfp"><select onchange="refreshAll()">'+fOpts+'</select></td><td class="co"><input type="text" placeholder="'+t.ph_risc+'" value="'+esc(d.notas)+'" oninput="refreshAll()"></td>'+ccCells+'<td class="ca"><button class="delbtn" onclick="delRow('+n+')" title="'+t.del_row+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>';
 }
 function addRow(d){$('tbody').insertAdjacentHTML('beforeend',makeRow(d));hiddenCols.forEach(function(cls){var r=$('r'+rowUid);if(r)r.querySelectorAll('.'+cls).forEach(function(el){el.classList.add('col-off');});});refreshAll();}
@@ -458,15 +472,14 @@ function tc(col,bid){
   var btn=$(bid),isOff=btn.classList.contains('off');
   if(isOff){btn.classList.remove('off');hiddenCols.delete(col);$$(('.'+col)).forEach(function(el){el.classList.remove('col-off');});}
   else{btn.classList.add('off');hiddenCols.add(col);$$(('.'+col)).forEach(function(el){el.classList.add('col-off');});}
-  var fn=btn.childNodes[0];if(fn&&fn.nodeType===3)fn.textContent=isOff?'O ':'X ';
+  var fn=btn.childNodes[0];if(fn&&fn.nodeType===3)fn.textContent=isOff?'\ud83d\udc41 ':'\ud83d\udeab ';
 }
 function updateContactBtns(){
   var prenNom=prenedors[0]&&prenedors[0].nom?prenedors[0].nom.trim():'';
-  var subj=encodeURIComponent('Calendari de Pagaments'+(prenNom?' - '+prenNom:''));
-  var body=encodeURIComponent('Bon dia,\n\nAdjunto el calendari de pagaments'+(prenNom?' del client '+prenNom:'')+'.\n\nSalutacions,\nOptimizarte by Occident');
-  var waT=encodeURIComponent('Calendari de pagaments'+(prenNom?' - '+prenNom:''));
-  var EMAIL='';// <- BD: mail client
-  var PHONE='';// <- BD: telefon client (ex: 34647568360)
+  var subj=encodeURIComponent('Calendari de Pagaments'+(prenNom?' \u2013 '+prenNom:''));
+  var body=encodeURIComponent('Bon dia,\n\nAdjunto el calendari de pagaments de p\u00f2lisses'+(prenNom?' del client '+prenNom:'')+'.\n\nSalutacions,\nOptimizarte by Occident');
+  var waT=encodeURIComponent('Calendari de pagaments de p\u00f2lisses'+(prenNom?' \u2013 '+prenNom:''));
+  var EMAIL=''; var PHONE='';
   var bm=$('btnMail');if(bm)bm.href='mailto:'+EMAIL+'?subject='+subj+'&body='+body;
   var bw=$('btnWa');if(bw)bw.href='https://wa.me/'+PHONE+'?text='+waT;
 }
@@ -480,112 +493,6 @@ function saveDoc(){
   document.body.appendChild(a);a.click();
   document.body.removeChild(a);URL.revokeObjectURL(url);
 }
-$('datadoc').value=TODAY.toISOString().split('T')[0];
-buildCalHead();
-addPrenedor({nom:'',nif:''});
-addRow();
-updateContactBtns();
-</script>
-</body>
-</html>
-<script>
-'use strict';
-
-const T={ca:{hdr_title:'Calendari de Pagaments de P\u00f2lisses',hdr_sub:'Document informatiu \u00b7 OPTIMIZARTE 3.0 \u00b7 Mediador 17167',notice:'Afegeix prenedors, introdueix p\u00f2lisses i la <strong>graella de distribuci\u00f3</strong> s\'actualitza autom\u00e0ticament. Imprimeix en <strong>A4 apa\u00efsat</strong>.',lbl_pren:'Prenedors / Assegurats',lbl_date:'Data Document',btn_ap:'Afegir assegurat',fld_nom:'Prenedor',fld_nif:'NIF / CIF',ph_nom:'Nom complet o ra\u00f3 social\u2026',ph_pol:'N\u00ba P\u00f2lissa',ph_risc:'Risc assegurat\u2026',ph_co:'Companyia\u2026',cal_title:'Distribuci\u00f3 Mensual de Pagaments',cal_empty:'Introdueix p\u00f2lisses al formulari per veure la distribuci\u00f3 mensual\u2026',cal_pren:'Prenedor',cal_total:'TOTAL MENSUAL',vis_lbl:'Visible al imprimir:',v_pren:'Prenedor',v_ram:'Ram / Producte',v_pol:'N\u00ba P\u00f2lissa',v_mes:'Mes Ven\u00e7.',v_dia:'Dia',v_prima:'Prima',v_forma:'Forma Pagament',v_risc:'Risc / Notes',pol_base:'P\u00f2lisses en vigor',btn_col:'Afegir columna',th_pren:'Prenedor',th_co:'Companyia',th_ram:'Ram / Producte',th_pol:'N\u00ba P\u00f2lissa',th_mes:'Mes Venciment',th_dia:'Dia',th_prima:'Prima (\u20ac)',th_forma:'Forma Pagament',th_risc:'Notes / Risc Assegurat',total_lbl:'TOTAL PRIMES ANUALS',btn_add:'Afegir P\u00f2lissa',btn_clr:'Netejar Taula',btn_clrall:'Netejar Tot',btn_save:'Guardar',btn_mail:'Enviar Mail',btn_wa:'WhatsApp',btn_print:'Imprimir / PDF',foot_brand:'OPTIMIZARTE 3.0 \u2014 SCO',c_rows:'Netejar totes les p\u00f2lisses?',c_all:'Netejar tot el document?',ramo_ph:'— Selecciona —',pren_ph:'— Sense nom —',del_row:'Eliminar fila',del_pren:'Eliminar prenedor',del_col:'Eliminar columna',new_col:'Nova columna',months_l:['Gener','Febrer','Mar\u00e7','Abril','Maig','Juny','Juliol','Agost','Setembre','Octubre','Novembre','Desembre'],months_s:['Gen','Feb','Mar','Abr','Mai','Jun','Jul','Ago','Set','Oct','Nov','Des'],ramos:['','Llar','Salut','Vida','Motor','Moto','Empresa / Comer\u00e7','RC Professional','RC Patronal','Protecci\u00f3 Jur\u00eddica','Estalvis / Jubilaci\u00f3','Accidents','Defunci\u00f3','Lloguer','Multiriscos','Comunitats','Altres'],formes:[['anual','Anual'],['semestral','Semestral'],['quatrimestral','Quatrimestral'],['trimestral','Trimestral'],['bimestral','Bimestral'],['mensual','Mensual']]},
-es:{hdr_title:'Calendario de Pagos de P\u00f3lizas',hdr_sub:'Documento informativo \u00b7 OPTIMIZARTE 3.0 \u00b7 Mediador 17167',notice:'A\u00f1ade tomadores, introduce p\u00f3lizas y la <strong>cuadr\u00edcula de distribuci\u00f3n</strong> se actualiza autom\u00e1ticamente. Imprime en <strong>A4 apaisado</strong>.',lbl_pren:'Tomadores / Asegurados',lbl_date:'Fecha Documento',btn_ap:'A\u00f1adir asegurado',fld_nom:'Tomador',fld_nif:'NIF / CIF',ph_nom:'Nombre completo o raz\u00f3n social\u2026',ph_pol:'N\u00ba P\u00f3liza',ph_risc:'Riesgo asegurado\u2026',ph_co:'Compa\u00f1\u00eda\u2026',cal_title:'Distribuci\u00f3n Mensual de Pagos',cal_empty:'Introduce p\u00f3lizas en el formulario para ver la distribuci\u00f3n mensual\u2026',cal_pren:'Tomador',cal_total:'TOTAL MENSUAL',vis_lbl:'Visible al imprimir:',v_pren:'Tomador',v_ram:'Ramo / Producto',v_pol:'N\u00ba P\u00f3liza',v_mes:'Mes Venc.',v_dia:'D\u00eda',v_prima:'Prima',v_forma:'Forma de Pago',v_risc:'Riesgo / Notas',pol_base:'P\u00f3lizas en vigor',btn_col:'A\u00f1adir columna',th_pren:'Tomador',th_co:'Compa\u00f1\u00eda',th_ram:'Ramo / Producto',th_pol:'N\u00ba P\u00f3liza',th_mes:'Mes de Vencimiento',th_dia:'D\u00eda',th_prima:'Prima (\u20ac)',th_forma:'Forma de Pago',th_risc:'Notas / Riesgo Asegurado',total_lbl:'TOTAL PRIMAS ANUALES',btn_add:'A\u00f1adir P\u00f3liza',btn_clr:'Limpiar Tabla',btn_clrall:'Limpiar Todo',btn_save:'Guardar',btn_mail:'Enviar Email',btn_wa:'WhatsApp',btn_print:'Imprimir / PDF',foot_brand:'OPTIMIZARTE 3.0 \u2014 SCO',c_rows:'\u00bfLimpiar todas las p\u00f3lizas?',c_all:'\u00bfLimpiar todo el documento?',ramo_ph:'— Selecciona —',pren_ph:'— Sin nombre —',del_row:'Eliminar fila',del_pren:'Eliminar tomador',del_col:'Eliminar columna',new_col:'Nueva columna',months_l:['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],months_s:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],ramos:['','Hogar','Salud','Vida','Motor','Moto','Empresa / Comercio','RC Profesional','RC Patronal','Protecci\u00f3n Jur\u00eddica','Ahorros / Jubilaci\u00f3n','Accidentes','Defunci\u00f3n','Alquiler','Multiriesgos','Comunidades','Otros'],formes:[['anual','Anual'],['semestral','Semestral'],['quatrimestral','Cuatrimestral'],['trimestral','Trimestral'],['bimestral','Bimestral'],['mensual','Mensual']]},
-fr:{hdr_title:'Calendrier des Paiements de Polices',hdr_sub:'Document informatif \u00b7 OPTIMIZARTE 3.0 \u00b7 Interm\u00e9diaire 17167',notice:'Ajoutez des souscripteurs, saisissez les polices et la <strong>grille de distribution</strong> se met \u00e0 jour automatiquement. Imprimez en <strong>A4 paysage</strong>.',lbl_pren:'Souscripteurs / Assur\u00e9s',lbl_date:'Date du Document',btn_ap:'Ajouter un assur\u00e9',fld_nom:'Souscripteur',fld_nif:'N\u00b0 ID / SIRET',ph_nom:'Nom complet ou raison sociale\u2026',ph_pol:'N\u00b0 Police',ph_risc:'Risque assur\u00e9\u2026',ph_co:'Compagnie\u2026',cal_title:'Distribution Mensuelle des Paiements',cal_empty:'Saisissez des polices dans le formulaire pour voir la distribution mensuelle\u2026',cal_pren:'Souscripteur',cal_total:'TOTAL MENSUEL',vis_lbl:"Visible \u00e0 l'impression :",v_pren:'Souscripteur',v_ram:'Branche / Produit',v_pol:'N\u00b0 Police',v_mes:'Mois \u00c9ch.',v_dia:'Jour',v_prima:'Prime',v_forma:'Mode de Paiement',v_risc:'Risque / Notes',pol_base:'Polices en vigueur',btn_col:'Ajouter une colonne',th_pren:'Souscripteur',th_co:'Compagnie',th_ram:'Branche / Produit',th_pol:'N\u00b0 Police',th_mes:"Mois d'\u00c9ch\u00e9ance",th_dia:'Jour',th_prima:'Prime (\u20ac)',th_forma:'Mode de Paiement',th_risc:'Notes / Risque Assur\u00e9',total_lbl:'TOTAL PRIMES ANNUELLES',btn_add:'Ajouter une Police',btn_clr:'Effacer le Tableau',btn_clrall:'Tout Effacer',btn_save:'Enregistrer',btn_mail:'Envoyer Email',btn_wa:'WhatsApp',btn_print:'Imprimer / PDF',foot_brand:'OPTIMIZARTE 3.0 \u2014 SCO',c_rows:'Effacer toutes les polices ?',c_all:'Effacer tout le document ?',ramo_ph:'— S\u00e9lectionner —',pren_ph:'— Sans nom —',del_row:'Supprimer la ligne',del_pren:'Supprimer le souscripteur',del_col:'Supprimer la colonne',new_col:'Nouvelle colonne',months_l:['Janvier','F\u00e9vrier','Mars','Avril','Mai','Juin','Juillet','Ao\u00fbt','Septembre','Octobre','Novembre','D\u00e9cembre'],months_s:['Jan','F\u00e9v','Mar','Avr','Mai','Jun','Jul','Ao\u00fb','Sep','Oct','Nov','D\u00e9c'],ramos:['','Habitation','Sant\u00e9','Vie','Auto','Moto','Entreprise / Commerce','RC Professionnelle','RC Employeur','Protection Juridique','\u00c9pargne / Retraite','Accidents','D\u00e9c\u00e8s','Location','Multirisques','Copropri\u00e9t\u00e9s','Autres'],formes:[['anual','Annuel'],['semestral','Semestriel'],['quatrimestral','Quadrimestriel'],['trimestral','Trimestriel'],['bimestral','Bimestriel'],['mensual','Mensuel']]},
-en:{hdr_title:'Policy Payment Calendar',hdr_sub:'Informational document \u00b7 OPTIMIZARTE 3.0 \u00b7 Broker 17167',notice:'Add policyholders, enter policies and the <strong>distribution grid</strong> updates automatically. Print in <strong>A4 landscape</strong>.',lbl_pren:'Policyholders / Insured',lbl_date:'Document Date',btn_ap:'Add insured',fld_nom:'Policyholder',fld_nif:'ID / Tax No.',ph_nom:'Full name or company name\u2026',ph_pol:'Policy No.',ph_risc:'Insured risk\u2026',ph_co:'Insurer\u2026',cal_title:'Monthly Payment Distribution',cal_empty:'Enter policies in the form to view the monthly distribution\u2026',cal_pren:'Policyholder',cal_total:'MONTHLY TOTAL',vis_lbl:'Visible when printing:',v_pren:'Policyholder',v_ram:'Branch / Product',v_pol:'Policy No.',v_mes:'Due Month',v_dia:'Day',v_prima:'Premium',v_forma:'Payment Method',v_risc:'Risk / Notes',pol_base:'Active Policies',btn_col:'Add column',th_pren:'Policyholder',th_co:'Insurer',th_ram:'Branch / Product',th_pol:'Policy No.',th_mes:'Due Month',th_dia:'Day',th_prima:'Premium (\u20ac)',th_forma:'Payment Method',th_risc:'Notes / Insured Risk',total_lbl:'TOTAL ANNUAL PREMIUMS',btn_add:'Add Policy',btn_clr:'Clear Table',btn_clrall:'Clear All',btn_save:'Save',btn_mail:'Send Email',btn_wa:'WhatsApp',btn_print:'Print / PDF',foot_brand:'OPTIMIZARTE 3.0 \u2014 SCO',c_rows:'Clear all policies?',c_all:'Clear the entire document?',ramo_ph:'— Select —',pren_ph:'— No name —',del_row:'Delete row',del_pren:'Delete policyholder',del_col:'Delete column',new_col:'New column',months_l:['January','February','March','April','May','June','July','August','September','October','November','December'],months_s:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],ramos:['','Home','Health','Life','Motor','Motorcycle','Business','Professional Liability','Employer Liability','Legal Protection','Savings / Retirement','Accidents','Death','Rental','Multi-risk','Communities','Others'],formes:[['anual','Annual'],['semestral','Semi-annual'],['quatrimestral','Four-monthly'],['trimestral','Quarterly'],['bimestral','Bi-monthly'],['mensual','Monthly']]},
-ar:{hdr_title:'\u062c\u062f\u0648\u0644 \u062f\u0641\u0639\u0627\u062a \u0648\u062b\u0627\u0626\u0642 \u0627\u0644\u062a\u0623\u0645\u064a\u0646',hdr_sub:'\u0648\u062b\u064a\u0642\u0629 \u0645\u0639\u0644\u0648\u0645\u0627\u062a \u00b7 OPTIMIZARTE 3.0 \u00b7 \u0648\u0633\u064a\u0637 17167',notice:'\u0623\u0636\u0641 \u0627\u0644\u0645\u0643\u062a\u062a\u0628\u064a\u0646\u060c \u0623\u062f\u062e\u0644 \u0648\u062b\u0627\u0626\u0642 \u0627\u0644\u062a\u0623\u0645\u064a\u0646 \u0648\u0633\u064a\u062a\u062d\u062f\u062b <strong>\u062c\u062f\u0648\u0644 \u0627\u0644\u062a\u0648\u0632\u064a\u0639</strong> \u062a\u0644\u0642\u0627\u0626\u064a\u0627\u064b. \u0627\u0637\u0628\u0639 \u0628\u062a\u0646\u0633\u064a\u0642 <strong>A4 \u0623\u0641\u0642\u064a</strong>.',lbl_pren:'\u0627\u0644\u0645\u0643\u062a\u062a\u0628\u0648\u0646 / \u0627\u0644\u0645\u0624\u0645\u064e\u0651\u0646 \u0644\u0647\u0645',lbl_date:'\u062a\u0627\u0631\u064a\u062e \u0627\u0644\u0648\u062b\u064a\u0642\u0629',btn_ap:'\u0625\u0636\u0627\u0641\u0629 \u0645\u0624\u0645\u064e\u0651\u0646',fld_nom:'\u0627\u0644\u0645\u0643\u062a\u062a\u0628',fld_nif:'\u0631\u0642\u0645 \u0627\u0644\u062a\u0639\u0631\u064a\u0641 \u0627\u0644\u0636\u0631\u064a\u0628\u064a',ph_nom:'\u0627\u0644\u0627\u0633\u0645 \u0627\u0644\u0643\u0627\u0645\u0644 \u0623\u0648 \u0627\u0633\u0645 \u0627\u0644\u0634\u0631\u0643\u0629\u2026',ph_pol:'\u0631\u0642\u0645 \u0627\u0644\u0648\u062b\u064a\u0642\u0629',ph_risc:'\u0627\u0644\u062e\u0637\u0631 \u0627\u0644\u0645\u0624\u0645\u064e\u0651\u0646 \u0639\u0644\u064a\u0647\u2026',ph_co:'\u0634\u0631\u0643\u0629 \u0627\u0644\u062a\u0623\u0645\u064a\u0646\u2026',cal_title:'\u0627\u0644\u062a\u0648\u0632\u064a\u0639 \u0627\u0644\u0634\u0647\u0631\u064a \u0644\u0644\u062f\u0641\u0639\u0627\u062a',cal_empty:'\u0623\u062f\u062e\u0644 \u0648\u062b\u0627\u0626\u0642 \u0627\u0644\u062a\u0623\u0645\u064a\u0646 \u0641\u064a \u0627\u0644\u0646\u0645\u0648\u0630\u062c \u0644\u0639\u0631\u0636 \u0627\u0644\u062a\u0648\u0632\u064a\u0639 \u0627\u0644\u0634\u0647\u0631\u064a\u2026',cal_pren:'\u0627\u0644\u0645\u0643\u062a\u062a\u0628',cal_total:'\u0627\u0644\u0645\u062c\u0645\u0648\u0639 \u0627\u0644\u0634\u0647\u0631\u064a',vis_lbl:'\u0645\u0631\u0626\u064a \u0639\u0646\u062f \u0627\u0644\u0637\u0628\u0627\u0639\u0629:',v_pren:'\u0627\u0644\u0645\u0643\u062a\u062a\u0628',v_ram:'\u0627\u0644\u0641\u0631\u0639 / \u0627\u0644\u0645\u0646\u062a\u062c',v_pol:'\u0631\u0642\u0645 \u0627\u0644\u0648\u062b\u064a\u0642\u0629',v_mes:'\u0634\u0647\u0631 \u0627\u0644\u0627\u0633\u062a\u062d\u0642\u0627\u0642',v_dia:'\u0627\u0644\u064a\u0648\u0645',v_prima:'\u0627\u0644\u0642\u0633\u0637',v_forma:'\u0637\u0631\u064a\u0642\u0629 \u0627\u0644\u062f\u0641\u0639',v_risc:'\u0627\u0644\u062e\u0637\u0631 / \u0645\u0644\u0627\u062d\u0638\u0627\u062a',pol_base:'\u0627\u0644\u0648\u062b\u0627\u0626\u0642 \u0627\u0644\u0633\u0627\u0631\u064a\u0629',btn_col:'\u0625\u0636\u0627\u0641\u0629 \u0639\u0645\u0648\u062f',th_pren:'\u0627\u0644\u0645\u0643\u062a\u062a\u0628',th_co:'\u0634\u0631\u0643\u0629 \u0627\u0644\u062a\u0623\u0645\u064a\u0646',th_ram:'\u0627\u0644\u0641\u0631\u0639 / \u0627\u0644\u0645\u0646\u062a\u062c',th_pol:'\u0631\u0642\u0645 \u0627\u0644\u0648\u062b\u064a\u0642\u0629',th_mes:'\u0634\u0647\u0631 \u0627\u0644\u0627\u0633\u062a\u062d\u0642\u0627\u0642',th_dia:'\u0627\u0644\u064a\u0648\u0645',th_prima:'\u0627\u0644\u0642\u0633\u0637 (\u20ac)',th_forma:'\u0637\u0631\u064a\u0642\u0629 \u0627\u0644\u062f\u0641\u0639',th_risc:'\u0645\u0644\u0627\u062d\u0638\u0627\u062a / \u0627\u0644\u062e\u0637\u0631 \u0627\u0644\u0645\u0624\u0645\u064e\u0651\u0646 \u0639\u0644\u064a\u0647',total_lbl:'\u0645\u062c\u0645\u0648\u0639 \u0627\u0644\u0623\u0642\u0633\u0627\u0637 \u0627\u0644\u0633\u0646\u0648\u064a\u0629',btn_add:'\u0625\u0636\u0627\u0641\u0629 \u0648\u062b\u064a\u0642\u0629',btn_clr:'\u0645\u0633\u062d \u0627\u0644\u062c\u062f\u0648\u0644',btn_clrall:'\u0645\u0633\u062d \u0627\u0644\u0643\u0644',btn_save:'\u062d\u0641\u0638',btn_mail:'\u0625\u0631\u0633\u0627\u0644 \u0628\u0631\u064a\u062f',btn_wa:'\u0648\u0627\u062a\u0633\u0627\u0628',btn_print:'\u0637\u0628\u0627\u0639\u0629 / PDF',foot_brand:'OPTIMIZARTE 3.0 \u2014 SCO',c_rows:'\u0647\u0644 \u062a\u0631\u064a\u062f \u0645\u0633\u062d \u062c\u0645\u064a\u0639 \u0627\u0644\u0648\u062b\u0627\u0626\u0642\u061f',c_all:'\u0647\u0644 \u062a\u0631\u064a\u062f \u0645\u0633\u062d \u0643\u0644 \u0627\u0644\u0648\u062b\u064a\u0642\u0629\u061f',ramo_ph:'\u2014 \u0627\u062e\u062a\u0631 \u2014',pren_ph:'\u2014 \u0628\u062f\u0648\u0646 \u0627\u0633\u0645 \u2014',del_row:'\u062d\u0630\u0641 \u0627\u0644\u0633\u0637\u0631',del_pren:'\u062d\u0630\u0641 \u0627\u0644\u0645\u0643\u062a\u062a\u0628',del_col:'\u062d\u0630\u0641 \u0627\u0644\u0639\u0645\u0648\u062f',new_col:'\u0639\u0645\u0648\u062f \u062c\u062f\u064a\u062f',months_l:['\u064a\u0646\u0627\u064a\u0631','\u0641\u0628\u0631\u0627\u064a\u0631','\u0645\u0627\u0631\u0633','\u0623\u0628\u0631\u064a\u0644','\u0645\u0627\u064a','\u064a\u0648\u0646\u064a\u0648','\u064a\u0648\u0644\u064a\u0648\u0632','\u063a\u0634\u062a','\u0634\u062a\u0646\u0628\u0631','\u0623\u0643\u062a\u0648\u0628\u0631','\u0646\u0648\u0646\u0628\u0631','\u062f\u062c\u0646\u0628\u0631'],months_s:['\u064a\u0646','\u0641\u0628','\u0645\u0627\u0631','\u0623\u0628\u0631','\u0645\u0627\u064a','\u064a\u0648\u0646','\u064a\u0648\u0644','\u063a\u0634','\u0634\u062a\u0646','\u0623\u0643\u062a','\u0646\u0648\u0646','\u062f\u062c\u0646'],ramos:['','\u0627\u0644\u0633\u0643\u0646','\u0627\u0644\u0635\u062d\u0629','\u0627\u0644\u062d\u064a\u0627\u0629','\u0627\u0644\u0633\u064a\u0627\u0631\u0629','\u0627\u0644\u062f\u0631\u0627\u062c\u0629 \u0627\u0644\u0646\u0627\u0631\u064a\u0629','\u0627\u0644\u0645\u0642\u0627\u0648\u0644\u0629 / \u0627\u0644\u062a\u062c\u0627\u0631\u0629','\u0627\u0644\u0645\u0633\u0624\u0648\u0644\u064a\u0629 \u0627\u0644\u0645\u0647\u0646\u064a\u0629','\u0645\u0633\u0624\u0648\u0644\u064a\u0629 \u0635\u0627\u062d\u0628 \u0627\u0644\u0639\u0645\u0644','\u0627\u0644\u062d\u0645\u0627\u064a\u0629 \u0627\u0644\u0642\u0627\u0646\u0648\u0646\u064a\u0629','\u0627\u0644\u0627\u062f\u062e\u0627\u0631 / \u0627\u0644\u062a\u0642\u0627\u0639\u062f','\u0627\u0644\u062d\u0648\u0627\u062f\u062b','\u0627\u0644\u0648\u0641\u0627\u0629','\u0627\u0644\u0625\u064a\u062c\u0627\u0631','\u0627\u0644\u0645\u062e\u0627\u0637\u0631 \u0627\u0644\u0645\u062a\u0639\u062f\u062f\u0629','\u0627\u0644\u0645\u0644\u0643\u064a\u0629 \u0627\u0644\u0645\u0634\u062a\u0631\u0643\u0629','\u0623\u062e\u0631\u0649'],formes:[['anual','\u0633\u0646\u0648\u064a'],['semestral','\u0643\u0644 \u0633\u062a\u0629 \u0623\u0634\u0647\u0631'],['quatrimestral','\u0643\u0644 \u0623\u0631\u0628\u0639\u0629 \u0623\u0634\u0647\u0631'],['trimestral','\u0631\u0628\u0639 \u0633\u0646\u0648\u064a'],['bimestral','\u0643\u0644 \u0634\u0647\u0631\u064a\u0646'],['mensual','\u0634\u0647\u0631\u064a']]}};
-
-const RSVG={'Llar':'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>','Salut':'<rect x="9" y="3" width="6" height="18" rx="1.5"/><rect x="3" y="9" width="18" height="6" rx="1.5"/>','Vida':'<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>','Motor':'<rect x="1" y="10" width="22" height="8" rx="1.5"/><path d="M5 10V7h5l2 3"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>','Moto':'<circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M9 17h5M7 17 9 7h4l2 5h2"/>','Empresa / Comer\u00e7':'<path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/><path d="M3 9l2-5h14l2 5"/><line x1="12" y1="9" x2="12" y2="21"/>','RC Professional':'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>','RC Patronal':'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>','Protecci\u00f3 Jur\u00eddica':'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>','Estalvis / Jubilaci\u00f3':'<path d="M12 2a8 8 0 0 1 8 8c0 4.4-4 8-8 12C8 18 4 14.4 4 10a8 8 0 0 1 8-8z"/><circle cx="12" cy="10" r="2.5"/>','Accidents':'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>','Defunci\u00f3':'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>','Lloguer':'<path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>','Multiriscos':'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>','Comunitats':'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><rect x="9" y="13" width="6" height="9"/><line x1="6" y1="13" x2="6" y2="21"/><line x1="18" y1="13" x2="18" y2="21"/>','Altres':'<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>'};
-
-const COMPANIES={occident:{bg:'#DC0028',fg:'#fff',tx:'Occident'},allianz:{bg:'#003781',fg:'#fff',tx:'Allianz'},mapfre:{bg:'#CC0000',fg:'#fff',tx:'MAPFRE'},axa:{bg:'#00008F',fg:'#fff',tx:'AXA'},zurich:{bg:'#0066CC',fg:'#fff',tx:'Zurich'},generali:{bg:'#C8102E',fg:'#fff',tx:'Generali'},mutua:{bg:'#009639',fg:'#fff',tx:'Mutua'},helvetia:{bg:'#DA2128',fg:'#fff',tx:'Helvetia'},caser:{bg:'#E8A000',fg:'#000',tx:'CASER'},liberty:{bg:'#005EB8',fg:'#fff',tx:'Liberty'},sanitas:{bg:'#00A3E0',fg:'#fff',tx:'Sanitas'},asisa:{bg:'#0066B3',fg:'#fff',tx:'ASISA'},dkv:{bg:'#B5002D',fg:'#fff',tx:'DKV'},reale:{bg:'#B22222',fg:'#fff',tx:'Reale'},ageas:{bg:'#006633',fg:'#fff',tx:'Ageas'},catalana:{bg:'#E4002B',fg:'#fff',tx:'Catalana'},pelayo:{bg:'#FF6600',fg:'#fff',tx:'Pelayo'},fiatc:{bg:'#003087',fg:'#fff',tx:'FIATC'},'plus ultra':{bg:'#00529B',fg:'#fff',tx:'Plus Ultra'},adeslas:{bg:'#009B77',fg:'#fff',tx:'Adeslas'}};
-
-const FORMA_CFG={anual:{n:1,s:12},semestral:{n:2,s:6},quatrimestral:{n:3,s:4},trimestral:{n:4,s:3},bimestral:{n:6,s:2},mensual:{n:12,s:1}};
-const RAMOS_CA=T.ca.ramos;
-
-let lang='ca',prenedors=[],pUid=0,rowUid=0,ccUid=0,customCols=[],calPrenHidden=false;
-const hiddenFormCols=new Set();
-const TODAY=new Date(),CM=TODAY.getMonth(),CY=TODAY.getFullYear();
-const $=id=>document.getElementById(id);
-const $$=s=>document.querySelectorAll(s);
-function esc(v){if(v==null)return'';return String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function fmt(v){return v.toLocaleString('ca-ES',{minimumFractionDigits:2,maximumFractionDigits:2})+' \u20ac';}
-function daysInMonth(m){return new Date(CY,m+1,0).getDate();}
-function monSeq(){return Array.from({length:12},(_,i)=>(CM+i)%12);}
-function payMonths(mv,f){const c=FORMA_CFG[f]||FORMA_CFG.anual;return Array.from({length:c.n},(_,i)=>(mv+i*c.s)%12);}
-function tr(){return T[lang];}
-function rsvg(k){const p=RSVG[k];if(!p)return'';return`<svg viewBox="0 0 24 24" fill="none" stroke="#DC0028" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" style="display:block;margin:auto">${p}</svg>`;}
-function companyKey(txt){if(!txt)return null;const n=txt.toLowerCase().replace(/[àáâã]/g,'a').replace(/[èéê]/g,'e').replace(/[ìíî]/g,'i').replace(/[òóô]/g,'o').replace(/[ùúû]/g,'u').trim();for(const k of Object.keys(COMPANIES)){if(n.includes(k))return k;}return null;}
-
-/* FLAG DROPDOWN */
-(function(){
-  const btn=$('flag-btn'),menu=$('flag-menu');
-  btn.addEventListener('click',function(e){e.stopPropagation();const o=menu.classList.contains('open');menu.classList.toggle('open',!o);btn.classList.toggle('open',!o);});
-  menu.addEventListener('click',function(e){e.stopPropagation();const opt=e.target.closest('.flag-opt');if(!opt)return;btn.classList.remove('open');menu.classList.remove('open');applyLang(opt.dataset.lang);});
-  document.addEventListener('click',function(){if(btn)btn.classList.remove('open');if(menu)menu.classList.remove('open');});
-})();
-
-function applyLang(l){
-  lang=l;const t=T[l];
-  const map={'hdr-title':'hdr_title','hdr-sub':'hdr_sub','lbl-pren':'lbl_pren','lbl-date':'lbl_date','btn-ap':'btn_ap','cal-title':'cal_title','vis-lbl':'vis_lbl','v-pren':'v_pren','v-ram':'v_ram','v-pol':'v_pol','v-mes':'v_mes','v-dia':'v_dia','v-prima':'v_prima','v-forma':'v_forma','v-risc':'v_risc','btn-col':'btn_col','th-pren':'th_pren','th-co':'th_co','th-ram':'th_ram','th-pol':'th_pol','th-mes':'th_mes','th-dia':'th_dia','th-prima':'th_prima','th-forma':'th_forma','th-risc':'th_risc','total-lbl':'total_lbl','btn-add':'btn_add','btn-clr':'btn_clr','btn-clrall':'btn_clrall','btn-save':'btn_save','btn-mail-lbl':'btn_mail','btn-wa-lbl':'btn_wa','btn-print':'btn_print','foot-brand':'foot_brand'};
-  for(const[id,key]of Object.entries(map)){const el=$(id);if(!el)continue;el.textContent=t[key]||'';}
-  const ni=$('notice-txt');if(ni)ni.innerHTML=t.notice;
-  $$('.fs.wn label').forEach(el=>el.textContent=t.fld_nom);
-  $$('.fs.wi label').forEach(el=>el.textContent=t.fld_nif);
-  $$('#pren-list input[id^="pnom"]').forEach(el=>el.placeholder=t.ph_nom);
-  $$('#tbody .co input').forEach(el=>el.placeholder=t.ph_risc);
-  $$('#tbody .cco input').forEach(el=>el.placeholder=t.ph_co);
-  $$('.cm select').forEach(sel=>{const v=sel.value;sel.innerHTML=t.months_l.map((m,i)=>`<option value="${i}"${parseInt(v)===i?' selected':''}>${m}</option>`).join('');});
-  $$('.cr select').forEach(sel=>{const v=sel.value;sel.innerHTML=RAMOS_CA.map((ca,i)=>`<option value="${ca}"${v===ca?' selected':''}>${t.ramos[i]||t.ramo_ph}</option>`).join('');});
-  $$('.cfp select').forEach(sel=>{const v=sel.value;sel.innerHTML=t.formes.map(([k,lbl])=>`<option value="${k}"${v===k?' selected':''}>${lbl}</option>`).join('');});
-  updatePolTitle();buildCalHead();buildCal();updateContactBtns();
-  $$('.flag-opt').forEach(o=>o.classList.toggle('active',o.dataset.lang===l));
-  const ao=document.querySelector(`.flag-opt[data-lang="${l}"]`),icon=$('flag-icon');
-  if(ao&&icon){const s=ao.querySelector('svg');icon.innerHTML=s.innerHTML;icon.setAttribute('viewBox',s.getAttribute('viewBox')||'0 0 22 14');icon.style.cssText=s.style.cssText||'';}
-  document.documentElement.lang=l;document.documentElement.dir=l==='ar'?'rtl':'ltr';
-}
-
-function addPrenedor(d){pUid++;prenedors.push({id:pUid,nom:d?.nom||'',nif:d?.nif||''});renderPren();updatePrenDrops();updatePolTitle();refreshAll();}
-function delPrenedor(id){if(prenedors.length<=1)return;prenedors=prenedors.filter(p=>p.id!==id);$$('#tbody .ct select').forEach(s=>{if(parseInt(s.value)===id)s.value=prenedors[0].id;});renderPren();updatePrenDrops();updatePolTitle();refreshAll();}
-function onPrenInput(){prenedors.forEach(p=>{const n=$('pnom-'+p.id),i=$('pnif-'+p.id);if(n)p.nom=n.value;if(i)p.nif=i.value;});updatePrenDrops();updatePolTitle();updateContactBtns();refreshAll();}
-function renderPren(){const t=tr();$('pren-list').innerHTML=prenedors.map((p,i)=>`<div class="pren-entry" id="pe-${p.id}"><span class="pren-n">${i+1}</span><div class="fs wn"><label>${t.fld_nom}</label><input id="pnom-${p.id}" value="${esc(p.nom)}" placeholder="${t.ph_nom}" oninput="onPrenInput()"></div><div class="fs wi"><label>${t.fld_nif}</label><input id="pnif-${p.id}" value="${esc(p.nif)}" placeholder="00000000A" oninput="onPrenInput()"></div>${prenedors.length>1?`<button class="pren-del" onclick="delPrenedor(${p.id})" title="${t.del_pren}">\u00d7</button>`:''}</div>`).join('');}
-function updatePrenDrops(){const t=tr();const opts=prenedors.map(p=>`<option value="${p.id}">${esc(p.nom)||t.pren_ph}</option>`).join('');$$('#tbody .ct select').forEach(s=>{const v=s.value;s.innerHTML=opts;if(prenedors.find(p=>String(p.id)===String(v)))s.value=v;else s.value=prenedors[0]?.id??'';});}
-function updatePolTitle(){const el=$('pol-title');if(el)el.textContent=`${tr().pol_base} / ${prenedors.length}`;}
-
-function fmtPol(input){const raw=input.value.replace(/[^0-9]/g,'').slice(0,8);if(!raw){input.value='';refreshAll();return;}const d0=raw[0];if(d0!=='7'&&d0!=='8'){input.value=raw;refreshAll();return;}if(raw.length===1){input.value=raw;refreshAll();return;}const d1=raw[1];let r;if(d1==='6'){r=d0+'-'+d1;if(raw.length>=3)r+='.'+raw.slice(2,Math.min(5,raw.length));if(raw.length>=6)r+='.'+raw.slice(5,Math.min(8,raw.length));}else{r=d0+'-'+raw.slice(1,Math.min(3,raw.length));if(raw.length>=4)r+='.'+raw.slice(3,Math.min(6,raw.length));if(raw.length>=7)r+='.'+raw.slice(6,Math.min(8,raw.length));}const atEnd=input.selectionStart>=input.value.length;input.value=r;if(atEnd){const len=r.length;input.setSelectionRange(len,len);}refreshAll();}
-
-function tryCompanyConvert(input,rid){const txt=input.value.trim();if(!txt)return;const k=companyKey(txt);if(!k)return;const c=COMPANIES[k];const td=input.closest('td');td.dataset.rawco=txt;td.innerHTML=`<span class="co-badge" style="background:${c.bg};color:${c.fg};">${c.tx}<button class="co-edit" onclick="editCompany(${rid})" title="Editar">\u270e</button></span>`;}
-function editCompany(rid){const td=document.querySelector(`#r${rid} .cco`);if(!td)return;const raw=td.dataset.rawco||'';const t=tr();td.innerHTML=`<input type="text" placeholder="${t.ph_co}" value="${esc(raw)}" style="border:none;border-bottom:1.5px solid var(--gray-4);padding:4px 2px;font-size:11.5px;color:var(--dark);font-family:'Inter',sans-serif;background:transparent;outline:none;width:100%;" onblur="tryCompanyConvert(this,${rid})" onkeydown="if(event.key==='Enter')this.blur()">`;td.querySelector('input').focus();}
-
-function updateDays(rid){const ms=$('mes'+rid),ds=$('dia'+rid);if(!ms||!ds)return;const m=parseInt(ms.value),pd=parseInt(ds.value)||1,mx=daysInMonth(m);let h='';for(let d=1;d<=mx;d++){h+=`<option value="${d}"${(d===pd||(pd>mx&&d===mx))?' selected':''}>${d}</option>`;}ds.innerHTML=h;refreshAll();}
-function updateRamoIcon(rid){const s=document.querySelector(`#r${rid} .cr select`);const sp=$('ic-'+rid);if(s&&sp)sp.innerHTML=rsvg(s.value);}
-
-function buildCalHead(){const seq=monSeq(),t=tr();let year=CY,h='<tr>';const eye=calPrenHidden?'\ud83d\udeab':'\ud83d\udc41';h+=`<th class="cal-pren">${t.cal_pren}&nbsp;<button class="cal-eye" id="cal-eye-btn" onclick="toggleCalPren()" title="Ocultar/mostrar">${eye}</button></th>`;h+=`<th class="cal-ico"></th>`;seq.forEach((m,i)=>{if(i>0&&m===0)year++;const yTag=(i===0||m===0)?`<small>'${String(year).slice(2)}</small>`:'';let cls='cal-mon';if(i===0)cls+=' cal-curr';if(m===0&&i>0)cls+=' cal-newy';h+=`<th class="${cls}">${t.months_s[m]}${yTag}</th>`;});h+='</tr>';$('cal-head').innerHTML=h;}
-
-function toggleCalPren(){calPrenHidden=!calPrenHidden;document.querySelectorAll('table.cal .cal-pren').forEach(el=>{el.classList.toggle('cal-pren-hidden',calPrenHidden);});const btn=$('cal-eye-btn');if(btn)btn.textContent=calPrenHidden?'\ud83d\udeab':'\ud83d\udc41';}
-
-function buildCal(){const seq=monSeq(),t=tr(),cb=$('cal-body'),cf=$('cal-foot'),rows=$$('#tbody tr');if(!rows.length){cb.innerHTML=`<tr><td class="cal-pren${calPrenHidden?' cal-pren-hidden':''}" colspan="14" style="color:var(--gray-3);font-style:italic;padding:20px 12px;">${t.cal_empty}</td></tr>`;cf.innerHTML='';return;}const tots=new Array(12).fill(0);let bh='';rows.forEach(row=>{const ctS=row.querySelector('.ct select'),mS=row.querySelector('.cm select'),fpS=row.querySelector('.cfp select'),pI=row.querySelector('.cv input'),crS=row.querySelector('.cr select');const pid=ctS?parseInt(ctS.value):null;const pr=prenedors.find(p=>p.id===pid);const pNom=pr?(pr.nom||'\u2014'):'\u2014';const caRamo=crS?crS.value:'';const mv=mS?parseInt(mS.value):CM;const fo=fpS?fpS.value:'anual';const prima=pI?(parseFloat(pI.value)||0):0;const pm=payMonths(mv,fo);const frac=pm.length?prima/pm.length:0;const ga=new Array(12).fill(0);pm.forEach(mi=>{const pos=seq.indexOf(mi);if(pos!==-1)ga[pos]+=frac;});ga.forEach((a,i)=>tots[i]+=a);bh+='<tr>';bh+=`<td class="cal-pren${calPrenHidden?' cal-pren-hidden':''}">${esc(pNom)}</td>`;bh+=`<td class="cal-ico">${rsvg(caRamo)}</td>`;ga.forEach((a,i)=>{const cc=(i===0)?' cal-now':'';bh+=a>0?`<td class="cal-amt cal-has${cc}">${fmt(a)}</td>`:`<td class="cal-amt${cc}"></td>`;});bh+='</tr>';});cb.innerHTML=bh;let fh='<tr>';fh+=`<td class="cal-pren${calPrenHidden?' cal-pren-hidden':''}">—</td>`;fh+=`<td class="cal-ico"></td>`;tots.forEach(v=>{fh+=v>0?`<td class="cal-has">${fmt(v)}</td>`:`<td class="cal-nil">—</td>`;});fh+='</tr>';cf.innerHTML=fh;}
-
-function tcForm(col,btnId){const btn=$(btnId),isOff=btn.classList.contains('off');if(isOff){btn.classList.remove('off');hiddenFormCols.delete(col);document.querySelectorAll(`table.pt .${col}`).forEach(el=>el.classList.remove('col-off'));}else{btn.classList.add('off');hiddenFormCols.add(col);document.querySelectorAll(`table.pt .${col}`).forEach(el=>el.classList.add('col-off'));}const fn=btn.childNodes[0];if(fn&&fn.nodeType===3)fn.textContent=isOff?'\ud83d\udc41 ':'\ud83d\udeab ';}
-
-function addCustomCol(){ccUid++;const id=ccUid,ttl=tr().new_col;customCols.push({id,title:ttl});const hr=$('pt-head'),la=hr.querySelector('.th-a');const th=document.createElement('th');th.className=`cc-col cc-${id}`;th.style.width='110px';th.innerHTML=`<div class="cc-hi"><input class="cc-tin" value="${esc(ttl)}" oninput="updateCC(${id},this.value)"><button class="cc-x" onclick="delCC(${id})">\u00d7</button></div>`;hr.insertBefore(th,la);$$('#tbody tr').forEach(row=>{const la2=row.querySelector('.ca');const td=document.createElement('td');td.className=`cc-col cc-${id}${hiddenFormCols.has('cc-'+id)?' col-off':''}`;td.innerHTML=`<input type="text" placeholder="\u2026" style="border:none;border-bottom:1.5px solid var(--gray-4);padding:4px 2px;font-size:11.5px;color:var(--dark);font-family:'Inter',sans-serif;background:transparent;outline:none;width:100%;">`;row.insertBefore(td,la2);});const tf=$('tfoot-row'),lt=tf.querySelector('.ca');const td2=document.createElement('td');td2.className=`cc-col cc-${id}`;td2.style.background='#EEE';tf.insertBefore(td2,lt);const box=$('vis-box');const nb=document.createElement('button');nb.className='vbtn';nb.id=`b-cc-${id}`;nb.innerHTML=`\ud83d\udc41 ${esc(ttl)}`;nb.onclick=()=>tcForm(`cc-${id}`,`b-cc-${id}`);box.appendChild(nb);}
-function delCC(id){customCols=customCols.filter(c=>c.id!==id);$$('.cc-'+id).forEach(el=>el.remove());const b=$('b-cc-'+id);if(b)b.remove();}
-function updateCC(id,val){const c=customCols.find(c=>c.id===id);if(c)c.title=val;const b=$('b-cc-'+id);if(b)b.innerHTML=`\ud83d\udc41 ${val||'Col'}`;}
-
-function makeRow(d){d=d||{};rowUid++;const n=rowUid,t=tr();const pv=d.prenId||(prenedors[0]?.id??'');const prenOpts=prenedors.map(p=>`<option value="${p.id}"${String(p.id)===String(pv)?' selected':''}>${esc(p.nom)||t.pren_ph}</option>`).join('');const ramoOpts=RAMOS_CA.map((ca,i)=>`<option value="${ca}"${d.ramo===ca?' selected':''}>${t.ramos[i]||t.ramo_ph}</option>`).join('');const mVal=(d.mes!=null)?parseInt(d.mes):CM;const mesOpts=t.months_l.map((m,i)=>`<option value="${i}"${mVal===i?' selected':''}>${m}</option>`).join('');const mx=daysInMonth(mVal),dv=d.dia?parseInt(d.dia):1;let dOpts='';for(let day=1;day<=mx;day++){dOpts+=`<option value="${day}"${(day===dv||(dv>mx&&day===mx))?' selected':''}>${day}</option>`;}const fv=d.forma||'anual';const fOpts=t.formes.map(([k,lbl])=>`<option value="${k}"${fv===k?' selected':''}>${lbl}</option>`).join('');const ccCells=customCols.map(cc=>`<td class="cc-col cc-${cc.id}${hiddenFormCols.has('cc-'+cc.id)?' col-off':''}"><input type="text" placeholder="\u2026" style="border:none;border-bottom:1.5px solid var(--gray-4);padding:4px 2px;font-size:11.5px;color:var(--dark);font-family:'Inter',sans-serif;background:transparent;outline:none;width:100%;"></td>`).join('');function hc(cls){return hiddenFormCols.has(cls)?' col-off':'';}return `<tr id="r${n}"><td class="td-n cn">${n}</td><td class="ct${hc('ct')}"><select onchange="refreshAll()">${prenOpts}</select></td><td class="ci td-i${hc('ci')}"><span id="ic-${n}">${rsvg(d.ramo||'')}</span></td><td class="cco${hc('cco')}"><input type="text" placeholder="${t.ph_co}" value="${esc(d.co||'')}" style="border:none;border-bottom:1.5px solid var(--gray-4);padding:4px 2px;font-size:11.5px;color:var(--dark);font-family:'Inter',sans-serif;background:transparent;outline:none;width:100%;" onblur="tryCompanyConvert(this,${n})" onkeydown="if(event.key===\'Enter\')this.blur()"></td><td class="cr${hc('cr')}"><select onchange="updateRamoIcon(${n});refreshAll()">${ramoOpts}</select></td><td class="cp${hc('cp')}"><input type="text" id="pol${n}" placeholder="${t.ph_pol}" value="${esc(d.poliza||'')}" style="font-family:\'Inter\',monospace;letter-spacing:.4px;" oninput="fmtPol(this)"></td><td class="cm${hc('cm')}"><select id="mes${n}" onchange="updateDays(${n})">${mesOpts}</select></td><td class="cd td-d${hc('cd')}" style="text-align:center;"><select id="dia${n}" onchange="refreshAll()" style="text-align:center;">${dOpts}</select></td><td class="cv td-v${hc('cv')}"><input type="number" step="0.01" min="0" placeholder="0,00" value="${esc(d.prima||'')}" oninput="refreshAll()"></td><td class="cfp${hc('cfp')}"><select onchange="refreshAll()">${fOpts}</select></td><td class="co${hc('co')}"><input type="text" placeholder="${t.ph_risc}" value="${esc(d.notas||'')}" oninput="refreshAll()"></td>${ccCells}<td class="ca"><button class="delbtn" onclick="delRow(${n})" title="${t.del_row}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td></tr>`;}
-
-function addRow(d){$('tbody').insertAdjacentHTML('beforeend',makeRow(d));refreshAll();}
-function delRow(n){const r=$('r'+n);if(r){r.remove();refreshAll();}}
-function clearRows(){if(!confirm(tr().c_rows))return;$('tbody').innerHTML='';rowUid=0;addRow();}
-function clearAll(){if(!confirm(tr().c_all))return;$('datadoc').value=TODAY.toISOString().split('T')[0];customCols.forEach(cc=>{$$('.cc-'+cc.id).forEach(el=>el.remove());const b=$('b-cc-'+cc.id);if(b)b.remove();});customCols=[];ccUid=0;prenedors=[];pUid=0;addPrenedor();$('tbody').innerHTML='';rowUid=0;addRow();}
-function calcTotal(){let t=0;$$('.td-v input').forEach(i=>{t+=parseFloat(i.value)||0;});$('tval').textContent=fmt(t);}
-function refreshAll(){calcTotal();buildCal();}
-
-function updateContactBtns(){const prenNom=(prenedors[0]?.nom?.trim()||'');const t=tr();const subj=encodeURIComponent(`${t.hdr_title}${prenNom?' \u2013 '+prenNom:''}`);const body=encodeURIComponent(`${prenNom?prenNom+'\n\n':''}${t.hdr_title}`);const waText=encodeURIComponent(`${t.hdr_title}${prenNom?' \u2013 '+prenNom:''}`);const RECIPIENT_EMAIL='';/* \u2190 BD: email del client */const RECIPIENT_PHONE='';/* \u2190 BD: tel\u00e8fon del client */const mb=$('btn-mail');if(mb)mb.href=`mailto:${RECIPIENT_EMAIL}?subject=${subj}&body=${body}`;const wb=$('btn-wa');if(wb)wb.href=`https://wa.me/${RECIPIENT_PHONE}?text=${waText}`;}
-
-function saveDoc(){const prenNom=(prenedors[0]?.nom?.trim()||'Document').replace(/[\\/:*?"<>|]/g,'').replace(/\s+/g,'_');const dateStr=TODAY.toISOString().split('T')[0];const filename=`${prenNom}-CalendariPagaments-${dateStr}.html`;const blob=new Blob([document.documentElement.outerHTML],{type:'text/html;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}
-
 $('datadoc').value=TODAY.toISOString().split('T')[0];
 buildCalHead();
 addPrenedor({nom:'',nif:''});

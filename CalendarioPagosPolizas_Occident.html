@@ -29,7 +29,7 @@ body{font-family:'Open Sans',Arial,sans-serif;background:var(--bg);color:var(--d
 .hdr-sub{font-size:11px;color:rgba(255,255,255,.65);margin-top:2px;}
 
 /* ═══ CONTAINER ═══ */
-.wrap{max-width:1680px;margin:0 auto;padding:20px 24px;}
+.wrap{max-width:1700px;margin:0 auto;padding:20px 24px;}
 
 /* ═══ NOTICE ═══ */
 .notice{background:#FFF8DC;border:1px solid #F0C040;border-radius:6px;padding:8px 14px;font-size:11px;color:#7A6000;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:8px;margin-bottom:14px;}
@@ -56,7 +56,6 @@ body{font-family:'Open Sans',Arial,sans-serif;background:var(--bg);color:var(--d
 .btn-ap{display:inline-flex;align-items:center;gap:5px;background:var(--red);color:#fff;border:none;border-radius:5px;padding:6px 12px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:background .15s;white-space:nowrap;align-self:flex-end;margin-bottom:3px;flex-shrink:0;}
 .btn-ap:hover{background:var(--red-d);}
 .btn-ap svg{width:12px;height:12px;}
-/* date field */
 .fld{display:flex;flex-direction:column;gap:3px;flex-shrink:0;}
 .fld label{font-size:9px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.9px;font-family:'Inter',sans-serif;}
 .fld input{border:none;border-bottom:2px solid var(--gray-4);padding:4px 2px;font-size:13px;font-weight:600;color:var(--dark);font-family:'Poppins',sans-serif;background:transparent;outline:none;transition:border-color .2s;}
@@ -86,28 +85,34 @@ body{font-family:'Open Sans',Arial,sans-serif;background:var(--bg);color:var(--d
 .tblwrap,.calwrap{overflow-x:auto;}
 
 /* ═══ CALENDAR TABLE ═══ */
-table.cal{width:100%;border-collapse:collapse;table-layout:fixed;min-width:1340px;}
+table.cal{width:100%;border-collapse:collapse;table-layout:fixed;min-width:1240px;}
 table.cal thead tr{background:var(--red);}
 table.cal th{color:#fff;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:9px 5px;text-align:center;white-space:nowrap;}
-table.cal th.c-pren{text-align:left;padding-left:12px;width:140px;}
-table.cal th.c-risc{text-align:left;padding-left:8px;width:150px;}
-table.cal th.c-mon{width:82px;}
-table.cal th small{font-size:9px;opacity:.7;margin-left:2px;font-weight:400;}
+table.cal th.c-pren{text-align:left;padding-left:10px;width:140px;position:relative;}
+table.cal th.c-ico {width:32px;padding:9px 3px;}
+table.cal th.c-mon {width:84px;}
+table.cal th small {font-size:9px;opacity:.7;margin-left:2px;font-weight:400;}
 table.cal th.c-curr{background:#b00020;} table.cal th.c-newy{background:#a00018;}
+/* eye-toggle inside cal header */
+.cal-th-toggle{background:none;border:none;color:rgba(255,255,255,.55);cursor:pointer;font-size:12px;padding:0 0 0 4px;line-height:1;transition:color .15s;vertical-align:middle;}
+.cal-th-toggle:hover{color:#fff;}
+
 table.cal tbody tr:nth-child(even){background:#FAFAFA;}
 table.cal tbody tr:hover{background:#fff4f6;}
 table.cal td{padding:7px 5px;font-size:12px;color:var(--gray);border-bottom:1px solid var(--border);text-align:center;font-family:'Inter',sans-serif;vertical-align:middle;}
-table.cal td.c-pren{text-align:left;padding-left:12px;font-size:11.5px;color:var(--dark);font-weight:600;font-family:'Poppins',sans-serif;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-table.cal td.c-risc{text-align:left;padding-left:8px;font-size:11px;color:var(--gray);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-table.cal td.c-amt{font-size:11px;}
-table.cal td.c-has{background:#fffbf0;color:#b45309;font-weight:700;font-size:11px;}
-table.cal td.c-now{background:rgba(220,0,40,.03);}
+table.cal td.c-pren{text-align:left;padding-left:10px;font-size:11.5px;color:var(--dark);font-weight:600;font-family:'Poppins',sans-serif;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+table.cal td.c-ico {padding:4px 3px;text-align:center;}
+/* +15% font size for cal amounts: base 11px → 12.65px ≈ 13px */
+table.cal td.c-amt{font-size:13px;}
+table.cal td.c-has{background:#fffbf0;color:#b45309;font-weight:700;font-size:13px;}
+table.cal td.c-now{background:rgba(220,0,40,.04);}
 table.cal td.c-has.c-now{background:#fff0e6;color:#c2410c;}
 table.cal tfoot tr{background:var(--dark);}
-table.cal tfoot td{color:rgba(255,255,255,.5);font-family:'Inter',sans-serif;font-size:10.5px;font-weight:600;padding:8px 5px;text-align:center;border:none;}
-table.cal tfoot td.cf-pren{text-align:left;padding-left:12px;opacity:.2;font-size:9px;letter-spacing:.8px;text-transform:uppercase;}
+table.cal tfoot td{color:rgba(255,255,255,.5);font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:8px 5px;text-align:center;border:none;}
+table.cal tfoot td.cf-pren{text-align:left;padding-left:10px;opacity:.2;font-size:9px;letter-spacing:.8px;text-transform:uppercase;}
+table.cal tfoot td.cf-ico {padding:3px;}
 table.cal tfoot td.cf-lbl{text-align:left;padding-left:8px;font-size:9.5px;letter-spacing:.8px;text-transform:uppercase;opacity:.4;}
-table.cal tfoot td.cf-has{color:#fbbf24;font-size:11px;}
+table.cal tfoot td.cf-has{color:#fbbf24;font-size:13px;}
 table.cal tfoot td.cf-nil{opacity:.15;font-weight:400;}
 
 /* ═══ COL VISIBILITY BOX ═══ */
@@ -118,12 +123,24 @@ table.cal tfoot td.cf-nil{opacity:.15;font-weight:400;}
 
 /* ═══ FORM TABLE ═══ */
 table.pt{width:100%;border-collapse:collapse;table-layout:fixed;}
-col.cn{width:28px;} col.ct{width:12%;} col.ci{width:32px;} col.cr{width:11%;}
-col.cp{width:105px;} col.cm{width:96px;} col.cd{width:52px;} col.cfp{width:108px;}
-col.cv{width:78px;} col.co{} col.ca{width:32px;}
+col.cn {width:28px;}
+col.ct {width:11%;}
+col.ci {width:30px;}
+col.cco{width:88px;}
+col.cr {width:10%;}
+col.cp {width:100px;}
+col.cm {width:92px;}
+col.cd {width:50px;}
+col.cv {width:125px;}  /* widened so € stays on same line */
+col.cfp{width:104px;}
+col.co {}
+col.ca {width:30px;}
+
 table.pt thead tr{background:var(--red);}
 table.pt th{color:#fff;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;padding:9px 7px;text-align:left;white-space:nowrap;}
-table.pt th.th-n{text-align:center;padding-left:0;} table.pt th.th-i{text-align:center;padding:9px 4px;} table.pt th.th-a{padding:0;}
+table.pt th.th-n{text-align:center;padding-left:0;}
+table.pt th.th-i{text-align:center;padding:9px 3px;}
+table.pt th.th-a{padding:0;}
 table.pt tbody tr:nth-child(even){background:#FAFAFA;}
 table.pt tbody tr:hover{background:#fff8f8;}
 table.pt td{padding:5px 6px;border-bottom:1px solid var(--border);vertical-align:middle;font-size:12px;font-family:'Inter',sans-serif;}
@@ -134,21 +151,29 @@ table.pt td input,table.pt td select{border:none;border-bottom:1.5px solid var(-
 table.pt td input{cursor:text;}
 table.pt td input:focus,table.pt td select:focus{border-bottom-color:var(--red);}
 table.pt td input::placeholder{color:var(--gray-3);font-size:10.5px;}
+
+/* Company badge */
+.co-badge{display:inline-flex;align-items:center;gap:5px;border-radius:4px;padding:2px 7px;font-size:10.5px;font-weight:700;font-family:'Inter',sans-serif;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
+.co-edit{background:none;border:none;cursor:pointer;font-size:11px;opacity:.6;padding:0 1px;line-height:1;flex-shrink:0;}
+.co-edit:hover{opacity:1;}
+
 /* custom col header */
 .cc-hi{display:flex;align-items:center;gap:4px;}
 .cc-tin{background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.3)!important;color:#fff!important;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;outline:none;width:80px;padding:0!important;cursor:text;}
 .cc-x{background:none;border:none;color:rgba(255,255,255,.45);cursor:pointer;padding:0;font-size:14px;line-height:1;transition:color .15s;flex-shrink:0;}
 .cc-x:hover{color:#fff;}
-/* delete row btn */
+
 .delbtn{background:none;border:none;cursor:pointer;padding:3px 4px;color:#CCC;border-radius:4px;display:flex;align-items:center;transition:all .15s;}
 .delbtn:hover{color:var(--red);background:var(--red-l);}
 .delbtn svg{width:14px;height:14px;}
 .col-off{display:none!important;}
+
 /* tfoot total */
 .trow td{padding:8px!important;font-family:'Inter',sans-serif;border-top:2px solid var(--gray-4)!important;border-bottom:none!important;background:#F5F5F5;}
-.tlbl{font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.8px;}
-.tval{text-align:right;font-size:13px;font-weight:700;color:var(--red);padding-right:10px!important;}
-/* add-col button in header */
+.tlbl{font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.8px;white-space:nowrap;}
+.tval{text-align:right;font-size:13px;font-weight:700;color:var(--red);padding-right:10px!important;white-space:nowrap;}
+
+/* add-col button in form header */
 .btn-ac{margin-left:auto;display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.12);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.2);border-radius:5px;padding:5px 12px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;}
 .btn-ac:hover{background:rgba(255,255,255,.22);color:#fff;}
 .btn-ac svg{width:12px;height:12px;}
@@ -161,42 +186,45 @@ table.pt td input::placeholder{color:var(--gray-3);font-size:10.5px;}
 .btn-g{background:var(--dark);color:#fff;} .btn-g:hover{background:#333;}
 .btn-w{background:#fff;color:var(--gray);border:1.5px solid var(--border);} .btn-w:hover{border-color:#AAA;}
 .btn-r{background:var(--red);color:#fff;} .btn-r:hover{background:var(--red-d);box-shadow:0 3px 10px rgba(220,0,40,.25);}
+.btn-s{background:#166534;color:#fff;} .btn-s:hover{background:#14532d;box-shadow:0 3px 10px rgba(22,101,52,.3);}
 
 /* ═══ FOOTER ═══ */
 .foot{text-align:center;padding:16px 20px 6px;font-family:'Inter',sans-serif;}
-.foot-main{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;margin-bottom:4px;}
+.foot-main{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;}
 .foot-brand{font-size:11px;font-weight:700;color:var(--dark);}
 .foot-sep{color:var(--gray-4);font-size:14px;}
 .foot-lnk{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--gray);text-decoration:none;transition:color .15s;}
 .foot-lnk:hover{color:var(--red);}
 .foot-lnk svg{width:13px;height:13px;flex-shrink:0;color:var(--red);}
-.foot-date{font-size:10px;color:var(--gray-3);margin-top:2px;}
 
 /* ═══ RTL (Arabic) ═══ */
-html[dir="rtl"] .client-card{border-left:none;border-right:6px solid var(--red);}
+html[dir="rtl"] .client-card{border-left:none;border-right:6px solid var(--red);flex-direction:row-reverse;}
+html[dir="rtl"] .pren-block{align-items:flex-end;}
+html[dir="rtl"] .pren-row{flex-direction:row-reverse;}
+html[dir="rtl"] .pren-entry{flex-direction:row-reverse;}
 html[dir="rtl"] .hdr-r{text-align:left;}
 html[dir="rtl"] .flag-menu{right:auto;left:0;}
 html[dir="rtl"] .shdr{flex-direction:row-reverse;}
 html[dir="rtl"] .btn-ac{margin-left:0;margin-right:auto;}
 html[dir="rtl"] .actbar{flex-direction:row-reverse;}
+html[dir="rtl"] .vis-box{flex-direction:row-reverse;}
 html[dir="rtl"] table.pt th,html[dir="rtl"] table.pt td{text-align:right;}
 html[dir="rtl"] table.pt th.th-n,html[dir="rtl"] table.pt td.td-n{text-align:center;}
+html[dir="rtl"] table.pt th.th-i,html[dir="rtl"] table.pt td.td-i{text-align:center;}
+html[dir="rtl"] table.pt td.td-v input{text-align:left;}
+html[dir="rtl"] .tval{text-align:left;padding-left:10px!important;padding-right:8px!important;}
 html[dir="rtl"] table.cal th,html[dir="rtl"] table.cal td{text-align:right;}
 html[dir="rtl"] table.cal th.c-mon,html[dir="rtl"] table.cal td.c-amt{text-align:center;}
-html[dir="rtl"] table.cal td.c-pren{padding-right:12px;padding-left:5px;}
-html[dir="rtl"] table.cal td.c-risc{padding-right:8px;padding-left:5px;}
-html[dir="rtl"] table.cal tfoot td.cf-pren{text-align:right;padding-right:12px;padding-left:5px;}
-html[dir="rtl"] table.cal tfoot td.cf-lbl{text-align:right;padding-right:8px;padding-left:5px;}
-html[dir="rtl"] .tval{text-align:left;padding-left:10px!important;padding-right:8px!important;}
+html[dir="rtl"] table.cal td.c-pren{padding-right:10px;padding-left:5px;}
+html[dir="rtl"] table.cal tfoot td.cf-pren{text-align:right;padding-right:10px;padding-left:5px;}
 html[dir="rtl"] .foot-main{flex-direction:row-reverse;}
 
-/* ═══ PRINT ═══ */
+/* ═══ PRINT — preservar colors i fons exactament com pantalla ═══ */
 @media print{
-  body{background:#fff;padding:0;}
-  .hdr{box-shadow:none;}
-  .notice,.vis-box,.actbar,.delbtn,.btn-ap,.pren-del,.btn-ac,.cc-x,.flag-wrap,.shdr svg.hi{display:none!important;}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  body{background:var(--bg);padding:0;}
+  .notice,.vis-box,.actbar,.delbtn,.btn-ap,.pren-del,.btn-ac,.cc-x,.flag-wrap,.cal-th-toggle{display:none!important;}
   .wrap{padding:8px 12px;max-width:100%;}
-  .client-card,.sbox{box-shadow:none;border-radius:4px;}
   .tblwrap,.calwrap{overflow:visible;}
   @page{size:A4 landscape;margin:8mm;}
 }
@@ -204,7 +232,7 @@ html[dir="rtl"] .foot-main{flex-direction:row-reverse;}
 </head>
 <body>
 
-<!-- ═══ HEADER ═══ -->
+<!-- HEADER -->
 <header class="hdr">
   <div class="logo-text">
     <span class="logo-main">OPTIMIZART€</span>
@@ -231,7 +259,6 @@ html[dir="rtl"] .foot-main{flex-direction:row-reverse;}
         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
       </svg>
     </div>
-
     <!-- Prenedors -->
     <div class="pren-block">
       <div class="pren-label" data-i18n="lbl_pren">Prenedors / Assegurats</div>
@@ -241,19 +268,15 @@ html[dir="rtl"] .foot-main{flex-direction:row-reverse;}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       <span data-i18n="btn_ap">Afegir assegurat</span>
     </button>
-
     <div class="c-sep"></div>
-
     <!-- Date -->
     <div class="fld" style="min-width:130px;max-width:150px;">
       <label data-i18n="lbl_date">Data Document</label>
       <input type="date" id="datadoc"/>
     </div>
-
-    <!-- ═══ FLAG DROPDOWN ═══ -->
+    <!-- FLAG DROPDOWN -->
     <div class="flag-wrap" id="flagWrap">
       <button class="flag-btn" id="flagBtn" type="button">
-        <!-- Active flag shown here, filled by JS -->
         <svg class="fsv" id="flagIcon" viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg">
           <rect width="22" height="14" fill="#FCDD09"/>
           <rect y="1.56" width="22" height="1.55" fill="#CF2031"/>
@@ -264,57 +287,24 @@ html[dir="rtl"] .foot-main{flex-direction:row-reverse;}
         <span class="arr">▼</span>
       </button>
       <div class="flag-menu" id="flagMenu">
-        <!-- ca -->
         <div class="flag-opt is-active" data-lang="ca">
-          <svg viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg">
-            <rect width="22" height="14" fill="#FCDD09"/>
-            <rect y="1.56" width="22" height="1.55" fill="#CF2031"/>
-            <rect y="4.67" width="22" height="1.55" fill="#CF2031"/>
-            <rect y="7.78" width="22" height="1.55" fill="#CF2031"/>
-            <rect y="10.89" width="22" height="1.55" fill="#CF2031"/>
-          </svg>Català
+          <svg viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="14" fill="#FCDD09"/><rect y="1.56" width="22" height="1.55" fill="#CF2031"/><rect y="4.67" width="22" height="1.55" fill="#CF2031"/><rect y="7.78" width="22" height="1.55" fill="#CF2031"/><rect y="10.89" width="22" height="1.55" fill="#CF2031"/></svg>Català
         </div>
-        <!-- es -->
         <div class="flag-opt" data-lang="es">
-          <svg viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg">
-            <rect width="22" height="3.5" fill="#AA151B"/>
-            <rect y="3.5" width="22" height="7" fill="#F1BF00"/>
-            <rect y="10.5" width="22" height="3.5" fill="#AA151B"/>
-          </svg>Español
+          <svg viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="3.5" fill="#AA151B"/><rect y="3.5" width="22" height="7" fill="#F1BF00"/><rect y="10.5" width="22" height="3.5" fill="#AA151B"/></svg>Español
         </div>
-        <!-- fr -->
         <div class="flag-opt" data-lang="fr">
-          <svg viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg">
-            <rect width="7.34" height="14" fill="#002395"/>
-            <rect x="7.34" width="7.32" height="14" fill="#fff"/>
-            <rect x="14.66" width="7.34" height="14" fill="#ED2939"/>
-          </svg>Français
+          <svg viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg"><rect width="7.34" height="14" fill="#002395"/><rect x="7.34" width="7.32" height="14" fill="#fff"/><rect x="14.66" width="7.34" height="14" fill="#ED2939"/></svg>Français
         </div>
-        <!-- en -->
         <div class="flag-opt" data-lang="en">
-          <svg viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg" style="overflow:hidden">
-            <rect width="22" height="14" fill="#012169"/>
-            <line x1="0" y1="0" x2="22" y2="14" stroke="#fff" stroke-width="5"/>
-            <line x1="22" y1="0" x2="0" y2="14" stroke="#fff" stroke-width="5"/>
-            <line x1="0" y1="0" x2="22" y2="14" stroke="#C8102E" stroke-width="2"/>
-            <line x1="22" y1="0" x2="0" y2="14" stroke="#C8102E" stroke-width="2"/>
-            <rect x="9" y="0" width="4" height="14" fill="#fff"/>
-            <rect x="0" y="5" width="22" height="4" fill="#fff"/>
-            <rect x="10" y="0" width="2" height="14" fill="#C8102E"/>
-            <rect x="0" y="6" width="22" height="2" fill="#C8102E"/>
-          </svg>English
+          <svg viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg" style="overflow:hidden"><rect width="22" height="14" fill="#012169"/><line x1="0" y1="0" x2="22" y2="14" stroke="#fff" stroke-width="5"/><line x1="22" y1="0" x2="0" y2="14" stroke="#fff" stroke-width="5"/><line x1="0" y1="0" x2="22" y2="14" stroke="#C8102E" stroke-width="2"/><line x1="22" y1="0" x2="0" y2="14" stroke="#C8102E" stroke-width="2"/><rect x="9" y="0" width="4" height="14" fill="#fff"/><rect x="0" y="5" width="22" height="4" fill="#fff"/><rect x="10" y="0" width="2" height="14" fill="#C8102E"/><rect x="0" y="6" width="22" height="2" fill="#C8102E"/></svg>English
         </div>
-        <!-- ar / Morocco -->
         <div class="flag-opt" data-lang="ar">
-          <svg viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg">
-            <rect width="22" height="14" fill="#C1272D"/>
-            <polygon points="11,3.2 11.85,5.83 14.61,5.83 12.38,7.45 13.23,10.07 11,8.45 8.77,10.07 9.62,7.45 7.39,5.83 10.15,5.83"
-                     fill="none" stroke="#006233" stroke-width="0.75" stroke-linejoin="round"/>
-          </svg>العربية
+          <svg viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="14" fill="#C1272D"/><polygon points="11,3.2 11.85,5.83 14.61,5.83 12.38,7.45 13.23,10.07 11,8.45 8.77,10.07 9.62,7.45 7.39,5.83 10.15,5.83" fill="none" stroke="#006233" stroke-width="0.75" stroke-linejoin="round"/></svg>العربية
         </div>
       </div>
-    </div><!-- /flag-wrap -->
-  </div><!-- /client-card -->
+    </div>
+  </div>
 
   <!-- ═══ CALENDAR GRID ═══ -->
   <div class="sbox">
@@ -326,7 +316,7 @@ html[dir="rtl"] .foot-main{flex-direction:row-reverse;}
       <table class="cal">
         <thead id="calHead"></thead>
         <tbody id="calBody">
-          <tr><td class="c-pren" colspan="14" style="color:var(--gray-3);font-style:italic;padding:20px 12px;" data-i18n="cal_empty">Introdueix pòlisses al formulari per veure la distribució mensual…</td></tr>
+          <tr><td class="c-pren" colspan="15" style="color:var(--gray-3);font-style:italic;padding:20px 12px;" data-i18n="cal_empty">Introdueix pòlisses al formulari per veure la distribució mensual…</td></tr>
         </tbody>
         <tfoot id="calFoot"></tfoot>
       </table>
@@ -344,13 +334,12 @@ html[dir="rtl"] .foot-main{flex-direction:row-reverse;}
     <button class="vbtn" id="b-cp"  onclick="tc('cp','b-cp')">👁 <span data-i18n="v_pol">Nº Pòlissa</span></button>
     <button class="vbtn" id="b-cm"  onclick="tc('cm','b-cm')">👁 <span data-i18n="v_mes">Mes Venç.</span></button>
     <button class="vbtn" id="b-cd"  onclick="tc('cd','b-cd')">👁 <span data-i18n="v_dia">Dia</span></button>
-    <button class="vbtn" id="b-cfp" onclick="tc('cfp','b-cfp')">👁 <span data-i18n="v_forma">Forma Pagament</span></button>
     <button class="vbtn" id="b-cv"  onclick="tc('cv','b-cv')">👁 <span data-i18n="v_prima">Prima</span></button>
+    <button class="vbtn" id="b-cfp" onclick="tc('cfp','b-cfp')">👁 <span data-i18n="v_forma">Forma Pagament</span></button>
     <button class="vbtn" id="b-co"  onclick="tc('co','b-co')">👁 <span data-i18n="v_risc">Risc / Notes</span></button>
-    <!-- custom col buttons injected here -->
   </div>
 
-  <!-- ═══ FORM TABLE ═══ -->
+  <!-- ═══ FORM TABLE — Pòlisses en vigor ═══ -->
   <div class="sbox">
     <div class="shdr" id="polHdr">
       <svg class="hi" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/></svg>
@@ -363,20 +352,22 @@ html[dir="rtl"] .foot-main{flex-direction:row-reverse;}
     <div class="tblwrap">
       <table class="pt" id="pt">
         <colgroup>
-          <col class="cn"><col class="ct"><col class="ci"><col class="cr"><col class="cp">
-          <col class="cm"><col class="cd"><col class="cfp"><col class="cv"><col class="co"><col class="ca">
+          <col class="cn"><col class="ct"><col class="ci"><col class="cco">
+          <col class="cr"><col class="cp"><col class="cm"><col class="cd">
+          <col class="cv"><col class="cfp"><col class="co"><col class="ca">
         </colgroup>
         <thead>
           <tr id="ptHeadRow">
             <th class="th-n cn">#</th>
             <th class="ct" data-i18n="h_pren">Prenedor</th>
             <th class="th-i ci"></th>
+            <th class="cco" data-i18n="h_co">Companyia</th>
             <th class="cr" data-i18n="h_ram">Ram / Producte</th>
             <th class="cp" data-i18n="h_pol">Nº Pòlissa</th>
             <th class="cm" data-i18n="h_mes">Mes Venciment</th>
             <th class="cd" style="text-align:center;" data-i18n="h_dia">Dia</th>
-            <th class="cfp" data-i18n="h_forma">Forma Pagament</th>
             <th class="cv" style="text-align:right;padding-right:8px;" data-i18n="h_prima">Prima (€)</th>
+            <th class="cfp" data-i18n="h_forma">Forma Pagament</th>
             <th class="co" data-i18n="h_risc">Notes / Risc Assegurat</th>
             <th class="th-a ca"></th>
           </tr>
@@ -387,8 +378,9 @@ html[dir="rtl"] .foot-main{flex-direction:row-reverse;}
             <td class="cn" style="background:#EEE;"></td>
             <td class="ct tlbl" colspan="7" data-i18n="total_lbl">TOTAL PRIMES ANUALS</td>
             <td class="cv tval" id="tval">0,00 €</td>
-            <td class="co" style="background:#EEE;"></td>
-            <td class="ca" style="background:#EEE;"></td>
+            <td class="cfp" style="background:#EEE;"></td>
+            <td class="co"  style="background:#EEE;"></td>
+            <td class="ca"  style="background:#EEE;"></td>
           </tr>
         </tfoot>
       </table>
@@ -412,6 +404,10 @@ html[dir="rtl"] .foot-main{flex-direction:row-reverse;}
       </button>
     </div>
     <div class="ar">
+      <button class="btn btn-s" onclick="saveDoc()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <span data-i18n="btn_save">Guardar</span>
+      </button>
       <button class="btn btn-r" onclick="window.print()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
         <span data-i18n="btn_print">Imprimir / PDF</span>
@@ -440,15 +436,14 @@ html[dir="rtl"] .foot-main{flex-direction:row-reverse;}
       optimizarte@optimizarte.com
     </a>
   </div>
-  <div class="foot-date" id="fdate"></div>
 </footer>
 
 <script>
 'use strict';
 
-/* ═══════════════════════════════════════════════
+/* ════════════════════════════════════════════
    TRANSLATIONS
-═══════════════════════════════════════════════ */
+════════════════════════════════════════════ */
 const LANG = {
   ca:{
     hdr_title:'Calendari de Pagaments de Pòlisses',
@@ -457,19 +452,20 @@ const LANG = {
     lbl_pren:'Prenedors / Assegurats', lbl_date:'Data Document',
     btn_ap:'Afegir assegurat',
     fld_nom:'Prenedor', fld_nif:'NIF / CIF',
-    ph_nom:'Nom complet o raó social…', ph_pol:'Nº Pòlissa', ph_risc:'Risc assegurat…',
+    ph_nom:'Nom complet o raó social…', ph_pol:'Nº Pòlissa', ph_risc:'Risc assegurat…', ph_co:'Companyia…',
     cal_title:'Distribució Mensual de Pagaments',
     cal_empty:'Introdueix pòlisses al formulari per veure la distribució mensual…',
-    cal_pren:'Prenedor', cal_risc:'Risc Assegurat', cal_total:'TOTAL MENSUAL',
+    cal_pren:'Prenedor', cal_total:'TOTAL MENSUAL',
     vis_lbl:'Visible al imprimir:',
     v_pren:'Prenedor', v_ram:'Ram / Producte', v_pol:'Nº Pòlissa',
-    v_mes:'Mes Venç.', v_dia:'Dia', v_forma:'Forma Pagament', v_prima:'Prima', v_risc:'Risc / Notes',
+    v_mes:'Mes Venç.', v_dia:'Dia', v_prima:'Prima', v_forma:'Forma Pagament', v_risc:'Risc / Notes',
     pol_base:'Pòlisses en vigor', btn_col:'Afegir columna',
-    h_pren:'Prenedor', h_ram:'Ram / Producte', h_pol:'Nº Pòlissa',
-    h_mes:'Mes Venciment', h_dia:'Dia', h_forma:'Forma Pagament',
-    h_prima:'Prima (€)', h_risc:'Notes / Risc Assegurat',
+    h_pren:'Prenedor', h_co:'Companyia', h_ram:'Ram / Producte', h_pol:'Nº Pòlissa',
+    h_mes:'Mes Venciment', h_dia:'Dia', h_prima:'Prima (€)', h_forma:'Forma Pagament',
+    h_risc:'Notes / Risc Assegurat',
     total_lbl:'TOTAL PRIMES ANUALS',
-    btn_add:'Afegir Pòlissa', btn_clr:'Netejar Taula', btn_clrall:'Netejar Tot', btn_print:'Imprimir / PDF',
+    btn_add:'Afegir Pòlissa', btn_clr:'Netejar Taula', btn_clrall:'Netejar Tot',
+    btn_save:'Guardar', btn_print:'Imprimir / PDF',
     foot_brand:'OPTIMIZARTE 3.0 — SCO',
     c_rows:'Netejar totes les pòlisses?', c_all:'Netejar tot el document?',
     ramo_ph:'— Selecciona —', pren_ph:'— Sense nom —',
@@ -483,19 +479,20 @@ const LANG = {
     lbl_pren:'Tomadores / Asegurados', lbl_date:'Fecha Documento',
     btn_ap:'Añadir asegurado',
     fld_nom:'Tomador', fld_nif:'NIF / CIF',
-    ph_nom:'Nombre completo o razón social…', ph_pol:'Nº Póliza', ph_risc:'Riesgo asegurado…',
+    ph_nom:'Nombre completo o razón social…', ph_pol:'Nº Póliza', ph_risc:'Riesgo asegurado…', ph_co:'Compañía…',
     cal_title:'Distribución Mensual de Pagos',
     cal_empty:'Introduce pólizas en el formulario para ver la distribución mensual…',
-    cal_pren:'Tomador', cal_risc:'Riesgo Asegurado', cal_total:'TOTAL MENSUAL',
+    cal_pren:'Tomador', cal_total:'TOTAL MENSUAL',
     vis_lbl:'Visible al imprimir:',
     v_pren:'Tomador', v_ram:'Ramo / Producto', v_pol:'Nº Póliza',
-    v_mes:'Mes Venc.', v_dia:'Día', v_forma:'Forma de Pago', v_prima:'Prima', v_risc:'Riesgo / Notas',
+    v_mes:'Mes Venc.', v_dia:'Día', v_prima:'Prima', v_forma:'Forma de Pago', v_risc:'Riesgo / Notas',
     pol_base:'Pólizas en vigor', btn_col:'Añadir columna',
-    h_pren:'Tomador', h_ram:'Ramo / Producto', h_pol:'Nº Póliza',
-    h_mes:'Mes de Vencimiento', h_dia:'Día', h_forma:'Forma de Pago',
-    h_prima:'Prima (€)', h_risc:'Notas / Riesgo Asegurado',
+    h_pren:'Tomador', h_co:'Compañía', h_ram:'Ramo / Producto', h_pol:'Nº Póliza',
+    h_mes:'Mes de Vencimiento', h_dia:'Día', h_prima:'Prima (€)', h_forma:'Forma de Pago',
+    h_risc:'Notas / Riesgo Asegurado',
     total_lbl:'TOTAL PRIMAS ANUALES',
-    btn_add:'Añadir Póliza', btn_clr:'Limpiar Tabla', btn_clrall:'Limpiar Todo', btn_print:'Imprimir / PDF',
+    btn_add:'Añadir Póliza', btn_clr:'Limpiar Tabla', btn_clrall:'Limpiar Todo',
+    btn_save:'Guardar', btn_print:'Imprimir / PDF',
     foot_brand:'OPTIMIZARTE 3.0 — SCO',
     c_rows:'¿Limpiar todas las pólizas?', c_all:'¿Limpiar todo el documento?',
     ramo_ph:'— Selecciona —', pren_ph:'— Sin nombre —',
@@ -509,19 +506,20 @@ const LANG = {
     lbl_pren:'Souscripteurs / Assurés', lbl_date:'Date du Document',
     btn_ap:'Ajouter un assuré',
     fld_nom:'Souscripteur', fld_nif:'N° ID / SIRET',
-    ph_nom:'Nom complet ou raison sociale…', ph_pol:'N° Police', ph_risc:'Risque assuré…',
+    ph_nom:'Nom complet ou raison sociale…', ph_pol:'N° Police', ph_risc:'Risque assuré…', ph_co:'Compagnie…',
     cal_title:'Distribution Mensuelle des Paiements',
     cal_empty:'Saisissez des polices dans le formulaire pour voir la distribution mensuelle…',
-    cal_pren:'Souscripteur', cal_risc:'Risque Assuré', cal_total:'TOTAL MENSUEL',
+    cal_pren:'Souscripteur', cal_total:'TOTAL MENSUEL',
     vis_lbl:'Visible à l\'impression :',
     v_pren:'Souscripteur', v_ram:'Branche / Produit', v_pol:'N° Police',
-    v_mes:'Mois Éch.', v_dia:'Jour', v_forma:'Mode de Paiement', v_prima:'Prime', v_risc:'Risque / Notes',
+    v_mes:'Mois Éch.', v_dia:'Jour', v_prima:'Prime', v_forma:'Mode de Paiement', v_risc:'Risque / Notes',
     pol_base:'Polices en vigueur', btn_col:'Ajouter une colonne',
-    h_pren:'Souscripteur', h_ram:'Branche / Produit', h_pol:'N° Police',
-    h_mes:'Mois d\'Échéance', h_dia:'Jour', h_forma:'Mode de Paiement',
-    h_prima:'Prime (€)', h_risc:'Notes / Risque Assuré',
+    h_pren:'Souscripteur', h_co:'Compagnie', h_ram:'Branche / Produit', h_pol:'N° Police',
+    h_mes:'Mois d\'Échéance', h_dia:'Jour', h_prima:'Prime (€)', h_forma:'Mode de Paiement',
+    h_risc:'Notes / Risque Assuré',
     total_lbl:'TOTAL PRIMES ANNUELLES',
-    btn_add:'Ajouter une Police', btn_clr:'Effacer le Tableau', btn_clrall:'Tout Effacer', btn_print:'Imprimer / PDF',
+    btn_add:'Ajouter une Police', btn_clr:'Effacer le Tableau', btn_clrall:'Tout Effacer',
+    btn_save:'Enregistrer', btn_print:'Imprimer / PDF',
     foot_brand:'OPTIMIZARTE 3.0 — SCO',
     c_rows:'Effacer toutes les polices ?', c_all:'Effacer tout le document ?',
     ramo_ph:'— Sélectionner —', pren_ph:'— Sans nom —',
@@ -535,28 +533,26 @@ const LANG = {
     lbl_pren:'Policyholders / Insured', lbl_date:'Document Date',
     btn_ap:'Add insured',
     fld_nom:'Policyholder', fld_nif:'ID / Tax No.',
-    ph_nom:'Full name or company name…', ph_pol:'Policy No.', ph_risc:'Insured risk…',
+    ph_nom:'Full name or company name…', ph_pol:'Policy No.', ph_risc:'Insured risk…', ph_co:'Insurer…',
     cal_title:'Monthly Payment Distribution',
     cal_empty:'Enter policies in the form to view the monthly distribution…',
-    cal_pren:'Policyholder', cal_risc:'Insured Risk', cal_total:'MONTHLY TOTAL',
+    cal_pren:'Policyholder', cal_total:'MONTHLY TOTAL',
     vis_lbl:'Visible when printing:',
     v_pren:'Policyholder', v_ram:'Branch / Product', v_pol:'Policy No.',
-    v_mes:'Due Month', v_dia:'Day', v_forma:'Payment Method', v_prima:'Premium', v_risc:'Risk / Notes',
+    v_mes:'Due Month', v_dia:'Day', v_prima:'Premium', v_forma:'Payment Method', v_risc:'Risk / Notes',
     pol_base:'Active Policies', btn_col:'Add column',
-    h_pren:'Policyholder', h_ram:'Branch / Product', h_pol:'Policy No.',
-    h_mes:'Due Month', h_dia:'Day', h_forma:'Payment Method',
-    h_prima:'Premium (€)', h_risc:'Notes / Insured Risk',
+    h_pren:'Policyholder', h_co:'Insurer', h_ram:'Branch / Product', h_pol:'Policy No.',
+    h_mes:'Due Month', h_dia:'Day', h_prima:'Premium (€)', h_forma:'Payment Method',
+    h_risc:'Notes / Insured Risk',
     total_lbl:'TOTAL ANNUAL PREMIUMS',
-    btn_add:'Add Policy', btn_clr:'Clear Table', btn_clrall:'Clear All', btn_print:'Print / PDF',
+    btn_add:'Add Policy', btn_clr:'Clear Table', btn_clrall:'Clear All',
+    btn_save:'Save', btn_print:'Print / PDF',
     foot_brand:'OPTIMIZARTE 3.0 — SCO',
     c_rows:'Clear all policies?', c_all:'Clear the entire document?',
     ramo_ph:'— Select —', pren_ph:'— No name —',
     del_row:'Delete row', del_pren:'Delete policyholder', del_col:'Delete column',
     new_col:'New column',
   },
-  /* Àrab estàndard formal — registre marroquí d'assegurances
-     Mesos: convenció oficial marroquina (origen francés): يوليوز غشت شتنبر نونبر دجنبر
-     Termes: مكتتب (subscriptor/prenedor) · وثيقة (pòlissa) · قسط (prima) */
   ar:{
     hdr_title:'جدول دفعات وثائق التأمين',
     hdr_sub:'وثيقة معلومات · OPTIMIZARTE 3.0 · وسيط 17167',
@@ -564,19 +560,20 @@ const LANG = {
     lbl_pren:'المكتتبون / المؤمَّن لهم', lbl_date:'تاريخ الوثيقة',
     btn_ap:'إضافة مؤمَّن',
     fld_nom:'المكتتب', fld_nif:'رقم التعريف الضريبي',
-    ph_nom:'الاسم الكامل أو اسم الشركة…', ph_pol:'رقم الوثيقة', ph_risc:'الخطر المؤمَّن عليه…',
+    ph_nom:'الاسم الكامل أو اسم الشركة…', ph_pol:'رقم الوثيقة', ph_risc:'الخطر المؤمَّن عليه…', ph_co:'شركة التأمين…',
     cal_title:'التوزيع الشهري للدفعات',
     cal_empty:'أدخل وثائق التأمين في النموذج لعرض التوزيع الشهري…',
-    cal_pren:'المكتتب', cal_risc:'الخطر المؤمَّن عليه', cal_total:'المجموع الشهري',
+    cal_pren:'المكتتب', cal_total:'المجموع الشهري',
     vis_lbl:'مرئي عند الطباعة:',
     v_pren:'المكتتب', v_ram:'الفرع / المنتج', v_pol:'رقم الوثيقة',
-    v_mes:'شهر الاستحقاق', v_dia:'اليوم', v_forma:'طريقة الدفع', v_prima:'القسط', v_risc:'الخطر / ملاحظات',
+    v_mes:'شهر الاستحقاق', v_dia:'اليوم', v_prima:'القسط', v_forma:'طريقة الدفع', v_risc:'الخطر / ملاحظات',
     pol_base:'الوثائق السارية', btn_col:'إضافة عمود',
-    h_pren:'المكتتب', h_ram:'الفرع / المنتج', h_pol:'رقم الوثيقة',
-    h_mes:'شهر الاستحقاق', h_dia:'اليوم', h_forma:'طريقة الدفع',
-    h_prima:'القسط (€)', h_risc:'ملاحظات / الخطر المؤمَّن عليه',
+    h_pren:'المكتتب', h_co:'شركة التأمين', h_ram:'الفرع / المنتج', h_pol:'رقم الوثيقة',
+    h_mes:'شهر الاستحقاق', h_dia:'اليوم', h_prima:'القسط (€)', h_forma:'طريقة الدفع',
+    h_risc:'ملاحظات / الخطر المؤمَّن عليه',
     total_lbl:'مجموع الأقساط السنوية',
-    btn_add:'إضافة وثيقة', btn_clr:'مسح الجدول', btn_clrall:'مسح الكل', btn_print:'طباعة / PDF',
+    btn_add:'إضافة وثيقة', btn_clr:'مسح الجدول', btn_clrall:'مسح الكل',
+    btn_save:'حفظ', btn_print:'طباعة / PDF',
     foot_brand:'OPTIMIZARTE 3.0 — SCO',
     c_rows:'هل تريد مسح جميع الوثائق؟', c_all:'هل تريد مسح كل الوثيقة؟',
     ramo_ph:'— اختر —', pren_ph:'— بدون اسم —',
@@ -585,7 +582,7 @@ const LANG = {
   }
 };
 
-/* Ramos per idioma (mateixa posició, CA com a clau de valor) */
+/* Ramos (CA key, translated label per lang) */
 const RAMOS_CA = ['','Llar','Salut','Vida','Motor','Moto','Empresa / Comerç','RC Professional','RC Patronal','Protecció Jurídica','Estalvis / Jubilació','Accidents','Defunció','Lloguer','Multiriscos','Comunitats','Altres'];
 const RAMOS = {
   ca:RAMOS_CA,
@@ -595,7 +592,7 @@ const RAMOS = {
   ar:['','السكن','الصحة','الحياة','السيارة','الدراجة النارية','المقاولة / التجارة','المسؤولية المهنية','مسؤولية صاحب العمل','الحماية القانونية','الادخار / التقاعد','الحوادث','الوفاة','الإيجار','المخاطر المتعددة','الملكية المشتركة','أخرى']
 };
 
-/* Mesos per idioma */
+/* Months */
 const MONTHS = {
   ca:{l:['Gener','Febrer','Març','Abril','Maig','Juny','Juliol','Agost','Setembre','Octubre','Novembre','Desembre'],s:['Gen','Feb','Mar','Abr','Mai','Jun','Jul','Ago','Set','Oct','Nov','Des']},
   es:{l:['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],s:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']},
@@ -604,7 +601,7 @@ const MONTHS = {
   ar:{l:['يناير','فبراير','مارس','أبريل','ماي','يونيو','يوليوز','غشت','شتنبر','أكتوبر','نونبر','دجنبر'],s:['ين','فب','مار','أبر','ماي','يون','يول','غش','شتن','أكت','نون','دجن']}
 };
 
-/* Forma pagament per idioma */
+/* Forma pagament */
 const FORMES = {
   ca:[['anual','Anual'],['semestral','Semestral'],['quatrimestral','Quatrimestral'],['trimestral','Trimestral'],['bimestral','Bimestral'],['mensual','Mensual']],
   es:[['anual','Anual'],['semestral','Semestral'],['quatrimestral','Cuatrimestral'],['trimestral','Trimestral'],['bimestral','Bimestral'],['mensual','Mensual']],
@@ -613,7 +610,7 @@ const FORMES = {
   ar:[['anual','سنوي'],['semestral','كل ستة أشهر'],['quatrimestral','كل أربعة أشهر'],['trimestral','ربع سنوي'],['bimestral','كل شهرين'],['mensual','شهري']]
 };
 
-/* Ramo SVG icons (keyed by CA name) */
+/* Ramo icons */
 const RSVG = {
   'Llar':`<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>`,
   'Salut':`<rect x="9" y="3" width="6" height="18" rx="1.5"/><rect x="3" y="9" width="18" height="6" rx="1.5"/>`,
@@ -633,166 +630,166 @@ const RSVG = {
   'Altres':`<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>`
 };
 
+/* Insurance company logo badges — bg/color per brand */
+const COMPANIES = {
+  'occident':     {bg:'#DC0028',fg:'#fff',tx:'Occident'},
+  'allianz':      {bg:'#003781',fg:'#fff',tx:'Allianz'},
+  'mapfre':       {bg:'#CC0000',fg:'#fff',tx:'MAPFRE'},
+  'axa':          {bg:'#00008F',fg:'#fff',tx:'AXA'},
+  'zurich':       {bg:'#0066CC',fg:'#fff',tx:'Zurich'},
+  'generali':     {bg:'#C8102E',fg:'#fff',tx:'Generali'},
+  'mutua':        {bg:'#009639',fg:'#fff',tx:'Mutua'},
+  'helvetia':     {bg:'#DA2128',fg:'#fff',tx:'Helvetia'},
+  'caser':        {bg:'#E8A000',fg:'#000',tx:'CASER'},
+  'liberty':      {bg:'#005EB8',fg:'#fff',tx:'Liberty'},
+  'sanitas':      {bg:'#00A3E0',fg:'#fff',tx:'Sanitas'},
+  'asisa':        {bg:'#0066B3',fg:'#fff',tx:'ASISA'},
+  'dkv':          {bg:'#B5002D',fg:'#fff',tx:'DKV'},
+  'reale':        {bg:'#B22222',fg:'#fff',tx:'Reale'},
+  'ageas':        {bg:'#006633',fg:'#fff',tx:'Ageas'},
+  'catalana':     {bg:'#E4002B',fg:'#fff',tx:'Catalana'},
+  'pelayo':       {bg:'#FF6600',fg:'#fff',tx:'Pelayo'},
+  'fiatc':        {bg:'#003087',fg:'#fff',tx:'FIATC'},
+  'plus ultra':   {bg:'#00529B',fg:'#fff',tx:'Plus Ultra'},
+  'aig':          {bg:'#E60000',fg:'#fff',tx:'AIG'},
+  'hiscox':       {bg:'#003087',fg:'#fff',tx:'Hiscox'},
+  'nationale':    {bg:'#003D7C',fg:'#fff',tx:'Nationale'},
+  'adeslas':      {bg:'#009B77',fg:'#fff',tx:'Adeslas'},
+  'maz':          {bg:'#005A9C',fg:'#fff',tx:'MAZ'},
+  'fremap':       {bg:'#007041',fg:'#fff',tx:'FREMAP'},
+};
+
 const FORMA_CFG = {anual:{n:1,s:12},semestral:{n:2,s:6},quatrimestral:{n:3,s:4},trimestral:{n:4,s:3},bimestral:{n:6,s:2},mensual:{n:12,s:1}};
 
-/* ═══ STATE ═══ */
-let lang       = 'ca';
-let prenedors  = [];
-let pUid = 0, rowUid = 0, ccUid = 0;
+/* ════════════════════════════════════════════
+   STATE
+════════════════════════════════════════════ */
+let lang = 'ca';
+let prenedors = [], pUid=0, rowUid=0, ccUid=0;
 let customCols = [];
 const hiddenCols = new Set();
 const TODAY = new Date(), CM = TODAY.getMonth(), CY = TODAY.getFullYear();
 
-/* ═══ UTILS ═══ */
+/* ════════════════════════════════════════════
+   UTILS
+════════════════════════════════════════════ */
 const $ = id => document.getElementById(id);
-const $$ = sel => document.querySelectorAll(sel);
+const $$ = s => document.querySelectorAll(s);
 function esc(v){if(v==null)return'';return String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function fmt(v){return v.toLocaleString('ca-ES',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';}
 function daysInMonth(m){return new Date(CY,m+1,0).getDate();}
 function monSeq(){return Array.from({length:12},(_,i)=>(CM+i)%12);}
 function payMonths(mv,f){const c=FORMA_CFG[f]||FORMA_CFG.anual;return Array.from({length:c.n},(_,i)=>(mv+i*c.s)%12);}
 function tr(){return LANG[lang];}
-function rsvg(k){const p=RSVG[k];if(!p)return'';return`<svg viewBox="0 0 24 24" fill="none" stroke="#DC0028" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" style="display:block;margin:auto">${p}</svg>`;}
+function rsvg(k){const p=RSVG[k];if(!p)return'';return`<svg viewBox="0 0 24 24" fill="none" stroke="#DC0028" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" style="display:block;margin:auto">${p}</svg>`;}
 
-/* ═══════════════════════════════════════════════
+/* Company badge */
+function companyKey(text){
+  if(!text)return null;
+  const n=text.toLowerCase().replace(/[àáâ]/g,'a').replace(/[èéê]/g,'e').replace(/[ìíî]/g,'i').replace(/[òóô]/g,'o').replace(/[ùúû]/g,'u').trim();
+  for(const k of Object.keys(COMPANIES)){if(n.includes(k))return k;}
+  return null;
+}
+function companyBadge(text,rid){
+  const k=companyKey(text);
+  if(!k)return null;
+  const c=COMPANIES[k];
+  return `<span class="co-badge" style="background:${c.bg};color:${c.fg};" data-rawco="${esc(text)}">${c.tx}<button class="co-edit" onclick="editCompany(${rid})" title="Editar">✎</button></span>`;
+}
+function tryCompanyConvert(input,rid){
+  const txt=input.value.trim();
+  if(!txt)return;
+  const badge=companyBadge(txt,rid);
+  if(badge){const td=input.parentElement;td.innerHTML=badge;td.dataset.rawco=txt;}
+}
+function editCompany(rid){
+  const td=document.querySelector(`#r${rid} .cco`);if(!td)return;
+  const raw=td.dataset.rawco||'';
+  const t=LANG[lang];
+  td.innerHTML=`<input type="text" placeholder="${t.ph_co}" value="${esc(raw)}" style="border:none;border-bottom:1.5px solid var(--gray-4);padding:4px 2px;font-size:11.5px;color:var(--dark);font-family:'Inter',sans-serif;background:transparent;outline:none;width:100%;" onblur="tryCompanyConvert(this,${rid})" onkeydown="if(event.key==='Enter')this.blur()">`;
+  td.querySelector('input').focus();
+}
+
+/* ════════════════════════════════════════════
    FLAG DROPDOWN
-   Uses event delegation on the menu and stopPropagation on the trigger.
-   document click (bubbled through, no containment check) closes the menu.
-═══════════════════════════════════════════════ */
+════════════════════════════════════════════ */
 (function initFlagDropdown(){
-  const btn  = $('flagBtn');
-  const menu = $('flagMenu');
-
-  // Toggle open/close on trigger click
-  btn.addEventListener('click', function(e){
+  const btn=$('flagBtn'), menu=$('flagMenu');
+  btn.addEventListener('click',function(e){
     e.stopPropagation();
-    const isOpen = menu.classList.contains('is-open');
-    menu.classList.toggle('is-open', !isOpen);
-    btn.classList.toggle('is-open', !isOpen);
+    const isOpen=menu.classList.contains('is-open');
+    menu.classList.toggle('is-open',!isOpen);
+    btn.classList.toggle('is-open',!isOpen);
   });
-
-  // Select language on option click (event delegation)
-  menu.addEventListener('click', function(e){
+  menu.addEventListener('click',function(e){
     e.stopPropagation();
-    const opt = e.target.closest('.flag-opt');
-    if(!opt) return;
-    const l = opt.dataset.lang;
-    if(l){
-      // Close menu
-      menu.classList.remove('is-open');
-      btn.classList.remove('is-open');
-      // Apply language
-      applyLang(l);
-    }
+    const opt=e.target.closest('.flag-opt');
+    if(!opt)return;
+    const l=opt.dataset.lang;
+    if(l){menu.classList.remove('is-open');btn.classList.remove('is-open');applyLang(l);}
   });
-
-  // Close when clicking anywhere else on the page
-  document.addEventListener('click', function(){
-    menu.classList.remove('is-open');
-    btn.classList.remove('is-open');
+  document.addEventListener('click',function(){
+    menu.classList.remove('is-open');btn.classList.remove('is-open');
   });
 })();
 
-/* ═══ APPLY LANGUAGE ═══ */
+/* ════════════════════════════════════════════
+   APPLY LANGUAGE
+════════════════════════════════════════════ */
 function applyLang(l){
-  lang = l;
-  const t = LANG[l];
-
-  // Static text nodes
+  lang=l;const t=LANG[l];
   $$('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(t[k]!==undefined)el.textContent=t[k];});
-  // HTML content
   $$('[data-i18n-html]').forEach(el=>{const k=el.dataset.i18nHtml;if(t[k]!==undefined)el.innerHTML=t[k];});
-
-  // Dynamic elements in prenedor card
   $$('.fs.wn label').forEach(el=>el.textContent=t.fld_nom);
   $$('.fs.wi label').forEach(el=>el.textContent=t.fld_nif);
   $$('#pren-list input[id^="pnom"]').forEach(el=>el.placeholder=t.ph_nom);
-
-  // Row placeholders
   $$('#tbody .co input').forEach(el=>el.placeholder=t.ph_risc);
-
-  // Month dropdowns
-  $$('.cm select').forEach(sel=>{
-    const v=sel.value;
-    sel.innerHTML=MONTHS[l].l.map((m,i)=>`<option value="${i}"${parseInt(v)===i?' selected':''}>${m}</option>`).join('');
-  });
-
-  // Ramo dropdowns
-  $$('.cr select').forEach(sel=>{
-    const v=sel.value;
-    sel.innerHTML=RAMOS_CA.map((ca,i)=>`<option value="${ca}"${v===ca?' selected':''}>${RAMOS[l][i]||t.ramo_ph}</option>`).join('');
-  });
-
-  // Forma pagament dropdowns
-  $$('.cfp select').forEach(sel=>{
-    const v=sel.value;
-    sel.innerHTML=FORMES[l].map(([k,lbl])=>`<option value="${k}"${v===k?' selected':''}>${lbl}</option>`).join('');
-  });
-
-  // Polisses title
-  updatePolTitle();
-
-  // Calendar
-  buildCalHead();
-  buildCal();
-
-  // Update active flag in dropdown and trigger icon
+  $$('#tbody .cco input').forEach(el=>el.placeholder=t.ph_co);
+  $$('.cm select').forEach(sel=>{const v=sel.value;sel.innerHTML=MONTHS[l].l.map((m,i)=>`<option value="${i}"${parseInt(v)===i?' selected':''}>${m}</option>`).join('');});
+  $$('.cr select').forEach(sel=>{const v=sel.value;sel.innerHTML=RAMOS_CA.map((ca,i)=>`<option value="${ca}"${v===ca?' selected':''}>${RAMOS[l][i]||t.ramo_ph}</option>`).join('');});
+  $$('.cfp select').forEach(sel=>{const v=sel.value;sel.innerHTML=FORMES[l].map(([k,lbl])=>`<option value="${k}"${v===k?' selected':''}>${lbl}</option>`).join('');});
+  updatePolTitle();buildCalHead();buildCal();
   $$('.flag-opt').forEach(o=>o.classList.toggle('is-active',o.dataset.lang===l));
-  const activeOpt = document.querySelector(`.flag-opt[data-lang="${l}"]`);
-  const icon = $('flagIcon');
-  if(activeOpt && icon){
-    const s = activeOpt.querySelector('svg');
-    icon.innerHTML = s.innerHTML;
-    icon.setAttribute('viewBox', s.getAttribute('viewBox')||'0 0 22 14');
-    icon.style.cssText = s.style.cssText||'';
-  }
-
-  // RTL
-  document.documentElement.lang = l;
-  document.documentElement.dir  = l==='ar' ? 'rtl' : 'ltr';
+  const activeOpt=document.querySelector(`.flag-opt[data-lang="${l}"]`);
+  const icon=$('flagIcon');
+  if(activeOpt&&icon){const s=activeOpt.querySelector('svg');icon.innerHTML=s.innerHTML;icon.setAttribute('viewBox',s.getAttribute('viewBox')||'0 0 22 14');icon.style.cssText=s.style.cssText||'';}
+  document.documentElement.lang=l;
+  document.documentElement.dir=l==='ar'?'rtl':'ltr';
 }
 
-/* ═══ POLISSA NUMBER FORMAT ═══ */
+/* ════════════════════════════════════════════
+   POLISSA FORMAT
+════════════════════════════════════════════ */
 function fmtPol(input){
   const raw=input.value.replace(/[^0-9]/g,'').slice(0,8);
   if(!raw){input.value='';refreshAll();return;}
   const d0=raw[0];
   if(d0!=='7'&&d0!=='8'){input.value=raw;refreshAll();return;}
   if(raw.length===1){input.value=raw;refreshAll();return;}
-  const d1=raw[1]; let r;
-  if(d1==='6'){
-    r=d0+'-'+d1;
-    if(raw.length>=3)r+='.'+raw.slice(2,Math.min(5,raw.length));
-    if(raw.length>=6)r+='.'+raw.slice(5,Math.min(8,raw.length));
-  }else{
-    r=d0+'-'+raw.slice(1,Math.min(3,raw.length));
-    if(raw.length>=4)r+='.'+raw.slice(3,Math.min(6,raw.length));
-    if(raw.length>=7)r+='.'+raw.slice(6,Math.min(8,raw.length));
-  }
+  const d1=raw[1];let r;
+  if(d1==='6'){r=d0+'-'+d1;if(raw.length>=3)r+='.'+raw.slice(2,Math.min(5,raw.length));if(raw.length>=6)r+='.'+raw.slice(5,Math.min(8,raw.length));}
+  else{r=d0+'-'+raw.slice(1,Math.min(3,raw.length));if(raw.length>=4)r+='.'+raw.slice(3,Math.min(6,raw.length));if(raw.length>=7)r+='.'+raw.slice(6,Math.min(8,raw.length));}
   const atEnd=input.selectionStart>=input.value.length;
-  input.value=r;
-  if(atEnd){const len=r.length;input.setSelectionRange(len,len);}
+  input.value=r;if(atEnd){const len=r.length;input.setSelectionRange(len,len);}
   refreshAll();
 }
 
-/* ═══ PRENEDORS ═══ */
+/* ════════════════════════════════════════════
+   PRENEDORS
+════════════════════════════════════════════ */
 function addPrenedor(d){
-  pUid++;
-  prenedors.push({id:pUid,nom:d?.nom||'',nif:d?.nif||''});
-  renderPren(); updatePrenDrops(); updatePolTitle(); refreshAll();
+  pUid++;prenedors.push({id:pUid,nom:d?.nom||'',nif:d?.nif||''});
+  renderPren();updatePrenDrops();updatePolTitle();refreshAll();
 }
 function delPrenedor(id){
   if(prenedors.length<=1)return;
   prenedors=prenedors.filter(p=>p.id!==id);
   $$('#tbody .ct select').forEach(s=>{if(parseInt(s.value)===id)s.value=prenedors[0].id;});
-  renderPren(); updatePrenDrops(); updatePolTitle(); refreshAll();
+  renderPren();updatePrenDrops();updatePolTitle();refreshAll();
 }
 function onPrenInput(){
-  prenedors.forEach(p=>{
-    const n=$('pnom-'+p.id),i=$('pnif-'+p.id);
-    if(n)p.nom=n.value; if(i)p.nif=i.value;
-  });
-  updatePrenDrops(); updatePolTitle(); refreshAll();
+  prenedors.forEach(p=>{const n=$('pnom-'+p.id),i=$('pnif-'+p.id);if(n)p.nom=n.value;if(i)p.nif=i.value;});
+  updatePrenDrops();updatePolTitle();refreshAll();
 }
 function renderPren(){
   const t=LANG[lang];
@@ -810,65 +807,71 @@ function updatePrenDrops(){
   $$('#tbody .ct select').forEach(s=>{const v=s.value;s.innerHTML=opts;if(prenedors.find(p=>String(p.id)===String(v)))s.value=v;else s.value=prenedors[0]?.id??'';});
 }
 function updatePolTitle(){
-  const el=$('polTitle');
-  if(el)el.textContent=`${LANG[lang].pol_base} / ${prenedors.length}`;
+  const el=$('polTitle');if(el)el.textContent=`${LANG[lang].pol_base} / ${prenedors.length}`;
 }
 
-/* ═══ DAY DROPDOWN ═══ */
+/* ════════════════════════════════════════════
+   DAY & RAMO
+════════════════════════════════════════════ */
 function updateDays(rid){
   const ms=$('mes'+rid),ds=$('dia'+rid);if(!ms||!ds)return;
   const m=parseInt(ms.value),pd=parseInt(ds.value)||1,mx=daysInMonth(m);
   let h='';for(let d=1;d<=mx;d++){h+=`<option value="${d}"${(d===pd||(pd>mx&&d===mx))?' selected':''}>${d}</option>`;}
-  ds.innerHTML=h; refreshAll();
+  ds.innerHTML=h;refreshAll();
 }
-
-/* ═══ RAMO ICON ═══ */
 function updateRamoIcon(rid){
-  const s=document.querySelector(`#r${rid} .cr select`);
-  const sp=$('ic-'+rid);
+  const s=document.querySelector(`#r${rid} .cr select`);const sp=$('ic-'+rid);
   if(s&&sp)sp.innerHTML=rsvg(s.value);
 }
 
-/* ═══ CALENDAR HEADER ═══ */
+/* ════════════════════════════════════════════
+   CALENDAR HEADER
+════════════════════════════════════════════ */
 function buildCalHead(){
   const seq=monSeq(),sh=MONTHS[lang].s,t=LANG[lang];
   let year=CY,h='<tr>';
-  h+=`<th class="c-pren">${t.cal_pren}</th>`;
-  h+=`<th class="c-risc">${t.cal_risc}</th>`;
+  // Prenedor header + eye toggle
+  h+=`<th class="c-pren">${t.cal_pren}<button class="cal-th-toggle" onclick="tc('ct','b-ct')" title="Ocultar/mostrar prenedor">👁</button></th>`;
+  // Ramo icon header
+  h+=`<th class="c-ico" title="Ram"></th>`;
+  // Month headers
   seq.forEach((m,i)=>{
     if(i>0&&m===0)year++;
     const yTag=(i===0||m===0)?`<small>'${String(year).slice(2)}</small>`:'';
     let cls='c-mon';if(i===0)cls+=' c-curr';if(m===0&&i>0)cls+=' c-newy';
     h+=`<th class="${cls}">${sh[m]}${yTag}</th>`;
   });
-  h+='</tr>';
-  $('calHead').innerHTML=h;
+  h+='</tr>';$('calHead').innerHTML=h;
 }
 
-/* ═══ CALENDAR BODY ═══ */
+/* ════════════════════════════════════════════
+   CALENDAR BODY
+════════════════════════════════════════════ */
 function buildCal(){
   const seq=monSeq(),t=LANG[lang];
   const cb=$('calBody'),cf=$('calFoot'),rows=$$('#tbody tr');
   if(!rows.length){
-    cb.innerHTML=`<tr><td class="c-pren" colspan="14" style="color:var(--gray-3);font-style:italic;padding:20px 12px;">${t.cal_empty}</td></tr>`;
-    cf.innerHTML=''; return;
+    cb.innerHTML=`<tr><td class="c-pren" colspan="15" style="color:var(--gray-3);font-style:italic;padding:20px 12px;">${t.cal_empty}</td></tr>`;
+    cf.innerHTML='';return;
   }
-  const tots=new Array(12).fill(0); let bh='';
+  const tots=new Array(12).fill(0);let bh='';
   rows.forEach(row=>{
     const ctS=row.querySelector('.ct select'),mS=row.querySelector('.cm select');
-    const fpS=row.querySelector('.cfp select'),pI=row.querySelector('.cv input'),nI=row.querySelector('.co input');
+    const fpS=row.querySelector('.cfp select'),pI=row.querySelector('.cv input');
+    const crS=row.querySelector('.cr select');
     const pid=ctS?parseInt(ctS.value):null;
     const pr=prenedors.find(p=>p.id===pid);
     const pNom=pr?(pr.nom||'—'):'—';
+    const caRamo=crS?crS.value:'';
     const mv=mS?parseInt(mS.value):CM, fo=fpS?fpS.value:'anual';
-    const prima=pI?(parseFloat(pI.value)||0):0, risc=nI?nI.value.trim():'';
-    const pm=payMonths(mv,fo), fr2=pm.length?prima/pm.length:0;
+    const prima=pI?(parseFloat(pI.value)||0):0;
+    const pm=payMonths(mv,fo),fr2=pm.length?prima/pm.length:0;
     const ga=new Array(12).fill(0);
     pm.forEach(mi=>{const pos=seq.indexOf(mi);if(pos!==-1)ga[pos]+=fr2;});
     ga.forEach((a,i)=>tots[i]+=a);
     bh+='<tr>';
     bh+=`<td class="c-pren">${esc(pNom)}</td>`;
-    bh+=`<td class="c-risc">${esc(risc)}</td>`;
+    bh+=`<td class="c-ico">${rsvg(caRamo)}</td>`;
     ga.forEach((a,i)=>{
       const cc=(i===0)?' c-now':'';
       bh+=a>0?`<td class="c-amt c-has${cc}">${fmt(a)}</td>`:`<td class="c-amt${cc}"></td>`;
@@ -878,12 +881,14 @@ function buildCal(){
   cb.innerHTML=bh;
   let fh='<tr>';
   fh+=`<td class="cf-pren">—</td>`;
-  fh+=`<td class="cf-lbl">${t.cal_total}</td>`;
-  tots.forEach(v=>{ fh+=v>0?`<td class="cf-has">${fmt(v)}</td>`:`<td class="cf-nil">—</td>`;});
-  fh+='</tr>'; cf.innerHTML=fh;
+  fh+=`<td class="cf-ico"></td>`;
+  tots.forEach(v=>{fh+=v>0?`<td class="cf-has">${fmt(v)}</td>`:`<td class="cf-nil">—</td>`;});
+  fh+='</tr>';cf.innerHTML=fh;
 }
 
-/* ═══ CUSTOM COLUMNS ═══ */
+/* ════════════════════════════════════════════
+   CUSTOM COLUMNS
+════════════════════════════════════════════ */
 function addCustomCol(){
   ccUid++;const id=ccUid;const ttl=LANG[lang].new_col;customCols.push({id,title:ttl});
   const hr=$('ptHeadRow'),la=hr.querySelector('.th-a');
@@ -901,17 +906,13 @@ function addCustomCol(){
   const box=$('visBox');const nb=document.createElement('button');nb.className='vbtn';nb.id=`b-cc-${id}`;
   nb.innerHTML=`👁 ${esc(ttl)}`;nb.onclick=()=>tc(`cc-${id}`,`b-cc-${id}`);box.appendChild(nb);
 }
-function delCC(id){
-  customCols=customCols.filter(c=>c.id!==id);
-  $$('.cc-'+id).forEach(el=>el.remove());
-  const b=$('b-cc-'+id);if(b)b.remove();
-}
-function updateCC(id,val){
-  const c=customCols.find(c=>c.id===id);if(c)c.title=val;
-  const b=$('b-cc-'+id);if(b)b.innerHTML=`👁 ${val||'Col'}`;
-}
+function delCC(id){customCols=customCols.filter(c=>c.id!==id);$$('.cc-'+id).forEach(el=>el.remove());const b=$('b-cc-'+id);if(b)b.remove();}
+function updateCC(id,val){const c=customCols.find(c=>c.id===id);if(c)c.title=val;const b=$('b-cc-'+id);if(b)b.innerHTML=`👁 ${val||'Col'}`;}
 
-/* ═══ MAKE ROW ═══ */
+/* ════════════════════════════════════════════
+   MAKE ROW
+   Order: #, Prenedor, [ramo-icon], [company], Ram, Polissa, Mes, Dia, Prima, Forma, Notes, Del
+════════════════════════════════════════════ */
 function makeRow(d){
   d=d||{};rowUid++;const n=rowUid,t=LANG[lang];
   const pv=d.prenId||(prenedors[0]?.id??'');
@@ -924,23 +925,34 @@ function makeRow(d){
   const fv=d.forma||'anual';
   const fOpts=FORMES[lang].map(([k,lbl])=>`<option value="${k}"${fv===k?' selected':''}>${lbl}</option>`).join('');
   const ccCells=customCols.map(cc=>`<td class="cc-col cc-${cc.id}${hiddenCols.has('cc-'+cc.id)?' col-off':''}"><input type="text" placeholder="…" style="border:none;border-bottom:1.5px solid var(--gray-4);padding:4px 2px;font-size:11.5px;color:var(--dark);font-family:'Inter',sans-serif;background:transparent;outline:none;width:100%;"></td>`).join('');
+
+  // Company cell
+  const coRaw=d.co||'';
+  const coBadge=companyBadge(coRaw,n);
+  const coCell=coBadge
+    ?`<td class="cco" data-rawco="${esc(coRaw)}">${coBadge}</td>`
+    :`<td class="cco"><input type="text" placeholder="${t.ph_co}" value="${esc(coRaw)}" style="border:none;border-bottom:1.5px solid var(--gray-4);padding:4px 2px;font-size:11.5px;color:var(--dark);font-family:'Inter',sans-serif;background:transparent;outline:none;width:100%;" onblur="tryCompanyConvert(this,${n})" onkeydown="if(event.key==='Enter')this.blur()"></td>`;
+
   return `<tr id="r${n}">
   <td class="td-n cn">${n}</td>
   <td class="ct"><select onchange="refreshAll()">${pOpts}</select></td>
   <td class="ci td-i"><span id="ic-${n}">${rsvg(d.ramo||'')}</span></td>
+  ${coCell}
   <td class="cr"><select onchange="updateRamoIcon(${n});refreshAll()">${rOpts}</select></td>
   <td class="cp"><input type="text" id="pol${n}" placeholder="${t.ph_pol}" value="${esc(d.poliza)}" style="font-family:'Inter',monospace;letter-spacing:.4px;" oninput="fmtPol(this)"></td>
   <td class="cm"><select id="mes${n}" onchange="updateDays(${n})">${mOpts}</select></td>
   <td class="cd td-d" style="text-align:center;"><select id="dia${n}" onchange="refreshAll()" style="text-align:center;">${dOpts}</select></td>
-  <td class="cfp"><select onchange="refreshAll()">${fOpts}</select></td>
   <td class="cv td-v"><input type="number" step="0.01" min="0" placeholder="0,00" value="${esc(d.prima)}" oninput="refreshAll()"></td>
+  <td class="cfp"><select onchange="refreshAll()">${fOpts}</select></td>
   <td class="co"><input type="text" placeholder="${t.ph_risc}" value="${esc(d.notas)}" oninput="refreshAll()"></td>
   ${ccCells}
   <td class="ca"><button class="delbtn" onclick="delRow(${n})" title="${t.del_row}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></td>
 </tr>`;
 }
 
-/* ═══ ROW CRUD ═══ */
+/* ════════════════════════════════════════════
+   ROW CRUD
+════════════════════════════════════════════ */
 function addRow(d){
   $('tbody').insertAdjacentHTML('beforeend',makeRow(d));
   hiddenCols.forEach(cls=>{const r=$('r'+rowUid);if(r)r.querySelectorAll('.'+cls).forEach(el=>el.classList.add('col-off'));});
@@ -957,22 +969,40 @@ function clearAll(){
   $('tbody').innerHTML='';rowUid=0;addRow();
 }
 
-/* ═══ REFRESH ═══ */
+/* ════════════════════════════════════════════
+   REFRESH
+════════════════════════════════════════════ */
 function calcTotal(){let t=0;$$('.td-v input').forEach(i=>t+=parseFloat(i.value)||0);$('tval').textContent=fmt(t);}
 function refreshAll(){calcTotal();buildCal();}
 
-/* ═══ COLUMN TOGGLE ═══ */
+/* ════════════════════════════════════════════
+   COLUMN TOGGLE
+════════════════════════════════════════════ */
 function tc(col,bid){
   const btn=$(bid),isOff=btn.classList.contains('off');
   if(isOff){btn.classList.remove('off');hiddenCols.delete(col);$$(`.${col}`).forEach(el=>el.classList.remove('col-off'));}
   else{btn.classList.add('off');hiddenCols.add(col);$$(`.${col}`).forEach(el=>el.classList.add('col-off'));}
-  // update emoji (first text node)
   const fn=btn.childNodes[0];if(fn&&fn.nodeType===3)fn.textContent=isOff?'👁 ':'🚫 ';
 }
 
-/* ═══ INIT ═══ */
+/* ════════════════════════════════════════════
+   SAVE — filename: Prenedor-CalendariPagaments-YYYY-MM-DD.html
+════════════════════════════════════════════ */
+function saveDoc(){
+  const prenNom=(prenedors[0]?.nom?.trim()||'Document').replace(/[\\/:*?"<>|]/g,'');
+  const dateStr=TODAY.toISOString().split('T')[0];
+  const filename=`${prenNom}-CalendariPagaments-${dateStr}.html`;
+  const blob=new Blob([document.documentElement.outerHTML],{type:'text/html;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=filename;
+  document.body.appendChild(a);a.click();
+  document.body.removeChild(a);URL.revokeObjectURL(url);
+}
+
+/* ════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════ */
 $('datadoc').value=TODAY.toISOString().split('T')[0];
-$('fdate').textContent=TODAY.toLocaleDateString('ca-ES',{day:'2-digit',month:'long',year:'numeric'});
 buildCalHead();
 addPrenedor({nom:'',nif:''});
 addRow();

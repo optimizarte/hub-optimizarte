@@ -1,0 +1,1687 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#202020">
+<title>Hub Oficina · Optimizarte by Occident</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════
+   TOKENS & RESET
+═══════════════════════════════════════════════ */
+:root {
+  --red:        #DC0028;
+  --red-dark:   #a8001e;
+  --red-light:  #fff0f2;
+  --dark:       #202020;
+  --gray:       #414141;
+  --gray-2:     #6b6b6b;
+  --gray-3:     #BEBEBE;
+  --gray-4:     #E7E6E6;
+  --bg:         #F0F0F0;
+  --white:      #FFFFFF;
+  --green:      #1a7a4a;
+  --green-bg:   #edfaf3;
+  --amber:      #b45309;
+  --amber-bg:   #fffbeb;
+  --blue:       #0563C1;
+  --radius:     12px;
+  --radius-sm:  8px;
+  --shadow:     0 2px 12px rgba(0,0,0,0.08);
+  --shadow-md:  0 8px 32px rgba(0,0,0,0.14);
+  --font:       'DM Sans', system-ui, sans-serif;
+  --font-serif: 'DM Serif Display', Georgia, serif;
+  --header-h:   60px;
+  --sidebar-w:  236px;
+  --bottom-h:   64px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--dark);
+  min-height: 100vh;
+  min-height: 100dvh;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a { text-decoration: none; color: inherit; }
+button { font-family: var(--font); }
+
+/* ═══════════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════════ */
+.header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  background: var(--dark);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 16px;
+  z-index: 200;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.35);
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+/* Logo SVG — OPTIMIZARTE by Occident, todo blanco */
+.logo-svg { height: 38px; width: auto; }
+
+.header-divider {
+  width: 1px; height: 26px;
+  background: rgba(255,255,255,0.14);
+  flex-shrink: 0;
+}
+
+.header-subtitle {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  color: rgba(255,255,255,0.7);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.header-spacer { flex: 1; }
+
+/* Desktop search */
+.header-search {
+  position: relative;
+  width: 240px;
+}
+.header-search input {
+  width: 100%;
+  background: rgba(255,255,255,0.09);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 8px;
+  padding: 8px 12px 8px 34px;
+  color: white;
+  font-family: var(--font);
+  font-size: 13px;
+  outline: none;
+  transition: all .2s;
+}
+.header-search input::placeholder { color: rgba(255,255,255,0.35); }
+.header-search input:focus { background: rgba(255,255,255,0.14); border-color: var(--red); }
+.search-icon-header {
+  position: absolute; left: 9px; top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255,255,255,0.35);
+  pointer-events: none;
+}
+
+/* Mobile search icon */
+.btn-icon {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.09);
+  border: none;
+  color: rgba(255,255,255,0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background .15s;
+}
+.btn-icon:hover { background: rgba(255,255,255,0.16); }
+
+.header-avatar {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--red);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: white;
+  flex-shrink: 0; cursor: pointer;
+}
+
+/* Mobile search bar (slides down) */
+.mobile-search-bar {
+  display: none;
+  position: fixed;
+  top: var(--header-h);
+  left: 0; right: 0;
+  background: var(--dark);
+  padding: 10px 16px 12px;
+  z-index: 199;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.mobile-search-bar.open { display: flex; }
+.mobile-search-bar input {
+  flex: 1;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: white;
+  font-family: var(--font);
+  font-size: 15px;
+  outline: none;
+}
+.mobile-search-bar input::placeholder { color: rgba(255,255,255,0.4); }
+
+/* ═══════════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════════ */
+.layout {
+  display: flex;
+  margin-top: var(--header-h);
+  min-height: calc(100vh - var(--header-h));
+}
+
+/* ═══════════════════════════════════════════════
+   SIDEBAR (desktop only)
+═══════════════════════════════════════════════ */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--white);
+  border-right: 1px solid var(--gray-4);
+  position: fixed;
+  top: var(--header-h);
+  bottom: 0; left: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0 0;
+  z-index: 100;
+}
+
+.sidebar-section { padding: 0 14px 16px; }
+
+.sidebar-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--gray-3);
+  padding: 8px 8px 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all .15s;
+  color: var(--gray);
+  font-size: 13px;
+  font-weight: 400;
+  user-select: none;
+}
+.nav-item:hover { background: var(--bg); color: var(--dark); }
+.nav-item.active {
+  background: var(--red-light);
+  color: var(--red);
+  font-weight: 600;
+}
+.nav-item.active svg { color: var(--red) !important; }
+.nav-icon { width: 16px; height: 16px; flex-shrink: 0; color: var(--gray-3); }
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--red);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 999px;
+  min-width: 18px;
+  text-align: center;
+}
+.nav-badge.gray { background: var(--gray-4); color: var(--gray-2); }
+
+.sidebar-sep { height: 1px; background: var(--gray-4); margin: 6px 14px 14px; }
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 14px;
+  border-top: 1px solid var(--gray-4);
+}
+.occ-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+}
+.occ-badge span { font-size: 10.5px; color: var(--gray-2); line-height: 1.35; }
+.occ-badge strong { display: block; color: var(--dark); font-size: 11.5px; }
+
+/* ═══════════════════════════════════════════════
+   MAIN CONTENT
+═══════════════════════════════════════════════ */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  padding: 28px 28px 40px;
+}
+
+/* Page header */
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.page-title-block h1 {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--dark);
+  line-height: 1.2;
+}
+.page-title-block p { font-size: 13px; color: var(--gray-2); margin-top: 3px; }
+.accent { color: var(--red); font-style: italic; }
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--red);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 9px 16px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.btn-primary:hover { background: var(--red-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(220,0,40,.28); }
+
+/* Stats bar */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.stat-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.stat-icon {
+  width: 38px; height: 38px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.stat-icon.red   { background: var(--red-light); color: var(--red); }
+.stat-icon.green { background: var(--green-bg);  color: var(--green); }
+.stat-icon.amber { background: var(--amber-bg);  color: var(--amber); }
+.stat-icon.blue  { background: #eff6ff;           color: var(--blue); }
+.stat-info strong { display: block; font-size: 20px; font-weight: 700; color: var(--dark); line-height: 1; }
+.stat-info span   { font-size: 11px; color: var(--gray-2); display: block; margin-top: 2px; }
+
+/* Filter chips */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.filter-label { font-size: 11.5px; color: var(--gray-2); font-weight: 500; margin-right: 2px; }
+.chip {
+  padding: 5px 13px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1.5px solid var(--gray-4);
+  background: var(--white);
+  color: var(--gray);
+  cursor: pointer;
+  transition: all .15s;
+  user-select: none;
+}
+.chip:hover  { border-color: var(--red); color: var(--red); }
+.chip.active { background: var(--red); color: white; border-color: var(--red); }
+
+/* Section title */
+.section-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--gray-3);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-title::after { content:''; flex:1; height:1px; background:var(--gray-4); }
+
+/* Cards grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+/* Tool card */
+.tool-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1.5px solid transparent;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all .22s cubic-bezier(.4,0,.2,1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.tool-card:hover {
+  border-color: var(--red);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+.tool-card.soon { opacity: .6; pointer-events: none; }
+
+.card-stripe      { height: 4px; background: var(--red); }
+.card-stripe.amber{ background: #d97706; }
+.card-stripe.green{ background: var(--green); }
+.card-stripe.blue { background: var(--blue); }
+.card-stripe.gray { background: var(--gray-3); }
+
+.card-body { padding: 18px; flex: 1; display: flex; flex-direction: column; gap: 9px; }
+
+.card-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+.card-icon {
+  width: 42px; height: 42px;
+  border-radius: 9px;
+  background: var(--red-light);
+  color: var(--red);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.card-icon.amber { background: var(--amber-bg); color: #d97706; }
+.card-icon.green { background: var(--green-bg); color: var(--green); }
+.card-icon.gray  { background: #f5f5f5; color: var(--gray-3); }
+
+.card-status {
+  font-size: 10px; font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+.status-live { background: var(--green-bg); color: var(--green); }
+.status-soon { background: var(--gray-4);   color: var(--gray-2); }
+.status-dev  { background: var(--amber-bg); color: var(--amber); }
+
+.card-title { font-size: 14.5px; font-weight: 700; color: var(--dark); line-height: 1.3; }
+.card-desc  { font-size: 12.5px; color: var(--gray-2); line-height: 1.55; flex: 1; }
+
+.card-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+.card-category {
+  font-size: 10.5px; font-weight: 600;
+  color: var(--red); text-transform: uppercase; letter-spacing: .5px;
+}
+.card-arrow {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gray-3);
+  transition: all .2s;
+}
+.tool-card:hover .card-arrow { background: var(--red); color: white; }
+
+/* Add card */
+.card-add {
+  background: transparent;
+  border: 2px dashed var(--gray-4);
+  border-radius: var(--radius);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 8px;
+  padding: 36px;
+  cursor: pointer;
+  transition: all .2s;
+  min-height: 140px;
+  color: var(--gray-3);
+}
+.card-add:hover { border-color: var(--red); color: var(--red); background: var(--red-light); }
+.card-add span { font-size: 12.5px; font-weight: 600; }
+
+/* ═══════════════════════════════════════════════
+   DRAG & DROP REORDER — grid-live
+═══════════════════════════════════════════════ */
+#grid-live .tool-card {
+  cursor: grab;
+  user-select: none;
+}
+#grid-live .tool-card:active {
+  cursor: grabbing;
+}
+#grid-live .tool-card.is-dragging {
+  opacity: 0.35;
+  transform: scale(0.97) !important;
+  border-color: var(--red) !important;
+  border-style: dashed !important;
+  box-shadow: none !important;
+  cursor: grabbing;
+}
+#grid-live .tool-card.drag-target {
+  border-color: var(--red) !important;
+  box-shadow: 0 0 0 3px rgba(220,0,40,0.18) !important;
+  transform: translateY(-3px) scale(1.012) !important;
+}
+
+/* Drag handle — visible on hover */
+.drag-handle {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .18s;
+  pointer-events: none;
+  color: var(--gray-3);
+  z-index: 2;
+}
+#grid-live .tool-card:hover .drag-handle { opacity: 1; }
+#grid-live .tool-card.is-dragging .drag-handle { opacity: 0; }
+
+/* Section title drag hint */
+.drag-hint-label {
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--gray-3);
+  letter-spacing: .5px;
+  text-transform: none;
+  margin-left: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Touch drag ghost */
+.touch-ghost {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.85;
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius);
+  background: var(--white);
+  border: 1.5px solid var(--red);
+  transform: rotate(2deg) scale(1.04);
+  transition: transform .1s;
+}
+
+/* No results */
+#no-results {
+  display: none;
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--gray-2);
+}
+
+/* ═══════════════════════════════════════════════
+   MODAL (desktop)
+═══════════════════════════════════════════════ */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 300;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.open { display: flex; }
+
+.modal-box {
+  background: var(--white);
+  border-radius: 16px;
+  width: 96vw;
+  max-width: 1440px;
+  height: 92vh;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.32);
+  animation: modalIn .22s ease;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(.97) translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.modal-header {
+  background: var(--dark);
+  color: white;
+  padding: 13px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.modal-title { font-size: 14px; font-weight: 600; }
+.modal-actions { display: flex; align-items: center; gap: 8px; }
+
+.modal-btn {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: rgba(255,255,255,0.75);
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--font);
+  font-size: 12px; font-weight: 500;
+  transition: all .15s;
+  text-decoration: none;
+}
+.modal-btn:hover { background: rgba(255,255,255,0.18); color: white; }
+
+.modal-close {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  width: 30px; height: 30px;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  transition: all .15s;
+}
+.modal-close:hover { background: rgba(255,255,255,0.2); color: white; }
+
+.modal-body {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.modal-centered {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12px;
+  padding: 32px;
+  text-align: center;
+  color: var(--gray-2);
+}
+.modal-centered .big-icon { font-size: 48px; margin-bottom: 4px; }
+.modal-centered h3 {
+  font-family: var(--font-serif);
+  font-size: 22px; font-weight: 400;
+  color: var(--dark);
+}
+.modal-centered p { font-size: 14px; max-width: 400px; line-height: 1.6; }
+
+/* ═══════════════════════════════════════════════
+   BOTTOM NAV (mobile only)
+═══════════════════════════════════════════════ */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: var(--bottom-h);
+  background: var(--white);
+  border-top: 1px solid var(--gray-4);
+  padding: 0 4px;
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 200;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+}
+
+.bnav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .15s;
+  color: var(--gray-3);
+  min-width: 52px;
+  border: none;
+  background: none;
+  font-family: var(--font);
+}
+.bnav-item.active { color: var(--red); }
+.bnav-item span { font-size: 10px; font-weight: 600; }
+.bnav-item svg  { width: 22px; height: 22px; }
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE — MOBILE ≤ 768px
+═══════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* Hide desktop elements */
+  .sidebar          { display: none; }
+  .header-search    { display: none; }
+  .header-divider   { display: none; }
+  .header-subtitle  { display: none; }
+
+  /* Show mobile elements */
+  .btn-icon     { display: flex; }
+  .bottom-nav   { display: flex; }
+
+  /* Shrink logo on mobile */
+  .logo-svg { height: 30px; }
+
+  /* Main shifts for bottom nav */
+  .main {
+    margin-left: 0;
+    padding: 16px 14px calc(var(--bottom-h) + env(safe-area-inset-bottom) + 12px);
+  }
+
+  /* Page header stacked */
+  .page-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .page-title-block h1 { font-size: 22px; }
+  .btn-primary { width: 100%; justify-content: center; }
+
+  /* Stats 2x2 */
+  .stats-bar { grid-template-columns: 1fr 1fr; }
+  .stat-card { padding: 12px 14px; gap: 10px; }
+  .stat-info strong { font-size: 18px; }
+
+  /* Cards single column */
+  .cards-grid { grid-template-columns: 1fr; gap: 10px; }
+
+  /* Cards horizontal on mobile */
+  .tool-card { flex-direction: row; }
+  .card-stripe { width: 4px; height: auto; flex-shrink: 0; }
+  .card-body { padding: 14px 16px; }
+  .card-icon { width: 36px; height: 36px; border-radius: 8px; }
+  .card-icon svg { width: 18px; height: 18px; }
+  .card-title { font-size: 13.5px; }
+  .card-desc  { font-size: 12px; }
+
+  /* Filter bar horizontal scroll */
+  .filter-bar { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
+  .filter-bar::-webkit-scrollbar { display: none; }
+
+  /* Section title */
+  .section-title { font-size: 10px; }
+
+  /* No modal on mobile — tools open in new tab */
+  .modal-overlay { display: none !important; }
+}
+
+@media (max-width: 380px) {
+  .stats-bar { grid-template-columns: 1fr 1fr; }
+  .stat-info strong { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════════ -->
+<header class="header">
+  <a href="#" class="header-logo">
+    <!--
+      Logo OPTIMIZARTE by Occident — recreació SVG fidel
+      Tipografia serif bold caps + "by Occident" cursiva+negreta + anagrama trisquel
+      Tot en blanc, fons transparent.
+    -->
+    <svg class="logo-svg" viewBox="0 0 460 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- OPTIMIZARTE€ — serif bold uppercase -->
+      <text x="4" y="38"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="40" font-weight="900" fill="white" letter-spacing="-1">OPTIMIZART€</text>
+      <!-- "by" italic -->
+      <text x="42" y="65"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="21" font-weight="400" font-style="italic" fill="white">by</text>
+      <!-- "Occident" bold -->
+      <text x="76" y="65"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="21" font-weight="700" fill="white">Occident</text>
+      <!-- Anagrama trisquel / Y amb tres braços arrodonits — blanc -->
+      <g transform="translate(427,56) scale(0.52)">
+        <path d="M0,0 C-10,-6 -34,-10 -46,-2 C-60,8 -60,24 -50,32 C-40,40 -24,34 -12,20 Z"
+              fill="white" stroke="white" stroke-width="0.5" stroke-linejoin="round"/>
+        <path d="M0,0 C12,-4 26,-20 24,-38 C22,-54 8,-62 -6,-56 C-20,-50 -20,-34 -12,-20 Z"
+              fill="white" stroke="white" stroke-width="0.5" stroke-linejoin="round"/>
+        <path d="M0,0 C2,12 16,26 34,28 C50,30 62,18 60,4 C58,-10 42,-16 26,-10 Z"
+              fill="white" stroke="white" stroke-width="0.5" stroke-linejoin="round"/>
+        <circle cx="0" cy="0" r="9" fill="white"/>
+      </g>
+    </svg>
+  </a>
+
+  <div class="header-divider"></div>
+  <span class="header-subtitle">Hub d'Eines</span>
+  <div class="header-spacer"></div>
+
+  <!-- Desktop search -->
+  <div class="header-search">
+    <svg class="search-icon-header" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input type="text" id="desktopSearch" placeholder="Cercar eina..." oninput="filterTools(this.value)">
+  </div>
+
+  <!-- Mobile search toggle -->
+  <button class="btn-icon" onclick="toggleMobileSearch()" id="searchToggle" aria-label="Cercar">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+  </button>
+
+  <div class="header-avatar" title="Oficina Occident">OC</div>
+</header>
+
+<!-- Mobile search bar -->
+<div class="mobile-search-bar" id="mobileSearch">
+  <input type="text" id="mobileSearchInput" placeholder="Cercar eina..." oninput="filterTools(this.value)" autofocus>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     LAYOUT
+═══════════════════════════════════════════════ -->
+<div class="layout">
+
+<!-- ── SIDEBAR (desktop) ── -->
+<aside class="sidebar">
+  <div class="sidebar-section">
+    <div class="sidebar-label">Navegació</div>
+
+    <a class="nav-item active" href="#" onclick="sidebarFilter('all',this);return false;">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+      </svg>
+      Totes les eines
+      <span class="nav-badge" id="badge-all">7</span>
+    </a>
+
+    <a class="nav-item" href="#" onclick="sidebarFilter('formularis',this);return false;">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+        <rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/>
+      </svg>
+      Formularis
+      <span class="nav-badge gray">0</span>
+    </a>
+
+    <a class="nav-item" href="#" onclick="sidebarFilter('instruccions',this);return false;">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/>
+      </svg>
+      Instruccions
+      <span class="nav-badge gray">0</span>
+    </a>
+
+    <a class="nav-item" href="#" onclick="sidebarFilter('analisi',this);return false;">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </svg>
+      Anàlisi de Pòlisses
+      <span class="nav-badge gray">1</span>
+    </a>
+
+    <a class="nav-item" href="#" onclick="sidebarFilter('sinistres',this);return false;">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      Sinistres
+      <span class="nav-badge gray">0</span>
+    </a>
+
+    <a class="nav-item" href="#" onclick="sidebarFilter('pagaments',this);return false;">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <rect x="3" y="4" width="18" height="18" rx="2"/>
+        <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+        <line x1="3" y1="10" x2="21" y2="10"/>
+      </svg>
+      Pagaments
+      <span class="nav-badge gray">1</span>
+    </a>
+
+    <a class="nav-item" href="#" onclick="sidebarFilter('cotitzacions',this);return false;">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <line x1="12" y1="1" x2="12" y2="23"/>
+        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+      </svg>
+      Cotitzacions
+      <span class="nav-badge gray">0</span>
+    </a>
+  </div>
+
+  <div class="sidebar-sep"></div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Estat</div>
+    <a class="nav-item" href="#" onclick="sidebarFilter('_live',this);return false;">
+      <span style="width:9px;height:9px;border-radius:50%;background:var(--green);flex-shrink:0;display:block"></span>
+      Disponibles
+    </a>
+    <a class="nav-item" href="#" onclick="sidebarFilter('_dev',this);return false;">
+      <span style="width:9px;height:9px;border-radius:50%;background:#d97706;flex-shrink:0;display:block"></span>
+      En desenvolupament
+    </a>
+    <a class="nav-item" href="#" onclick="sidebarFilter('_soon',this);return false;">
+      <span style="width:9px;height:9px;border-radius:50%;background:var(--gray-3);flex-shrink:0;display:block"></span>
+      Pròximament
+    </a>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="occ-badge">
+      <svg width="28" height="28" viewBox="0 0 460 85" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(227,42) scale(0.7)">
+          <path d="M0,0 C-10,-6 -34,-10 -46,-2 C-60,8 -60,24 -50,32 C-40,40 -24,34 -12,20 Z" fill="#DC0028"/>
+          <path d="M0,0 C12,-4 26,-20 24,-38 C22,-54 8,-62 -6,-56 C-20,-50 -20,-34 -12,-20 Z" fill="#DC0028"/>
+          <path d="M0,0 C2,12 16,26 34,28 C50,30 62,18 60,4 C58,-10 42,-16 26,-10 Z" fill="#DC0028"/>
+          <circle cx="0" cy="0" r="9" fill="#DC0028"/>
+        </g>
+      </svg>
+      <span><strong>Optimizarte by Occident</strong>Plataforma interna v1.0</span>
+    </div>
+  </div>
+</aside>
+
+<!-- ── MAIN ── -->
+<main class="main" id="mainContent">
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="page-title-block">
+      <h1>Eines de <span class="accent">l'Oficina</span></h1>
+      <p>Accedeix i gestiona totes les eines de l'equip des d'un sol lloc</p>
+    </div>
+    <button class="btn-primary" onclick="showAddModal()">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Nova eina
+    </button>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-icon red">
+        <svg width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+      </div>
+      <div class="stat-info">
+        <strong id="total-count">—</strong>
+        <span>Eines totals</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon green">
+        <svg width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <div class="stat-info">
+        <strong id="live-count">—</strong>
+        <span>Disponibles</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon amber">
+        <svg width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <div class="stat-info">
+        <strong id="dev-count">—</strong>
+        <span>En desenvolupament</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon blue">
+        <svg width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+      </div>
+      <div class="stat-info">
+        <strong id="soon-count">—</strong>
+        <span>Pròximament</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter chips -->
+  <div class="filter-bar">
+    <span class="filter-label">Filtrar:</span>
+    <div class="chip active" onclick="chipFilter('all',this)">Totes</div>
+    <div class="chip" onclick="chipFilter('formularis',this)">Formularis</div>
+    <div class="chip" onclick="chipFilter('instruccions',this)">Instruccions</div>
+    <div class="chip" onclick="chipFilter('analisi',this)">Anàlisi</div>
+    <div class="chip" onclick="chipFilter('sinistres',this)">Sinistres</div>
+    <div class="chip" onclick="chipFilter('pagaments',this)">Pagaments</div>
+    <div class="chip" onclick="chipFilter('cotitzacions',this)">Cotitzacions</div>
+  </div>
+
+  <!-- ─── Cards container ─── -->
+  <div id="cardsContainer">
+
+    <!-- DISPONIBLES -->
+    <div class="section-title" id="title-live">
+      Disponibles ara
+      <span class="drag-hint-label" id="drag-hint-live">
+        <svg width="10" height="10" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg>
+        arrossega per reordenar
+      </span>
+    </div>
+    <div class="cards-grid" id="grid-live">
+
+      <!-- ★ Seguiment d'Agència -->
+      <a class="tool-card"
+         href="seguiment_17167_2026_1.html"
+         data-category="analisi"
+         data-status="live"
+         data-title="Seguiment d'Agència · Optimizarte 3.0"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+            </div>
+            <span class="card-status status-live">● Disponible</span>
+          </div>
+          <div class="card-title">Seguiment d'Agència</div>
+          <div class="card-desc">Infografia de seguiment mensual de vendes: KPIs, bonos, objectius i evolució de l'agència Optimizarte 3.0.</div>
+          <div class="card-footer-row">
+            <span class="card-category">Anàlisi</span>
+            <div class="card-arrow">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="m9 18 6-6-6-6"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- ★ Calendari de Pagaments -->
+      <a class="tool-card"
+         href="CalendarioPagosPolizas_Occident.html"
+         data-category="pagaments"
+         data-status="live"
+         data-title="Calendari de Pagaments de Pòlisses"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe amber"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon amber">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="18" rx="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+            </div>
+            <span class="card-status status-live">● Disponible</span>
+          </div>
+          <div class="card-title">Calendari de Pagaments</div>
+          <div class="card-desc">Generador de calendaris de venciments i fraccionament de primes per pòlisses. Visualització mensual i anual.</div>
+          <div class="card-footer-row">
+            <span class="card-category" style="color:#d97706">Pagaments</span>
+            <div class="card-arrow">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="m9 18 6-6-6-6"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- ★ Alta de Cliente -->
+      <a class="tool-card"
+         href="alta-clientes.html"
+         data-category="formularis"
+         data-status="live"
+         data-title="Alta de Cliente"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe green"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon green">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+                <line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/>
+              </svg>
+            </div>
+            <span class="card-status status-live">● Disponible</span>
+          </div>
+          <div class="card-title">Alta de Cliente</div>
+          <div class="card-desc">Formulari d'alta de nous clients: particular, empresa o autònom. Recull totes les dades necessàries per a la gestió a l'agència.</div>
+          <div class="card-footer-row">
+            <span class="card-category" style="color:var(--green)">Formularis</span>
+            <div class="card-arrow">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="m9 18 6-6-6-6"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </a>
+
+    </div><!-- /grid-live -->
+
+    <!-- EN DESENVOLUPAMENT -->
+    <div class="section-title" id="title-dev">En desenvolupament</div>
+    <div class="cards-grid" id="grid-dev">
+      <div class="card-add" onclick="showAddModal()">
+        <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        <span>Afegir eina</span>
+      </div>
+    </div>
+
+    <!-- PRÒXIMAMENT -->
+    <div class="section-title" id="title-soon">Pròximament</div>
+    <div class="cards-grid" id="grid-soon">
+
+      <div class="tool-card soon" data-category="formularis" data-status="soon">
+        <div class="card-stripe gray"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon gray">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+                <rect x="9" y="3" width="6" height="4" rx="1"/>
+              </svg>
+            </div>
+            <span class="card-status status-soon">Pròximament</span>
+          </div>
+          <div class="card-title">Formulari d'Alta de Client</div>
+          <div class="card-desc">Recollida de dades del prenedor, risc i necessitats per iniciar una oferta personalitzada.</div>
+          <div class="card-footer-row">
+            <span class="card-category" style="color:var(--gray-3)">Formularis</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-card soon" data-category="instruccions" data-status="soon">
+        <div class="card-stripe gray"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon gray">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/>
+              </svg>
+            </div>
+            <span class="card-status status-soon">Pròximament</span>
+          </div>
+          <div class="card-title">Guia de Registre al Portal</div>
+          <div class="card-desc">Instruccions pas a pas perquè el client es registri a l'àrea privada d'Occident.</div>
+          <div class="card-footer-row">
+            <span class="card-category" style="color:var(--gray-3)">Instruccions</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-card soon" data-category="sinistres" data-status="soon">
+        <div class="card-stripe gray"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon gray">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <span class="card-status status-soon">Pròximament</span>
+          </div>
+          <div class="card-title">Resolució de Sinistres</div>
+          <div class="card-desc">Guia de tramitació i seguiment de l'estat de sinistres amb checklist de documentació.</div>
+          <div class="card-footer-row">
+            <span class="card-category" style="color:var(--gray-3)">Sinistres</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-card soon" data-category="cotitzacions" data-status="soon">
+        <div class="card-stripe gray"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon gray">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+            </div>
+            <span class="card-status status-soon">Pròximament</span>
+          </div>
+          <div class="card-title">Comparativa de Cotitzacions</div>
+          <div class="card-desc">Comparador visual de preus i cobertures entre Occident i altres companyies del mercat.</div>
+          <div class="card-footer-row">
+            <span class="card-category" style="color:var(--gray-3)">Cotitzacions</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-card soon" data-category="analisi" data-status="soon">
+        <div class="card-stripe gray"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon gray">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+              </svg>
+            </div>
+            <span class="card-status status-soon">Pròximament</span>
+          </div>
+          <div class="card-title">Anàlisi de Pòlissa</div>
+          <div class="card-desc">Revisió detallada de cobertures, exclusions i oportunitats de millora per a una pòlissa existent.</div>
+          <div class="card-footer-row">
+            <span class="card-category" style="color:var(--gray-3)">Anàlisi</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /grid-soon -->
+
+    <div id="no-results">
+      <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin:0 auto 14px;display:block;color:var(--gray-3)">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <p style="font-size:15px;font-weight:600;color:var(--dark)">Sense resultats</p>
+      <p style="font-size:13px;margin-top:4px">Prova amb un altre terme de cerca</p>
+    </div>
+
+  </div><!-- /cardsContainer -->
+</main>
+</div><!-- /layout -->
+
+<!-- ═══════════════════════════════════════════════
+     BOTTOM NAV (mobile)
+═══════════════════════════════════════════════ -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="bnav-item active" onclick="bnavFilter('all',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+      <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+      <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+    </svg>
+    <span>Totes</span>
+  </button>
+  <button class="bnav-item" onclick="bnavFilter('analisi',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+    </svg>
+    <span>Anàlisi</span>
+  </button>
+  <button class="bnav-item" onclick="bnavFilter('pagaments',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+      <rect x="3" y="4" width="18" height="18" rx="2"/>
+      <line x1="3" y1="10" x2="21" y2="10"/>
+    </svg>
+    <span>Pagaments</span>
+  </button>
+  <button class="bnav-item" onclick="bnavFilter('formularis',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+      <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+      <rect x="9" y="3" width="6" height="4" rx="1"/>
+    </svg>
+    <span>Més</span>
+  </button>
+</nav>
+
+<!-- ═══════════════════════════════════════════════
+     MODAL (desktop only)
+═══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="toolModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title" id="modalTitle">Eina</span>
+      <div class="modal-actions">
+        <a class="modal-btn" id="modalExtLink" href="#" target="_blank">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+            <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+          Nova pestanya
+        </a>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// DEVICE DETECTION
+// ═══════════════════════════════════════════════
+const isMobile = () => window.innerWidth <= 768;
+
+// ═══════════════════════════════════════════════
+// CARD CLICK — desktop: modal iframe | mobile: new tab
+// ═══════════════════════════════════════════════
+function handleCardClick(e, card) {
+  e.preventDefault();
+  const url   = card.getAttribute('href');
+  const title = card.dataset.title || card.querySelector('.card-title')?.textContent || 'Eina';
+
+  if (isMobile()) {
+    // On mobile: open directly in new tab — iframes are poor UX on phones
+    window.open(url, '_blank');
+  } else {
+    openModal(title, url);
+  }
+}
+
+// ═══════════════════════════════════════════════
+// MODAL (desktop)
+// ═══════════════════════════════════════════════
+function openModal(title, url) {
+  const modal    = document.getElementById('toolModal');
+  const extLink  = document.getElementById('modalExtLink');
+  const body     = document.getElementById('modalBody');
+  document.getElementById('modalTitle').textContent = title;
+
+  if (url) {
+    extLink.href = url;
+    extLink.style.display = 'flex';
+    body.innerHTML = `<iframe style="width:100%;flex:1;border:none;display:block;height:100%" src="${url}"></iframe>`;
+  } else {
+    extLink.style.display = 'none';
+    body.innerHTML = `<div class="modal-centered"><div class="big-icon">🚧</div><h3>${title}</h3><p>Aquesta eina estarà disponible aviat.</p></div>`;
+  }
+  modal.classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('toolModal').classList.remove('open');
+  document.getElementById('modalBody').innerHTML = '';
+}
+
+document.getElementById('toolModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('toolModal')) closeModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ═══════════════════════════════════════════════
+// ADD MODAL
+// ═══════════════════════════════════════════════
+function showAddModal() {
+  if (isMobile()) {
+    // Mobile: simple alert-style sheet
+    alert('Per afegir una nova eina, demana a Claude que la creï i la integri al hub.');
+    return;
+  }
+  document.getElementById('modalExtLink').style.display = 'none';
+  document.getElementById('modalTitle').textContent = 'Nova Eina';
+  document.getElementById('modalBody').innerHTML = `
+    <div class="modal-centered">
+      <div class="big-icon">➕</div>
+      <h3>Afegir eina</h3>
+      <p>Demana a Claude que creï l'HTML standalone i l'integri aquí automàticament.</p>
+      <div style="margin-top:20px;background:var(--bg);border-radius:8px;padding:16px;text-align:left;width:100%;max-width:400px;">
+        <p style="font-size:11px;color:var(--gray-2);font-weight:700;margin-bottom:10px;letter-spacing:1px">PROPERES EINES</p>
+        <ul style="font-size:13px;color:var(--gray);list-style:none;display:flex;flex-direction:column;gap:8px;">
+          <li>📋 Formulari d'Alta de Client</li>
+          <li>📖 Guia de Registre al Portal</li>
+          <li>🛡️ Resolució de Sinistres</li>
+          <li>💶 Comparativa de Cotitzacions</li>
+          <li>📄 Anàlisi de Pòlissa</li>
+        </ul>
+      </div>
+    </div>`;
+  document.getElementById('toolModal').classList.add('open');
+}
+
+// ═══════════════════════════════════════════════
+// MOBILE SEARCH TOGGLE
+// ═══════════════════════════════════════════════
+let mobileSearchOpen = false;
+function toggleMobileSearch() {
+  mobileSearchOpen = !mobileSearchOpen;
+  const bar = document.getElementById('mobileSearch');
+  bar.classList.toggle('open', mobileSearchOpen);
+  if (mobileSearchOpen) {
+    document.getElementById('mobileSearchInput').focus();
+    document.querySelector('.main').style.marginTop = '48px';
+  } else {
+    document.querySelector('.main').style.marginTop = '';
+    document.getElementById('mobileSearchInput').value = '';
+    filterTools('');
+  }
+}
+
+// ═══════════════════════════════════════════════
+// FILTER ENGINE
+// ═══════════════════════════════════════════════
+let currentFilter = 'all';
+let currentSearch = '';
+
+function sidebarFilter(cat, el) {
+  currentFilter = cat;
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  // Sync chips
+  syncChips(cat);
+  applyFilters();
+}
+
+function chipFilter(cat, el) {
+  currentFilter = cat;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  applyFilters();
+}
+
+function bnavFilter(cat, el) {
+  currentFilter = cat;
+  document.querySelectorAll('.bnav-item').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  // Sync chips
+  syncChips(cat);
+  applyFilters();
+}
+
+function syncChips(cat) {
+  const cleanCat = cat.startsWith('_') ? 'all' : cat;
+  document.querySelectorAll('.chip').forEach(c => {
+    c.classList.toggle('active', c.textContent.trim().toLowerCase().includes(cleanCat) || (cleanCat === 'all' && c.textContent.includes('Totes')));
+  });
+}
+
+function filterTools(query) {
+  currentSearch = query.toLowerCase().trim();
+  applyFilters();
+}
+
+function applyFilters() {
+  const cards = document.querySelectorAll('.tool-card');
+  let visible = 0;
+
+  cards.forEach(card => {
+    const cat    = card.dataset.category || '';
+    const status = card.dataset.status   || '';
+    const text   = card.textContent.toLowerCase();
+
+    let catMatch = true;
+    if (currentFilter === 'all') {
+      catMatch = true;
+    } else if (currentFilter === '_live') {
+      catMatch = status === 'live';
+    } else if (currentFilter === '_dev') {
+      catMatch = status === 'dev';
+    } else if (currentFilter === '_soon') {
+      catMatch = status === 'soon';
+    } else {
+      catMatch = cat === currentFilter;
+    }
+
+    const show = catMatch && (currentSearch === '' || text.includes(currentSearch));
+    card.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+
+  document.getElementById('no-results').style.display = visible === 0 ? 'block' : 'none';
+
+  // Show/hide section blocks
+  ['live','dev','soon'].forEach(s => {
+    const grid  = document.getElementById('grid-' + s);
+    const title = document.getElementById('title-' + s);
+    if (!grid) return;
+    const hasVisible = [...grid.querySelectorAll('.tool-card, .card-add')].some(c => c.style.display !== 'none');
+    grid.style.display  = hasVisible ? '' : 'none';
+    if (title) title.style.display = hasVisible ? '' : 'none';
+  });
+}
+
+// ═══════════════════════════════════════════════
+// STATS COUNTER
+// ═══════════════════════════════════════════════
+function updateCounts() {
+  const cards = document.querySelectorAll('.tool-card');
+  let live = 0, dev = 0, soon = 0;
+  cards.forEach(c => {
+    if (c.dataset.status === 'live') live++;
+    else if (c.dataset.status === 'dev') dev++;
+    else if (c.dataset.status === 'soon') soon++;
+  });
+  document.getElementById('total-count').textContent = cards.length;
+  document.getElementById('live-count').textContent  = live;
+  document.getElementById('dev-count').textContent   = dev;
+  document.getElementById('soon-count').textContent  = soon;
+  document.getElementById('badge-all').textContent   = cards.length;
+}
+
+updateCounts();
+
+// ═══════════════════════════════════════════════
+// DRAG & DROP REORDER — grid-live
+// ═══════════════════════════════════════════════
+(function initDragSort() {
+  const grid = document.getElementById('grid-live');
+  if (!grid) return;
+
+  const STORAGE_KEY = 'optimizarte-grid-live-order';
+  let draggedEl  = null;
+  let touchGhost = null;
+  let touchOffX  = 0;
+  let touchOffY  = 0;
+
+  // ── helpers ──────────────────────────────────
+  function liveCards() {
+    return [...grid.querySelectorAll('.tool-card[data-status="live"]')];
+  }
+
+  function cardKey(card) {
+    return card.getAttribute('href') || card.dataset.title || card.querySelector('.card-title')?.textContent || '';
+  }
+
+  function swapWith(target) {
+    if (!draggedEl || target === draggedEl) return;
+    const cards  = liveCards();
+    const fromIdx = cards.indexOf(draggedEl);
+    const toIdx   = cards.indexOf(target);
+    if (fromIdx < toIdx) {
+      grid.insertBefore(draggedEl, target.nextSibling);
+    } else {
+      grid.insertBefore(draggedEl, target);
+    }
+  }
+
+  // ── persist / restore ─────────────────────────
+  function saveOrder() {
+    try {
+      const order = liveCards().map(cardKey);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(order));
+    } catch(e) {}
+  }
+
+  function restoreOrder() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+      if (!Array.isArray(saved)) return;
+      saved.forEach(key => {
+        const card = liveCards().find(c => cardKey(c) === key);
+        if (card) grid.appendChild(card);
+      });
+    } catch(e) {}
+  }
+
+  // ── HTML5 drag events (desktop) ───────────────
+  let lastEntered = null; // guard: avoid double-swap on same card
+
+  function bindDragEvents(card) {
+    card.setAttribute('draggable', 'true');
+
+    card.addEventListener('dragstart', function(e) {
+      draggedEl   = this;
+      lastEntered = null;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', ''); // required for Firefox
+      requestAnimationFrame(() => this.classList.add('is-dragging'));
+    });
+
+    card.addEventListener('dragend', function() {
+      this.classList.remove('is-dragging');
+      grid.querySelectorAll('.drag-target').forEach(c => c.classList.remove('drag-target'));
+      draggedEl   = null;
+      lastEntered = null;
+      saveOrder();
+    });
+
+    // dragover: ONLY preventDefault (enables drop) — NO swap here
+    card.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+    });
+
+    // dragenter: fires ONCE per card entry — do the swap here
+    card.addEventListener('dragenter', function(e) {
+      e.preventDefault();
+      if (!draggedEl || this === draggedEl) return;
+      if (this === lastEntered) return; // already swapped with this card
+      lastEntered = this;
+      grid.querySelectorAll('.drag-target').forEach(c => c.classList.remove('drag-target'));
+      this.classList.add('drag-target');
+      swapWith(this);
+    });
+
+    card.addEventListener('dragleave', function() {
+      this.classList.remove('drag-target');
+    });
+  }
+
+  // ── Touch events (mobile) ─────────────────────
+  function bindTouchEvents(card) {
+    let longPressTimer = null;
+    let isDragging = false;
+
+    card.addEventListener('touchstart', function(e) {
+      const touch = e.touches[0];
+      // Long-press to activate drag (300ms)
+      longPressTimer = setTimeout(() => {
+        isDragging = true;
+        draggedEl  = this;
+        this.classList.add('is-dragging');
+        // Create ghost
+        const rect = this.getBoundingClientRect();
+        touchOffX  = touch.clientX - rect.left;
+        touchOffY  = touch.clientY - rect.top;
+        touchGhost = this.cloneNode(true);
+        touchGhost.classList.add('touch-ghost');
+        touchGhost.style.width  = rect.width + 'px';
+        touchGhost.style.height = rect.height + 'px';
+        touchGhost.style.left   = (touch.clientX - touchOffX) + 'px';
+        touchGhost.style.top    = (touch.clientY - touchOffY) + 'px';
+        document.body.appendChild(touchGhost);
+        // Haptic feedback if available
+        if (navigator.vibrate) navigator.vibrate(40);
+      }, 300);
+    }, { passive: true });
+
+    card.addEventListener('touchmove', function(e) {
+      if (!isDragging) {
+        clearTimeout(longPressTimer);
+        return;
+      }
+      e.preventDefault();
+      const touch = e.touches[0];
+      // Move ghost
+      if (touchGhost) {
+        touchGhost.style.left = (touch.clientX - touchOffX) + 'px';
+        touchGhost.style.top  = (touch.clientY - touchOffY) + 'px';
+      }
+      // Find card under touch point (hide ghost temporarily)
+      touchGhost.style.display = 'none';
+      const elUnder = document.elementFromPoint(touch.clientX, touch.clientY);
+      touchGhost.style.display = '';
+      const targetCard = elUnder?.closest('#grid-live .tool-card[data-status="live"]');
+      if (targetCard && targetCard !== draggedEl) {
+        grid.querySelectorAll('.drag-target').forEach(c => c.classList.remove('drag-target'));
+        targetCard.classList.add('drag-target');
+        swapWith(targetCard);
+      }
+    }, { passive: false });
+
+    const endTouch = function() {
+      clearTimeout(longPressTimer);
+      if (!isDragging) return;
+      isDragging = false;
+      if (touchGhost) { touchGhost.remove(); touchGhost = null; }
+      if (draggedEl) { draggedEl.classList.remove('is-dragging'); draggedEl = null; }
+      grid.querySelectorAll('.drag-target').forEach(c => c.classList.remove('drag-target'));
+      saveOrder();
+    };
+    card.addEventListener('touchend',    endTouch, { passive: true });
+    card.addEventListener('touchcancel', endTouch, { passive: true });
+  }
+
+  // ── init ──────────────────────────────────────
+  restoreOrder();
+
+  liveCards().forEach(card => {
+    bindDragEvents(card);
+    bindTouchEvents(card);
+  });
+
+  // Observer: if new live cards are added later, bind them too
+  new MutationObserver(mutations => {
+    mutations.forEach(m => {
+      m.addedNodes.forEach(node => {
+        if (node.nodeType === 1 && node.classList.contains('tool-card') && node.dataset.status === 'live') {
+          bindDragEvents(node);
+          bindTouchEvents(node);
+        }
+      });
+    });
+  }).observe(grid, { childList: true });
+
+})();
+</script>
+</body>
+</html>

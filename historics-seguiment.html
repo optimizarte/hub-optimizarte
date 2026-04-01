@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Històrics Seguiment · OPTIMIZARTE</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#DC0028;--red-d:#b8001e;--red-l:#fff0f2;
+  --dark:#202020;--gray:#555;--gray-2:#888;--gray-3:#bbb;--gray-4:#e5e5e5;
+  --green:#166534;--green-bg:#dcfce7;--green-d:#14532d;
+  --blue:#1d4ed8;--blue-bg:#dbeafe;--blue-d:#1e3a8a;
+  --purple:#6b21a8;--purple-bg:#f3e8ff;--purple-d:#581c87;
+  --border:#e0e0e0;--bg:#f2f2f2;--radius:8px;--shadow:0 2px 12px rgba(0,0,0,.09);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;padding:0 0 60px;}
+.hdr{background:var(--red);height:70px;padding:0 32px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 10px rgba(180,0,30,.3);}
+.logo-main{font-family:'Poppins',sans-serif;font-size:27px;font-weight:800;color:#fff;letter-spacing:-.5px;}
+.logo-sub{display:flex;align-items:baseline;gap:4px;margin-top:1px;}
+.logo-by{font-size:11px;font-style:italic;color:rgba(255,255,255,.75);}
+.logo-occ{font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:#fff;}
+.hdr-r{text-align:right;}
+.hdr-title{font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;color:#fff;}
+.hdr-sub{font-size:11px;color:rgba(255,255,255,.65);margin-top:2px;}
+.wrap{max-width:1280px;margin:0 auto;padding:24px;}
+.tab-panel{display:block;margin-bottom:24px;}
+.tab-panel+.tab-panel{border-top:2px solid var(--gray-4);padding-top:24px;}
+.sec-bar{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+.sec-title{font-family:'Poppins',sans-serif;font-size:18px;font-weight:700;color:var(--dark);flex:1;}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:6px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;white-space:nowrap;transition:all .18s;}
+.btn svg{width:14px;height:14px;flex-shrink:0;}
+.btn-blue{background:var(--blue);color:#fff;}.btn-blue:hover{background:var(--blue-d);}
+.btn-green{background:var(--green);color:#fff;}.btn-green:hover{background:var(--green-d);}
+.btn-purple{background:var(--purple);color:#fff;}.btn-purple:hover{background:var(--purple-d);}
+.btn-gray{background:#fff;color:var(--gray);border:1.5px solid var(--border);}.btn-gray:hover{border-color:#999;}
+.folder-bar{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:10px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.folder-path{font-size:12px;color:var(--gray);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.folder-path strong{color:var(--dark);font-weight:600;}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.badge-ok{background:var(--green-bg);color:var(--green);}.badge-ko{background:var(--gray-4);color:var(--gray-2);}
+.section-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media(max-width:800px){.section-grid{grid-template-columns:1fr;}}
+.drop-zone{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);border:2px dashed var(--gray-3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:36px 24px;cursor:pointer;transition:all .2s;text-align:center;min-height:240px;}
+.dz-blue:hover,.dz-blue.drag-over{border-color:var(--blue);background:var(--blue-bg);}
+.dz-green:hover,.dz-green.drag-over{border-color:var(--green);background:var(--green-bg);}
+.dz-purple:hover,.dz-purple.drag-over{border-color:var(--purple);background:var(--purple-bg);}
+.drop-zone svg{color:var(--gray-3);transition:color .2s;}
+.dz-blue:hover svg,.dz-blue.drag-over svg{color:var(--blue)!important;}
+.dz-green:hover svg,.dz-green.drag-over svg{color:var(--green)!important;}
+.dz-purple:hover svg,.dz-purple.drag-over svg{color:var(--purple)!important;}
+.drop-title{font-size:14px;font-weight:600;color:var(--dark);}
+.drop-sub{font-size:12px;color:var(--gray-2);}
+.drop-lbl{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;border:1.5px solid;}
+.dl-blue{background:var(--blue-bg);color:var(--blue);border-color:var(--blue);}.dl-blue:hover{background:var(--blue);color:#fff;}
+.dl-green{background:var(--green-bg);color:var(--green);border-color:var(--green);}.dl-green:hover{background:var(--green);color:#fff;}
+.dl-purple{background:var(--purple-bg);color:var(--purple);border-color:var(--purple);}.dl-purple:hover{background:var(--purple);color:#fff;}
+.file-panel{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden;}
+.panel-hdr{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.panel-hdr-title{font-size:12px;font-weight:700;color:var(--dark);flex:1;}
+.search-wrap{position:relative;flex:1;min-width:140px;}
+.search-wrap svg{position:absolute;left:8px;top:50%;transform:translateY(-50%);width:13px;height:13px;color:var(--gray-3);}
+.search-inp{width:100%;padding:6px 8px 6px 28px;border:1.5px solid var(--border);border-radius:5px;font-size:12px;font-family:'Inter',sans-serif;outline:none;}
+.month-sel{padding:6px 8px;border:1.5px solid var(--border);border-radius:5px;font-size:12px;font-family:'Inter',sans-serif;outline:none;cursor:pointer;background:#fff;}
+.file-list{overflow-y:auto;max-height:460px;}
+.file-item{display:flex;align-items:center;gap:9px;padding:9px 16px;border-bottom:1px solid #f5f5f5;cursor:pointer;transition:background .12s;}
+.file-item:hover{background:#f9f9f9;}
+.fi-icon{width:32px;height:32px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.fi-info{flex:1;min-width:0;}
+.fi-name{font-size:12px;font-weight:600;color:var(--dark);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.fi-meta{font-size:10.5px;color:var(--gray-2);margin-top:1px;}
+.fi-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;flex-shrink:0;}
+.fb-blue{background:var(--blue-bg);color:var(--blue);}
+.fb-green{background:var(--green-bg);color:var(--green);}
+.fb-purple{background:var(--purple-bg);color:var(--purple);}
+.fi-actions{display:flex;gap:5px;flex-shrink:0;}
+.icon-btn{background:none;border:none;cursor:pointer;padding:3px;border-radius:4px;color:var(--gray-3);transition:all .15s;display:flex;}
+.icon-btn:hover{color:var(--red);background:var(--red-l);}
+.ib-open:hover{color:var(--blue)!important;background:var(--blue-bg)!important;}
+.empty-state{padding:36px 20px;text-align:center;color:var(--gray-2);font-size:12px;}
+.empty-state svg{display:block;margin:0 auto 10px;color:var(--gray-3);}
+.last-saved{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:12px 16px;margin-top:14px;}
+.ls-label{font-size:10.5px;font-weight:700;color:var(--gray-2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px;}
+.ls-name{font-size:12.5px;font-weight:600;color:var(--dark);}
+.ls-meta{font-size:11px;color:var(--gray-2);margin-top:2px;}
+.api-warn{background:#fef3c7;border:1px solid #f59e0b;border-radius:var(--radius);padding:10px 14px;font-size:12px;color:#92400e;margin-bottom:16px;display:none;align-items:center;gap:8px;}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:800;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:#fff;border-radius:10px;width:96vw;height:92vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.modal-bar{background:var(--dark);padding:10px 16px;display:flex;align-items:center;gap:10px;}
+.modal-title{font-size:13px;font-weight:600;color:#fff;flex:1;}
+.modal-close{background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:18px;padding:2px 6px;border-radius:4px;}
+.modal-close:hover{background:rgba(255,255,255,.15);color:#fff;}
+.modal iframe{flex:1;border:none;width:100%;height:100%;}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--dark);color:#fff;padding:12px 18px;border-radius:8px;font-size:13px;font-weight:500;z-index:999;display:none;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,.3);}
+.toast.show{display:flex;animation:sup .2s ease;}
+.toast.t-ok{background:var(--green);}.toast.t-err{background:#b91c1c;}
+@keyframes sup{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div>
+    <div class="logo-main">OPTIMIZART&#8364;</div>
+    <div class="logo-sub"><span class="logo-by">by</span><span class="logo-occ">Occident</span></div>
+  </div>
+  <div class="hdr-r">
+    <div class="hdr-title">Hist&#242;rics Seguiment</div>
+    <div class="hdr-sub">Ag&#232;ncia 17167 &middot; Mediador Occident</div>
+  </div>
+</header>
+<div class="wrap">
+  <div class="api-warn" id="apiWarn">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    <span>Utilitza <strong>Chrome</strong> o <strong>Edge</strong> per desar fitxers directament a la carpeta local.</span>
+  </div>
+
+
+  <div class="tab-panel" id="panel-dafo">
+    <div class="sec-bar">
+      <div class="sec-title">&#128203; Hist&#242;rics de DAFOs</div>
+      <button class="btn btn-blue" onclick="pickFolder('dafo')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Carpeta
+      </button>
+      <button class="btn btn-gray" onclick="refreshList('dafo')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>Recarregar
+      </button>
+    </div>
+    <div class="folder-bar">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" style="color:var(--gray-3);flex-shrink:0;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      <div class="folder-path" id="fp-dafo"><em>Cap carpeta seleccionada</em></div>
+      <span class="badge badge-ko" id="fb-dafo">&#9679; Desconnectat</span>
+    </div>
+    <div class="section-grid">
+      <div>
+        <div class="drop-zone dz-blue" id="dz-dafo"
+             ondragover="onDragOver(event,'dafo')" ondragleave="onDragLeave('dafo')" ondrop="onDrop(event,'dafo')"
+             onclick="document.getElementById('fi-dafo').click()">
+          <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+          <div class="drop-title">Arrossega un fitxer HTML</div>
+          <div class="drop-sub">o fes clic per seleccionar</div>
+          <label class="drop-lbl dl-blue" onclick="event.stopPropagation();document.getElementById('fi-dafo').click()">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Seleccionar fitxer
+          </label>
+        </div>
+        <input type="file" id="fi-dafo" accept=".html" multiple style="display:none" onchange="onFileInput(event,'dafo')">
+        <div id="ls-dafo" style="display:none;" class="last-saved">
+          <div class="ls-label">&#128190; &#218;ltim desat</div>
+          <div class="ls-name" id="lsn-dafo"></div>
+          <div class="ls-meta" id="lsm-dafo"></div>
+        </div>
+      </div>
+      <div class="file-panel">
+        <div class="panel-hdr">
+          <div class="panel-hdr-title">Fitxers desats</div>
+          <div class="search-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="search-inp" type="text" placeholder="Cercar..." id="si-dafo" oninput="filterFiles('dafo')">
+          </div>
+          <select class="month-sel" id="ms-dafo" onchange="filterFiles('dafo')" style="border-color:#1d4ed8;"></select>
+        </div>
+        <div class="file-list" id="fl-dafo">
+          <div class="empty-state"><svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Selecciona una carpeta</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="panel-tanc">
+    <div class="sec-bar">
+      <div class="sec-title">&#128196; Hist&#242;rics de Tancaments Mensuals</div>
+      <button class="btn btn-green" onclick="pickFolder('tanc')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Carpeta
+      </button>
+      <button class="btn btn-gray" onclick="refreshList('tanc')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>Recarregar
+      </button>
+    </div>
+    <div class="folder-bar">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" style="color:var(--gray-3);flex-shrink:0;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      <div class="folder-path" id="fp-tanc"><em>Cap carpeta seleccionada</em></div>
+      <span class="badge badge-ko" id="fb-tanc">&#9679; Desconnectat</span>
+    </div>
+    <div class="section-grid">
+      <div>
+        <div class="drop-zone dz-green" id="dz-tanc"
+             ondragover="onDragOver(event,'tanc')" ondragleave="onDragLeave('tanc')" ondrop="onDrop(event,'tanc')"
+             onclick="document.getElementById('fi-tanc').click()">
+          <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+          <div class="drop-title">Arrossega un fitxer HTML</div>
+          <div class="drop-sub">o fes clic per seleccionar</div>
+          <label class="drop-lbl dl-green" onclick="event.stopPropagation();document.getElementById('fi-tanc').click()">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Seleccionar fitxer
+          </label>
+        </div>
+        <input type="file" id="fi-tanc" accept=".html" multiple style="display:none" onchange="onFileInput(event,'tanc')">
+        <div id="ls-tanc" style="display:none;" class="last-saved">
+          <div class="ls-label">&#128190; &#218;ltim desat</div>
+          <div class="ls-name" id="lsn-tanc"></div>
+          <div class="ls-meta" id="lsm-tanc"></div>
+        </div>
+      </div>
+      <div class="file-panel">
+        <div class="panel-hdr">
+          <div class="panel-hdr-title">Fitxers desats</div>
+          <div class="search-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="search-inp" type="text" placeholder="Cercar..." id="si-tanc" oninput="filterFiles('tanc')">
+          </div>
+          <select class="month-sel" id="ms-tanc" onchange="filterFiles('tanc')" style="border-color:#166534;"></select>
+        </div>
+        <div class="file-list" id="fl-tanc">
+          <div class="empty-state"><svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Selecciona una carpeta</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="panel-fitxa">
+    <div class="sec-bar">
+      <div class="sec-title">&#128101; Hist&#242;rics de Fitxes Mediador</div>
+      <button class="btn btn-purple" onclick="pickFolder('fitxa')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Carpeta
+      </button>
+      <button class="btn btn-gray" onclick="refreshList('fitxa')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>Recarregar
+      </button>
+    </div>
+    <div class="folder-bar">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" style="color:var(--gray-3);flex-shrink:0;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      <div class="folder-path" id="fp-fitxa"><em>Cap carpeta seleccionada</em></div>
+      <span class="badge badge-ko" id="fb-fitxa">&#9679; Desconnectat</span>
+    </div>
+    <div class="section-grid">
+      <div>
+        <div class="drop-zone dz-purple" id="dz-fitxa"
+             ondragover="onDragOver(event,'fitxa')" ondragleave="onDragLeave('fitxa')" ondrop="onDrop(event,'fitxa')"
+             onclick="document.getElementById('fi-fitxa').click()">
+          <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+          <div class="drop-title">Arrossega un fitxer HTML</div>
+          <div class="drop-sub">o fes clic per seleccionar</div>
+          <label class="drop-lbl dl-purple" onclick="event.stopPropagation();document.getElementById('fi-fitxa').click()">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Seleccionar fitxer
+          </label>
+        </div>
+        <input type="file" id="fi-fitxa" accept=".html" multiple style="display:none" onchange="onFileInput(event,'fitxa')">
+        <div id="ls-fitxa" style="display:none;" class="last-saved">
+          <div class="ls-label">&#128190; &#218;ltim desat</div>
+          <div class="ls-name" id="lsn-fitxa"></div>
+          <div class="ls-meta" id="lsm-fitxa"></div>
+        </div>
+      </div>
+      <div class="file-panel">
+        <div class="panel-hdr">
+          <div class="panel-hdr-title">Fitxers desats</div>
+          <div class="search-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="search-inp" type="text" placeholder="Cercar..." id="si-fitxa" oninput="filterFiles('fitxa')">
+          </div>
+          <select class="month-sel" id="ms-fitxa" onchange="filterFiles('fitxa')" style="border-color:#6b21a8;"></select>
+        </div>
+        <div class="file-list" id="fl-fitxa">
+          <div class="empty-state"><svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Selecciona una carpeta</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+<div class="modal-overlay" id="previewModal">
+  <div class="modal">
+    <div class="modal-bar">
+      <div class="modal-title" id="previewTitle">Previsualitzar</div>
+      <button class="modal-close" onclick="closePreview()">&#10005;</button>
+    </div>
+    <iframe id="previewFrame" sandbox="allow-scripts allow-same-origin"></iframe>
+  </div>
+</div>
+<div class="toast" id="toast"><span id="toastMsg"></span></div>
+<script>
+'use strict';
+const SECS = ['dafo','tanc','fitxa'];
+const COLORS = {dafo:'#1d4ed8',tanc:'#166534',fitxa:'#6b21a8'};
+const BADGE  = {dafo:'fb-blue',tanc:'fb-green',fitxa:'fb-purple'};
+const MCA = {'01':'Gener','02':'Febrer','03':'Mar\u00e7','04':'Abril','05':'Maig','06':'Juny',
+             '07':'Juliol','08':'Agost','09':'Setembre','10':'Octubre','11':'Novembre','12':'Desembre'};
+const MES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const MCA_L = ['gener','febrer','mar\u00e7','abril','maig','juny','juliol','agost','setembre','octubre','novembre','desembre'];
+
+let handles={dafo:null,tanc:null,fitxa:null};
+let files={dafo:[],tanc:[],fitxa:[]};
+
+// Init month selects
+SECS.forEach(function(s){
+  var sel=document.getElementById('ms-'+s);
+  sel.innerHTML='<option value="">Tots els mesos</option>'+
+    Object.keys(MCA).map(function(v){return '<option value="'+v+'">'+MCA[v]+'</option>';}).join('');
+});
+if(!('showDirectoryPicker' in window)) document.getElementById('apiWarn').style.display='flex';
+
+// Restore handles
+(async function(){
+  try{
+    var db=await openDB();
+    for(var s of SECS){
+      var h=await dbGet(db,'dir-'+s);
+      if(h){
+        var p=await h.queryPermission({mode:'readwrite'});
+        if(p==='granted'){handles[s]=h;updFolderUI(s,h.name);await refreshList(s);}
+      }
+    }
+    // scroll to section if hash
+    var hash=location.hash.replace('#','');
+    if(hash){ var el=document.getElementById('panel-'+hash); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+  }catch(e){}
+})();
+
+function switchTab(t){ location.hash=t; }
+
+async function pickFolder(s){
+  if(!('showDirectoryPicker' in window)){toast('Usa Chrome o Edge','err');return;}
+  try{
+    var h=await window.showDirectoryPicker({mode:'readwrite'});
+    handles[s]=h;
+    var db=await openDB();
+    await dbSet(db,'dir-'+s,h);
+    updFolderUI(s,h.name);
+    await refreshList(s);
+    toast('Carpeta: '+h.name,'ok');
+  }catch(e){if(e.name!=='AbortError')toast('Error: '+e.message,'err');}
+}
+
+function updFolderUI(s,name){
+  document.getElementById('fp-'+s).innerHTML='<strong>'+escH(name)+'</strong>';
+  var b=document.getElementById('fb-'+s);
+  b.textContent='\u25cf Connectat'; b.className='badge badge-ok';
+}
+
+async function saveFile(s,file){
+  var h=handles[s];
+  if(!h){toast('Primer selecciona una carpeta','err');return false;}
+  var p=await h.requestPermission({mode:'readwrite'});
+  if(p!=='granted'){toast('Perm\u00eds denegat','err');return false;}
+  try{
+    var fh=await h.getFileHandle(file.name,{create:true});
+    var w=await fh.createWritable();
+    await w.write(file);await w.close();
+    document.getElementById('ls-'+s).style.display='block';
+    document.getElementById('lsn-'+s).textContent=file.name;
+    document.getElementById('lsm-'+s).textContent=fmtB(file.size)+' \u00b7 '+new Date().toLocaleString('ca-ES');
+    // Save to localStorage for index card quick links
+    var fm=detectM(file.name);
+    var pm=getPrevM();
+    if(fm.mm&&fm.mm===pm.mm){
+      localStorage.setItem('hist_'+s+'_prev',JSON.stringify({name:file.name,ts:Date.now(),mm:fm.mm,yyyy:fm.yyyy||pm.yyyy}));
+    }
+    toast('Desat: '+file.name,'ok');
+    await refreshList(s);
+    return true;
+  }catch(e){toast('Error: '+e.message,'err');return false;}
+}
+
+function getPrevM(){
+  var d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);
+  return{mm:String(d.getMonth()+1).padStart(2,'0'),yyyy:String(d.getFullYear())};
+}
+
+function onDragOver(e,s){e.preventDefault();document.getElementById('dz-'+s).classList.add('drag-over');}
+function onDragLeave(s){document.getElementById('dz-'+s).classList.remove('drag-over');}
+async function onDrop(e,s){
+  e.preventDefault();document.getElementById('dz-'+s).classList.remove('drag-over');
+  var fs=[...e.dataTransfer.files].filter(function(f){return f.name.endsWith('.html');});
+  if(!fs.length){toast('Nom\u00e9s .html','err');return;}
+  for(var f of fs)await saveFile(s,f);
+}
+async function onFileInput(e,s){
+  for(var f of [...e.target.files])await saveFile(s,f);
+  e.target.value='';
+}
+
+async function refreshList(s){
+  var h=handles[s];if(!h)return;
+  files[s]=[];
+  try{
+    for await(var [name,fh] of h.entries()){
+      if(fh.kind==='file'&&name.endsWith('.html')){
+        var f=await fh.getFile();
+        var dm=detectM(name);
+        files[s].push({name:name,handle:fh,size:f.size,lastMod:f.lastModified,mm:dm.mm,yyyy:dm.yyyy});
+      }
+    }
+    files[s].sort(function(a,b){return b.lastMod-a.lastMod;});
+    filterFiles(s);
+  }catch(e){toast('Error llegint carpeta','err');}
+}
+
+function detectM(name){
+  var lo=name.toLowerCase().replace(/[_\-.]/g,' ');
+  var m,mm=null,yyyy=null;
+  m=lo.match(/\b(20\d\d)\s*(0[1-9]|1[0-2])\b/);if(m){yyyy=m[1];mm=m[2];return{mm:mm,yyyy:yyyy};}
+  m=lo.match(/\b(0[1-9]|1[0-2])\s*(20\d\d)\b/);if(m){mm=m[1];yyyy=m[2];return{mm:mm,yyyy:yyyy};}
+  for(var i=0;i<MCA_L.length;i++){if(lo.indexOf(MCA_L[i])>=0){mm=String(i+1).padStart(2,'0');break;}}
+  if(!mm)for(var j=0;j<MES.length;j++){if(lo.indexOf(MES[j])>=0){mm=String(j+1).padStart(2,'0');break;}}
+  var ym=lo.match(/\b(20\d\d)\b/);if(ym)yyyy=ym[1];
+  return{mm:mm,yyyy:yyyy};
+}
+
+function filterFiles(s){
+  var q=document.getElementById('si-'+s).value.toLowerCase();
+  var mo=document.getElementById('ms-'+s).value;
+  var filtered=files[s].filter(function(f){
+    return(!q||f.name.toLowerCase().indexOf(q)>=0)&&(!mo||f.mm===mo);
+  });
+  renderList(s,filtered);
+}
+
+function renderList(s,list){
+  var el=document.getElementById('fl-'+s);
+  var bc=BADGE[s],col=COLORS[s];
+  if(!list.length){
+    el.innerHTML='<div class="empty-state"><svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>'+(files[s].length?'Cap resultat':'Cap fitxer')+'</div>';
+    return;
+  }
+  el.innerHTML=list.map(function(f){
+    return '<div class="file-item" onclick="openFile(\''+s+'\',\''+escA(f.name)+'\')">'+
+      '<div class="fi-icon" style="background:'+col+'20;"><svg width="16" height="16" fill="none" stroke="'+col+'" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>'+
+      '<div class="fi-info"><div class="fi-name">'+escH(f.name)+'</div><div class="fi-meta">'+fmtB(f.size)+' \u00b7 '+new Date(f.lastMod).toLocaleDateString('ca-ES')+'</div></div>'+
+      (f.mm?'<span class="fi-badge '+bc+'">'+(MCA[f.mm]||f.mm)+(f.yyyy?' '+f.yyyy:'')+'</span>':'')+
+      '<div class="fi-actions" onclick="event.stopPropagation()">'+
+        '<button class="icon-btn ib-open" onclick="openFile(\''+s+'\',\''+escA(f.name)+'\')"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>'+
+        '<button class="icon-btn" onclick="delFile(\''+s+'\',\''+escA(f.name)+'\')"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>'+
+      '</div></div>';
+  }).join('');
+}
+
+async function openFile(s,name){
+  var entry=files[s].find(function(f){return f.name===name;});if(!entry)return;
+  try{
+    var f=await entry.handle.getFile();
+    var url=URL.createObjectURL(f);
+    document.getElementById('previewTitle').textContent=name;
+    document.getElementById('previewFrame').src=url;
+    document.getElementById('previewModal').classList.add('open');
+  }catch(e){toast('Error obrint','err');}
+}
+function closePreview(){
+  document.getElementById('previewModal').classList.remove('open');
+  var fr=document.getElementById('previewFrame');
+  URL.revokeObjectURL(fr.src);fr.src='';
+}
+async function delFile(s,name){
+  if(!confirm('Eliminar "'+name+'"?'))return;
+  try{await handles[s].removeEntry(name);toast('Eliminat','ok');await refreshList(s);}
+  catch(e){toast('Error eliminant','err');}
+}
+
+function openDB(){return new Promise(function(res,rej){var r=indexedDB.open('HistDB',1);r.onupgradeneeded=function(e){e.target.result.createObjectStore('s');};r.onsuccess=function(e){res(e.target.result);};r.onerror=rej;});}
+function dbGet(db,k){return new Promise(function(res,rej){var r=db.transaction('s','readonly').objectStore('s').get(k);r.onsuccess=function(e){res(e.target.result);};r.onerror=rej;});}
+function dbSet(db,k,v){return new Promise(function(res,rej){var r=db.transaction('s','readwrite').objectStore('s').put(v,k);r.onsuccess=function(){res();};r.onerror=rej;});}
+
+function escH(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function escA(v){return String(v||'').replace(/'/g,"\\'");}
+function fmtB(b){if(b<1024)return b+'B';if(b<1048576)return (b/1024).toFixed(1)+'KB';return (b/1048576).toFixed(1)+'MB';}
+
+var _tt;
+function toast(msg,type){
+  var t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  t.className='toast show t-'+(type||'ok');
+  clearTimeout(_tt);_tt=setTimeout(function(){t.classList.remove('show');},3000);
+}
+document.getElementById('previewModal').addEventListener('click',function(e){if(e.target===this)closePreview();});
+</script>
+</body>
+</html>

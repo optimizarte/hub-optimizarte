@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Seguiment Vendes · Agència 17167 · Març 2026</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,Helvetica,sans-serif;background:#F0F0F0;color:#202020;min-width:1100px}
+/* HEADER */
+.header{background:#DC0028;color:white;padding:0 36px;display:flex;align-items:center;justify-content:space-between;height:80px}
+/* MAIN */
+.main{padding:22px 36px;max-width:1320px;margin:0 auto}
+.mb20{margin-bottom:20px}
+/* PILDORES */
+.summary-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px}
+.sum-item{background:white;border-radius:12px;padding:24px 22px;box-shadow:0 2px 12px rgba(0,0,0,.09);border-left:6px solid #DC0028;min-height:110px;display:flex;flex-direction:column;justify-content:center}
+.sum-item.prev{border-left-color:#BEBEBE}
+.sum-item.dark{border-left-color:#202020}
+.sum-item.blue{border-left-color:#5c6bc0}
+.sum-item label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#888;display:block;margin-bottom:7px}
+.sum-item .val{font-size:34px;font-weight:900;line-height:1}
+.sum-item .sub{font-size:12px;color:#888;margin-top:6px}
+/* SECTION TITLES */
+.section-title{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.sec-num{width:30px;height:30px;background:#DC0028;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;flex-shrink:0}
+.sec-label{font-size:14px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:#DC0028;border-bottom:2px solid #DC0028;padding-bottom:4px;flex:1}
+/* MITJA */
+.mitja-grid{display:grid;grid-template-columns:1fr 1fr 1fr;min-height:260px}
+.mitja-col{padding:22px 24px;display:flex;flex-direction:column;background:white}
+.mitja-col+.mitja-col{border-left:1px solid #EBEBEB}
+.mitja-col-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #F0F0F0}
+.mitja-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #F5F5F5}
+.mitja-row:last-child{border-bottom:none}
+.mitja-row .lbl{font-size:13px;color:#888}
+.mitja-row .amt{font-size:21px;font-weight:900;color:#202020}
+.mitja-result-box{background:#F8F8F8;border-radius:8px;padding:16px;margin-top:14px;text-align:center;flex:1;display:flex;flex-direction:column;justify-content:center}
+.mitja-result-box label{font-size:11px;color:#888;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:5px}
+.mitja-result-box .big{font-size:32px;font-weight:900;color:#DC0028}
+.msub-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.msub{background:#F0F0F0;border-radius:6px;padding:12px 8px;text-align:center}
+.msub label{font-size:10px;text-transform:uppercase;letter-spacing:.8px;display:block;margin-bottom:3px}
+.msub .big{font-size:22px;font-weight:900}
+/* BONOS */
+.bono-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-bottom:20px}
+.bono-card{border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,.1);overflow:hidden}
+.bono-card.gran{border:2px solid #28A745}
+.bono-card.mitja{border:2px solid #fd7e14}
+.bono-card.petit{border:2px solid #0563C1}
+.bono-card.no-ok{border:2px solid #DC0028}
+.bono-hdr{padding:14px 20px;color:white;display:flex;align-items:center;justify-content:space-between}
+.bono-card.gran .bono-hdr{background:#28A745}
+.bono-card.mitja .bono-hdr{background:#fd7e14}
+.bono-card.petit .bono-hdr{background:#0563C1}
+.bono-card.no-ok .bono-hdr{background:#DC0028}
+.bono-name{font-size:22px;font-weight:900}
+.bono-body{background:white;padding:20px}
+.bono-req{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #F2F2F2;font-size:12px}
+.bono-req:last-child{border-bottom:none}
+.bono-req .ok{color:#28A745;font-weight:700}
+.bono-req .fail{color:#DC0028;font-weight:700}
+.achieved-label{display:inline-flex;align-items:center;gap:5px;padding:6px 18px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:1px;background:#e8f5e9;color:#28A745;margin-top:10px}
+.failed-label{display:inline-flex;align-items:center;gap:5px;padding:6px 18px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:1px;background:#ffeaea;color:#DC0028;margin-top:10px}
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.kpi-card{background:white;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.07);padding:16px;display:flex;flex-direction:column;gap:5px;position:relative;overflow:hidden}
+.kpi-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.kpi-card.neg::after{background:#DC0028}
+.kpi-card.pos::after{background:#28A745}
+.kpi-card.neutral::after{background:#BEBEBE}
+.kpi-card.warn::after{background:#fd7e14}
+.kpi-lbl{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#888}
+.kpi-val{font-size:28px;font-weight:900;line-height:1}
+.kpi-sub{font-size:11px;color:#aaa}
+.badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px}
+.badge.neg{background:#ffeaea;color:#DC0028}
+.badge.pos{background:#e8f5e9;color:#28A745}
+.badge.warn{background:#fff3e0;color:#fd7e14}
+.badge.info{background:#e8eaf6;color:#5c6bc0}
+.badge.none{background:#f5f5f5;color:#999}
+.nota-neg{background:#fff0f0;border:1px solid #ffcdd2;border-radius:6px;padding:6px 10px;font-size:10px;color:#b71c1c;display:flex;align-items:center;gap:5px;margin-top:4px}
+/* ESTRATÈGICS */
+.est-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}
+/* HOGAR */
+.hogar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}
+/* EXTRABONO */
+.extra-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}
+.extra-card{background:white;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);overflow:hidden}
+.extra-hdr{padding:13px 18px;display:flex;align-items:center;gap:14px}
+.extra-pct{font-size:30px;font-weight:900;color:white}
+.extra-lbl-s{font-size:12px;opacity:.85;letter-spacing:1px;text-transform:uppercase;color:white;margin-top:2px}
+.extra-body{padding:20px}
+.prog-label{display:flex;justify-content:space-between;font-size:12px;color:#888;margin-bottom:5px;font-weight:700;text-transform:uppercase}
+.prog-track{height:17px;background:#F0F0F0;border-radius:8px;overflow:hidden;margin-bottom:16px}
+.prog-fill{height:100%;border-radius:8px}
+.extra-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.extra-stat{background:#F8F8F8;border-radius:6px;padding:12px;text-align:center}
+.extra-stat label{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:3px}
+.extra-stat .val{font-size:24px;font-weight:900;color:#28A745}
+.extra-stat .ctx{font-size:11px;color:#aaa}
+/* FOOTER */
+.footer{background:#202020;color:#888;padding:13px 36px;font-size:11px;display:flex;justify-content:space-between;margin-top:24px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg" style="height:60%;object-fit:contain">
+    <path d="M20 8 C14 8 9 13 9 19 C9 27 20 38 20 38 C20 38 31 27 31 19 C31 13 26 8 20 8 Z" fill="white"/>
+    <circle cx="20" cy="19" r="4" fill="#DC0028"/>
+    <text x="38" y="32" font-family="Arial,sans-serif" font-size="22" font-weight="900" fill="white">Occident</text>
+  </svg>
+  <div style="text-align:center">
+    <div style="font-size:20px;font-weight:700;letter-spacing:2px;text-transform:uppercase">Seguiment de Vendes</div>
+    <div style="font-size:12px;opacity:.85;margin-top:2px;letter-spacing:1px">Informe mensual d'activitat · Delegació Segm5 OAG</div>
+  </div>
+  <div style="text-align:right">
+    <div style="font-size:11px;opacity:.75;letter-spacing:1px">AGÈNCIA #17167</div>
+    <div style="font-size:16px;font-weight:700">Optimizarte 3.0 S.l.u.</div>
+    <div style="font-size:13px;opacity:.85;margin-top:2px">📅 Març 2026</div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- PILDORES -->
+<div class="summary-bar">
+  <div class="sum-item prev">
+    <label>VC Mes Anterior <span style="background:#BEBEBE;color:#555;font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;margin-left:4px">MARÇ 2025</span></label>
+    <div class="val" style="color:#555">13.029 €</div>
+    <div class="sub">33 operacions</div>
+  </div>
+  <div class="sum-item">
+    <label>VC Mes Actual <span style="background:#DC0028;color:white;font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;margin-left:4px">MARÇ 2026</span></label>
+    <div class="val" style="color:#DC0028">18.316 €</div>
+    <div class="sub">42 operacions</div>
+  </div>
+  <div class="sum-item dark">
+    <label>Facturació EX.U.</label>
+    <div class="val">65.533 €</div>
+    <div class="sub" style="color:#28A745;font-weight:700;font-size:13px">▲ +11% increment</div>
+  </div>
+  <div class="sum-item blue">
+    <label>Mitja Ponderada (bono)</label>
+    <div class="val" style="color:#DC0028">23.595 €</div>
+    <div class="sub">(13.029 + 34.161) ÷ 2 · Màxim assolit 🏆</div>
+  </div>
+</div>
+
+<!-- MITJA -->
+<div class="section-title mb20">
+  <div class="sec-num">·</div>
+  <div class="sec-label">Càlcul de la Mitja Ponderada</div>
+</div>
+<div style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.07);overflow:hidden;margin-bottom:24px">
+  <div class="mitja-grid">
+    <div class="mitja-col">
+      <div class="mitja-col-title" style="color:#BEBEBE">VC Mes Anterior (Març 2025)</div>
+      <div class="mitja-row"><span class="lbl">VC Total</span><span class="amt">13.029 €</span></div>
+      <div class="mitja-row"><span class="lbl">VC SSGG</span><span class="amt" style="color:#202020">16.297 €</span></div>
+      <div class="mitja-row"><span class="lbl">VC VIDA</span><span class="amt" style="color:#953735">12.577 €</span></div>
+      <div class="mitja-row"><span class="lbl">Operacions</span><span class="amt">33</span></div>
+    </div>
+    <div class="mitja-col">
+      <div class="mitja-col-title" style="color:#DC0028">VC Mes Actual (Març 2026)</div>
+      <div class="mitja-row"><span class="lbl">VC Total</span><span class="amt" style="color:#DC0028">18.316 €</span></div>
+      <div class="mitja-row"><span class="lbl">VC SSGG</span><span class="amt" style="color:#DC0028">14.602 €</span></div>
+      <div class="mitja-row"><span class="lbl">VC VIDA</span><span class="amt" style="color:#DC0028">3.714 €</span></div>
+      <div class="mitja-row"><span class="lbl">Operacions</span><span class="amt">42</span></div>
+    </div>
+    <div class="mitja-col">
+      <div class="mitja-col-title" style="color:#28A745">Mitja (Base de Bono)</div>
+      <div class="mitja-result-box">
+        <label>Mitja VC Total</label>
+        <div class="big">23.595 €</div>
+      </div>
+      <div class="msub-grid">
+        <div class="msub">
+          <label style="color:#414141">SSGG</label>
+          <div class="big" style="color:#202020;font-size:18px">15.450 €</div>
+        </div>
+        <div class="msub">
+          <label style="color:#953735">VIDA</label>
+          <div class="big" style="color:#953735;font-size:18px">8.146 €</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;background:#e8f5e9;border-radius:6px;padding:11px 14px">
+        <span style="font-size:13px;color:#28A745;font-weight:700">🏆 BONO GRAN ASSOLIT</span>
+        <span style="font-size:15px;font-weight:900;color:#28A745">✔</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEC 1: BONOS -->
+<div class="section-title">
+  <div class="sec-num">1</div>
+  <div class="sec-label">Bonos de Producció</div>
+</div>
+<div class="bono-grid">
+
+  <!-- BONO GRAN -->
+  <div class="bono-card gran">
+    <div class="bono-hdr">
+      <div>
+        <div class="bono-name">Bono Gran</div>
+        <div style="font-size:11px;opacity:.85">VC ≥ 9.000 · SSGG ≥ 3.250 · VIDA ≥ 2.950</div>
+      </div>
+      <svg viewBox="0 0 64 64" width="50" height="50" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter:hue-rotate(120deg)">
+        <path d="M20 8 h24 v16 c0 10-8 18-12 18 s-12-8-12-18 Z"/>
+        <path d="M20 12 h-8 c-4 0-6 4-4 8 l4 6 c1 2 4 4 8 2"/>
+        <path d="M44 12 h8 c4 0 6 4 4 8 l-4 6 c-1 2-4 4-8 2"/>
+        <line x1="32" y1="42" x2="32" y2="52"/>
+        <path d="M22 52 h20 l2 4 H20 Z"/>
+        <text x="32" y="7" text-anchor="middle" font-size="7" stroke="none" fill="white">★★★</text>
+      </svg>
+    </div>
+    <div class="bono-body">
+      <div class="bono-req"><span>VC Total (mitja)</span><span class="ok">23.595 € ✔ OK</span></div>
+      <div class="bono-req"><span>VC SSGG (mitja)</span><span class="ok">15.450 € ✔ OK</span></div>
+      <div class="bono-req"><span>VC VIDA (mitja)</span><span class="ok">8.146 € ✔ OK</span></div>
+      <div class="bono-req"><span>Falta Total</span><span class="ok">0 € — Cobert</span></div>
+      <div style="text-align:center;margin-top:8px"><span class="achieved-label">🏆 BONO GRAN ASSOLIT!</span></div>
+    </div>
+  </div>
+
+  <!-- BONO MITTÀ -->
+  <div class="bono-card mitja">
+    <div class="bono-hdr">
+      <div>
+        <div class="bono-name">Bono Mitjà</div>
+        <div style="font-size:11px;opacity:.85">VC ≥ 7.100 · SSGG ≥ 2.500 · VIDA ≥ 2.375</div>
+      </div>
+      <svg viewBox="0 0 64 64" width="50" height="50" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 8 h24 v16 c0 10-8 18-12 18 s-12-8-12-18 Z"/>
+        <path d="M20 12 h-8 c-4 0-6 4-4 8 l4 6 c1 2 4 4 8 2"/>
+        <path d="M44 12 h8 c4 0 6 4 4 8 l-4 6 c-1 2-4 4-8 2"/>
+        <line x1="32" y1="42" x2="32" y2="52"/>
+        <path d="M22 52 h20 l2 4 H20 Z"/>
+        <text x="32" y="7" text-anchor="middle" font-size="7" stroke="none" fill="white">★★★</text>
+      </svg>
+    </div>
+    <div class="bono-body">
+      <div class="bono-req"><span>VC Total (mitja)</span><span class="ok">23.595 € ✔ OK</span></div>
+      <div class="bono-req"><span>VC SSGG (mitja)</span><span class="ok">15.450 € ✔ OK</span></div>
+      <div class="bono-req"><span>VC VIDA (mitja)</span><span class="ok">8.146 € ✔ OK</span></div>
+      <div class="bono-req"><span>Falta Total</span><span class="ok">0 € — Cobert</span></div>
+      <div style="text-align:center;margin-top:8px"><span class="achieved-label">✔ Bono Mitjà Assolit</span></div>
+    </div>
+  </div>
+
+  <!-- BONO PETIT -->
+  <div class="bono-card petit">
+    <div class="bono-hdr">
+      <div>
+        <div class="bono-name">Bono Petit</div>
+        <div style="font-size:11px;opacity:.85">VC ≥ 5.225 · SSGG ≥ 1.950 · VIDA ≥ 1.875</div>
+      </div>
+      <svg viewBox="0 0 64 64" width="50" height="50" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 8 h24 v16 c0 10-8 18-12 18 s-12-8-12-18 Z"/>
+        <path d="M20 12 h-8 c-4 0-6 4-4 8 l4 6 c1 2 4 4 8 2"/>
+        <path d="M44 12 h8 c4 0 6 4 4 8 l-4 6 c-1 2-4 4-8 2"/>
+        <line x1="32" y1="42" x2="32" y2="52"/>
+        <path d="M22 52 h20 l2 4 H20 Z"/>
+        <text x="32" y="7" text-anchor="middle" font-size="7" stroke="none" fill="white">★★★</text>
+      </svg>
+    </div>
+    <div class="bono-body">
+      <div class="bono-req"><span>VC Total (mitja)</span><span class="ok">23.595 € ✔ OK</span></div>
+      <div class="bono-req"><span>VC SSGG (mitja)</span><span class="ok">15.450 € ✔ OK</span></div>
+      <div class="bono-req"><span>VC VIDA (mitja)</span><span class="ok">8.146 € ✔ OK</span></div>
+      <div class="bono-req"><span>Falta Total</span><span class="ok">0 € — Cobert</span></div>
+      <div style="text-align:center;margin-top:8px"><span class="achieved-label">✔ Bono Petit Assolit</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SEC 2: KPIs -->
+<div class="section-title">
+  <div class="sec-num">2</div>
+  <div class="sec-label">KPIs d'Activitat</div>
+</div>
+<div class="kpi-grid">
+  <div class="kpi-card neg">
+    <div class="kpi-lbl">Sense Efectes</div>
+    <div class="kpi-val" style="color:#DC0028">4</div>
+    <div class="nota-neg">⚠ Impacte en imatge de l'agència</div>
+  </div>
+  <div class="kpi-card pos">
+    <div class="kpi-lbl">Pòl. Líquides</div>
+    <div class="kpi-val" style="color:#28A745">18</div>
+    <div class="kpi-sub">VC Líquids: 968 €</div>
+    <span class="badge pos">▲ Actiu</span>
+  </div>
+  <div class="kpi-card neutral">
+    <div class="kpi-lbl">OF. ADN</div>
+    <div class="kpi-val" style="color:#BEBEBE">0</div>
+    <div class="kpi-sub">Sense activitat ADN</div>
+    <span class="badge none">Pendent</span>
+  </div>
+  <div class="kpi-card pos">
+    <div class="kpi-lbl">Ofertes</div>
+    <div class="kpi-val" style="color:#202020">175</div>
+    <div class="kpi-sub">Any ant.: 172</div>
+    <span class="badge pos">▲ +1,7% vs any ant.</span>
+  </div>
+  <div class="kpi-card neutral">
+    <div class="kpi-lbl">Ofertes Any Ant.</div>
+    <div class="kpi-val" style="color:#888">172</div>
+    <div class="kpi-sub">Referència 2025</div>
+  </div>
+  <div class="kpi-card pos">
+    <div class="kpi-lbl">Oportunitats</div>
+    <div class="kpi-val" style="color:#202020">27</div>
+    <div class="kpi-sub">Pipeline CRM</div>
+    <span class="badge pos">Actiu</span>
+  </div>
+  <div class="kpi-card warn">
+    <div class="kpi-lbl">Activitats CRM</div>
+    <div class="kpi-val" style="color:#fd7e14">2</div>
+    <div class="kpi-sub">Registre baix</div>
+    <span class="badge warn">⚠ Baix registre</span>
+  </div>
+  <!-- Total NO ADN -->
+  <div class="kpi-card neutral" style="border:2px solid #DC0028">
+    <div class="kpi-lbl" style="color:#DC0028">Total NO ADN</div>
+    <div class="kpi-val" style="color:#DC0028">0</div>
+    <div class="kpi-sub">Sense pèndua en ADN</div>
+    <span class="badge pos">✔ Net</span>
+  </div>
+</div>
+
+<!-- SEC 3: ESTRATÈGICS -->
+<div class="section-title">
+  <div class="sec-num">3</div>
+  <div class="sec-label">Ramos Estratègics</div>
+</div>
+<div class="est-grid">
+
+  <!-- HOGAR -->
+  <div style="background:white;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.09);overflow:hidden;display:flex;flex-direction:column">
+    <div style="background:#DC0028;padding:8px 14px"><span style="color:white;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase">Família Hogar</span></div>
+    <div style="padding:14px 16px;flex:1;display:flex;align-items:center;gap:14px">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="88" height="88" fill="none" stroke="#DC0028" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/>
+        <rect x="19" y="30" width="10" height="10"/><rect x="12" y="26" width="7" height="6"/>
+        <rect x="30" y="12" width="5" height="8"/>
+      </svg>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+        <svg viewBox="0 0 96 96" width="96" height="96"><circle cx="48" cy="48" r="38" fill="none" stroke="#EBEBEB" stroke-width="11"/><circle cx="48" cy="48" r="38" fill="none" stroke="#DC0028" stroke-width="11" stroke-dasharray="66.6 172.3" stroke-linecap="round" transform="rotate(-90 48 48)"/><text x="48" y="53" text-anchor="middle" font-family="Arial" font-size="16" font-weight="900" fill="#202020">28%</text></svg>
+        <div style="font-size:14px;font-weight:900;color:#DC0028">10 pòl. / 36 of.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTO -->
+  <div style="background:white;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.09);overflow:hidden;display:flex;flex-direction:column">
+    <div style="background:#DC0028;padding:8px 14px"><span style="color:white;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase">RC Obligació Auto</span></div>
+    <div style="padding:14px 16px;flex:1;display:flex;align-items:center;gap:14px">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="88" height="88" fill="none" stroke="#DC0028" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6,28 L10,20 L14,16 L34,16 L38,20 L42,28 L42,34 L6,34 Z"/>
+        <polyline points="14,16 12,24 36,24 34,16"/>
+        <circle cx="14" cy="34" r="5"/><circle cx="34" cy="34" r="5"/>
+      </svg>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+        <svg viewBox="0 0 96 96" width="96" height="96"><circle cx="48" cy="48" r="38" fill="none" stroke="#EBEBEB" stroke-width="11"/><circle cx="48" cy="48" r="38" fill="none" stroke="#DC0028" stroke-width="11" stroke-dasharray="73.8 165.0" stroke-linecap="round" transform="rotate(-90 48 48)"/><text x="48" y="53" text-anchor="middle" font-family="Arial" font-size="16" font-weight="900" fill="#202020">31%</text></svg>
+        <div style="font-size:14px;font-weight:900;color:#DC0028">18 pòl. / 59 of.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIDA -->
+  <div style="background:white;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.09);overflow:hidden;display:flex;flex-direction:column">
+    <div style="background:#DC0028;padding:8px 14px"><span style="color:white;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase">Vida Temporal</span></div>
+    <div style="padding:14px 16px;flex:1;display:flex;align-items:center;gap:14px">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="88" height="88" fill="none" stroke="#DC0028" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M24,38 C24,38 8,26 8,16 C8,11 12,8 17,8 C20,8 22,10 24,12 C26,10 28,8 31,8 C36,8 40,11 40,16 C40,26 24,38 24,38 Z"/>
+      </svg>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+        <svg viewBox="0 0 96 96" width="96" height="96"><circle cx="48" cy="48" r="38" fill="none" stroke="#EBEBEB" stroke-width="11"/><circle cx="48" cy="48" r="38" fill="none" stroke="#DC0028" stroke-width="11" stroke-dasharray="119.4 119.4" stroke-linecap="round" transform="rotate(-90 48 48)"/><text x="48" y="53" text-anchor="middle" font-family="Arial" font-size="16" font-weight="900" fill="#202020">50%</text></svg>
+        <div style="font-size:14px;font-weight:900;color:#DC0028">3 pòl. / 6 of.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AHORRO / ELÈCTRICA -->
+  <div style="background:white;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.09);overflow:hidden;display:flex;flex-direction:column">
+    <div style="background:#DC0028;padding:8px 14px"><span style="color:white;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase">Fondo Elec. Previstes</span></div>
+    <div style="padding:14px 16px;flex:1;display:flex;align-items:center;gap:14px">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="88" height="88" fill="none" stroke="#DC0028" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12,36 C8,36 6,32 6,28 C6,20 12,14 24,14 C36,14 42,20 42,28 C42,32 40,36 36,36"/>
+        <line x1="20" y1="14" x2="28" y2="14"/><line x1="24" y1="10" x2="24" y2="14"/>
+        <line x1="16" y1="36" x2="14" y2="42"/><line x1="32" y1="36" x2="34" y2="42"/>
+        <line x1="8" y1="44" x2="40" y2="44"/>
+      </svg>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+        <svg viewBox="0 0 96 96" width="96" height="96"><circle cx="48" cy="48" r="38" fill="none" stroke="#EBEBEB" stroke-width="11"/><circle cx="48" cy="48" r="38" fill="none" stroke="#DC0028" stroke-width="11" stroke-dasharray="119.4 119.4" stroke-linecap="round" transform="rotate(-90 48 48)"/><text x="48" y="53" text-anchor="middle" font-family="Arial" font-size="16" font-weight="900" fill="#202020">50%</text></svg>
+        <div style="font-size:14px;font-weight:900;color:#DC0028">1 pòl. / 2 of.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SALUD -->
+  <div style="background:white;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.09);overflow:hidden;display:flex;flex-direction:column">
+    <div style="background:#DC0028;padding:8px 14px"><span style="color:white;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase">Salut A.Sanit. Cp C</span></div>
+    <div style="padding:14px 16px;flex:1;display:flex;align-items:center;gap:14px">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="88" height="88" fill="none" stroke="#DC0028" stroke-width="2" stroke-linecap="round">
+        <rect x="18" y="8" width="12" height="32" rx="2"/>
+        <rect x="8" y="18" width="32" height="12" rx="2"/>
+        <line x1="10" y1="44" x2="38" y2="44"/>
+      </svg>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+        <svg viewBox="0 0 96 96" width="96" height="96"><circle cx="48" cy="48" r="38" fill="none" stroke="#EBEBEB" stroke-width="11"/><circle cx="48" cy="48" r="38" fill="none" stroke="#DC0028" stroke-width="11" stroke-dasharray="0 238.8" stroke-linecap="round" transform="rotate(-90 48 48)"/><text x="48" y="53" text-anchor="middle" font-family="Arial" font-size="16" font-weight="900" fill="#202020">0%</text></svg>
+        <div style="font-size:14px;font-weight:900;color:#DC0028">0 pòl. / 3 of.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DECESOS -->
+  <div style="background:white;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.09);overflow:hidden;display:flex;flex-direction:column">
+    <div style="background:#DC0028;padding:8px 14px"><span style="color:white;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase">Decesos Pri.p.peri</span></div>
+    <div style="padding:14px 16px;flex:1;display:flex;align-items:center;gap:14px">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="88" height="88" fill="none" stroke="#DC0028" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="24" cy="16" r="10"/>
+        <path d="M14,44 C14,34 34,34 34,44"/>
+        <line x1="24" y1="26" x2="24" y2="34"/>
+      </svg>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+        <svg viewBox="0 0 96 96" width="96" height="96"><circle cx="48" cy="48" r="38" fill="none" stroke="#EBEBEB" stroke-width="11"/><circle cx="48" cy="48" r="38" fill="none" stroke="#DC0028" stroke-width="11" stroke-dasharray="0 238.8" stroke-linecap="round" transform="rotate(-90 48 48)"/><text x="48" y="53" text-anchor="middle" font-family="Arial" font-size="16" font-weight="900" fill="#202020">0%</text></svg>
+        <div style="font-size:14px;font-weight:900;color:#DC0028">0 pòl. / 1 of.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SEC 4: BONO HOGAR -->
+<div class="section-title">
+  <div class="sec-num">4</div>
+  <div class="sec-label">Bono Hogar</div>
+</div>
+<div class="hogar-grid">
+
+  <!-- PETIT -->
+  <div style="background:white;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);overflow:hidden;text-align:center;border:2px solid #0563C1">
+    <div style="padding:11px 14px;color:white;font-weight:700;font-size:13px;letter-spacing:1px;background:#0563C1">Bono Hogar Petit ★</div>
+    <div style="padding:16px 12px">
+      <div style="font-size:11px;color:#888;margin-bottom:10px">Objectiu: <strong>5</strong> · Venudes: <strong style="color:#DC0028">10</strong></div>
+      <div style="display:flex;justify-content:center;gap:4px;flex-wrap:wrap;margin-bottom:8px">
+        <!-- 5 cases, totes verdes -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#0563C1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#0563C1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#0563C1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#0563C1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#0563C1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:5px;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;background:#e3f2fd;color:#0563C1">✔ ASSOLIT (10/5)</div>
+    </div>
+  </div>
+
+  <!-- MIG -->
+  <div style="background:white;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);overflow:hidden;text-align:center;border:2px solid #fd7e14">
+    <div style="padding:11px 14px;color:white;font-weight:700;font-size:13px;letter-spacing:1px;background:#fd7e14">Bono Hogar Mig ★★</div>
+    <div style="padding:16px 12px">
+      <div style="font-size:11px;color:#888;margin-bottom:10px">Objectiu: <strong>7</strong> · Venudes: <strong style="color:#DC0028">10</strong></div>
+      <div style="display:flex;justify-content:center;gap:4px;flex-wrap:wrap;margin-bottom:8px">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#fd7e14" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#fd7e14" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#fd7e14" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#fd7e14" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#fd7e14" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#fd7e14" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#fd7e14" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:5px;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;background:#fff3e0;color:#fd7e14">✔ ASSOLIT (10/7)</div>
+    </div>
+  </div>
+
+  <!-- GRAN -->
+  <div style="background:white;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);overflow:hidden;text-align:center;border:2px solid #28A745">
+    <div style="padding:11px 14px;color:white;font-weight:700;font-size:13px;letter-spacing:1px;background:#28A745">Bono Hogar Gran 🏆</div>
+    <div style="padding:16px 12px">
+      <div style="font-size:11px;color:#888;margin-bottom:10px">Objectiu: <strong>9</strong> · Venudes: <strong style="color:#DC0028">10</strong></div>
+      <div style="display:flex;justify-content:center;gap:4px;flex-wrap:wrap;margin-bottom:8px">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#28A745" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#28A745" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#28A745" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#28A745" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#28A745" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#28A745" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#28A745" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#28A745" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#28A745" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,22 24,8 42,22"/><rect x="10" y="22" width="28" height="18" rx="1"/><rect x="19" y="30" width="10" height="10"/></svg>
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:5px;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;background:#e8f5e9;color:#28A745">🏆 BONO GRAN ASSOLIT (10/9)</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SEC 5: EXTRABONO -->
+<div class="section-title">
+  <div class="sec-num">5</div>
+  <div class="sec-label">Extrabono</div>
+</div>
+
+<!-- Barra referència -->
+<div style="background:white;border-radius:10px;padding:16px 24px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);display:flex;align-items:center;gap:32px;flex-wrap:wrap">
+  <div style="font-size:13px;color:#888;font-weight:700;letter-spacing:1px;text-transform:uppercase;flex-shrink:0">Ref. 2025:</div>
+  <div style="font-size:18px;font-weight:700">VC: <span style="color:#202020">13.029 €</span></div>
+  <div style="font-size:18px;font-weight:700">OP: <span style="color:#202020">33 ops.</span></div>
+  <div style="font-size:18px;font-weight:700">VC 2026: <span style="color:#DC0028;font-weight:900">18.316 €</span></div>
+  <div style="font-size:18px;font-weight:700">OP 2026: <span style="color:#DC0028;font-weight:900">42 ops.</span></div>
+  <div style="margin-left:auto;background:#e8f5e9;border:1px solid #c8e6c9;border-radius:8px;padding:10px 18px;font-size:14px;color:#28A745;font-weight:700;flex-shrink:0">🏆 Extrabono +20% ASSOLIT!</div>
+</div>
+
+<div class="extra-grid">
+
+  <!-- 7% -->
+  <div class="extra-card">
+    <div class="extra-hdr" style="background:linear-gradient(135deg,#28A745,#5cb85c)">
+      <div>
+        <div class="extra-pct">7%</div>
+        <div class="extra-lbl-s">Extrabono</div>
+      </div>
+      <div style="margin-left:auto;font-size:28px">🏆</div>
+    </div>
+    <div class="extra-body">
+      <div class="prog-label"><span>VC</span><span style="color:#28A745">ASSOLIT ✔</span></div>
+      <div class="prog-track"><div class="prog-fill" style="width:100%;background:linear-gradient(90deg,#28A745,#5cb85c)"></div></div>
+      <div class="prog-label"><span>Operacions</span><span style="color:#28A745">ASSOLIT ✔</span></div>
+      <div class="prog-track"><div class="prog-fill" style="width:100%;background:linear-gradient(90deg,#28A745,#5cb85c)"></div></div>
+      <div class="extra-stats">
+        <div class="extra-stat"><label>Obj. VC +7%</label><div class="val">13.941 €</div><div class="ctx">Obtingut: 18.316 €</div></div>
+        <div class="extra-stat"><label>Obj. OP +7%</label><div class="val">35 ops.</div><div class="ctx">Obtingut: 42 ops.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12% -->
+  <div class="extra-card">
+    <div class="extra-hdr" style="background:linear-gradient(135deg,#28A745,#20c997)">
+      <div>
+        <div class="extra-pct">12%</div>
+        <div class="extra-lbl-s">Extrabono</div>
+      </div>
+      <div style="margin-left:auto;font-size:28px">🏆</div>
+    </div>
+    <div class="extra-body">
+      <div class="prog-label"><span>VC</span><span style="color:#28A745">ASSOLIT ✔</span></div>
+      <div class="prog-track"><div class="prog-fill" style="width:100%;background:linear-gradient(90deg,#28A745,#20c997)"></div></div>
+      <div class="prog-label"><span>Operacions</span><span style="color:#28A745">ASSOLIT ✔</span></div>
+      <div class="prog-track"><div class="prog-fill" style="width:100%;background:linear-gradient(90deg,#28A745,#20c997)"></div></div>
+      <div class="extra-stats">
+        <div class="extra-stat"><label>Obj. VC +12%</label><div class="val">14.592 €</div><div class="ctx">Obtingut: 18.316 €</div></div>
+        <div class="extra-stat"><label>Obj. OP +12%</label><div class="val">37 ops.</div><div class="ctx">Obtingut: 42 ops.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 20% -->
+  <div class="extra-card" style="border:2px solid #28A745">
+    <div class="extra-hdr" style="background:linear-gradient(135deg,#202020,#28A745)">
+      <div>
+        <div class="extra-pct">20%</div>
+        <div class="extra-lbl-s">Extrabono MÀXIM</div>
+      </div>
+      <div style="margin-left:auto;font-size:28px">🏆</div>
+    </div>
+    <div class="extra-body">
+      <div class="prog-label"><span>VC</span><span style="color:#28A745">ASSOLIT ✔</span></div>
+      <div class="prog-track"><div class="prog-fill" style="width:100%;background:linear-gradient(90deg,#202020,#28A745)"></div></div>
+      <div class="prog-label"><span>Operacions</span><span style="color:#28A745">ASSOLIT ✔</span></div>
+      <div class="prog-track"><div class="prog-fill" style="width:100%;background:linear-gradient(90deg,#202020,#28A745)"></div></div>
+      <div class="extra-stats">
+        <div class="extra-stat"><label>Obj. VC +20%</label><div class="val">15.635 €</div><div class="ctx">Obtingut: 18.316 €</div></div>
+        <div class="extra-stat"><label>Obj. OP +20%</label><div class="val">40 ops.</div><div class="ctx">Obtingut: 42 ops.</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</div><!-- /main -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <div>Occident Seguros · Delegació Segm5 OAG · Ús intern supervisors</div>
+  <div>Agència 17167 · Optimizarte 3.0 S.l.u. · Març 2026</div>
+  <div>Document Confidencial</div>
+</div>
+
+</body>
+</html>

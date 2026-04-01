@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAFO Març 2026 · OPTIMIZART€ 3.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--col:#16A34A;--dark:#202020;--gray:#414141;--gray3:#E7E6E6;--bg:#F5F5F5;--white:#fff;
+--red:#DC0028;--amber:#D97706;--blue:#0563C1;--shadow:0 2px 12px rgba(0,0,0,0.09);--radius:10px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Open Sans',Arial,sans-serif;background:var(--bg);color:var(--dark);font-size:13px;line-height:1.5;}
+.hdr{background:var(--col);color:#fff;padding:20px 36px;display:flex;align-items:center;justify-content:space-between;}
+.hdr-brand{font-family:'Poppins',sans-serif;font-size:20px;font-weight:800;}
+.hdr-brand span{opacity:.7;}
+.hdr-sub{font-family:'Inter',sans-serif;font-size:10px;opacity:.8;margin-top:2px;}
+.hdr-month{font-family:'Poppins',sans-serif;font-size:28px;font-weight:800;text-align:center;}
+.hdr-month-sub{font-family:'Inter',sans-serif;font-size:11px;opacity:.85;text-align:center;margin-top:2px;}
+.hdr-meta{text-align:right;font-family:'Inter',sans-serif;font-size:10px;opacity:.85;line-height:1.7;}
+.content{padding:24px 36px;max-width:1200px;margin:0 auto;}
+.sec-title{font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:var(--col);border-left:4px solid var(--col);padding-left:11px;margin-bottom:14px;}
+
+.kpi-row{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:22px;}
+.kpi-c{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:12px 14px;text-align:center;border-top:3px solid var(--col);}
+.kpi-lbl{font-family:'Inter',sans-serif;font-size:9px;color:var(--gray);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+.kpi-v{font-family:'Inter',sans-serif;font-size:20px;font-weight:800;color:var(--dark);}
+.kpi-v.neg{color:var(--red);}
+.kpi-v.pos{color:var(--col);}
+.kpi-v.warn{color:var(--amber);}
+.kpi-note{font-family:'Inter',sans-serif;font-size:9px;color:var(--gray);margin-top:3px;}
+
+/* Comparative evolution banner */
+.evo-banner{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px;}
+.evo-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:12px 14px;text-align:center;}
+.evo-title{font-family:'Inter',sans-serif;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--gray);margin-bottom:6px;}
+.evo-arrow{font-size:22px;margin:4px 0;}
+.evo-label{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;}
+.evo-label.good{color:var(--col);}
+.evo-label.bad{color:var(--red);}
+.evo-label.warn{color:var(--amber);}
+.evo-from-to{font-family:'Inter',sans-serif;font-size:9px;color:var(--gray);}
+
+.ramo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px;}
+.ramo-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:12px 14px;}
+.ramo-name{font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;margin-bottom:8px;}
+.ramo-stat{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid var(--gray3);font-family:'Inter',sans-serif;font-size:10.5px;}
+.ramo-stat:last-child{border-bottom:none;}
+.ramo-stat-lbl{color:var(--gray);}
+.ramo-stat-val{font-weight:700;}
+.ramo-stat-val.neg{color:var(--red);}
+.ramo-stat-val.pos{color:var(--col);}
+.ramo-stat-val.warn{color:var(--amber);}
+
+.dafo-main{display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:22px;}
+.dafo-q{padding:18px 20px;border-right:2px solid var(--gray3);border-bottom:2px solid var(--gray3);}
+.dafo-q:nth-child(2){border-right:none;}
+.dafo-q:nth-child(3){border-bottom:none;}
+.dafo-q:nth-child(4){border-right:none;border-bottom:none;}
+.dafo-q-hdr{font-family:'Poppins',sans-serif;font-size:13px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:7px;padding-bottom:8px;border-bottom:2px solid;}
+.dafo-q-hdr.F{color:#16A34A;border-color:#DCFCE7;}
+.dafo-q-hdr.D{color:#DC0028;border-color:#FEE2E2;}
+.dafo-q-hdr.O{color:#0563C1;border-color:#DBEAFE;}
+.dafo-q-hdr.A{color:#D97706;border-color:#FEF3C7;}
+.dafo-q-hdr .q-label{font-size:9px;font-weight:600;padding:2px 8px;border-radius:10px;}
+.dafo-q-hdr.F .q-label{background:#DCFCE7;color:#16A34A;}
+.dafo-q-hdr.D .q-label{background:#FEE2E2;color:#DC0028;}
+.dafo-q-hdr.O .q-label{background:#DBEAFE;color:#0563C1;}
+.dafo-q-hdr.A .q-label{background:#FEF3C7;color:#D97706;}
+.dafo-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.dafo-list li{font-family:'Open Sans',sans-serif;font-size:11.5px;color:var(--gray);padding-left:14px;position:relative;line-height:1.5;}
+.dafo-list li::before{content:'▸';position:absolute;left:0;font-size:10px;line-height:1.7;}
+.dafo-list.F li::before{color:#16A34A;}
+.dafo-list.D li::before{color:#DC0028;}
+.dafo-list.O li::before{color:#0563C1;}
+.dafo-list.A li::before{color:#D97706;}
+.dafo-list li strong{color:var(--dark);}
+
+/* Trimestre balance */
+.trim-balance{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 20px;margin-bottom:22px;border-left:4px solid var(--col);}
+.trim-title{font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;color:var(--dark);margin-bottom:10px;}
+.trim-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.trim-item{text-align:center;}
+.trim-val{font-family:'Poppins',sans-serif;font-size:18px;font-weight:800;}
+.trim-val.pos{color:var(--col);}
+.trim-val.neg{color:var(--red);}
+.trim-val.warn{color:var(--amber);}
+.trim-lbl{font-family:'Inter',sans-serif;font-size:9px;color:var(--gray);font-weight:600;text-transform:uppercase;}
+
+.alert-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;margin-bottom:22px;}
+.alert-box{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:13px 15px;border-left:4px solid;}
+.alert-box.r{border-color:var(--red);}
+.alert-box.g{border-color:var(--col);}
+.alert-box.a{border-color:var(--amber);}
+.ab-title{font-family:'Poppins',sans-serif;font-size:11.5px;font-weight:700;margin-bottom:5px;display:flex;align-items:center;gap:5px;}
+.ab-body{font-family:'Open Sans',sans-serif;font-size:10.5px;color:var(--gray);line-height:1.55;}
+.ab-body strong{color:var(--dark);}
+
+.rec-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px;}
+.rec-c{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px;display:flex;gap:11px;}
+.rec-n{width:28px;height:28px;border-radius:50%;background:var(--col);color:#fff;font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.rec-prio{display:inline-block;font-family:'Inter',sans-serif;font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px;}
+.rec-prio.h{background:#FEE2E2;color:#DC0028;}
+.rec-prio.m{background:#FEF3C7;color:#D97706;}
+.rec-c h4{font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;margin-bottom:3px;}
+.rec-c p{font-family:'Open Sans',sans-serif;font-size:10px;color:var(--gray);line-height:1.5;}
+.ftr{background:var(--dark);color:#fff;padding:11px 36px;display:flex;justify-content:space-between;align-items:center;font-family:'Inter',sans-serif;font-size:9.5px;opacity:.9;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div>
+    <div class="hdr-brand">OPTIMIZART<span>€</span> 3.0</div>
+    <div class="hdr-sub">Agència Occident #17167 · OAG Seg.5</div>
+  </div>
+  <div>
+    <div class="hdr-month">DAFO — MARÇ 2026</div>
+    <div class="hdr-month-sub">Diagnòstic mensual · Tancament Q1 · Equip Dany · Silvia · Fadoua</div>
+  </div>
+  <div class="hdr-meta">
+    Mes: 03/2026<br>Ops Vendes: 42 (+2% vs Feb)<br>Cartera: +28,26% vs any anterior 🏆<br><span style="opacity:.6">Revisió Abril 2026</span>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- KPIs -->
+  <div class="sec-title">📊 KPIs Març 2026</div>
+  <div class="kpi-row">
+    <div class="kpi-c">
+      <div class="kpi-lbl">Ops Vendes</div>
+      <div class="kpi-v pos">42</div>
+      <div class="kpi-note">+2% vs Feb | Màxim Q1</div>
+    </div>
+    <div class="kpi-c">
+      <div class="kpi-lbl">Ops Anulac.</div>
+      <div class="kpi-v neg">24</div>
+      <div class="kpi-note">+4% vs Feb · Màxim Q1</div>
+    </div>
+    <div class="kpi-c">
+      <div class="kpi-lbl">Ofertes env.</div>
+      <div class="kpi-v pos">188</div>
+      <div class="kpi-note">+6% vs Feb ⬆️</div>
+    </div>
+    <div class="kpi-c">
+      <div class="kpi-lbl">Taxa Anul. TAM</div>
+      <div class="kpi-v neg" style="font-size:16px;">14,79%</div>
+      <div class="kpi-note">Autos TAM: 18,84%</div>
+    </div>
+    <div class="kpi-c">
+      <div class="kpi-lbl">Autos net ops</div>
+      <div class="kpi-v pos" style="font-size:16px;">+15 🔥</div>
+      <div class="kpi-note">Millor ramo del mes!</div>
+    </div>
+    <div class="kpi-c">
+      <div class="kpi-lbl">Visites Silvia</div>
+      <div class="kpi-v neg" style="font-size:16px;">0/9</div>
+      <div class="kpi-note">3r mes consecutiu 🚨</div>
+    </div>
+  </div>
+
+  <!-- BALANÇ TRIMESTRAL -->
+  <div class="sec-title">🏆 Balanç Acumulat Q1 — Tancament del Trimestre</div>
+  <div class="trim-balance">
+    <div class="trim-title">Resultats acumulats Gener + Febrer + Març 2026</div>
+    <div class="trim-grid">
+      <div class="trim-item">
+        <div class="trim-val pos">118</div>
+        <div class="trim-lbl">Ops vendes Q1</div>
+      </div>
+      <div class="trim-item">
+        <div class="trim-val neg">68</div>
+        <div class="trim-lbl">Ops anulacions Q1</div>
+      </div>
+      <div class="trim-item">
+        <div class="trim-val pos">509</div>
+        <div class="trim-lbl">Ofertes Q1 (+14,4% vs AA)</div>
+      </div>
+      <div class="trim-item">
+        <div class="trim-val pos">+28,26%</div>
+        <div class="trim-lbl">Creix. pòlisses vs AA 🏆</div>
+      </div>
+      <div class="trim-item">
+        <div class="trim-val warn">14,79%</div>
+        <div class="trim-lbl">Taxa anulació TAM</div>
+      </div>
+      <div class="trim-item">
+        <div class="trim-val neg">0/30</div>
+        <div class="trim-lbl">Visites Silvia (0% compli.)</div>
+      </div>
+      <div class="trim-item">
+        <div class="trim-val warn">1,91</div>
+        <div class="trim-lbl">Pòlissa/Client (baixant)</div>
+      </div>
+      <div class="trim-item">
+        <div class="trim-val pos">+14,91%</div>
+        <div class="trim-lbl">Creix. facturació vs AA</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EVOLUCIÓ -->
+  <div class="sec-title">📈 Evolució vs Febrer 2026</div>
+  <div class="evo-banner">
+    <div class="evo-card" style="border-top:3px solid var(--col);">
+      <div class="evo-title">Autos ops netes</div>
+      <div class="evo-arrow">🔥</div>
+      <div class="evo-label good">EXCEL·LENT</div>
+      <div class="evo-from-to">+1 Feb → +15 Mar (best!)</div>
+    </div>
+    <div class="evo-card" style="border-top:3px solid var(--red);">
+      <div class="evo-title">FH Hogar ops netes</div>
+      <div class="evo-arrow">⬇️</div>
+      <div class="evo-label bad">TORNA NEGATIU</div>
+      <div class="evo-from-to">+2 Feb → -2 Mar</div>
+    </div>
+    <div class="evo-card" style="border-top:3px solid var(--red);">
+      <div class="evo-title">RC Empreses</div>
+      <div class="evo-arrow">⬇️</div>
+      <div class="evo-label bad">PERD SEGMENT</div>
+      <div class="evo-from-to">+1 Feb → -3 Mar (0 vendes)</div>
+    </div>
+    <div class="evo-card" style="border-top:3px solid var(--amber);">
+      <div class="evo-title">Vida Ahorro</div>
+      <div class="evo-arrow">⬇️</div>
+      <div class="evo-label warn">CAU vs Feb</div>
+      <div class="evo-from-to">+10 ops Feb → +1 Mar</div>
+    </div>
+    <div class="evo-card" style="border-top:3px solid var(--col);">
+      <div class="evo-title">Ofertes enviades</div>
+      <div class="evo-arrow">⬆️</div>
+      <div class="evo-label good">CREIX</div>
+      <div class="evo-from-to">178 Feb → 188 Mar (+6%)</div>
+    </div>
+    <div class="evo-card" style="border-top:3px solid var(--red);">
+      <div class="evo-title">Taxa Anulació TAM</div>
+      <div class="evo-arrow">⬆️</div>
+      <div class="evo-label bad">AUGMENTA</div>
+      <div class="evo-from-to">14,40% Feb → 14,79% Mar</div>
+    </div>
+    <div class="evo-card" style="border-top:3px solid var(--red);">
+      <div class="evo-title">% Ratio Sense Efecte</div>
+      <div class="evo-arrow">⬆️</div>
+      <div class="evo-label bad">EMPITJORA</div>
+      <div class="evo-from-to">12,65% Feb → 13,10% Mar</div>
+    </div>
+    <div class="evo-card" style="border-top:3px solid var(--col);">
+      <div class="evo-title">Creix. cartera % vs AA</div>
+      <div class="evo-arrow">🏆</div>
+      <div class="evo-label good">CONFIRMA</div>
+      <div class="evo-from-to">+28,81% Feb → +28,26% Mar</div>
+    </div>
+  </div>
+
+  <!-- RAMOS -->
+  <div class="sec-title">🏷️ Detall per Ramo — Març 2026</div>
+  <div class="ramo-grid">
+    <div class="ramo-card" style="border-top:3px solid var(--col);">
+      <div class="ramo-name">🚗 Autos 🔥 MILLOR MES</div>
+      <div class="ramo-stat"><span class="ramo-stat-lbl">Vendes ops</span><span class="ramo-stat-val pos">18</span></div>
+      <div class="ramo-stat"><span class="ramo-stat-lbl">Anulacions ops</span><span class="ramo-stat-val">3</span></div>
+      <div class="ramo-stat"><span class="ramo-stat-lbl">Net ops</span><span class="ramo-stat-val pos">+15 🔥</span></div>
+      <div class="ramo-stat"><span class="ramo-stat-lbl">Taxa anulació TAM</span><span class="ramo-stat-val warn">18,84%</span></div>
+      <div class="ramo-stat"><span class="ramo-stat-lbl">Creix. cartera Autos</span><span class="ramo-stat-val pos">+18,49% vs AA</span></div>
+    </div>
+    <div class="ramo-card" style="border-top:3px solid var(--red);">
+      <div class="ramo-name">🏠 Hogar + Multiriscos</div>
+      <div class="ramo-stat"><span class="ramo-stat-lbl">FH ops netes</span><span class="ramo-stat-val neg">-2 (11v/12an)</span></div>
+      <div class="ramo-stat"><span class="ramo-stat-lbl">Comunitats ops</span><span class="ramo-stat-val pos">+2</span></div>
+      <div class="ramo-stat"><span class="ramo-stat-lbl">RC Empreses net</span><span class="ramo-stat-val neg">-3 (0v/3an) 🚨</span></div>
+      <div class="ramo-stat"><span class="ramo-stat-lbl">Pyme net</span><span class="ramo-stat-val warn">~0</span></div>
+      <div class="ramo-stat"><span class="ramo-stat-lbl">FH creix. cartera vs AA</span><span class="ramo-stat-val pos">+3,88%</span></div>
+    </div>
+    <div class="ramo-card" style="border-top:3px solid var(--amber);">
+      <div class="ramo-name">💙 Vida (tots els ramos)</div>
+      <div class="ramo-stat"><span class="ramo-stat-lbl">Temporal ops net</span><span class="ramo-stat-val pos">+2</span></div>
+      <div class="ramo-stat"><span class="ramo-stat-lbl">Ahorro ops net</span><span class="ramo-stat-val pos">+1</span></div>
+      <div class="ramo-stat"><span class="ramo-stat-lbl">Supl.Gar. ops net</span><span class="ramo-stat-val pos">+1 (alta prima)</span></div>
+      <div class="ramo-stat"><span class="ramo-stat-lbl">Decesos ops net</span><span class="ramo-stat-val neg">-1 (3r mes)</span></div>
+      <div class="ramo-stat"><span class="ramo-stat-lbl">Salut ops net</span><span class="ramo-stat-val neg">-1</span></div>
+    </div>
+    <div class="ramo-card" style="border-top:3px solid #888;">
+      <div class="ramo-name">📦 Cartera Global Q1</div>
+      <div class="ramo-stat"><span class="ramo-stat-lbl">Creix. pòlisses vs AA</span><span class="ramo-stat-val pos">+28,26% 🏆</span></div>
+      <div class="ramo-stat"><span class="ramo-stat-lbl">Creix. facturació vs AA</span><span class="ramo-stat-val pos">+14,91%</span></div>
+      <div class="ramo-stat"><span class="ramo-stat-lbl">Taxa anulació TAM</span><span class="ramo-stat-val neg">14,79% ⬆️</span></div>
+      <div class="ramo-stat"><span class="ramo-stat-lbl">Autos TAM</span><span class="ramo-stat-val neg">18,84% 🚨</span></div>
+      <div class="ramo-stat"><span class="ramo-stat-lbl">% Ratio Sense Efecte</span><span class="ramo-stat-val neg">13,10% ⬆️</span></div>
+    </div>
+  </div>
+
+  <!-- DAFO -->
+  <div class="sec-title">🧭 DAFO — Març 2026</div>
+  <div class="dafo-main">
+    <div class="dafo-q">
+      <div class="dafo-q-hdr F">💪 <span>FORTALESES</span> <span class="q-label">Intern · Positiu</span></div>
+      <ul class="dafo-list F">
+        <li><strong>Autos excel·lent: +15 ops netes</strong> — el millor mes del trimestre per Autos, demostra que hi ha capacitat de producció important en el ramo</li>
+        <li><strong>42 ops vendes</strong> — quasi màxim del trimestre i millor mes per volum</li>
+        <li><strong>Creixement cartera +28,26% vs any anterior</strong> — resultat excepcional que confirma la trajectòria de l'agència</li>
+        <li>Facturació acumulada +14,91% — tendència sòlida i positiva</li>
+        <li>Supl.Garantitzat d'alta prima unitària confirma capacitat de venda de productes premium</li>
+        <li>Comunitats: +2 netes — bon resultat en el ramo</li>
+      </ul>
+    </div>
+    <div class="dafo-q">
+      <div class="dafo-q-hdr D">⚠️ <span>DEBILITATS</span> <span class="q-label">Intern · Negatiu</span></div>
+      <ul class="dafo-list D">
+        <li><strong>FH torna al negatiu:</strong> 12 anulacions vs 11 vendes — tendència de saldo negatiu persistent en el ramo principal</li>
+        <li><strong>RC Empreses: 3 baixes, 0 vendes</strong> — pèrdua del segment empresarial sense cap acció de retenció</li>
+        <li><strong>Silvia: 0 visites (0/9)</strong> — 3r mes consecutiu sense activitat presencial. Situació crítica</li>
+        <li><strong>% Ratio Sense Efecte: 13,10%</strong> — màxim del trimestre, moltes pòlisses emeses no acaben en vigor</li>
+        <li>Decesos: 3r mes negatiu consecutiu — cartera s'erosiona</li>
+        <li>Vida Ahorro cau de 10 a 1 op neta: no s'ha replicat el momentum de Febrer</li>
+        <li>Taxa anulació TAM al màxim del trimestre: 14,79% (Autos: 18,84%)</li>
+      </ul>
+    </div>
+    <div class="dafo-q">
+      <div class="dafo-q-hdr O">🎯 <span>OPORTUNITATS</span> <span class="q-label">Extern · Positiu</span></div>
+      <ul class="dafo-list O">
+        <li><strong>Autos amb momentum fort:</strong> el +15 netes de Març indica que hi ha mercat actiu — <strong>Silvia</strong> ha de capitalitzar-ho al camp en Q2</li>
+        <li><strong>3 baixes RC Empreses</strong> = clients que han marxat i es poden reconquistar amb una trucada de <strong>Fadoua</strong></li>
+        <li>Inici Q2 (Abril) = temporada forta vehicles nous i canvis de companyia</li>
+        <li>Alta prima unitària Supl.Gar. / Ahorro = pocs clients, resultat alt — model escalable</li>
+        <li>Facturació Autos +14,12% vs mes anterior indica sòlida base de renovació</li>
+        <li>446 unipòlisses segueixen esperant una proposta — potencial no explotat</li>
+      </ul>
+    </div>
+    <div class="dafo-q">
+      <div class="dafo-q-hdr A">🔴 <span>AMENACES</span> <span class="q-label">Extern · Negatiu</span></div>
+      <ul class="dafo-list A">
+        <li><strong>3 mesos sense visites de Silvia</strong> = dependència total de vendes inbounds i de Dany. Sense prospecció externa, el creixement s'estanca</li>
+        <li><strong>FH negatiu 3 mesos consecutius</strong> (Gen, Feb, Mar): si la tendència continua a Q2, la cartera FH (principal en volum) perdurà volum</li>
+        <li>Taxa anulació Autos TAM >18%: si s'assoleix el màxim del sector sense pla de retenció actiu, Autos seguirà erosionant-se</li>
+        <li>RC Empreses en caiguda: si no es reconquisten els clients perduts, es perd un segment estratègic per a bonos i diversificació</li>
+        <li>La competència pot captar clients unipòlissa si l'agència no fa contacte proactiu amb ells primer</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ALERTES -->
+  <div class="sec-title">💡 Punts Clau del Mes i Tancament Q1</div>
+  <div class="alert-row">
+    <div class="alert-box g">
+      <div class="ab-title">🔥 Autos: Millor Mes del Trimestre</div>
+      <div class="ab-body">+15 ops netes d'Autos és el resultat individual per ramo més alt del trimestre. <strong>Dany</strong> ha demostrat una excel·lent execució en el ramo. Cal analitzar si hi ha factors estacionals o de client que expliquen el salt de +1 (Feb) a +15 (Mar) i replicar-ho sistemàticament.</div>
+    </div>
+    <div class="alert-box r">
+      <div class="ab-title">🚨 Silvia — 3 Mesos 0 Visites: Punt d'Inflexió</div>
+      <div class="ab-body">Tancam el Q1 amb <strong>0 visites de 30 planificades</strong> per a Silvia. Amb quasi 1 any a l'agència, cal una conversa oberta entre <strong>Dany i Silvia</strong>: quins impediments hi ha? Quins recursos necessita? Quins objectius de visites es compromet a fer a Q2? La situació requereix una solució definitiva.</div>
+    </div>
+    <div class="alert-box a">
+      <div class="ab-title">⚠️ RC Empreses i FH Perden Cartera</div>
+      <div class="ab-body">RC tanca Març amb 3 baixes i 0 altes. FH porta 3 mesos en negatiu. <strong>Fadoua</strong> hauria de fer un seguiment telefònic dels clients que han donat de baixa en el mes per entendre les causes i explorar si es poden recuperar.</div>
+    </div>
+  </div>
+
+  <!-- RECOMANACIONS Q2 -->
+  <div class="sec-title">✅ Accions Prioritàries per a Q2 — A partir d'Abril</div>
+  <div class="rec-row">
+    <div class="rec-c">
+      <div class="rec-n">1</div>
+      <div>
+        <span class="rec-prio h">URGENT · Dany + Silvia</span>
+        <h4>Reunió de definició del pla de visites Q2</h4>
+        <p>Reunió formal Dany + Silvia per establir: (a) objectiu mensual de visites (mínim 20/mes), (b) priorització de clients (Autos renovació, FH unipòlissa, RC Empreses perduts), (c) format de reportatge setmanal, (d) recursos que necessita Silvia (rutes, material, suport de Fadoua). Cal un compromís clar i escrit.</p>
+      </div>
+    </div>
+    <div class="rec-c">
+      <div class="rec-n">2</div>
+      <div>
+        <span class="rec-prio h">URGENT · Fadoua</span>
+        <h4>Retenció Autos: llistat + contacte 60 dies</h4>
+        <p>Preparar llistat complet de pòlisses Autos amb renovació en els pròxims 60 dies. Enviar comunicació proactiva i trucar per verificar satisfacció. Prioritzar els que han tingut incidències o que son unipòlissa. Objectiu: reduir la taxa anulació Autos TAM de 18,84% a menys de 16% en Q2.</p>
+      </div>
+    </div>
+    <div class="rec-c">
+      <div class="rec-n">3</div>
+      <div>
+        <span class="rec-prio h">PRIORITAT · Fadoua</span>
+        <h4>Reconquistar els 3 clients RC perduts</h4>
+        <p>Identificar les 3 empreses que han donat de baixa RC al Març. Trucar-les per entendre el motiu de baixa i explorar si hi ha possibilitat de reactivació amb una nova proposta. Les empreses que abandonen sovint ho fan per preu: preparar una contraoferta o package RC + altres productes.</p>
+      </div>
+    </div>
+    <div class="rec-c">
+      <div class="rec-n">4</div>
+      <div>
+        <span class="rec-prio m">ESTRATÈGIC · Dany</span>
+        <h4>Capitalitzar Momentum Autos a Q2</h4>
+        <p>Analitzar per quin motiu Març ha estat tan bo en Autos: temporada? Tipus de client? Canal? Replicar el model en Abril i Maig. Compartir el perfil de client que ha comprat Autos al Març amb Silvia perquè el busqui proactivament al camp. L'objectiu és tenir +10 ops netes Autos cada mes.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESUM FINAL -->
+  <div style="background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 20px;border-top:4px solid var(--col);">
+    <div class="sec-title" style="margin-bottom:8px;">📝 Resum Tancament Q1 — Març 2026</div>
+    <p style="font-family:'Open Sans';font-size:11.5px;color:var(--gray);line-height:1.7;margin-bottom:6px;"><strong style="color:var(--dark)">Març tanca el trimestre amb dos missatges clars:</strong> els Autos han agafat un momentum molt fort (+15 ops netes) i la cartera global del Q1 creix un +28,26% vs any anterior — un resultat molt positiu per a l'agència en el primer any de treball en equip.</p>
+    <p style="font-family:'Open Sans';font-size:11.5px;color:var(--gray);line-height:1.7;margin-bottom:6px;">Però el Q1 ha exposat dues vulnerabilitats estructurals que cal resoldre a Q2: <strong>la falta d'activitat presencial de Silvia (0 visites en 90 dies)</strong> i <strong>l'erosió persistent del FH i la taxa d'anulació creixent</strong>. Sense corregir-les, el Q2 podria veure com el creixement es frenà.</p>
+    <p style="font-family:'Open Sans';font-size:11.5px;color:var(--dark);font-weight:600;line-height:1.7;">Per a Q2: <em>l'equip ha de treballar de forma coordinada en tres fronts: Silvia activa visites, Fadoua gestiona la retenció i el cross-selling, i Dany sistemtatitza els productes d'alta prima unitària (Vida Ahorro, Supl.Gar.) com a motor de resultat mensual</em>. Amb aquest model, el creixement es pot consolidar i millorar.</p>
+  </div>
+
+</div>
+
+<div class="ftr">
+  <div>OPTIMIZART€ 3.0 · Agència #17167 · DAFO Març 2026 · Tancament Q1 · Document intern d'equip</div>
+  <div>Equip: Dany (Gerent) · Silvia (Comercial Extern) · Fadoua (Comercial Intern/Admin)</div>
+</div>
+
+</body>
+</html>

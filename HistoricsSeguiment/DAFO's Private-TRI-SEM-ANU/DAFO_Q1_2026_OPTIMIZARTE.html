@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anàlisi Q1 2026 — OPTIMIZART€ 3.0 | Agència #17167</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #DC0028;
+  --dark: #202020;
+  --gray: #414141;
+  --gray2: #BEBEBE;
+  --gray3: #E7E6E6;
+  --bg: #F5F5F5;
+  --white: #FFFFFF;
+  --green: #16A34A;
+  --amber: #D97706;
+  --blue: #0563C1;
+  --shadow: 0 2px 12px rgba(0,0,0,0.10);
+  --radius: 10px;
+  --jan: #DC0028;
+  --feb: #0563C1;
+  --mar: #16A34A;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Open Sans', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ── HEADER ── */
+.main-header {
+  background: var(--red);
+  color: white;
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.logo-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.5px;
+}
+.logo-text span { color: rgba(255,255,255,0.7); }
+.header-center h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.2;
+}
+.header-center p {
+  font-size: 11px;
+  text-align: center;
+  opacity: 0.85;
+  margin-top: 3px;
+  font-family: 'Inter', sans-serif;
+}
+.header-meta {
+  text-align: right;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  opacity: 0.85;
+  line-height: 1.6;
+}
+.header-meta strong { font-size: 13px; opacity: 1; }
+
+/* ── CONTENIDO ── */
+.content { padding: 28px 40px; max-width: 1300px; margin: 0 auto; }
+
+/* ── SECTION TITLE ── */
+.section-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--red);
+  border-left: 4px solid var(--red);
+  padding-left: 12px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── KPI SUMMARY ROW ── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.kpi-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+  border-top: 3px solid var(--red);
+  text-align: center;
+}
+.kpi-label {
+  font-size: 10px;
+  color: var(--gray);
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.kpi-months {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+.kpi-month {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.kpi-month-label {
+  font-size: 9px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 3px;
+  color: white;
+}
+.kpi-month-label.jan { background: var(--jan); }
+.kpi-month-label.feb { background: var(--feb); }
+.kpi-month-label.mar { background: var(--mar); }
+.kpi-month-val {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--dark);
+}
+.kpi-month-val.neg { color: var(--red); }
+.kpi-month-val.pos { color: var(--green); }
+
+/* ── COMPARISON TABLE ── */
+.comp-table-wrap {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+.comp-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.comp-table th {
+  padding: 10px 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.comp-table th.header-row-0 { background: var(--dark); color: white; text-align: left; }
+.comp-table th.jan-col { background: var(--jan); color: white; text-align: center; }
+.comp-table th.feb-col { background: var(--feb); color: white; text-align: center; }
+.comp-table th.mar-col { background: var(--mar); color: white; text-align: center; }
+.comp-table th.trend-col { background: var(--gray); color: white; text-align: center; }
+.comp-table td {
+  padding: 8px 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  border-bottom: 1px solid var(--gray3);
+  color: var(--dark);
+}
+.comp-table td.label-col {
+  font-weight: 600;
+  color: var(--gray);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  background: #FAFAFA;
+}
+.comp-table td.num-col {
+  text-align: center;
+  font-weight: 600;
+}
+.comp-table td.trend-col {
+  text-align: center;
+  font-size: 16px;
+}
+.comp-table tr.section-row td {
+  background: var(--gray3);
+  font-weight: 700;
+  font-size: 11px;
+  color: var(--dark);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.comp-table tr:last-child td { border-bottom: none; }
+.neg { color: var(--red) !important; }
+.pos { color: var(--green) !important; }
+.warn { color: var(--amber) !important; }
+.trend-up { color: var(--red); }
+.trend-down { color: var(--green); }
+.trend-same { color: var(--gray2); }
+
+/* ── BAR CHART ── */
+.charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.chart-card {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+}
+.chart-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+}
+.bar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.bar-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.bar-item-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  color: var(--gray);
+  width: 50px;
+  flex-shrink: 0;
+  font-weight: 600;
+}
+.bar-track {
+  flex: 1;
+  height: 20px;
+  background: var(--gray3);
+  border-radius: 4px;
+  overflow: visible;
+  position: relative;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 6px;
+  transition: width 0.5s ease;
+  min-width: 4px;
+}
+.bar-val {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  white-space: nowrap;
+}
+.bar-val-outside {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--dark);
+  margin-left: 6px;
+  white-space: nowrap;
+}
+
+/* ── DAFO GRID ── */
+.dafo-section { margin-bottom: 28px; }
+.dafo-months-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.dafo-month-card {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.dafo-month-header {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+}
+.dafo-month-header.jan { background: var(--jan); }
+.dafo-month-header.feb { background: var(--feb); }
+.dafo-month-header.mar { background: var(--mar); }
+.dafo-month-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+}
+.dafo-month-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  opacity: 0.85;
+}
+.dafo-month-badge {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(255,255,255,0.2);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+.dafo-quadrant-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+.dafo-quadrant {
+  padding: 12px 14px;
+  border-right: 1px solid var(--gray3);
+  border-bottom: 1px solid var(--gray3);
+}
+.dafo-quadrant:nth-child(2n) { border-right: none; }
+.dafo-quadrant:nth-child(3),
+.dafo-quadrant:nth-child(4) { border-bottom: none; }
+.dafo-q-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.dafo-q-title.F { color: #16A34A; }
+.dafo-q-title.D { color: #DC0028; }
+.dafo-q-title.O { color: #0563C1; }
+.dafo-q-title.A { color: #D97706; }
+.dafo-q-icon { font-size: 13px; }
+.dafo-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.dafo-list li {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 10.5px;
+  color: var(--gray);
+  padding-left: 10px;
+  position: relative;
+  line-height: 1.4;
+}
+.dafo-list li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 1.1;
+}
+.dafo-list.F li::before { color: #16A34A; }
+.dafo-list.D li::before { color: #DC0028; }
+.dafo-list.O li::before { color: #0563C1; }
+.dafo-list.A li::before { color: #D97706; }
+
+/* ── EVOLUTION SECTION ── */
+.evo-section { margin-bottom: 28px; }
+.evo-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.evo-card {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 16px;
+}
+.evo-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+.evo-trend-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.evo-trend-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  flex: 1;
+}
+.evo-trend-bar-fill {
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+  min-height: 4px;
+}
+.evo-trend-bar-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  color: white;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+.evo-trend-bar-val {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--dark);
+}
+
+/* ── ALERTS SECTION ── */
+.alerts-section { margin-bottom: 28px; }
+.alerts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.alert-card {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 16px;
+  border-left: 4px solid;
+}
+.alert-card.danger { border-color: var(--red); }
+.alert-card.warning { border-color: var(--amber); }
+.alert-card.info { border-color: var(--blue); }
+.alert-card.success { border-color: var(--green); }
+.alert-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.alert-icon { font-size: 16px; }
+.alert-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--dark);
+}
+.alert-body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11px;
+  color: var(--gray);
+  line-height: 1.5;
+}
+.alert-body strong { color: var(--dark); font-weight: 600; }
+
+/* ── RECOMENDACIONES ── */
+.recs-section { margin-bottom: 28px; }
+.recs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.rec-card {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px 18px;
+  display: flex;
+  gap: 14px;
+}
+.rec-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--red);
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.rec-content h4 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 4px;
+}
+.rec-content p {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11px;
+  color: var(--gray);
+  line-height: 1.5;
+}
+.rec-priority {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 3px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.rec-priority.high { background: #FEE2E2; color: #DC0028; }
+.rec-priority.medium { background: #FEF3C7; color: #D97706; }
+.rec-priority.low { background: #DCFCE7; color: #16A34A; }
+
+/* ── BONO SUMMARY ── */
+.bono-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.bono-card {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.bono-header {
+  padding: 10px 16px;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+}
+.bono-header.jan { background: var(--jan); }
+.bono-header.feb { background: var(--feb); }
+.bono-header.mar { background: #888; }
+.bono-body { padding: 12px 16px; }
+.bono-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--gray3);
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+}
+.bono-row:last-child { border-bottom: none; }
+.bono-row-label { color: var(--gray); }
+.bono-row-val { font-weight: 700; color: var(--dark); }
+.bono-row-val.highlight { color: var(--red); font-size: 14px; }
+.bono-level {
+  display: inline-flex;
+  gap: 3px;
+  margin-top: 2px;
+}
+.bono-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--gray3);
+}
+.bono-dot.active { background: var(--red); }
+
+/* ── FOOTER ── */
+.main-footer {
+  background: var(--dark);
+  color: white;
+  padding: 14px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-left {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  opacity: 0.7;
+}
+.footer-right {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+/* ── OCCIDENT LOGO SVG ── */
+.occ-logo { display: flex; align-items: center; gap: 8px; }
+
+/* ── ANNOTATION BADGE ── */
+.month-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  color: white;
+}
+.month-badge.jan { background: var(--jan); }
+.month-badge.feb { background: var(--feb); }
+.month-badge.mar { background: var(--mar); }
+
+/* ── TREND ARROW ── */
+.t-up::after { content: ' ▲'; color: var(--red); font-size: 9px; }
+.t-down::after { content: ' ▼'; color: var(--green); font-size: 9px; }
+.t-eq::after { content: ' ●'; color: var(--gray2); font-size: 9px; }
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px;
+  background: var(--gray3);
+  margin: 4px 0 16px 0;
+}
+
+/* Print */
+@media print {
+  body { background: white; }
+  .chart-card, .dafo-month-card, .alert-card, .rec-card { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="main-header">
+  <div class="header-logo">
+    <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 4 C13 4 7 10 7 17 C7 26 20 36 20 36 C20 36 33 26 33 17 C33 10 27 4 20 4Z" fill="white" opacity="0.9"/>
+      <circle cx="20" cy="17" r="5" fill="#DC0028"/>
+    </svg>
+    <div>
+      <div class="logo-text">OPTIMIZART<span>€</span> 3.0</div>
+      <div style="color:rgba(255,255,255,0.75);font-size:10px;font-family:'Inter',sans-serif;">Agència Occident #17167 · OAG Seg.5</div>
+    </div>
+  </div>
+  <div class="header-center">
+    <h1>ANÀLISI COMERCIAL Q1 2026<br><span style="font-size:14px;font-weight:500;opacity:0.9">DAFO Mensual · Evolució Comparativa · Recomanacions</span></h1>
+    <p>Portal Comercial Agentes Lib + Ficha del Mediador · Dades verificades</p>
+  </div>
+  <div class="header-meta">
+    <strong>Mediador B01819788</strong><br>
+    Supervisor: AN000 · RAA00<br>
+    Gener · Febrer · Març 2026<br>
+    <span style="opacity:0.6">Generat: Abril 2026</span>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- 1. KPI RESUM                                              -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="section-title">📊 KPIs Clau — Comparativa Mensual</div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Ops. Vendes Totals</div>
+      <div class="kpi-months">
+        <div class="kpi-month">
+          <span class="kpi-month-label jan">GEN</span>
+          <span class="kpi-month-val">35</span>
+        </div>
+        <div class="kpi-month">
+          <span class="kpi-month-label feb">FEB</span>
+          <span class="kpi-month-val pos">41</span>
+        </div>
+        <div class="kpi-month">
+          <span class="kpi-month-label mar">MAR</span>
+          <span class="kpi-month-val pos">42</span>
+        </div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Primes Vendes (€)</div>
+      <div class="kpi-months">
+        <div class="kpi-month">
+          <span class="kpi-month-label jan">GEN</span>
+          <span class="kpi-month-val">29.088</span>
+        </div>
+        <div class="kpi-month">
+          <span class="kpi-month-label feb">FEB</span>
+          <span class="kpi-month-val pos">30.952</span>
+        </div>
+        <div class="kpi-month">
+          <span class="kpi-month-label mar">MAR</span>
+          <span class="kpi-month-val neg">22.013</span>
+        </div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Primes Líquides Corr. (€)</div>
+      <div class="kpi-months">
+        <div class="kpi-month">
+          <span class="kpi-month-label jan">GEN</span>
+          <span class="kpi-month-val pos">4.798</span>
+        </div>
+        <div class="kpi-month">
+          <span class="kpi-month-label feb">FEB</span>
+          <span class="kpi-month-val neg">1.148</span>
+        </div>
+        <div class="kpi-month">
+          <span class="kpi-month-label mar">MAR</span>
+          <span class="kpi-month-val neg">968</span>
+        </div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Anulacions / Taxa TAM</div>
+      <div class="kpi-months">
+        <div class="kpi-month">
+          <span class="kpi-month-label jan">GEN</span>
+          <span class="kpi-month-val warn">13,91%</span>
+        </div>
+        <div class="kpi-month">
+          <span class="kpi-month-label feb">FEB</span>
+          <span class="kpi-month-val warn">14,40%</span>
+        </div>
+        <div class="kpi-month">
+          <span class="kpi-month-label mar">MAR</span>
+          <span class="kpi-month-val neg">14,79%</span>
+        </div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Visites Realitzades</div>
+      <div class="kpi-months">
+        <div class="kpi-month">
+          <span class="kpi-month-label jan">GEN</span>
+          <span class="kpi-month-val neg">0/12</span>
+        </div>
+        <div class="kpi-month">
+          <span class="kpi-month-label feb">FEB</span>
+          <span class="kpi-month-val neg">0/9</span>
+        </div>
+        <div class="kpi-month">
+          <span class="kpi-month-label mar">MAR</span>
+          <span class="kpi-month-val neg">0/9</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- 2. TAULA COMPARATIVA                                       -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="section-title">📋 Taula Comparativa Detallada</div>
+  <div class="comp-table-wrap" style="margin-bottom:28px;">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th class="header-row-0" style="width:22%">Indicador</th>
+          <th class="jan-col">Gener 2026</th>
+          <th class="feb-col">Febrer 2026</th>
+          <th class="mar-col">Març 2026</th>
+          <th class="trend-col">Tendència</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="section-row"><td colspan="5">🏢 ACTIVITAT COMERCIAL</td></tr>
+        <tr>
+          <td class="label-col">Total Ops. Vendes</td>
+          <td class="num-col">35</td>
+          <td class="num-col pos">41 <small>(+17%)</small></td>
+          <td class="num-col pos">42 <small>(+2%)</small></td>
+          <td class="num-col trend-col">📈 Positiva</td>
+        </tr>
+        <tr>
+          <td class="label-col">Total Ops. Anulacions</td>
+          <td class="num-col warn">21</td>
+          <td class="num-col warn">23 <small>(+10%)</small></td>
+          <td class="num-col neg">24 <small>(+4%)</small></td>
+          <td class="num-col trend-col">📈 Negativa</td>
+        </tr>
+        <tr>
+          <td class="label-col">Ràtio Venda/Anulació</td>
+          <td class="num-col warn">1,67</td>
+          <td class="num-col warn">1,78</td>
+          <td class="num-col warn">1,75</td>
+          <td class="num-col trend-col">➡️ Estable</td>
+        </tr>
+        <tr>
+          <td class="label-col">Ofertes Enviades</td>
+          <td class="num-col">143</td>
+          <td class="num-col pos">178 <small>(+25%)</small></td>
+          <td class="num-col pos">188 <small>(+6%)</small></td>
+          <td class="num-col trend-col">📈 Positiva</td>
+        </tr>
+        <tr>
+          <td class="label-col">% Efectivitat Ofertes</td>
+          <td class="num-col">24,5%</td>
+          <td class="num-col pos">23,0%</td>
+          <td class="num-col">22,3%</td>
+          <td class="num-col trend-col">📉 Lleugera baixa</td>
+        </tr>
+        <tr>
+          <td class="label-col">% Ofertes ADN</td>
+          <td class="num-col pos">92,59%</td>
+          <td class="num-col warn">87,88%</td>
+          <td class="num-col warn">87,95%</td>
+          <td class="num-col trend-col">📉 Baixa vs Gen</td>
+        </tr>
+        <tr>
+          <td class="label-col">Visites Realitzades</td>
+          <td class="num-col neg">0 / 12</td>
+          <td class="num-col neg">0 / 9</td>
+          <td class="num-col neg">0 / 9</td>
+          <td class="num-col trend-col neg">🚨 Crítica</td>
+        </tr>
+
+        <tr class="section-row"><td colspan="5">💰 PRIMES I LIQUIDACIÓ</td></tr>
+        <tr>
+          <td class="label-col">Primes Vendes SSGG (€)</td>
+          <td class="num-col">10.825</td>
+          <td class="num-col pos">12.009</td>
+          <td class="num-col pos">14.695</td>
+          <td class="num-col trend-col">📈 Positiva</td>
+        </tr>
+        <tr>
+          <td class="label-col">Primes Vendes Vida (€)</td>
+          <td class="num-col pos">18.263</td>
+          <td class="num-col pos">18.943</td>
+          <td class="num-col neg">7.318</td>
+          <td class="num-col trend-col">📉 Caiguda Març</td>
+        </tr>
+        <tr>
+          <td class="label-col">Primes Liq. SSGG Corr. (€)</td>
+          <td class="num-col neg">-9.555</td>
+          <td class="num-col pos">+7.157</td>
+          <td class="num-col pos">+1.228</td>
+          <td class="num-col trend-col">📈 Millora</td>
+        </tr>
+        <tr>
+          <td class="label-col">Primes Liq. Vida Corr. (€)</td>
+          <td class="num-col pos">+14.353</td>
+          <td class="num-col neg">-6.009</td>
+          <td class="num-col neg">-260</td>
+          <td class="num-col trend-col">📉 Negativa</td>
+        </tr>
+        <tr>
+          <td class="label-col"><strong>Primes Liq. TOTALS (€)</strong></td>
+          <td class="num-col pos"><strong>4.798</strong></td>
+          <td class="num-col warn"><strong>1.148</strong></td>
+          <td class="num-col warn"><strong>968</strong></td>
+          <td class="num-col trend-col">📉 Decreixent</td>
+        </tr>
+
+        <tr class="section-row"><td colspan="5">📦 CARTERA I QUALITAT</td></tr>
+        <tr>
+          <td class="label-col">Pòlisses Cartera</td>
+          <td class="num-col">1.602</td>
+          <td class="num-col pos">1.619 <small>(+17)</small></td>
+          <td class="num-col">—</td>
+          <td class="num-col trend-col">📈 Creixent</td>
+        </tr>
+        <tr>
+          <td class="label-col">Clients en Vigor</td>
+          <td class="num-col">836</td>
+          <td class="num-col pos">847</td>
+          <td class="num-col">—</td>
+          <td class="num-col trend-col">📈 Positiva</td>
+        </tr>
+        <tr>
+          <td class="label-col">Clients Unipòlissa</td>
+          <td class="num-col neg">439 (52,5%)</td>
+          <td class="num-col neg">446 (52,7%)</td>
+          <td class="num-col">—</td>
+          <td class="num-col trend-col">🚨 Risc alt</td>
+        </tr>
+        <tr>
+          <td class="label-col">Taxa Anulació TAM</td>
+          <td class="num-col warn">13,91%</td>
+          <td class="num-col warn">14,40%</td>
+          <td class="num-col neg">14,79%</td>
+          <td class="num-col trend-col">🚨 En augment</td>
+        </tr>
+        <tr>
+          <td class="label-col">Taxa Anulació Autos TAM</td>
+          <td class="num-col neg">18,24%</td>
+          <td class="num-col neg">19,16%</td>
+          <td class="num-col neg">18,84%</td>
+          <td class="num-col trend-col">🚨 Molt alta</td>
+        </tr>
+        <tr>
+          <td class="label-col">% Ratio Sense Efecte</td>
+          <td class="num-col warn">12,02%</td>
+          <td class="num-col warn">12,65%</td>
+          <td class="num-col neg">13,10%</td>
+          <td class="num-col trend-col">📉 Empitjora</td>
+        </tr>
+        <tr>
+          <td class="label-col">eClients / % eClient</td>
+          <td class="num-col">372 / 44,5%</td>
+          <td class="num-col pos">383 / 45,2%</td>
+          <td class="num-col">—</td>
+          <td class="num-col trend-col">📈 Positiva</td>
+        </tr>
+
+        <tr class="section-row"><td colspan="5">💼 INGRESSOS I BONOS</td></tr>
+        <tr>
+          <td class="label-col">Facturació Total (€)</td>
+          <td class="num-col pos">92.519</td>
+          <td class="num-col pos">154.661</td>
+          <td class="num-col pos">228.839 (acum)</td>
+          <td class="num-col trend-col">📈 Excellent</td>
+        </tr>
+        <tr>
+          <td class="label-col">Comissió Mensual (€)</td>
+          <td class="num-col">9.968</td>
+          <td class="num-col pos">11.548</td>
+          <td class="num-col pos">12.320</td>
+          <td class="num-col trend-col">📈 Positiva</td>
+        </tr>
+        <tr>
+          <td class="label-col">Bono Liquidat (€)</td>
+          <td class="num-col pos">4.932</td>
+          <td class="num-col warn">4.788</td>
+          <td class="num-col">—</td>
+          <td class="num-col trend-col">📉 Lleuger descens</td>
+        </tr>
+        <tr>
+          <td class="label-col"><strong>Total Ingressos (€)</strong></td>
+          <td class="num-col pos"><strong>15.098</strong></td>
+          <td class="num-col warn"><strong>10.976</strong></td>
+          <td class="num-col">—</td>
+          <td class="num-col trend-col">📉 Baixa feb</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- 3. GRÀFICS EVOLUCIÓ                                        -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="section-title">📈 Evolució Gràfica de KPIs</div>
+  <div class="charts-row">
+
+    <!-- CHART 1: Primes per ramo -->
+    <div class="chart-card">
+      <div class="chart-title">Primes de Venda per Ramo (€) — 3 mesos</div>
+      <!-- Hogar -->
+      <div class="bar-group">
+        <div style="font-family:'Inter';font-size:10px;font-weight:700;color:var(--gray);margin-bottom:4px;">🏠 HOGAR / FH</div>
+        <div class="bar-item">
+          <div class="bar-item-label">Gen</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:10%;background:var(--jan);">
+              <span class="bar-val" style="font-size:9px;">1.789</span>
+            </div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-item-label">Feb</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:19%;background:var(--feb);">
+              <span class="bar-val" style="font-size:9px;">3.296</span>
+            </div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-item-label">Mar</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:14%;background:var(--mar);">
+              <span class="bar-val" style="font-size:9px;">2.501</span>
+            </div>
+          </div>
+        </div>
+        <div style="font-family:'Inter';font-size:10px;font-weight:700;color:var(--gray);margin:8px 0 4px 0;">🚗 AUTOS</div>
+        <div class="bar-item">
+          <div class="bar-item-label">Gen</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:18%;background:var(--jan);">
+              <span class="bar-val" style="font-size:9px;">3.236</span>
+            </div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-item-label">Feb</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:17%;background:var(--feb);">
+              <span class="bar-val" style="font-size:9px;">3.060</span>
+            </div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-item-label">Mar</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:51%;background:var(--mar);">
+              <span class="bar-val">9.221 🔥</span>
+            </div>
+          </div>
+        </div>
+        <div style="font-family:'Inter';font-size:10px;font-weight:700;color:var(--gray);margin:8px 0 4px 0;">💙 VIDA (Temporal+Ahorro+Supl)</div>
+        <div class="bar-item">
+          <div class="bar-item-label">Gen</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:100%;background:var(--jan);">
+              <span class="bar-val">18.263 🏆</span>
+            </div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-item-label">Feb</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:100%;background:var(--feb);">
+              <span class="bar-val">18.943 🏆</span>
+            </div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-item-label">Mar</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:40%;background:var(--mar);">
+              <span class="bar-val">7.318</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHART 2: Primes Liq correg -->
+    <div class="chart-card">
+      <div class="chart-title">Primes Líquides Corregides (€) — SSGG vs Vida</div>
+      <div class="bar-group">
+        <div style="font-family:'Inter';font-size:10px;font-weight:700;color:var(--gray);margin-bottom:4px;">SSGG — Primes Liq. Corregides</div>
+
+        <!-- SSGG January NEGATIVE -->
+        <div class="bar-item">
+          <div class="bar-item-label">Gen SSGG</div>
+          <div class="bar-track" style="background:#FEE2E2;">
+            <div class="bar-fill" style="width:100%;background:#DC0028cc;">
+              <span class="bar-val">-9.555 🔴</span>
+            </div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-item-label">Feb SSGG</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:77%;background:var(--feb);">
+              <span class="bar-val">+7.157</span>
+            </div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-item-label">Mar SSGG</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:13%;background:var(--mar);">
+              <span class="bar-val" style="font-size:9px">+1.228</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="font-family:'Inter';font-size:10px;font-weight:700;color:var(--gray);margin:10px 0 4px 0;">VIDA — Primes Liq. Corregides</div>
+        <div class="bar-item">
+          <div class="bar-item-label">Gen Vida</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:100%;background:var(--jan);">
+              <span class="bar-val">+14.353 🏆</span>
+            </div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-item-label">Feb Vida</div>
+          <div class="bar-track" style="background:#FEE2E2;">
+            <div class="bar-fill" style="width:42%;background:#DC0028cc;">
+              <span class="bar-val">-6.009 🔴</span>
+            </div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-item-label">Mar Vida</div>
+          <div class="bar-track" style="background:#FEE2E2;">
+            <div class="bar-fill" style="width:3%;background:#DC0028cc;">
+            </div>
+            <span class="bar-val-outside">-260</span>
+          </div>
+        </div>
+
+        <div style="font-family:'Inter';font-size:10px;font-weight:700;color:var(--gray);margin:10px 0 4px 0;">TOTAL Primes Líq. Corregides</div>
+        <div class="bar-item">
+          <div class="bar-item-label">Gen Total</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:50%;background:var(--jan);">
+              <span class="bar-val">4.798</span>
+            </div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-item-label">Feb Total</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:12%;background:var(--feb);">
+              <span class="bar-val" style="font-size:9px;">1.148</span>
+            </div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-item-label">Mar Total</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:10%;background:var(--mar);">
+              <span class="bar-val" style="font-size:9px;">968</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- 4. BONOS                                                   -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="section-title">🏅 Seguiment Bonos</div>
+  <div class="bono-grid">
+    <div class="bono-card">
+      <div class="bono-header jan">Bono Gener 2026</div>
+      <div class="bono-body">
+        <div class="bono-row"><span class="bono-row-label">Primes Vdes. SSGG</span><span class="bono-row-val">13.713 €</span></div>
+        <div class="bono-row"><span class="bono-row-label">Primes Vdes. Vida+CoSalud</span><span class="bono-row-val">9.202 €</span></div>
+        <div class="bono-row"><span class="bono-row-label">Total Vendes</span><span class="bono-row-val">22.915 €</span></div>
+        <div class="bono-row"><span class="bono-row-label">Primes Devengades</span><span class="bono-row-val">92.519 €</span></div>
+        <div class="bono-row"><span class="bono-row-label">Comissió</span><span class="bono-row-val">9.968 €</span></div>
+        <div class="bono-row"><span class="bono-row-label">Nivell Bono</span><span class="bono-row-val"><div class="bono-level"><span class="bono-dot active"></span><span class="bono-dot active"></span><span class="bono-dot active"></span></div> Nivell 3</span></div>
+        <div class="bono-row"><span class="bono-row-label">Corrector Temporal (2 ops)</span><span class="bono-row-val neg">50% —197€</span></div>
+        <div class="bono-row"><span class="bono-row-label">Bono Liquidat</span><span class="bono-row-val">4.932 €</span></div>
+        <div class="bono-row"><span class="bono-row-label">Extra Bono FH</span><span class="bono-row-val">197 €</span></div>
+        <div class="bono-row"><span class="bono-row-label"><strong>TOTAL INGRESSOS</strong></span><span class="bono-row-val highlight"><strong>15.098 €</strong></span></div>
+      </div>
+    </div>
+    <div class="bono-card">
+      <div class="bono-header feb">Bono Febrer 2026</div>
+      <div class="bono-body">
+        <div class="bono-row"><span class="bono-row-label">Primes Vdes. SSGG</span><span class="bono-row-val">14.767 €</span></div>
+        <div class="bono-row"><span class="bono-row-label">Primes Vdes. Vida+CoSalud</span><span class="bono-row-val">14.023 €</span></div>
+        <div class="bono-row"><span class="bono-row-label">Total Vendes</span><span class="bono-row-val">28.790 €</span></div>
+        <div class="bono-row"><span class="bono-row-label">Primes Devengades</span><span class="bono-row-val neg">62.142 € ⚠️</span></div>
+        <div class="bono-row"><span class="bono-row-label">Comissió</span><span class="bono-row-val neg">5.938 € ⬇️</span></div>
+        <div class="bono-row"><span class="bono-row-label">Nivell Bono</span><span class="bono-row-val"><div class="bono-level"><span class="bono-dot active"></span><span class="bono-dot active"></span><span class="bono-dot active"></span></div> Nivell 3</span></div>
+        <div class="bono-row"><span class="bono-row-label">Corrector Temporal (1 op)</span><span class="bono-row-val warn">50% —0€</span></div>
+        <div class="bono-row"><span class="bono-row-label">Bono Liquidat</span><span class="bono-row-val">4.788 €</span></div>
+        <div class="bono-row"><span class="bono-row-label">Extra Bono FH</span><span class="bono-row-val pos">250 €</span></div>
+        <div class="bono-row"><span class="bono-row-label"><strong>TOTAL INGRESSOS</strong></span><span class="bono-row-val warn"><strong>10.976 €</strong></span></div>
+      </div>
+    </div>
+    <div class="bono-card">
+      <div class="bono-header" style="background:#888;">Indicadors Acumulats Q1 2026</div>
+      <div class="bono-body">
+        <div class="bono-row"><span class="bono-row-label">Primes Facturades SSGG</span><span class="bono-row-val pos">143.773 € (+7,97%)</span></div>
+        <div class="bono-row"><span class="bono-row-label">Primes Facturades Vida</span><span class="bono-row-val pos">85.066 € (+28,9%)</span></div>
+        <div class="bono-row"><span class="bono-row-label">Total Facturació</span><span class="bono-row-val pos">228.839 €</span></div>
+        <div class="bono-row"><span class="bono-row-label">Creix. % Pòlisses vs AA</span><span class="bono-row-val pos">+28,26% 🏆</span></div>
+        <div class="bono-row"><span class="bono-row-label">Comissions acumulades</span><span class="bono-row-val pos">37.661 €</span></div>
+        <div class="bono-row"><span class="bono-row-label">Bonos TAM</span><span class="bono-row-val pos">~110.111 €</span></div>
+        <div class="bono-row"><span class="bono-row-label">Offers acumulades 2026</span><span class="bono-row-val pos">509 (+14,4% vs AA)</span></div>
+        <div class="bono-row"><span class="bono-row-label">Ops Vendes acumulades</span><span class="bono-row-val pos">118 ops</span></div>
+        <div class="bono-row"><span class="bono-row-label">Tasa Anulació TAM actual</span><span class="bono-row-val neg">14,79% ⬆️</span></div>
+        <div class="bono-row"><span class="bono-row-label"><strong>CREIXEMENT FACTURACIÓ</strong></span><span class="bono-row-val highlight"><strong>+14,91%</strong></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- 5. DAFO PER MES                                            -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="section-title">🧭 DAFO Mensual — Diagnòstic Estratègic</div>
+  <div class="dafo-months-grid">
+
+    <!-- DAFO GENER -->
+    <div class="dafo-month-card">
+      <div class="dafo-month-header jan">
+        <div>
+          <div class="dafo-month-title">Gener 2026</div>
+          <div class="dafo-month-subtitle">35 ops · 29.088€ primes · 21 anulacions</div>
+        </div>
+        <div class="dafo-month-badge">Bono Niv.3 · 15.098€</div>
+      </div>
+      <div class="dafo-quadrant-grid">
+        <div class="dafo-quadrant">
+          <div class="dafo-q-title F"><span class="dafo-q-icon">💪</span> Fortaleses</div>
+          <ul class="dafo-list F">
+            <li>Vida excepcional: +14.353€ liq. corr. (Supl.Gar. 7.000€ + Ahorro 6.000€)</li>
+            <li>ADN ofertes al 92,59% — excel·lent alineació producte</li>
+            <li>Ofertes +36% vs any anterior (143 vs 105)</li>
+            <li>Facturació total +32,95% vs mes anterior</li>
+            <li>Bono Niv.3 assolit + Extra FH 197€</li>
+          </ul>
+        </div>
+        <div class="dafo-quadrant">
+          <div class="dafo-q-title D"><span class="dafo-q-icon">⚠️</span> Debilitats</div>
+          <ul class="dafo-list D">
+            <li>SSGG liq. corr. negatiu: -9.555€ (anulacions superen vendes)</li>
+            <li>Hogar: 9 baixes vs 8 altes → saldo -1.809€</li>
+            <li>Comunitats: 1 baixa -5.088€, 0 vendes efectives</li>
+            <li>ZERO visites comercials (0/12 planificades)</li>
+            <li>52,5% clients unipòlissa → risc fuga elevat</li>
+            <li>Taxa anul. Autos TAM 18,24% → molt alta</li>
+          </ul>
+        </div>
+        <div class="dafo-quadrant">
+          <div class="dafo-q-title O"><span class="dafo-q-icon">🎯</span> Oportunitats</div>
+          <ul class="dafo-list O">
+            <li>439 clients unipòlissa = target venda creuada immediata</li>
+            <li>Cartera de 1.602 pòlisses actives — gran base</li>
+            <li>Momentum Vida Ahorro i Salut actiu</li>
+            <li>Gener: inici d'any = renovació natural de pòlisses</li>
+            <li>Espai per activar RC i Comercios (0 vendes)</li>
+          </ul>
+        </div>
+        <div class="dafo-quadrant">
+          <div class="dafo-q-title A"><span class="dafo-q-icon">🔴</span> Amenaces</div>
+          <ul class="dafo-list A">
+            <li>Tendència alcista anulacions Autos — risc cartera 531 pòlisses</li>
+            <li>Hogar en negatiu persistent: cartera no creix</li>
+            <li>Sense activitat comercial presencial = sense fidelització</li>
+            <li>Corrector bono Temporal (2 ops, -50%) penalitza ingressos</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAFO FEBRER -->
+    <div class="dafo-month-card">
+      <div class="dafo-month-header feb">
+        <div>
+          <div class="dafo-month-title">Febrer 2026</div>
+          <div class="dafo-month-subtitle">41 ops · 30.952€ primes · 23 anulacions</div>
+        </div>
+        <div class="dafo-month-badge">Bono Niv.3 · 10.976€</div>
+      </div>
+      <div class="dafo-quadrant-grid">
+        <div class="dafo-quadrant">
+          <div class="dafo-q-title F"><span class="dafo-q-icon">💪</span> Fortaleses</div>
+          <ul class="dafo-list F">
+            <li>Millor mes del trimestre per ops: 41 (+17% vs gen)</li>
+            <li>Vida Ahorro explosiu: 10 ops garantitzades +10.782€ liq</li>
+            <li>SSGG torna a positiu: +7.157€ liq. correg.</li>
+            <li>Cartera creix: +17 pòlisses (1.619)</li>
+            <li>Extra Bono FH millora: 250€</li>
+            <li>Facturació acumulada +22,89% vs any anterior</li>
+          </ul>
+        </div>
+        <div class="dafo-quadrant">
+          <div class="dafo-q-title D"><span class="dafo-q-icon">⚠️</span> Debilitats</div>
+          <ul class="dafo-list D">
+            <li>Vida Temporal: 5 anulacions vs 1 venda → -3.094€ saldo</li>
+            <li>Salut: 1 venda, 1 anulació → neutre negatiu (-973€)</li>
+            <li>Total liq. corregit cau a 1.148€ (vs 4.798€ gen)</li>
+            <li>ZERO visites (0/9) — 2n mes consecutiu</li>
+            <li>Tasa anulació Autos: 19,16% → màxim del trimestre</li>
+            <li>Primes devengades cauen: 62.142€ vs 92.519€ (gen)</li>
+          </ul>
+        </div>
+        <div class="dafo-quadrant">
+          <div class="dafo-q-title O"><span class="dafo-q-icon">🎯</span> Oportunitats</div>
+          <ul class="dafo-list O">
+            <li>Momentum Vida Ahorro: replicable en mar/abr</li>
+            <li>446 unipòlisses = target immediat cross-selling</li>
+            <li>eClients creix (45,22%) → canal digital operatiu</li>
+            <li>Autos: 9 emissions actives → bon ritme emissió</li>
+            <li>Supl.Garantitzat actiu: 3 ops 4.957€</li>
+          </ul>
+        </div>
+        <div class="dafo-quadrant">
+          <div class="dafo-q-title A"><span class="dafo-q-icon">🔴</span> Amenaces</div>
+          <ul class="dafo-list A">
+            <li>Vida Temporal en sagnat: 5 baixes/1 alta → risc cartera 90 pòlisses</li>
+            <li>Autos en màxim anulació TAM (19,16%) — cartera 533 pòlisses en risc</li>
+            <li>Comunitats: anulació -5.088€ sense substitució</li>
+            <li>Comissió mensual cau a 5.938€ (vs 9.968€ gen)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAFO MARÇ -->
+    <div class="dafo-month-card">
+      <div class="dafo-month-header mar">
+        <div>
+          <div class="dafo-month-title">Març 2026</div>
+          <div class="dafo-month-subtitle">42 ops · 22.013€ primes · 24 anulacions</div>
+        </div>
+        <div class="dafo-month-badge">Liq. Corr. 968€ · Max anulació</div>
+      </div>
+      <div class="dafo-quadrant-grid">
+        <div class="dafo-quadrant">
+          <div class="dafo-q-title F"><span class="dafo-q-icon">💪</span> Fortaleses</div>
+          <ul class="dafo-list F">
+            <li>Autos: millor mes del trimestre — 15 ops liq., +6.895€</li>
+            <li>42 ops = quasi màxim del trimestre (≈feb)</li>
+            <li>Acumulat pòlisses +28,26% vs any anterior 🏆</li>
+            <li>Facturació acumulada 228.839€ (+14,91%)</li>
+            <li>Supl. Garantitzat potent: 4.586€ (1 op)</li>
+            <li>Vida Ahorro: +2.239€ garantitzat</li>
+          </ul>
+        </div>
+        <div class="dafo-quadrant">
+          <div class="dafo-q-title D"><span class="dafo-q-icon">⚠️</span> Debilitats</div>
+          <ul class="dafo-list D">
+            <li>Primes liq. corr. al mínim: 968€ — signe d'alerta</li>
+            <li>FH: 12 anulacions vs 11 vendes → saldo -928€</li>
+            <li>RC Empreses: 3 baixes, 0 altes → -556€ cartera</li>
+            <li>Decesos: 1 baixa, 0 alta → -211€</li>
+            <li>Temporal: -354€ (persisteix la tendència feb)</li>
+            <li>ZERO visites — 3r mes consecutiu sense presència</li>
+            <li>Ratio Sense Efecte màxim: 13,10%</li>
+          </ul>
+        </div>
+        <div class="dafo-quadrant">
+          <div class="dafo-q-title O"><span class="dafo-q-icon">🎯</span> Oportunitats</div>
+          <ul class="dafo-list O">
+            <li>Autos amb momentum fort → capitalitzar en Q2</li>
+            <li>RC Empreses: 3 baixes indiquen clients actius a reconquistar</li>
+            <li>Inici primavera = temporada forta nous vehicles/hogar</li>
+            <li>Comissions mensuals creixents: 12.320€ (màxim trimestre)</li>
+            <li>Vida Ahorro amb producte 4.586€ → alta prima unitària</li>
+          </ul>
+        </div>
+        <div class="dafo-quadrant">
+          <div class="dafo-q-title A"><span class="dafo-q-icon">🔴</span> Amenaces</div>
+          <ul class="dafo-list A">
+            <li>Taxa anulació TAM al màxim del trimestre: 14,79%</li>
+            <li>FH en negatiu 3 mesos consecutius → erosió cartera hogar</li>
+            <li>Sense activitat comercial = dependència de vendes inbounds</li>
+            <li>RC Empreses en caiguda → pèrdua segment empresarial</li>
+            <li>3 mesos sense visites = deteriorament relació client</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- 6. ALERTES CRÍTIQUES                                       -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="section-title" style="margin-top:28px;">🚨 Alertes i Punts d'Atenció</div>
+  <div class="alerts-grid">
+    <div class="alert-card danger">
+      <div class="alert-header">
+        <span class="alert-icon">🔴</span>
+        <div class="alert-title">Taxa Anulació Autos en Màxim Crític</div>
+      </div>
+      <div class="alert-body">
+        La taxa TAM Autos ha passat de <strong>18,24% (gen)</strong> a <strong>19,16% (feb)</strong> i <strong>18,84% (mar)</strong>. Amb <strong>531–533 pòlisses</strong> en cartera, representa un risc de pèrdua mensual persistent. Cal analitzar per agent i col·lectiu les causes (preus, servei, competència) i activar un pla de retenció específic per a renovacions.
+      </div>
+    </div>
+    <div class="alert-card danger">
+      <div class="alert-header">
+        <span class="alert-icon">🚫</span>
+        <div class="alert-title">Zero Visites Comercials — 3 Mesos Consecutius</div>
+      </div>
+      <div class="alert-body">
+        S'han planificat <strong>30 visites entre gen-mar</strong> i s'han realitzat <strong>0</strong>. Impacte directe en fidelització, venda creuada i retenció. L'any 2025 es van fer 320 visites (71,75% de compliment). El 2026 el compliment és <strong>0%</strong>. Activar immediatament activitat comercial presencial és la prioritat número 1.
+      </div>
+    </div>
+    <div class="alert-card danger">
+      <div class="alert-header">
+        <span class="alert-icon">⚠️</span>
+        <div class="alert-title">52,7% Clients Unipòlissa — Risc de Fuga Elevat</div>
+      </div>
+      <div class="alert-body">
+        <strong>446 de 847 clients</strong> (febrer) només tenen 1 pòlissa. Radi/Cliente = 1,91 (decreixent des de 2,02 el 2024). Clients unipòlissa abandonen amb molta més facilitat: basta 1 sola cotització d'un competidor. Cada client vinculat amb 2+ pòlisses té una taxa de retenció superior al 80%.
+      </div>
+    </div>
+    <div class="alert-card warning">
+      <div class="alert-header">
+        <span class="alert-icon">📉</span>
+        <div class="alert-title">Vida Temporal en Sangrat — Cartera en Risc</div>
+      </div>
+      <div class="alert-body">
+        Febrer: <strong>5 anulacions vs 1 venda</strong> (-3.094€ liq.). Març: 1 anulació addicional. La cartera de <strong>90 pòlisses de Vida Temporal</strong> (febrer) perd ritme. Cal revisar si és concentració de venciments, preus no competitius o manca de seguiment de renovació.
+      </div>
+    </div>
+    <div class="alert-card warning">
+      <div class="alert-header">
+        <span class="alert-icon">🏠</span>
+        <div class="alert-title">Hogar Negatiu 3 Mesos Consecutius</div>
+      </div>
+      <div class="alert-body">
+        Gen: -1.809€ · Feb: -321€ · Mar: -928€. La cartera de <strong>425-431 pòlisses Hogar</strong> té més baixes que altes els 3 mesos. Esfuerzo de Ventas FH: <strong>21,56%</strong> efectivitat vendes (baix). Amb 97 ofertes enviades al Q1 en FH, cal revisar el procés de seguiment d'ofertes i propostes de valor vs competència.
+      </div>
+    </div>
+    <div class="alert-card success">
+      <div class="alert-header">
+        <span class="alert-icon">🏆</span>
+        <div class="alert-title">Creixement Facturat Excellent — Facturació +14,91%</div>
+      </div>
+      <div class="alert-body">
+        Total facturat acumulat <strong>228.839€ (+14,91%)</strong> confirma que la cartera global creix. El creixement de pòlisses és del <strong>+28,26% vs any anterior</strong>. Els Bonos TAM han crescut des de <strong>341.303€ (2023)</strong> fins a <strong>~473.689€ (2025)</strong> — trajectòria excel·lent que cal preservar i accelerar.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- 7. RECOMANACIONS                                           -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="section-title" style="margin-top:28px;">✅ Recomanacions Estratègiques — Supervisor Comercial</div>
+  <div class="recs-grid">
+    <div class="rec-card">
+      <div class="rec-num">1</div>
+      <div class="rec-content">
+        <span class="rec-priority high">URGENT · Prioritat Màxima</span>
+        <h4>Pla de Visites Comercials Immediat</h4>
+        <p>Activar agenda de visites per la SF (comercial extern) dirigida als <strong>446 clients unipòlissa</strong> prioritzant els de prima anual >300€. Proposar un objectiu de <strong>20 visites/mes</strong> amb fòcus en detecció d'oportunitats FH, Salut i Vida. L'any 2024 es van realitzar 320 visites (82,63% compliment) — recuperar aquest nivell és crític.</p>
+      </div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-num">2</div>
+      <div class="rec-content">
+        <span class="rec-priority high">URGENT · Prioritat Alta</span>
+        <h4>Pla de Retenció Autos TAM</h4>
+        <p>Amb taxa anulació Autos >18%, cal activar un protocol de contacte preventiu <strong>60 dies abans del venciment</strong> per a tota la cartera Autos (531 pòlisses). Proposta: revisar si la causa és competitivitat de primes, sinistralitat o servei. Alternativa: crear una oferta de pack Autos + PJ Familiar (producte amb alta retenció) per als clients en risc.</p>
+      </div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-num">3</div>
+      <div class="rec-content">
+        <span class="rec-priority high">PRIORITAT ALTA</span>
+        <h4>Campanya Venda Creuada Clients Unipòlissa</h4>
+        <p>Dissenyar una acció comercial específica per als <strong>446 clients amb 1 sola pòlissa</strong>: (a) mailing personalitzat per ramo actual → proposta de segon producte complementari; (b) trucades de seguiment per la FK (comercial intern); (c) objectiu: convertir <strong>20% en clients multipòlissa</strong> en Q2. Cada client vinculat val ~3x més en retenció.</p>
+      </div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-num">4</div>
+      <div class="rec-content">
+        <span class="rec-priority medium">PRIORITAT MITJA</span>
+        <h4>Revisar Estratègia Vida Temporal</h4>
+        <p>Febrer va tenir 5 anulacions vs 1 venda en Temporal. Cal verificar: (a) hi ha venciments naturals concentrats? (b) la competència ofereix primes millors? (c) el seguiment de renovació és actiu? Implementar un <strong>procés de renovació proactiva</strong> 90 dies abans del venciment amb revisió de capital + prima. La cartera de 90 pòlisses (86 al febrer) és estratègica per ingressos Vida.</p>
+      </div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-num">5</div>
+      <div class="rec-content">
+        <span class="rec-priority medium">PRIORITAT MITJA</span>
+        <h4>Activar Segment RC Empreses i Comercios</h4>
+        <p>Març va tenir 3 baixes en RC sense cap alta nova. Hogar Comercios també mostra primes negatives. Cal identificar els clients empresarials que han causat baixa i contactar-los activament. A més, el ramo RC és estratègic per a bonos i diversificació. Recomanació: la FK hauria de fer un seguiment telefònic mensual del segment empresarial amb propostes actives.</p>
+      </div>
+    </div>
+    <div class="rec-card">
+      <div class="rec-num">6</div>
+      <div class="rec-content">
+        <span class="rec-priority low">PRIORITAT ESTRATÈGICA</span>
+        <h4>Capitalitzar Momentum Autos i Vida Ahorro</h4>
+        <p>Autos va tancar març amb <strong>+6.895€ líquides i 15 ops netes</strong> — el millor del trimestre. Vida Ahorro va generar <strong>+10.782€</strong> en febrer. Cal assignar quota mensual explícita per a aquests dos ramos a cadascun dels comercials i fer seguiment setmanal. El Supl.Garantitzat (1 op = 4.586€ prima) mostra que la prima unitària alta és assolible.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- 8. RESUM EXECUTIU                                          -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div style="background:white;border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 24px;margin-top:28px;border-top:4px solid var(--red);">
+    <div class="section-title" style="margin-bottom:12px;">📝 Resum Executiu Q1 2026</div>
+    <p style="font-family:'Open Sans',sans-serif;font-size:12px;color:var(--gray);line-height:1.7;margin-bottom:10px;">
+      <strong style="color:var(--dark)">El trimestre mostra un perfil dual:</strong> una cartera en creixement sòlid (+28,26% pòlisses, +14,91% facturació) que conviu amb una erosió preocupant de la qualitat operativa. Les primes líquides corregides cauen mes a mes (4.798€ → 1.148€ → 968€), la taxa d'anulació puja ininterrompudament i no s'ha realitzat cap visita comercial en 90 dies.
+    </p>
+    <p style="font-family:'Open Sans',sans-serif;font-size:12px;color:var(--gray);line-height:1.7;margin-bottom:10px;">
+      <strong style="color:var(--dark)">El punt de força principal és Vida Ahorro</strong> (especialment gener i febrer) i Autos en març. La venda de productes d'alta prima unitària (Supl.Garantitzat, Ahorro Creixent) demostra capacitat comercial rellevant que cal sistematitzar.
+    </p>
+    <p style="font-family:'Open Sans',sans-serif;font-size:12px;color:var(--dark);line-height:1.7;font-weight:600;">
+      La prioritat absoluta per a Q2 és: (1) recuperar l'activitat de visites comercials, (2) activar el pla de retenció Autos, i (3) convertir clients unipòlissa en multipòlissa. Si s'aconsegueix mantenir el creixement de cartera i reduir la taxa d'anulació Autos de 18,84% a <16%, el bono anual millorarà significativament.
+    </p>
+  </div>
+
+</div><!-- /content -->
+
+<!-- FOOTER -->
+<div class="main-footer">
+  <div class="footer-left">
+    OPTIMIZART€ 3.0 SCO · Agència Occident #17167 · OAG Delegació Segm5 · B01819788<br>
+    Informe generat per ús intern de gestió comercial. Dades extretes del Portal Comercial Occident.
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <svg width="28" height="28" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 4 C13 4 7 10 7 17 C7 26 20 36 20 36 C20 36 33 26 33 17 C33 10 27 4 20 4Z" fill="#DC0028"/>
+      <circle cx="20" cy="17" r="5" fill="white"/>
+    </svg>
+    <div class="footer-right" style="text-align:right;">
+      Occident · Agència #17167<br>
+      Canal OAG · Supervisió AN000/RAA00
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

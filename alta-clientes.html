@@ -7,37 +7,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --red: #DC0028;
-  --red-l: #FF1A3C;
-  --red-bg: rgba(220,0,40,.06);
-  --dark: #202020;
-  --gray: #414141;
-  --gray2: #BEBEBE;
-  --gray3: #F0F1F4;
-  --white: #FFF;
-  --border: #E0E2EA;
-  --shadow: 0 2px 12px rgba(0,0,0,.08);
-  --radius: 10px;
+  --red: #DC0028; --red-l: #FF1A3C; --red-bg: rgba(220,0,40,.06);
+  --dark: #202020; --gray: #414141; --gray2: #BEBEBE; --gray3: #F0F1F4;
+  --white: #FFF; --border: #E0E2EA;
+  --shadow: 0 2px 12px rgba(0,0,0,.08); --radius: 10px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{background:#F2F3F7;font-family:'Inter',sans-serif;font-size:14px;color:var(--dark);min-height:100vh}
 
-/* ── HEADER ── */
+/* HEADER */
 .page-hdr{background:var(--white);border-bottom:1px solid var(--border);padding:0 32px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 6px rgba(0,0,0,.06)}
 .logo{display:flex;align-items:center;gap:10px}
 .logo-box{width:34px;height:34px;background:var(--red);border-radius:8px;display:grid;place-items:center;font-family:'Poppins',sans-serif;font-weight:800;font-size:14px;color:#fff}
 .logo-name{font-family:'Poppins',sans-serif;font-weight:700;font-size:15px;color:var(--dark)}
 .logo-sub{font-size:10px;color:var(--gray2);letter-spacing:.5px;text-transform:uppercase;margin-top:-2px}
-.hdr-actions{display:flex;align-items:center;gap:10px}
 .hdr-badge{background:var(--red-bg);border:1px solid rgba(220,0,40,.2);border-radius:6px;padding:4px 12px;font-size:11.5px;color:var(--red);font-weight:600}
 
-/* ── LAYOUT ── */
+/* LAYOUT */
 .page-wrap{max-width:880px;margin:0 auto;padding:28px 16px 60px}
 .page-title{margin-bottom:24px}
 .page-title h1{font-family:'Poppins',sans-serif;font-size:22px;font-weight:800;color:var(--dark);letter-spacing:-.3px}
 .page-title p{font-size:13px;color:var(--gray);margin-top:4px}
 
-/* ── CARD ── */
+/* CARD */
 .card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);margin-bottom:20px;overflow:hidden}
 .card-hdr{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,#fafafa 0%,#fff 100%)}
 .card-icon{width:32px;height:32px;border-radius:7px;display:grid;place-items:center;font-size:16px;flex-shrink:0}
@@ -45,82 +37,174 @@ body{background:#F2F3F7;font-family:'Inter',sans-serif;font-size:14px;color:var(
 .card-hdr p{font-size:11px;color:var(--gray2);margin-top:1px}
 .card-body{padding:20px}
 
-/* ── TIPO SELECTOR ── */
+/* TIPO SELECTOR */
 .tipo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.tipo-opt{border:2px solid var(--border);border-radius:10px;padding:14px 12px;cursor:pointer;transition:all .15s;text-align:center;position:relative;background:var(--white)}
+.tipo-opt{border:2px solid var(--border);border-radius:10px;padding:14px 12px;cursor:pointer;transition:all .15s;text-align:center;position:relative;background:var(--white);user-select:none}
 .tipo-opt:hover{border-color:var(--gray2)}
 .tipo-opt.active{border-color:var(--red);background:var(--red-bg)}
 .tipo-opt input{position:absolute;opacity:0;width:0;height:0}
 .tipo-icon{font-size:24px;display:block;margin-bottom:6px}
 .tipo-label{font-size:12px;font-weight:700;color:var(--dark);display:block;font-family:'Poppins',sans-serif}
 .tipo-desc{font-size:10.5px;color:var(--gray);margin-top:2px;display:block;line-height:1.4}
+.tipo-radio{position:absolute;top:8px;right:8px;width:16px;height:16px;border-radius:50%;border:2px solid var(--border);background:white;transition:all .15s;display:grid;place-items:center}
+.tipo-radio::after{content:'';width:8px;height:8px;border-radius:50%;background:transparent;transition:background .15s}
+.tipo-opt.active .tipo-radio{border-color:var(--red)}
+.tipo-opt.active .tipo-radio::after{background:var(--red)}
 
-/* ── FIELDS ── */
+/* FIELDS */
 .field-grid{display:grid;gap:14px}
-.g2{grid-template-columns:1fr 1fr}
-.g3{grid-template-columns:1fr 1fr 1fr}
-.g4{grid-template-columns:1fr 1fr 1fr 1fr}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}.g4{grid-template-columns:repeat(4,1fr)}
 @media(max-width:600px){.g2,.g3,.g4{grid-template-columns:1fr}}
 .field{display:flex;flex-direction:column;gap:5px}
 .field label{font-size:11.5px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.4px}
 .field label .req{color:var(--red);margin-left:2px}
-.field input,.field select,.field textarea{
-  border:1.5px solid var(--border);border-radius:7px;padding:9px 12px;
-  font-size:13px;font-family:'Inter',sans-serif;color:var(--dark);
-  background:var(--white);transition:border-color .12s,box-shadow .12s;
-  width:100%
-}
-.field input:focus,.field select:focus,.field textarea:focus{
-  outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(220,0,40,.08)
-}
+.field input,.field select,.field textarea{border:1.5px solid var(--border);border-radius:7px;padding:9px 12px;font-size:13px;font-family:'Inter',sans-serif;color:var(--dark);background:var(--white);transition:border-color .12s,box-shadow .12s;width:100%}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(220,0,40,.08)}
 .field input::placeholder,.field textarea::placeholder{color:var(--gray2)}
 .field textarea{resize:vertical;min-height:72px}
 .field select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23BEBEBE' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
 .field-hint{font-size:10.5px;color:var(--gray2);margin-top:2px}
 
-/* ── SEGUROS ── */
-.seguros-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
-.seg-opt{border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:8px}
-.seg-opt:hover{border-color:var(--gray2)}
-.seg-opt.active{border-color:var(--red);background:var(--red-bg)}
-.seg-opt input{width:15px;height:15px;accent-color:var(--red);flex-shrink:0}
-.seg-icon{font-size:16px;flex-shrink:0}
-.seg-label{font-size:12px;font-weight:500;color:var(--dark)}
+/* SEXO SELECTOR */
+.sexo-selector{display:flex;gap:14px;align-items:center}
+.sexo-btn{border:none;border-radius:0;padding:4px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;background:transparent;transition:opacity .15s}
+.sexo-btn:hover{opacity:.75}
+.sexo-btn svg{width:22px;height:28px;stroke:var(--gray2);transition:stroke .15s}
+.sexo-btn.active svg{stroke:var(--red)}
+.sexo-btn-lbl{font-size:10px;font-weight:700;color:var(--gray2);font-family:'Poppins',sans-serif;transition:color .15s}
+.sexo-btn.active .sexo-btn-lbl{color:var(--red)}
 
-/* ── COLABORADOR ── */
-.colab-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.colab-opt{border:2px solid var(--border);border-radius:8px;padding:12px;cursor:pointer;transition:all .15s;position:relative;display:flex;align-items:center;gap:10px}
+/* CARNET FIELD */
+.carnet-field{display:flex;gap:6px;align-items:stretch}
+.carnet-tipo{border:1.5px solid var(--border);border-radius:7px;padding:9px 6px;font-size:12px;font-family:'Inter',sans-serif;color:var(--dark);background:var(--white);cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23BEBEBE' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 4px center;padding-right:20px;min-width:76px;flex-shrink:0}
+.carnet-date{border:1.5px solid var(--border);border-radius:7px;padding:9px 8px;font-size:12px;font-family:'Inter',sans-serif;color:var(--dark);background:var(--white);flex:1;min-width:0}
+.carnet-tipo:focus,.carnet-date:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(220,0,40,.08)}
+
+/* EMPLEADOS TOGGLE */
+.emp-tog{display:flex;gap:6px;margin-bottom:10px}
+.emp-tog-btn{flex:1;padding:8px;border:2px solid var(--border);border-radius:8px;background:var(--white);cursor:pointer;font-size:12px;font-weight:700;font-family:'Poppins',sans-serif;color:var(--gray);transition:all .15s;text-align:center}
+.emp-tog-btn:hover{border-color:var(--gray2)}
+.emp-tog-btn.si{border-color:#10B981;background:rgba(16,185,129,.08);color:#059669}
+.emp-tog-btn.no{border-color:var(--border);background:var(--gray3);color:var(--gray)}
+
+/* RAMO PILL */
+.seguros-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:8px}
+.ramo-pill{display:grid;grid-template-columns:38px 1fr auto;align-items:center;border:2px solid var(--border);border-radius:10px;overflow:visible;transition:border-color .15s,box-shadow .15s,transform .1s;position:relative;background:var(--white);cursor:pointer;user-select:none}
+.ramo-pill:has(.rp-icon-col:hover),.ramo-pill:has(.rp-name:hover){transform:translateY(1px);box-shadow:inset 0 2px 6px rgba(0,0,0,.14),0 1px 2px rgba(0,0,0,.05)}
+.rp-icon-col{grid-column:1;background:rgba(0,0,0,.025);border-right:1px solid rgba(0,0,0,.07);display:flex;align-items:center;justify-content:center;padding:10px 0;transition:background .15s;border-radius:8px 0 0 8px;align-self:stretch}
+.rp-icon{font-size:18px;filter:grayscale(1) opacity(.4);transition:filter .15s;line-height:1}
+.rp-name{grid-column:2;font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;padding:10px 8px;color:var(--dark);line-height:1.3}
+.rp-acts-col{grid-column:3;border-left:1px solid rgba(0,0,0,.07);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 5px;min-width:28px;align-self:stretch}
+/* PILL STATES */
+.ramo-pill.pill-gris{border:2px dashed #D5D5D5;background:#f8f8f8}
+.ramo-pill.pill-gris .rp-icon{filter:grayscale(1) opacity(.18)}
+.ramo-pill.pill-gris .rp-name{color:#bbb}
+.ramo-pill.pill-naranja{border:2px solid #F59E0B;background:rgba(245,158,11,.07)}
+.ramo-pill.pill-naranja .rp-icon-col{background:rgba(245,158,11,.12)}
+.ramo-pill.pill-naranja .rp-icon{filter:none}
+.ramo-pill.pill-naranja .rp-name{color:#92400E}
+.ramo-pill.pill-verde{border:2px solid #10B981;background:rgba(16,185,129,.07)}
+.ramo-pill.pill-verde .rp-icon-col{background:rgba(16,185,129,.12)}
+.ramo-pill.pill-verde .rp-icon{filter:none}
+.ramo-pill.pill-verde .rp-name{color:#065F46}
+.ramo-pill.pill-azul{border:2px solid #2563EB;background:rgba(37,99,235,.06)}
+.ramo-pill.pill-azul .rp-icon-col{background:rgba(37,99,235,.1)}
+.ramo-pill.pill-azul .rp-icon{filter:none}
+.ramo-pill.pill-azul .rp-name{color:#1D4ED8}
+.ramo-pill.pill-rojo{border:2px solid var(--red);background:var(--red-bg)}
+.ramo-pill.pill-rojo .rp-icon-col{background:rgba(220,0,40,.08)}
+.ramo-pill.pill-rojo .rp-icon{filter:none}
+.ramo-pill.pill-rojo .rp-name{color:var(--red)}
+.ramo-pill.pill-purpura{border:2px solid #7C3AED;background:rgba(124,58,237,.06)}
+.ramo-pill.pill-purpura .rp-icon-col{background:rgba(124,58,237,.1)}
+.ramo-pill.pill-purpura .rp-icon{filter:none}
+.ramo-pill.pill-purpura .rp-name{color:#5B21B6}
+/* PILL POPUP */
+.pill-popup{position:fixed;z-index:9999;background:var(--white);border:1.5px solid var(--border);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.14);min-width:230px;overflow:hidden;display:none}
+.pp-header{padding:7px 14px 6px;font-size:9px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--gray2);border-bottom:1px solid var(--border)}
+.pp-opt{padding:8px 14px;font-size:11.5px;font-family:'Inter',sans-serif;cursor:pointer;color:var(--dark);transition:background .1s;display:flex;align-items:center;gap:8px}
+.pp-opt:hover{background:var(--gray3)}
+.pp-opt.active{font-weight:600}
+.pp-opt[data-val="vto-inmediato"].active{background:rgba(124,58,237,.08);color:#5B21B6}
+.pp-opt[data-val="vto-inmediato"].active .pp-chk{color:#7C3AED}
+.pp-opt[data-val="no-necesita"].active{background:rgba(200,200,200,.12);color:#999}
+.pp-opt[data-val="no-necesita"].active .pp-chk{color:#aaa}
+.pp-opt[data-val="necesita"].active{background:rgba(245,158,11,.09);color:#92400E}
+.pp-opt[data-val="necesita"].active .pp-chk{color:#F59E0B}
+.pp-opt[data-val="facilita"].active{background:rgba(16,185,129,.09);color:#065F46}
+.pp-opt[data-val="facilita"].active .pp-chk{color:#10B981}
+.pp-opt[data-val="no-cambia-vto"].active{background:rgba(37,99,235,.08);color:#1D4ED8}
+.pp-opt[data-val="no-cambia-vto"].active .pp-chk{color:#2563EB}
+.pp-opt[data-val="no-cambia"].active{background:rgba(220,0,40,.06);color:var(--red)}
+.pp-opt[data-val="no-cambia"].active .pp-chk{color:var(--red)}
+.pp-opt-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.pp-opt-lbl{flex:1;line-height:1.3}
+.pp-chk{font-size:11px;font-weight:900;opacity:0;transition:opacity .12s;flex-shrink:0;line-height:1}
+.pp-opt.active .pp-chk{opacity:1}
+
+.rpa-btn{height:20px;padding:0 6px;border-radius:4px;border:none;cursor:pointer;font-size:10px;font-weight:700;font-family:'Poppins',sans-serif;display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0}
+.rpa-info{background:rgba(59,130,246,.12);color:#2563EB}
+.rpa-info:hover{background:rgba(59,130,246,.22)}
+.rpa-dup{background:rgba(16,185,129,.12);color:#059669}
+.rpa-dup:hover{background:rgba(16,185,129,.22)}
+.rpa-del{background:rgba(220,0,40,.1);color:var(--red)}
+.rpa-del:hover{background:rgba(220,0,40,.2)}
+.ramo-badge{position:absolute;top:-5px;left:8px;background:var(--red);color:#fff;font-size:7.5px;font-weight:800;padding:1px 5px;border-radius:3px;font-family:'Poppins',sans-serif;z-index:3;letter-spacing:.3px}
+.data-badge-ok{position:absolute;top:-5px;right:6px;background:#10B981;color:#fff;font-size:9px;font-weight:900;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:3;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.data-badge-warn{position:absolute;top:-5px;right:6px;background:#DC0028;color:#fff;font-size:9px;font-weight:900;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:3;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.rp-icon-col-link{cursor:pointer}
+.neg-group-hdr{font-size:9.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--gray2);margin:14px 0 10px;display:flex;align-items:center;gap:8px}
+.neg-group-hdr::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* GRUPO TITULO */
+.grupo-tit{font-size:9.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--gray2);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.grupo-tit::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* COLABORADOR */
+.colab-grid{display:grid;grid-template-columns:repeat(3,1fr) auto;gap:10px;align-items:start}
+.colab-opt{border:2px solid var(--border);border-radius:8px;padding:10px;cursor:pointer;transition:all .15s;position:relative;display:flex;align-items:center;gap:9px}
 .colab-opt:hover{border-color:var(--gray2)}
 .colab-opt.active{border-color:var(--red);background:var(--red-bg)}
 .colab-opt input{position:absolute;opacity:0;width:0;height:0}
-.av{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:10px;flex-shrink:0;font-family:'Poppins',sans-serif}
-.colab-name{font-size:12px;font-weight:600;color:var(--dark);font-family:'Poppins',sans-serif}
-.colab-rol{font-size:10.5px;color:var(--gray2);margin-top:1px}
+.av{width:30px;height:30px;border-radius:7px;display:grid;place-items:center;font-weight:800;font-size:9.5px;flex-shrink:0;font-family:'Poppins',sans-serif}
+.colab-name{font-size:11.5px;font-weight:700;color:var(--dark);font-family:'Poppins',sans-serif}
+.colab-rol{font-size:10px;color:var(--gray2);margin-top:1px}
+.colab-row{margin-bottom:14px}
+.colab-row:last-child{margin-bottom:0}
+.colab-row-lbl{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--gray2);margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.cr-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 
-/* ── ORIGEN ── */
-.origen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
-.origen-opt{border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:8px}
-.origen-opt:hover{border-color:var(--gray2)}
-.origen-opt.active{border-color:#3B82F6;background:rgba(59,130,246,.06)}
-.origen-opt input{width:14px;height:14px;accent-color:#3B82F6;flex-shrink:0}
-.origen-label{font-size:12px;font-weight:500;color:var(--dark)}
+/* SWITCHES */
+.sw-row{display:flex;flex-wrap:wrap;gap:8px 20px}
+.sw-item{display:flex;align-items:center;gap:8px;cursor:pointer;position:relative}
+.sw-item input{position:absolute;opacity:0;width:0;height:0}
+.sw-toggle{width:36px;height:20px;border-radius:10px;background:var(--border);position:relative;transition:background .2s;flex-shrink:0}
+.sw-toggle::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:white;top:2px;left:2px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw-item input:checked~.sw-toggle{background:var(--red)}
+.sw-item input:checked~.sw-toggle::after{transform:translateX(16px)}
+.sw-item-label{font-size:12.5px;font-weight:500;color:var(--dark)}
 
-/* ── DIVIDER ── */
+/* VTOS SI/NO */
+.vper-row{display:flex;align-items:center;gap:16px;padding:14px}
+.vper-question{font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;color:var(--dark);flex:1}
+.vper-btns{display:flex;gap:6px}
+.vper-btn{padding:8px 22px;border:2px solid var(--border);border-radius:8px;background:var(--white);cursor:pointer;font-size:12px;font-weight:700;color:var(--gray);transition:all .12s}
+.vper-btn.si{border-color:#10B981;background:rgba(16,185,129,.09);color:#059669}
+.vper-btn.no{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+
+/* DIVIDER */
 .divider{height:1px;background:var(--border);margin:18px 0}
-
-/* ── SECTION TITLE ── */
 .sec-tit{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray2);margin-bottom:12px}
 
-/* ── ACTIONS ── */
+/* ACTIONS */
 .actions{display:flex;gap:10px;align-items:center;justify-content:flex-end;padding:20px;border-top:1px solid var(--border);background:#fafafa}
 .btn-sec{padding:9px 20px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);color:var(--gray);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .12s}
 .btn-sec:hover{border-color:var(--gray2);background:var(--gray3)}
 .btn-pri{padding:9px 24px;border-radius:8px;border:none;background:var(--red);color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:background .12s;display:flex;align-items:center;gap:7px}
 .btn-pri:hover{background:var(--red-l)}
 .btn-warn{padding:9px 20px;border-radius:8px;border:1.5px solid #F59E0B;background:rgba(245,158,11,.06);color:#D97706;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
-.btn-warn:hover{background:rgba(245,158,11,.12)}
 
-/* ── SUCCESS MODAL ── */
+/* SUCCESS MODAL */
 #modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;align-items:center;justify-content:center}
 #modal.show{display:flex}
 .modal-box{background:var(--white);border-radius:14px;padding:32px 36px;max-width:480px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2)}
@@ -130,17 +214,77 @@ body{background:#F2F3F7;font-family:'Inter',sans-serif;font-size:14px;color:var(
 .modal-data{background:var(--gray3);border-radius:8px;padding:12px 16px;text-align:left;margin-bottom:20px;font-size:12.5px;line-height:1.8;color:var(--dark)}
 .modal-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 
-/* ── REQUIRED INDICATOR ── */
+/* RAMO MODAL */
+#ramoOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:998;align-items:center;justify-content:center;padding:16px}
+#ramoOverlay.show{display:flex}
+.ramo-modal-box{background:var(--white);border-radius:14px;padding:22px;width:100%;max-width:580px;box-shadow:0 24px 64px rgba(0,0,0,.22);max-height:90vh;overflow-y:auto}
+.ramo-modal-hdr{display:flex;align-items:center;gap:10px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.ramo-modal-icon{font-size:20px}
+.ramo-modal-hdr h3{font-family:'Poppins',sans-serif;font-size:14.5px;font-weight:700;color:var(--dark)}
+.ramo-modal-close{margin-left:auto;width:28px;height:28px;border-radius:6px;border:1.5px solid var(--border);background:var(--white);cursor:pointer;display:grid;place-items:center;font-size:12px;color:var(--gray);flex-shrink:0}
+.ramo-modal-close:hover{background:var(--gray3)}
+.ramo-modal-footer{margin-top:18px;display:flex;justify-content:flex-end;gap:8px;padding-top:14px;border-top:1px solid var(--border)}
+.rm-grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.rm-field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.rm-field:last-child{margin-bottom:0}
+.rm-label{font-size:11px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;display:block}
+.rm-input{border:1.5px solid var(--border);border-radius:7px;padding:8px 11px;font-size:12.5px;font-family:'Inter',sans-serif;color:var(--dark);background:var(--white);width:100%}
+.rm-input:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(220,0,40,.08)}
+.rm-input::placeholder{color:var(--gray2)}
+.rm-textarea{min-height:64px;resize:vertical}
+
+/* PROP SWITCHER */
+.prop-switcher{display:flex;gap:5px;flex-wrap:wrap}
+.prop-btn{flex:1;padding:7px 4px;border:1.5px solid var(--border);border-radius:7px;background:var(--white);cursor:pointer;font-size:10.5px;font-weight:700;color:var(--gray);transition:all .12s;text-align:center;font-family:'Poppins',sans-serif;white-space:nowrap}
+.prop-btn.active{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+
+/* YES/NO en modal */
+.yn-group{display:flex;gap:6px}
+.yn-btn{padding:7px 20px;border:1.5px solid var(--border);border-radius:7px;background:var(--white);cursor:pointer;font-size:12px;font-weight:700;color:var(--gray);transition:all .12s;font-family:'Inter',sans-serif}
+.yn-btn.yes{border-color:#10B981;background:rgba(16,185,129,.09);color:#059669}
+.yn-btn.no{border-color:var(--border);background:var(--gray3);color:var(--gray)}
+
+/* PERSON ICONS */
+.person-sel{margin-bottom:2px}
+.p-icons{display:flex;gap:5px}
+.p-icon{cursor:pointer;color:var(--gray2);transition:color .15s;display:block;width:28px;height:34px;flex-shrink:0}
+.p-icon.lit{color:var(--red)}
+.p-icon svg{display:block;width:100%;height:100%}
+
+/* MISC */
 .req-note{font-size:11px;color:var(--gray2);margin-bottom:18px}
 .req-note .req{color:var(--red)}
-
-/* ── CONDITIONAL ── */
-.cond{display:none}
-.cond.show{display:contents}
-
-/* ── PROGRESS ── */
 .prog-bar{height:4px;background:var(--border);border-radius:2px;margin-bottom:24px;overflow:hidden}
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--red),#FF6B6B);border-radius:2px;transition:width .3s ease;width:0%}
+.rm-section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.rm-block{border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;position:relative}
+.rm-block-lbl{font-size:10px;font-weight:700;color:var(--gray);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+
+/* ── SEARCH ── */
+.search-wrap{display:flex;align-items:center;gap:8px}
+.dir-btn{padding:5px 10px;border-radius:6px;border:1.5px solid var(--border);background:var(--white);color:var(--gray);font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;transition:all .12s;font-family:'Inter',sans-serif;line-height:1}
+.dir-btn:hover{border-color:var(--gray2);background:var(--gray3)}
+.dir-btn.connected{border-color:#10B981;color:#059669;background:rgba(16,185,129,.07)}
+.search-box{position:relative}
+.search-input{width:200px;border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;font-size:12.5px;font-family:'Inter',sans-serif;color:var(--dark);background:var(--white);transition:border-color .12s,width .2s,box-shadow .12s;outline:none}
+.search-input:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(220,0,40,.08);width:260px}
+.search-results{position:fixed;width:380px;background:var(--white);border:1.5px solid var(--border);border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.18);z-index:9999;display:none;max-height:420px;overflow-y:auto}
+.search-results.show{display:block}
+.sr-item{padding:11px 14px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .1s;display:flex;align-items:center;gap:10px}
+.sr-item:last-child{border-bottom:none}
+.sr-item:hover{background:var(--gray3)}
+.sr-name{font-size:12.5px;font-weight:700;color:var(--dark);font-family:'Poppins',sans-serif}
+.sr-meta{font-size:10.5px;color:var(--gray2);margin-top:2px}
+.sr-tipo{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:700;white-space:nowrap;background:var(--red-bg);color:var(--red);border:1px solid rgba(220,0,40,.18);flex-shrink:0}
+.sr-empty{padding:16px;text-align:center;font-size:12px;color:var(--gray2)}
+.sr-header{padding:8px 14px;font-size:10px;font-weight:700;color:var(--gray2);letter-spacing:.5px;text-transform:uppercase;border-bottom:1px solid var(--border);background:var(--gray3)}
+
+/* PILL PULSE — pulsing border when badge is red */
+@keyframes pillPulse {
+  0%,100%{box-shadow:0 0 0 0 rgba(220,0,40,.5),var(--shadow);border-color:transparent}
+  50%{box-shadow:0 0 0 7px rgba(220,0,40,.32),var(--shadow);border-color:rgba(220,0,40,.7)}
+}
+.ramo-pill.pill-badge-danger{animation:pillPulse 1.4s ease-in-out infinite;border-width:2px}
 </style>
 </head>
 <body>
@@ -155,16 +299,23 @@ body{background:#F2F3F7;font-family:'Inter',sans-serif;font-size:14px;color:var(
     </div>
   </div>
   <div class="hdr-actions">
-    <div class="hdr-badge">Alta de Cliente</div>
+    <div class="search-wrap">
+      <button class="dir-btn" id="dirBtn" type="button" onclick="selectClientesDir()" title="Conectar carpeta de registros">&#128193; <span id="dirStatus">Conectar carpeta</span></button>
+      <div class="search-box">
+        <input type="text" id="searchInput" class="search-input" placeholder="&#128269; Buscar cliente..." autocomplete="off" oninput="onSearchInput(this.value)" onfocus="onSearchFocus()">
+        <div class="search-results" id="searchResults"></div>
+      </div>
+    </div>
   </div>
 </header>
 
 <div class="page-wrap">
   <div class="page-title">
-    <h1>👤 Alta de Cliente</h1>
+    <h1>&#128100; Alta de Cliente</h1>
     <p>Registro de nuevo cliente en la base de datos de OPTIMIZARTE</p>
   </div>
 
+  <div id="loadBanner" style="display:none;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12.5px;color:#1E40AF;align-items:center;gap:8px"><span id="loadBannerText">&#128100; Cliente cargado</span><button style="margin-left:auto;cursor:pointer;font-size:12px;color:#60A5FA;font-weight:700;background:none;border:none;padding:0" onclick="this.closest('#loadBanner').style.display='none'">&#10005; Nuevo alta</button></div>
   <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
   <p class="req-note">Los campos marcados con <span class="req">*</span> son obligatorios</p>
 
@@ -173,323 +324,338 @@ body{background:#F2F3F7;font-family:'Inter',sans-serif;font-size:14px;color:var(
   <!-- 1. TIPO DE CLIENTE -->
   <div class="card">
     <div class="card-hdr">
-      <div class="card-icon" style="background:#FEF3C7">🏷️</div>
-      <div><h2>Tipo de cliente</h2><p>Selecciona la naturaleza jurídica</p></div>
+      <div class="card-icon" style="background:#FEF3C7">&#127991;&#65039;</div>
+      <div><h2>Tipo de cliente</h2><p>Selecciona la naturaleza jur&#237;dica del cliente</p></div>
     </div>
     <div class="card-body">
       <div class="tipo-grid">
-        <label class="tipo-opt active" onclick="setTipo('par',this)">
+        <div class="tipo-opt active" id="tipo-par" onclick="setTipo('par',this)">
           <input type="radio" name="tipo" value="par" checked>
-          <span class="tipo-icon">👤</span>
+          <span class="tipo-radio"></span>
+          <span class="tipo-icon">&#128100;</span>
           <span class="tipo-label">Particular</span>
-          <span class="tipo-desc">Persona física no empresarial</span>
-        </label>
-        <label class="tipo-opt" onclick="setTipo('emp',this)">
+          <span class="tipo-desc">Persona f&#237;sica no empresarial</span>
+        </div>
+        <div class="tipo-opt" id="tipo-emp" onclick="setTipo('emp',this)">
           <input type="radio" name="tipo" value="emp">
-          <span class="tipo-icon">🏢</span>
+          <span class="tipo-radio"></span>
+          <span class="tipo-icon">&#127962;</span>
           <span class="tipo-label">Empresa</span>
           <span class="tipo-desc">Sociedad mercantil o entidad</span>
-        </label>
-        <label class="tipo-opt" onclick="setTipo('aut',this)">
+        </div>
+        <div class="tipo-opt" id="tipo-aut" onclick="setTipo('aut',this)">
           <input type="radio" name="tipo" value="aut">
-          <span class="tipo-icon">💼</span>
-          <span class="tipo-label">Autónomo</span>
-          <span class="tipo-desc">Persona física con actividad económica</span>
-        </label>
+          <span class="tipo-radio"></span>
+          <span class="tipo-icon">&#128188;</span>
+          <span class="tipo-label">Aut&#243;nomo</span>
+          <span class="tipo-desc">Persona f&#237;sica con actividad econ&#243;mica</span>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- 2. IDENTIFICACIÓN -->
+  <!-- 2. DATOS DE IDENTIFICACIÓN -->
   <div class="card">
     <div class="card-hdr">
-      <div class="card-icon" style="background:#EEF2FF">🪪</div>
-      <div><h2>Datos de identificación</h2><p>Información personal o fiscal</p></div>
+      <div class="card-icon" style="background:#EEF2FF">&#129514;</div>
+      <div><h2>Datos de identificaci&#243;n</h2><p>Informaci&#243;n personal o fiscal</p></div>
     </div>
     <div class="card-body">
-      <!-- Particulares / Autónomos -->
-      <div class="cond show" id="block-par">
-        <div class="field-grid g3">
-          <div class="field">
-            <label>Nombre<span class="req">*</span></label>
-            <input type="text" id="nombre" placeholder="Nombre" required>
-          </div>
-          <div class="field">
-            <label>Primer apellido<span class="req">*</span></label>
-            <input type="text" id="ap1" placeholder="Primer apellido" required>
-          </div>
-          <div class="field">
-            <label>Segundo apellido</label>
-            <input type="text" id="ap2" placeholder="Segundo apellido">
-          </div>
+
+      <!-- BLOQUE PARTICULAR -->
+      <div id="block-par" style="display:block">
+        <div class="sec-tit" style="color:var(--red)">&#128100; Datos Particular</div>
+        <div class="field-grid g3" style="margin-bottom:14px">
+          <div class="field"><label>Nombre<span class="req">*</span></label><input type="text" id="par-nombre" placeholder="Nombre"></div>
+          <div class="field"><label>Primer apellido<span class="req">*</span></label><input type="text" id="par-ap1" placeholder="Primer apellido"></div>
+          <div class="field"><label>Segundo apellido</label><input type="text" id="par-ap2" placeholder="Segundo apellido"></div>
         </div>
-        <div class="divider"></div>
-        <div class="field-grid g3">
-          <div class="field">
-            <label>NIF / NIE<span class="req">*</span></label>
-            <input type="text" id="nif" placeholder="12345678A" maxlength="10" style="text-transform:uppercase" required>
-          </div>
-          <div class="field">
-            <label>Fecha de nacimiento</label>
-            <input type="date" id="fnac">
-          </div>
+        <div class="field-grid g3" style="margin-bottom:14px">
+          <div class="field"><label>DNI / NIE<span class="req">*</span></label><input type="text" id="par-nif" placeholder="12345678A" maxlength="10" style="text-transform:uppercase"></div>
+          <div class="field"><label>Fecha de nacimiento</label><input type="date" id="par-fnac"></div>
           <div class="field">
             <label>Sexo</label>
-            <select id="sexo">
-              <option value="">— Seleccionar —</option>
-              <option value="H">Hombre</option>
-              <option value="M">Mujer</option>
-              <option value="O">Otro / No indicar</option>
+            <div class="sexo-selector" id="par-sexo-sel">
+              <button type="button" class="sexo-btn" onclick="setSexo('H',this,'par-sexo')"><svg viewBox="0 0 32 44" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="10" r="8"/><path d="M4 44c0-8 5.4-14 12-14s12 6 12 14"/></svg><span class="sexo-btn-lbl">Hombre</span></button>
+              <button type="button" class="sexo-btn" onclick="setSexo('M',this,'par-sexo')"><svg viewBox="0 0 32 44" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="10" r="7"/><path d="M6 44l4-14h12l4 14"/><path d="M10 30l-4 8h20l-4-8"/></svg><span class="sexo-btn-lbl">Mujer</span></button>
+            </div>
+            <input type="hidden" id="par-sexo" value="">
+          </div>
+        </div>
+        <div class="field-grid g2" style="margin-bottom:14px">
+          <div class="field">
+            <label>Carnet 1</label>
+            <div class="carnet-field">
+              <select class="carnet-tipo" id="par-carnet1-tipo"><option value="">&#8212;</option><option>AM/LCM</option><option>A1</option><option>A2</option><option>A</option><option>B</option><option>C</option></select>
+              <input type="date" class="carnet-date" id="par-carnet1-fecha">
+            </div>
+          </div>
+          <div class="field">
+            <label>Carnet 2</label>
+            <div class="carnet-field">
+              <select class="carnet-tipo" id="par-carnet2-tipo"><option value="">&#8212;</option><option>AM/LCM</option><option>A1</option><option>A2</option><option>A</option><option>B</option><option>C</option></select>
+              <input type="date" class="carnet-date" id="par-carnet2-fecha">
+            </div>
+          </div>
+        </div>
+        <div class="field-grid g2">
+          <div class="field"><label>Estado civil</label>
+            <select id="par-estcivil">
+              <option value="">&#8212; Seleccionar &#8212;</option>
+              <option>Soltero/a</option><option>Casado/a</option><option>Pareja de hecho</option>
+              <option>Divorciado/a</option><option>Separado/a</option><option>Viudo/a</option>
+            </select>
+          </div>
+          <div class="field"><label>Hijos</label>
+            <select id="par-hijos">
+              <option value="">&#8212; Seleccionar &#8212;</option>
+              <option>0</option><option>1</option><option>2</option><option>3</option>
+              <option>4</option><option>5</option><option value="6+">6 o m&#225;s</option>
             </select>
           </div>
         </div>
       </div>
-      <!-- Empresas -->
-      <div class="cond" id="block-emp">
-        <div class="field-grid g2">
-          <div class="field">
-            <label>Razón social<span class="req">*</span></label>
-            <input type="text" id="razon" placeholder="Razón social de la empresa">
-          </div>
-          <div class="field">
-            <label>CIF<span class="req">*</span></label>
-            <input type="text" id="cif" placeholder="B12345678" maxlength="10" style="text-transform:uppercase">
-          </div>
+
+      <!-- BLOQUE EMPRESA -->
+      <div id="block-emp" style="display:none">
+        <div class="sec-tit" style="color:var(--red)">&#127962; Datos Empresa</div>
+        <div class="field-grid g2" style="margin-bottom:14px">
+          <div class="field"><label>Denominaci&#243;n social<span class="req">*</span></label><input type="text" id="emp-razon" placeholder="Denominaci&#243;n social"></div>
+          <div class="field"><label>CIF<span class="req">*</span></label><input type="text" id="emp-cif" placeholder="B12345678" maxlength="10" style="text-transform:uppercase"></div>
         </div>
-        <div class="divider"></div>
         <div class="field-grid g3">
-          <div class="field">
-            <label>Persona de contacto</label>
-            <input type="text" id="contacto" placeholder="Nombre del interlocutor">
+          <div class="field"><label>Actividad / CNAE</label><input type="text" id="emp-actividad" placeholder="Ej: Comercio al por menor"></div>
+          <div class="field"><label>Antig&#252;edad (a&#241;os)</label>
+            <select id="emp-antiguedad">
+              <option value="">&#8212; Seleccionar &#8212;</option>
+              <option>Menos de 2 a&#241;os</option><option>2 &#8211; 5 a&#241;os</option>
+              <option>5 &#8211; 10 a&#241;os</option><option>10 &#8211; 25 a&#241;os</option><option>M&#225;s de 25 a&#241;os</option>
+            </select>
           </div>
-          <div class="field">
-            <label>Cargo</label>
-            <input type="text" id="cargo" placeholder="Director, Gerente...">
-          </div>
-          <div class="field">
-            <label>CNAE / Actividad</label>
-            <input type="text" id="cnae" placeholder="6312 - Portales web">
-          </div>
+          <div class="field"><label>N&#186; de empleados</label><select id="empleados-emp"><option value="">&#8212; N&#186; empleados &#8212;</option></select></div>
         </div>
       </div>
+
+      <!-- BLOQUE AUTÓNOMO -->
+      <div id="block-aut" style="display:none">
+        <div class="sec-tit" style="color:var(--red)">&#128188; Datos Aut&#243;nomo</div>
+        <div class="field-grid g3" style="margin-bottom:14px">
+          <div class="field"><label>Nombre<span class="req">*</span></label><input type="text" id="aut-nombre" placeholder="Nombre"></div>
+          <div class="field"><label>Primer apellido<span class="req">*</span></label><input type="text" id="aut-ap1" placeholder="Primer apellido"></div>
+          <div class="field"><label>Segundo apellido</label><input type="text" id="aut-ap2" placeholder="Segundo apellido"></div>
+        </div>
+        <div class="field-grid g3" style="margin-bottom:14px">
+          <div class="field"><label>DNI / NIE<span class="req">*</span></label><input type="text" id="aut-nif" placeholder="12345678A" maxlength="10" style="text-transform:uppercase"></div>
+          <div class="field"><label>Fecha de nacimiento</label><input type="date" id="aut-fnac"></div>
+          <div class="field">
+            <label>Sexo</label>
+            <div class="sexo-selector" id="aut-sexo-sel">
+              <button type="button" class="sexo-btn" onclick="setSexo('H',this,'aut-sexo')"><svg viewBox="0 0 32 44" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="10" r="8"/><path d="M4 44c0-8 5.4-14 12-14s12 6 12 14"/></svg><span class="sexo-btn-lbl">Hombre</span></button>
+              <button type="button" class="sexo-btn" onclick="setSexo('M',this,'aut-sexo')"><svg viewBox="0 0 32 44" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="10" r="7"/><path d="M6 44l4-14h12l4 14"/><path d="M10 30l-4 8h20l-4-8"/></svg><span class="sexo-btn-lbl">Mujer</span></button>
+            </div>
+            <input type="hidden" id="aut-sexo" value="">
+          </div>
+        </div>
+        <div class="field-grid g2" style="margin-bottom:14px">
+          <div class="field">
+            <label>Carnet 1</label>
+            <div class="carnet-field">
+              <select class="carnet-tipo" id="aut-carnet1-tipo"><option value="">&#8212;</option><option>AM/LCM</option><option>A1</option><option>A2</option><option>A</option><option>B</option><option>C</option></select>
+              <input type="date" class="carnet-date" id="aut-carnet1-fecha">
+            </div>
+          </div>
+          <div class="field">
+            <label>Carnet 2</label>
+            <div class="carnet-field">
+              <select class="carnet-tipo" id="aut-carnet2-tipo"><option value="">&#8212;</option><option>AM/LCM</option><option>A1</option><option>A2</option><option>A</option><option>B</option><option>C</option></select>
+              <input type="date" class="carnet-date" id="aut-carnet2-fecha">
+            </div>
+          </div>
+        </div>
+        <div class="field-grid g2" style="margin-bottom:14px">
+          <div class="field"><label>Actividad / CNAE</label><input type="text" id="aut-actividad" placeholder="Ej: Fontan&#233;r&#237;a, Dise&#241;o gr&#225;fico..."></div>
+          <div class="field"><label>Antig&#252;edad (a&#241;os)</label>
+            <select id="aut-antiguedad">
+              <option value="">&#8212; Seleccionar &#8212;</option>
+              <option>Menos de 2 a&#241;os</option><option>2 &#8211; 5 a&#241;os</option>
+              <option>5 &#8211; 10 a&#241;os</option><option>10 &#8211; 25 a&#241;os</option><option>M&#225;s de 25 a&#241;os</option>
+            </select>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:8px"><label>&#191;Tiene empleados?</label></div>
+        <div class="emp-tog">
+          <button type="button" class="emp-tog-btn" id="aut-emp-si" onclick="setAutEmp('si')">&#10003; S&#237;</button>
+          <button type="button" class="emp-tog-btn" id="aut-emp-no" onclick="setAutEmp('no')">&#10007; No</button>
+        </div>
+        <div id="aut-emp-select-wrap" style="display:none">
+          <div class="field"><label>N&#186; de empleados</label><select id="empleados-aut"><option value="">&#8212; N&#186; empleados &#8212;</option></select></div>
+        </div>
+      </div>
+
     </div>
   </div>
 
   <!-- 3. CONTACTO -->
   <div class="card">
     <div class="card-hdr">
-      <div class="card-icon" style="background:#ECFDF5">📱</div>
-      <div><h2>Datos de contacto</h2><p>Teléfonos, email y dirección</p></div>
+      <div class="card-icon" style="background:#ECFDF5">&#128241;</div>
+      <div><h2>Datos de contacto</h2><p>Tel&#233;fonos, redes, email y direcci&#243;n</p></div>
     </div>
     <div class="card-body">
-      <div class="sec-tit">Teléfonos</div>
-      <div class="field-grid g3">
-        <div class="field">
-          <label>Teléfono principal<span class="req">*</span></label>
-          <input type="tel" id="tel1" placeholder="6XX XXX XXX" required>
-        </div>
-        <div class="field">
-          <label>Teléfono secundario</label>
-          <input type="tel" id="tel2" placeholder="9XX XXX XXX">
-        </div>
-        <div class="field">
-          <label>WhatsApp</label>
-          <input type="tel" id="wapp" placeholder="6XX XXX XXX">
-          <span class="field-hint">Si es diferente al principal</span>
-        </div>
+      <div class="sec-tit">Tel&#233;fono y mensajer&#237;a</div>
+      <div class="field-grid g2" style="margin-bottom:14px">
+        <div class="field"><label>Tel&#233;fono principal<span class="req">*</span></label><input type="tel" id="tel1" placeholder="6XX XXX XXX"></div>
+        <div class="field"><label>WhatsApp</label><input type="tel" id="wapp" placeholder="6XX XXX XXX"><span class="field-hint">Si difiere del tel&#233;fono principal</span></div>
       </div>
-      <div class="divider"></div>
       <div class="sec-tit">Email</div>
-      <div class="field-grid g2">
-        <div class="field">
-          <label>Email principal<span class="req">*</span></label>
-          <input type="email" id="email1" placeholder="cliente@email.com" required>
-        </div>
-        <div class="field">
-          <label>Email secundario</label>
-          <input type="email" id="email2" placeholder="otro@email.com">
-        </div>
+      <div class="field-grid g2" style="margin-bottom:14px">
+        <div class="field"><label>Email particular<span class="req">*</span></label><input type="email" id="email1" placeholder="cliente@email.com"></div>
+        <div class="field"><label>Email profesional</label><input type="email" id="email2" placeholder="nombre@empresa.com"></div>
       </div>
-      <div class="divider"></div>
-      <div class="sec-tit">Dirección</div>
+      <div class="sec-tit">Direcci&#243;n</div>
       <div class="field-grid g3" style="margin-bottom:10px">
-        <div class="field" style="grid-column:span 2">
-          <label>Dirección<span class="req">*</span></label>
-          <input type="text" id="dir" placeholder="Calle / Avenida / Plaza, número, piso, puerta" required>
-        </div>
-        <div class="field">
-          <label>Código postal<span class="req">*</span></label>
-          <input type="text" id="cp" placeholder="17600" maxlength="5" required>
-        </div>
+        <div class="field" style="grid-column:span 2"><label>Direcci&#243;n<span class="req">*</span></label><input type="text" id="dir" placeholder="Calle / Avenida / Plaza, n&#250;mero, piso, puerta"></div>
+        <div class="field"><label>C&#243;digo postal<span class="req">*</span></label><input type="text" id="cp" placeholder="17600" maxlength="5"></div>
       </div>
-      <div class="field-grid g3">
-        <div class="field">
-          <label>Municipio<span class="req">*</span></label>
-          <input type="text" id="muni" placeholder="Figueres" required>
-        </div>
-        <div class="field">
-          <label>Provincia</label>
-          <select id="prov">
-            <option value="Girona" selected>Girona</option>
-            <option value="Barcelona">Barcelona</option>
-            <option value="Tarragona">Tarragona</option>
-            <option value="Lleida">Lleida</option>
-            <option value="Valencia">Valencia</option>
-            <option value="Alicante">Alicante</option>
-            <option value="Otro">Otra provincia...</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>País</label>
-          <select id="pais">
-            <option value="España" selected>España</option>
-            <option value="Andorra">Andorra</option>
-            <option value="Francia">Francia</option>
-            <option value="Otro">Otro...</option>
-          </select>
-        </div>
+      <div class="field" style="margin-bottom:14px"><label>Localidad<span class="req">*</span></label><input type="text" id="muni" placeholder="Figueres, Girona..."></div>
+      <div class="sec-tit">Redes sociales</div>
+      <div class="field-grid">
+        <div class="field"><label>Redes sociales</label><input type="text" id="redes" placeholder="@instagram &#183; linkedin.com/in/... &#183; Facebook..."><span class="field-hint">Varios perfiles separados por &#183;</span></div>
       </div>
     </div>
   </div>
 
-  <!-- 4. INTERESES SEGUROS -->
-  <div class="card">
+  <!-- 4a. VENCIMIENTOS PARTICULAR -->
+  <div class="card" id="card-par-segs" style="display:block">
     <div class="card-hdr">
-      <div class="card-icon" style="background:#FFF1F2">🛡️</div>
-      <div><h2>Intereses aseguradores</h2><p>Ramos de seguro de interés para el cliente</p></div>
+      <div class="card-icon" style="background:#FFF1F2">&#128737;&#65039;</div>
+      <div><h2>Vencimientos / Oportunidades Particulares</h2><p>Ramos de inter&#233;s para el cliente particular</p></div>
     </div>
     <div class="card-body">
-      <div class="seguros-grid">
-        <label class="seg-opt">
-          <input type="checkbox" name="seg" value="Hogar" onchange="updProg()">
-          <span class="seg-icon">🏠</span><span class="seg-label">Hogar</span>
-        </label>
-        <label class="seg-opt">
-          <input type="checkbox" name="seg" value="Auto" onchange="updProg()">
-          <span class="seg-icon">🚗</span><span class="seg-label">Auto</span>
-        </label>
-        <label class="seg-opt">
-          <input type="checkbox" name="seg" value="Vida" onchange="updProg()">
-          <span class="seg-icon">❤️</span><span class="seg-label">Vida</span>
-        </label>
-        <label class="seg-opt">
-          <input type="checkbox" name="seg" value="Salud" onchange="updProg()">
-          <span class="seg-icon">🏥</span><span class="seg-label">Salud</span>
-        </label>
-        <label class="seg-opt">
-          <input type="checkbox" name="seg" value="Decesos" onchange="updProg()">
-          <span class="seg-icon">🕊️</span><span class="seg-label">Decesos</span>
-        </label>
-        <label class="seg-opt">
-          <input type="checkbox" name="seg" value="Empresa" onchange="updProg()">
-          <span class="seg-icon">🏢</span><span class="seg-label">Empresa</span>
-        </label>
-        <label class="seg-opt">
-          <input type="checkbox" name="seg" value="RC" onchange="updProg()">
-          <span class="seg-icon">⚖️</span><span class="seg-label">RC</span>
-        </label>
-        <label class="seg-opt">
-          <input type="checkbox" name="seg" value="Ahorros" onchange="updProg()">
-          <span class="seg-icon">💰</span><span class="seg-label">Ahorros</span>
-        </label>
-        <label class="seg-opt">
-          <input type="checkbox" name="seg" value="Accidentes" onchange="updProg()">
-          <span class="seg-icon">🩹</span><span class="seg-label">Accidentes</span>
-        </label>
-        <label class="seg-opt">
-          <input type="checkbox" name="seg" value="Mascotas" onchange="updProg()">
-          <span class="seg-icon">🐾</span><span class="seg-label">Mascotas</span>
-        </label>
-        <label class="seg-opt">
-          <input type="checkbox" name="seg" value="Juridica" onchange="updProg()">
-          <span class="seg-icon">📋</span><span class="seg-label">P. Jurídica</span>
-        </label>
-        <label class="seg-opt">
-          <input type="checkbox" name="seg" value="Ciber" onchange="updProg()">
-          <span class="seg-icon">🔒</span><span class="seg-label">Ciberseguridad</span>
-        </label>
+      <div class="grupo-tit">&#11088; Productos Estrat&#233;gicos</div>
+      <div class="seguros-grid" id="grid-estrategicos" style="margin-bottom:18px"></div>
+      <div class="grupo-tit">&#128309; Productos Ofertables</div>
+      <div class="seguros-grid" id="grid-ofertables"></div>
+    </div>
+  </div>
+
+  <!-- 4b. VENCIMIENTOS NEGOCIO -->
+  <div class="card" id="card-negocio" style="display:none">
+    <div class="card-hdr">
+      <div class="card-icon" style="background:#F0FFF4">&#127962;</div>
+      <div><h2>Vencimientos / Oportunidades Empresa &amp; Aut&#243;nomo</h2><p>Coberturas espec&#237;ficas para actividad empresarial</p></div>
+    </div>
+    <div class="card-body">
+      <div id="neg-grupo-actividad">
+        <div class="neg-group-hdr">&#127962; Relativos a la actividad</div>
+        <div class="seguros-grid" id="grid-neg-actividad" style="margin-bottom:18px"></div>
+      </div>
+      <div id="neg-grupo-empleados" style="display:none">
+        <div class="neg-group-hdr">&#128101; Relativos a los empleados</div>
+        <div class="seguros-grid" id="grid-neg-empleados" style="margin-bottom:18px"></div>
+      </div>
+      <div id="neg-grupo-autonomo">
+        <div class="neg-group-hdr">&#128188; Relativo al aut&#243;nomo / empresario</div>
+        <div class="seguros-grid" id="grid-neg-autonomo"></div>
       </div>
     </div>
   </div>
 
-  <!-- 5. ORIGEN Y ASIGNACIÓN -->
-  <div class="card">
+  <!-- 4c. PREGUNTA VTOS PERSONALES -->
+  <div class="card" id="card-vtos-per-ask" style="display:none">
     <div class="card-hdr">
-      <div class="card-icon" style="background:#EFF6FF">📊</div>
-      <div><h2>Origen y asignación</h2><p>Cómo llegó el cliente y quién lo gestiona</p></div>
+      <div class="card-icon" style="background:#FFF1F2">&#128100;</div>
+      <div><h2>Vencimientos personales</h2><p>&#191;Se quieren recoger tambi&#233;n los vencimientos particulares?</p></div>
     </div>
-    <div class="card-body">
-      <div class="sec-tit" style="margin-bottom:10px">Origen del cliente<span class="req">*</span></div>
-      <div class="origen-grid">
-        <label class="origen-opt"><input type="radio" name="origen" value="referido" onchange="updProg()"><span>🤝</span><span class="origen-label">Referido</span></label>
-        <label class="origen-opt"><input type="radio" name="origen" value="web" onchange="updProg()"><span>🌐</span><span class="origen-label">Web / Internet</span></label>
-        <label class="origen-opt"><input type="radio" name="origen" value="visita" onchange="updProg()"><span>🚪</span><span class="origen-label">Visita espontánea</span></label>
-        <label class="origen-opt"><input type="radio" name="origen" value="llamada" onchange="updProg()"><span>📞</span><span class="origen-label">Llamada entrante</span></label>
-        <label class="origen-opt"><input type="radio" name="origen" value="campana" onchange="updProg()"><span>📣</span><span class="origen-label">Campaña</span></label>
-        <label class="origen-opt"><input type="radio" name="origen" value="renovacion" onchange="updProg()"><span>🔄</span><span class="origen-label">Traslado de póliza</span></label>
-        <label class="origen-opt"><input type="radio" name="origen" value="vendedor" onchange="updProg()"><span>🛒</span><span class="origen-label">Captación comercial</span></label>
-        <label class="origen-opt"><input type="radio" name="origen" value="otro" onchange="updProg()"><span>❓</span><span class="origen-label">Otro</span></label>
-      </div>
-      <div id="referido-block" style="display:none;margin-top:12px">
-        <div class="field">
-          <label>Cliente/persona que refirió</label>
-          <input type="text" id="referido-por" placeholder="Nombre del cliente que lo ha referido">
-        </div>
-      </div>
-
-      <div class="divider"></div>
-      <div class="sec-tit" style="margin-bottom:10px">Asignar a<span class="req">*</span></div>
-      <div class="colab-grid">
-        <label class="colab-opt active" onclick="setColab('M441819E',this)">
-          <input type="radio" name="colab" value="M441819E" checked>
-          <div class="av" style="background:rgba(220,0,40,.18);color:#DC0028">DH</div>
-          <div><div class="colab-name">Dany Hernandez</div><div class="colab-rol">Gestión · Manager</div></div>
-        </label>
-        <label class="colab-opt" onclick="setColab('M354046Y',this)">
-          <input type="radio" name="colab" value="M354046Y">
-          <div class="av" style="background:rgba(59,130,246,.18);color:#3B82F6">FK</div>
-          <div><div class="colab-name">Fadoua Khachach</div><div class="colab-rol">Comercial · Interna</div></div>
-        </label>
-        <label class="colab-opt" onclick="setColab('MA48168T',this)">
-          <input type="radio" name="colab" value="MA48168T">
-          <div class="av" style="background:rgba(16,185,129,.18);color:#10B981">SF</div>
-          <div><div class="colab-name">Silvia Famoso</div><div class="colab-rol">Comercial · Campo</div></div>
-        </label>
+    <div class="vper-row">
+      <span class="vper-question">&#191;Recoger vencimientos personales del cliente?</span>
+      <div class="vper-btns">
+        <button type="button" class="vper-btn" id="vper-si" onclick="setVtosPer('si')">&#10003; S&#237;</button>
+        <button type="button" class="vper-btn" id="vper-no" onclick="setVtosPer('no')">&#10007; No</button>
       </div>
     </div>
   </div>
 
-  <!-- 6. OBSERVACIONES -->
+  <!-- 5. OBSERVACIONES -->
   <div class="card">
     <div class="card-hdr">
-      <div class="card-icon" style="background:#FFF7ED">📝</div>
-      <div><h2>Observaciones y notas</h2><p>Información adicional relevante</p></div>
+      <div class="card-icon" style="background:#FFF7ED">&#128221;</div>
+      <div><h2>Observaciones y notas</h2><p>Motivo del contacto, origen e informaci&#243;n adicional</p></div>
     </div>
     <div class="card-body">
-      <div class="field-grid g2">
+      <div class="field-grid g2" style="margin-bottom:18px;align-items:stretch">
+        <div class="field" style="display:flex;flex-direction:column"><label>Motivo del contacto</label><textarea id="obs" placeholder="Motivo del contacto, intereses del cliente..." style="flex:1;min-height:90px;resize:none"></textarea></div>
         <div class="field">
-          <label>Observaciones internas</label>
-          <textarea id="obs" placeholder="Notas para el equipo (no visibles por el cliente)..." rows="4"></textarea>
-        </div>
-        <div class="field">
-          <label>Primera acción prevista</label>
+          <label>Primera acci&#243;n prevista</label>
           <select id="primera-accion" style="margin-bottom:8px">
-            <option value="">— Sin acción inmediata —</option>
-            <option value="Llamada">📞 Llamada de bienvenida</option>
-            <option value="Cita">📅 Concertar cita</option>
-            <option value="Presupuesto">📄 Enviar presupuesto</option>
-            <option value="Visita">🤝 Visita comercial</option>
-            <option value="Email">✉️ Enviar email informativo</option>
+            <option value="">&#8212; Sin acci&#243;n inmediata &#8212;</option>
+            <option value="Team">&#128203; Enviar registro a Team</option>
+            <option value="Llamada">&#128222; Llamada de bienvenida</option>
+            <option value="Cita">&#128197; Concertar cita</option>
+            <option value="Presupuesto">&#128196; Enviar presupuesto</option>
+            <option value="Formulario">&#128221; Enviar formulario</option>
+            <option value="Visita">&#129309; Visita comercial</option>
+            <option value="Email">&#9993;&#65039; Enviar email informativo</option>
           </select>
-          <label>Fecha para la acción</label>
+          <label>Fecha para la acci&#243;n</label>
           <input type="date" id="fecha-accion">
-          <span class="field-hint">Se creará una actividad en la Agenda</span>
+          <span class="field-hint">Se crear&#225; una actividad en la Agenda</span>
         </div>
       </div>
       <div class="divider"></div>
+      <div class="sec-tit">&#191;C&#243;mo nos conoce?</div>
+      <div class="sw-row" style="margin-bottom:14px">
+        <label class="sw-item"><input type="radio" name="origen-sw" value="iniciativa"><span class="sw-toggle"></span><span class="sw-item-label">&#128587; Iniciativa propia</span></label>
+        <label class="sw-item"><input type="radio" name="origen-sw" value="recomendado"><span class="sw-toggle"></span><span class="sw-item-label">&#129309; Recomendado</span></label>
+        <label class="sw-item"><input type="radio" name="origen-sw" value="redes"><span class="sw-toggle"></span><span class="sw-item-label">&#128242; Redes sociales</span></label>
+        <label class="sw-item"><input type="radio" name="origen-sw" value="google"><span class="sw-toggle"></span><span class="sw-item-label">&#128269; Google</span></label>
+        <label class="sw-item"><input type="radio" name="origen-sw" value="otros"><span class="sw-toggle"></span><span class="sw-item-label">&#10067; Otros</span></label>
+      </div>
       <div class="field">
-        <label>¿Cómo conoce Occident? / Seguro actual</label>
-        <input type="text" id="seg-actual" placeholder="Ej: Tiene Hogar con Mutua Madrileña, quiere comparar...">
+        <label>Detalle del origen</label>
+        <input type="text" id="origen-detalle" placeholder="&#191;D&#243;nde nos ha visto? &#183; &#191;Qui&#233;n recomienda?...">
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. USUARIO -->
+  <div class="card">
+    <div class="card-hdr">
+      <div class="card-icon" style="background:#EFF6FF">&#128101;</div>
+      <div><h2>Usuario tratado / Asignado</h2><p>Qui&#233;n recoge los datos y a qui&#233;n se asigna el cliente</p></div>
+    </div>
+    <div class="card-body">
+      <div class="colab-row">
+        <div class="colab-row-lbl"><span class="cr-dot" style="background:#DC0028"></span>Usuario que recoge los datos</div>
+        <div class="colab-grid">
+          <label class="colab-opt active" onclick="setColab('recoge','M441819E',this)"><input type="radio" name="colab-recoge" value="M441819E" checked><div class="av" style="background:rgba(220,0,40,.18);color:#DC0028">DH</div><div><div class="colab-name">Dany Hernandez</div><div class="colab-rol">Gesti&#243;n &#183; Manager</div></div></label>
+          <label class="colab-opt" onclick="setColab('recoge','M354046Y',this)"><input type="radio" name="colab-recoge" value="M354046Y"><div class="av" style="background:rgba(59,130,246,.18);color:#3B82F6">FK</div><div><div class="colab-name">Fadoua Khachach</div><div class="colab-rol">Comercial &#183; Interna</div></div></label>
+          <label class="colab-opt" onclick="setColab('recoge','MA48168T',this)"><input type="radio" name="colab-recoge" value="MA48168T"><div class="av" style="background:rgba(16,185,129,.18);color:#10B981">SF</div><div><div class="colab-name">Silvia Famoso</div><div class="colab-rol">Comercial &#183; Campo</div></div></label>
+          <div style="display:flex;flex-direction:column;gap:8px;padding:6px 0">
+            <div>
+              <div style="font-size:9.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--gray2);margin-bottom:3px">Fecha creaci&#243;n</div>
+              <div id="fecha-creacion" style="font-size:12px;color:var(--dark);font-weight:600;font-family:'Inter',sans-serif">&#8212;</div>
+            </div>
+            <div>
+              <div style="font-size:9.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--gray2);margin-bottom:3px">&#218;ltima modificaci&#243;n</div>
+              <div id="fecha-modificacion" style="font-size:12px;color:var(--dark);font-weight:600;font-family:'Inter',sans-serif">&#8212;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="colab-row">
+        <div class="colab-row-lbl"><span class="cr-dot" style="background:#3B82F6"></span>Cliente asignado a</div>
+        <div class="colab-grid">
+          <label class="colab-opt active" onclick="setColab('asigna','M441819E',this)"><input type="radio" name="colab-asigna" value="M441819E" checked><div class="av" style="background:rgba(220,0,40,.18);color:#DC0028">DH</div><div><div class="colab-name">Dany Hernandez</div><div class="colab-rol">Gesti&#243;n &#183; Manager</div></div></label>
+          <label class="colab-opt" onclick="setColab('asigna','M354046Y',this)"><input type="radio" name="colab-asigna" value="M354046Y"><div class="av" style="background:rgba(59,130,246,.18);color:#3B82F6">FK</div><div><div class="colab-name">Fadoua Khachach</div><div class="colab-rol">Comercial &#183; Interna</div></div></label>
+          <label class="colab-opt" onclick="setColab('asigna','MA48168T',this)"><input type="radio" name="colab-asigna" value="MA48168T"><div class="av" style="background:rgba(16,185,129,.18);color:#10B981">SF</div><div><div class="colab-name">Silvia Famoso</div><div class="colab-rol">Comercial &#183; Campo</div></div></label>
+          <div style="display:flex;flex-direction:column;gap:8px;padding:6px 0">
+            <div>
+              <div style="font-size:9.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px">&#218;ltima modificaci&#243;n</div>
+              <div id="fecha-modificacion-asigna" style="font-size:12px;color:var(--text);font-weight:500">&#8212;</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -497,11 +663,9 @@ body{background:#F2F3F7;font-family:'Inter',sans-serif;font-size:14px;color:var(
   <!-- ACTIONS -->
   <div class="card">
     <div class="actions">
-      <button type="button" class="btn-sec" onclick="clearForm()">🗑️ Limpiar todo</button>
-      <button type="button" class="btn-warn" onclick="saveDraft()">💾 Guardar borrador</button>
-      <button type="button" class="btn-pri" onclick="submitForm()">
-        <span>✓</span> Registrar cliente
-      </button>
+      <button type="button" class="btn-sec" onclick="clearForm()">&#128465;&#65039; Limpiar todo</button>
+      <button type="button" class="btn-warn" onclick="saveDraft()">&#128190; Guardar Cliente</button>
+      <button type="button" class="btn-pri" onclick="submitForm()"><span>&#10003;</span> Registrar cliente</button>
     </div>
   </div>
 
@@ -511,253 +675,1576 @@ body{background:#F2F3F7;font-family:'Inter',sans-serif;font-size:14px;color:var(
 <!-- SUCCESS MODAL -->
 <div id="modal">
   <div class="modal-box">
-    <div class="modal-icon">✅</div>
+    <div class="modal-icon">&#9989;</div>
     <h3>Cliente registrado correctamente</h3>
-    <p>Los datos del cliente se han guardado. A continuación puedes copiarlo para introducirlo en el CRM de Occident.</p>
+    <p>Los datos del cliente se han guardado. A continuaci&#243;n puedes copiarlos para introducirlos en el CRM de Occident.</p>
     <div class="modal-data" id="modal-data"></div>
     <div class="modal-actions">
-      <button class="btn-sec" onclick="copyData()">📋 Copiar datos</button>
+      <button class="btn-sec" onclick="copyData()">&#128203; Copiar datos</button>
       <button class="btn-pri" onclick="newAlt()"><span>+</span> Nuevo cliente</button>
     </div>
   </div>
 </div>
 
-<script>
-// ─── STATE ───────────────────────────────────────────────────
-var tipo = 'par';
-var colab = 'M441819E';
-var lastData = {};
+<!-- RAMO MODAL -->
+<div id="ramoOverlay">
+  <div class="ramo-modal-box">
+    <div class="ramo-modal-hdr">
+      <span id="rmIcon" class="ramo-modal-icon"></span>
+      <h3 id="rmTitle"></h3>
+      <button class="ramo-modal-close" type="button" onclick="closeRamoModal()">&#10005;</button>
+    </div>
+    <div id="rmBody"></div>
+    <div class="ramo-modal-footer">
+      <button class="btn-sec" type="button" onclick="closeRamoModal()">Cancelar</button>
+      <button class="btn-pri" type="button" onclick="saveRamoData()"><span>&#10003;</span> Guardar datos</button>
+    </div>
+  </div>
+</div>
 
-// ─── TIPO ─────────────────────────────────────────────────────
+<!-- PILL POPUP -->
+<div id="pillPopup" class="pill-popup">
+  <div class="pp-header">Estado del vencimiento</div>
+  <div class="pp-opt" data-val="vto-inmediato" onclick="selectPillOption(this,event)"><span class="pp-opt-dot" style="background:#7C3AED"></span><span class="pp-opt-lbl">Vencimiento Inmediato / Tarificar</span><span class="pp-chk">&#10003;</span></div>
+  <div class="pp-opt" data-val="no-necesita" onclick="selectPillOption(this,event)"><span class="pp-opt-dot" style="background:#D5D5D5;border:1.5px dashed #bbb"></span><span class="pp-opt-lbl">No necesita</span><span class="pp-chk">&#10003;</span></div>
+  <div class="pp-opt" data-val="necesita" onclick="selectPillOption(this,event)"><span class="pp-opt-dot" style="background:#F59E0B"></span><span class="pp-opt-lbl">Necesita pero no tiene</span><span class="pp-chk">&#10003;</span></div>
+  <div class="pp-opt" data-val="facilita" onclick="selectPillOption(this,event)"><span class="pp-opt-dot" style="background:#10B981"></span><span class="pp-opt-lbl">Tiene en competencia · Facilita VTO</span><span class="pp-chk">&#10003;</span></div>
+  <div class="pp-opt" data-val="no-cambia-vto" onclick="selectPillOption(this,event)"><span class="pp-opt-dot" style="background:#2563EB"></span><span class="pp-opt-lbl">No quiere/puede cambiar · Da VTOS</span><span class="pp-chk">&#10003;</span></div>
+  <div class="pp-opt" data-val="no-cambia" onclick="selectPillOption(this,event)"><span class="pp-opt-dot" style="background:#DC0028"></span><span class="pp-opt-lbl">No quiere/puede cambiar</span><span class="pp-chk">&#10003;</span></div>
+</div>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────────────
+var tipo = 'par';
+var vtosPerSi = false;
+var autEmpSi = false;
+var colabRecoge = 'M441819E';
+var colabAsigna = 'M441819E';
+var lastData = {};
+var ramoData = {};
+var currentRamoKey = null;
+var currentRamoType = null;
+var currentPillEl = null;
+var ramoCounts = {};
+var COLABS = { 'M441819E':'Dany Hernandez', 'M354046Y':'Fadoua Khachach', 'MA48168T':'Silvia Famoso' };
+
+var PILL_STATE_LABELS = {
+  '': '\u2014 Estado \u2014',
+  'vto-inmediato': 'VTO Inmediato / Tarificar',
+  'no-necesita': 'No necesita',
+  'necesita': 'Necesita pero no tiene',
+  'facilita': 'Tiene en competencia',
+  'no-cambia-vto': 'No cambia \u00b7 Da VTOS',
+  'no-cambia': 'No quiere cambiar'
+};
+
+// ─── RAMO CONFIG ─────────────────────────────────────────────────
+var RAMO_CONFIG = {
+  'hogar':         { name: 'Hogar',              emoji: '\uD83C\uDFE0', hasModal: true  },
+  'auto':          { name: 'Auto',               emoji: '\uD83D\uDE97', hasModal: true  },
+  'moto':          { name: 'Moto',               emoji: '\uD83C\uDFCD\uFE0F', hasModal: true  },
+  'vida':          { name: 'Vida',               emoji: '\u2764\uFE0F', hasModal: true  },
+  'salud':         { name: 'Salud',              emoji: '\uD83C\uDFE5', hasModal: true  },
+  'decesos':       { name: 'Decesos',            emoji: '\uD83D\uDD4A\uFE0F', hasModal: true  },
+  'ahorro-g':      { name: 'Ahorro Garantizado', emoji: '\uD83D\uDCB0', hasModal: true  },
+  'ahorro-i':      { name: 'Ahorro Inversion',   emoji: '\uD83D\uDCC8', hasModal: true  },
+  'embarcaciones': { name: 'Embarcaciones',      emoji: '\u26F5', hasModal: true  },
+  'comunidades':   { name: 'Comunidades',        emoji: '\uD83C\uDFD8\uFE0F', hasModal: true  },
+  'movilidad':     { name: 'Movilidad Personal', emoji: '\uD83D\uDEF4', hasModal: false },
+  'mascotas':      { name: 'Mascotas',           emoji: '\uD83D\uDC3E', hasModal: false },
+  'bienes-consumo':{ name: 'Bienes Consumo',     emoji: '\uD83D\uDED2', hasModal: false },
+  'plan-pensiones':{ name: 'Plan Pensiones',     emoji: '\uD83C\uDFE6', hasModal: false },
+  'accidentes':    { name: 'Accidentes',         emoji: '\uD83E\uDE79', hasModal: false },
+  'comercio-pyme': { name: 'Comercio / Pyme',    emoji: '\uD83C\uDFEA', hasModal: false },
+  'rc':            { name: 'Resp. Civil',        emoji: '\u2696\uFE0F', hasModal: false },
+  'acc-convenio':  { name: 'Acc. Convenio',      emoji: '\uD83D\uDCCB', hasModal: false },
+  'acc-autonomo':  { name: 'Acc. Autonomo',      emoji: '\uD83D\uDCBC', hasModal: false },
+  'salud-col':     { name: 'Salud Colectivo',    emoji: '\uD83D\uDC65', hasModal: false },
+  'ahorro-col':    { name: 'Ahorro Colectivo',   emoji: '\uD83D\uDC8E', hasModal: false },
+  'transportes':   { name: 'Transportes',        emoji: '\uD83D\uDE9A', hasModal: false },
+  'baja-ilt-aut':  { name: 'Baja ILT Aut\u00f3nomo', emoji: '\uD83E\uDE7A', hasModal: false },
+  'subsidio':      { name: 'Subsidio',           emoji: '\uD83D\uDCB6', hasModal: false },
+  'otro':          { name: 'Otro',               emoji: '\uD83D\uDCDD', hasModal: true  }
+};
+
+var GRIDS = {
+  'grid-estrategicos': ['hogar','auto','moto','vida','salud','decesos','ahorro-g','ahorro-i','otro'],
+  'grid-ofertables': ['embarcaciones','comunidades','movilidad','mascotas','bienes-consumo','plan-pensiones','accidentes','otro'],
+  'grid-neg-actividad': ['comercio-pyme','rc','acc-convenio','transportes','otro'],
+  'grid-neg-empleados': ['acc-convenio','salud-col','ahorro-col','otro'],
+  'grid-neg-autonomo': ['baja-ilt-aut','salud','subsidio','otro']
+};
+
+// ─── DATA BADGE ──────────────────────────────────────────────────
+function isModalComplete(type, d) {
+  if (!d) return false;
+  if (type==='hogar') return !!(d.tipoProp && d.personas > 0);
+  if (type==='auto'||type==='moto') return !!(d.matricula && d.mesVcto);
+  if (type==='salud') return !!(d.personas > 0 && d.modalidad);
+  if (type==='decesos') return !!(d.personas > 0);
+  if (type==='vida') return !!(d.personas > 0 || d.capital);
+  if (type==='ahorro-g'||type==='ahorro-i') return !!(d.activo || d.aportaciones);
+  if (type==='comunidades') return !!(d.nombreCom);
+  if (type==='embarcaciones') return !!(d.eslora && d.nmotores);
+  if (type==='otro') return !!(d.notas && d.notas.trim());
+  return false;
+}
+function hasAnyData(type, d) {
+  if (!d) return false;
+  if (d._saved) return true;
+  var keys = Object.keys(d).filter(function(k){return k!=='estado'&&k!=='_saved';});
+  return keys.some(function(k){
+    var v=d[k];
+    if(typeof v==='boolean') return v;
+    if(Array.isArray(v)) return v.length>0;
+    return v!==''&&v!==0&&v!==null&&v!==undefined;
+  });
+}
+function buildDataBadge(type, key) {
+  var cfg = RAMO_CONFIG[type];
+  if (!cfg || !cfg.hasModal) return '';
+  var d = ramoData[key];
+  if (!d || !hasAnyData(type, d)) return '';
+  var ok = isModalComplete(type, d);
+  return '<span class="'+(ok?'data-badge-ok':'data-badge-warn')+'">'+(ok?'\u2713':'\u0021')+'</span>';
+}
+function refreshPillBadge(key) {
+  var pill = document.querySelector('[data-key="'+key+'"]');
+  if (!pill) return;
+  var type = pill.getAttribute('data-type');
+  pill.querySelectorAll('.data-badge-ok,.data-badge-warn').forEach(function(b){b.remove();});
+  var badgeHtml = buildDataBadge(type, key);
+  if (badgeHtml) {
+    var tmp = document.createElement('div'); tmp.innerHTML = badgeHtml;
+    var badgeEl = tmp.firstChild;
+    pill.appendChild(badgeEl);
+    if (badgeEl.classList.contains('data-badge-warn')) {
+      pill.classList.add('pill-badge-danger');
+    } else {
+      pill.classList.remove('pill-badge-danger');
+    }
+  } else {
+    pill.classList.remove('pill-badge-danger');
+  }
+}
+
+// ─── BUILD PILL ──────────────────────────────────────────────────
+function buildPill(type, key, isDup) {
+  var cfg = RAMO_CONFIG[type];
+  if (!cfg) return null;
+  var pill = document.createElement('div');
+  pill.className = 'ramo-pill';
+  pill.setAttribute('data-type', type);
+  pill.setAttribute('data-key', key);
+  if (isDup) pill.setAttribute('data-dup', '1');
+
+  var badge = isDup ? '<span class="ramo-badge">#' + key.split('-').pop() + '</span>' : '';
+  var dataBadge = buildDataBadge(type, key);
+  var delBtn = isDup
+    ? '<button class="rpa-btn rpa-del" type="button" onclick="delPill(this);event.stopPropagation()" title="Eliminar">\u2715</button>'
+    : '';
+
+  pill.innerHTML = badge + dataBadge +
+    '<div class="rp-icon-col"><span class="rp-icon">' + cfg.emoji + '</span></div>' +
+    '<div class="rp-name">' + cfg.name + '</div>' +
+    '<div class="rp-acts-col">' +
+      '<button class="rpa-btn rpa-dup" type="button" title="A\u00f1adir otro">+</button>' +
+      delBtn +
+    '</div>' +
+    '<input type="checkbox" name="seg" value="' + cfg.name + '" style="display:none">';
+
+  // "+" button duplicates without opening popup
+  var dupBtn = pill.querySelector('.rpa-dup');
+  if (dupBtn) dupBtn.addEventListener('click', function(e) { e.stopPropagation(); dupPill(dupBtn); });
+  var delBtnEl = pill.querySelector('.rpa-del');
+  if (delBtnEl) delBtnEl.addEventListener('click', function(e) { e.stopPropagation(); delPill(delBtnEl); });
+
+  // Clicking icon or name opens state popup
+  pill.addEventListener('click', function(e) {
+    if (e.target.closest('.rp-acts-col')) return;
+    openPillPopup(pill, e);
+  });
+
+  var d = ramoData[key] || {};
+  if (d.estado) applyPillState(pill, d.estado, false);
+  return pill;
+}
+
+function renderGrid(gridId, types) {
+  var grid = document.getElementById(gridId);
+  if (!grid) return;
+  grid.innerHTML = '';
+  var seen = {};
+  types.forEach(function(t) {
+    // 'otro' pill gets unique key per grid
+    var key = (t === 'otro') ? (gridId + '-otro-1') : (t + '-1');
+    var p = buildPill(t, key, false);
+    if (p) grid.appendChild(p);
+  });
+}
+
+function initGrids() {
+  for (var gId in GRIDS) renderGrid(gId, GRIDS[gId]);
+}
+
+function updateNegocioGroups() {
+  var isEmp = tipo === 'emp';
+  var isAut = tipo === 'aut';
+  // actividad + autonomo always visible for both emp and aut
+  var grA = document.getElementById('neg-grupo-actividad');
+  var grE = document.getElementById('neg-grupo-empleados');
+  var grO = document.getElementById('neg-grupo-autonomo');
+  if (grA) grA.style.display = (isEmp || isAut) ? '' : 'none';
+  if (grO) grO.style.display = (isEmp || isAut) ? '' : 'none';
+  // empleados: always for emp, only if autEmpSi for aut
+  if (grE) grE.style.display = (isEmp || (isAut && autEmpSi)) ? '' : 'none';
+}
+
+// ─── PILL POPUP ──────────────────────────────────────────────────
+function openPillPopup(pill, ev) {
+  if (ev) ev.stopPropagation();
+  var popup = document.getElementById('pillPopup');
+  var key = pill.getAttribute('data-key');
+  var d = ramoData[key] || {};
+  var current = d.estado || '';
+  popup.querySelectorAll('.pp-opt').forEach(function(opt) {
+    opt.classList.toggle('active', opt.getAttribute('data-val') === current);
+  });
+  currentPillEl = pill;
+  popup.style.display = 'block';
+  var rect = pill.getBoundingClientRect();
+  var pw = popup.offsetWidth || 210;
+  var ph = popup.offsetHeight || 160;
+  var left = Math.min(rect.left, window.innerWidth - pw - 8);
+  var top = (window.innerHeight - rect.bottom > ph + 8) ? rect.bottom + 4 : rect.top - ph - 4;
+  popup.style.left = Math.max(4, left) + 'px';
+  popup.style.top = top + 'px';
+}
+
+function closePillPopup() {
+  document.getElementById('pillPopup').style.display = 'none';
+  currentPillEl = null;
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#pillPopup') && !e.target.closest('.ramo-pill')) {
+    closePillPopup();
+  }
+});
+
+function selectPillOption(opt, ev) {
+  if (ev) ev.stopPropagation();
+  var val = opt.getAttribute('data-val');
+  if (currentPillEl) {
+    applyPillState(currentPillEl, val, true);
+  }
+  closePillPopup();
+}
+
+// ─── PILL STATE ──────────────────────────────────────────────────
+function applyPillState(pill, val, openModal) {
+  var type = pill.getAttribute('data-type');
+  var key  = pill.getAttribute('data-key');
+  var cb   = pill.querySelector('input[name="seg"]');
+
+  pill.classList.remove('pill-gris','pill-naranja','pill-verde','pill-azul','pill-rojo','pill-purpura','active');
+  if (cb) cb.checked = false;
+
+  var needsModal = openModal && RAMO_CONFIG[type] && RAMO_CONFIG[type].hasModal;
+  if (val === 'vto-inmediato') {
+    pill.classList.add('pill-purpura','active');
+    if (cb) cb.checked = true;
+    if (needsModal) setTimeout(function() { openRamoModal(type, key); }, 180);
+  } else if (val === 'no-necesita') {
+    pill.classList.add('pill-gris');
+  } else if (val === 'necesita') {
+    pill.classList.add('pill-naranja','active');
+    if (cb) cb.checked = true;
+    if (needsModal) setTimeout(function() { openRamoModal(type, key); }, 180);
+  } else if (val === 'facilita') {
+    pill.classList.add('pill-verde','active');
+    if (cb) cb.checked = true;
+    if (needsModal) setTimeout(function() { openRamoModal(type, key); }, 180);
+  } else if (val === 'no-cambia-vto') {
+    pill.classList.add('pill-azul','active');
+    if (cb) cb.checked = true;
+    if (needsModal) setTimeout(function() { openRamoModal(type, key); }, 180);
+  } else if (val === 'no-cambia') {
+    pill.classList.add('pill-rojo','active');
+    if (cb) cb.checked = true;
+    // No modal — solo registra el rechazo
+  }
+
+  var d = ramoData[key] || {};
+  d.estado = val;
+  ramoData[key] = d;
+  updProg();
+}
+
+function dupPill(btn) {
+  var pill = btn.closest('.ramo-pill');
+  var type = pill.getAttribute('data-type');
+  // For 'otro' pills use the existing key as base to avoid collisions across grids
+  var baseKey = pill.getAttribute('data-key');
+  var countKey = type === 'otro' ? baseKey : type;
+  var n = (ramoCounts[countKey] || 1) + 1;
+  ramoCounts[countKey] = n;
+  var key = (type === 'otro') ? (baseKey.replace(/-\d+$/, '') + '-' + n) : (type + '-' + n);
+  var newPill = buildPill(type, key, true);
+  var grid = pill.parentElement;
+  var all = grid.querySelectorAll('[data-type="' + type + '"]');
+  var last = all[all.length - 1];
+  last.parentNode.insertBefore(newPill, last.nextSibling);
+}
+
+function delPill(btn) {
+  var pill = btn.closest('.ramo-pill');
+  if (pill) {
+    var key = pill.getAttribute('data-key');
+    if (key) delete ramoData[key];
+    pill.remove();
+    updProg();
+  }
+}
+
+// ─── TIPO CLIENTE ────────────────────────────────────────────────
 function setTipo(t, el) {
   tipo = t;
-  document.querySelectorAll('.tipo-opt').forEach(o => o.classList.remove('active'));
-  el.classList.add('active');
-  // Show/hide blocks
-  var par = document.getElementById('block-par');
-  var emp = document.getElementById('block-emp');
-  if (t === 'emp') {
-    par.classList.remove('show');
-    emp.classList.add('show');
-  } else {
-    par.classList.add('show');
-    emp.classList.remove('show');
-  }
-  updProg();
+  document.querySelectorAll('.tipo-opt').forEach(function(o) {
+    o.classList.remove('active'); o.querySelector('input').checked = false;
+  });
+  el.classList.add('active'); el.querySelector('input').checked = true;
+  vtosPerSi = false;
+  var vsi = document.getElementById('vper-si'); var vno = document.getElementById('vper-no');
+  if (vsi) { vsi.classList.remove('si','no'); } if (vno) { vno.classList.remove('si','no'); }
+  updateVisibility(); updProg();
 }
 
-// ─── COLLABORATOR ─────────────────────────────────────────────
-function setColab(c, el) {
-  colab = c;
-  document.querySelectorAll('.colab-opt').forEach(o => o.classList.remove('active'));
-  el.classList.add('active');
-  updProg();
+function updateVisibility() {
+  var isPar = tipo==='par', isEmp = tipo==='emp', isAut = tipo==='aut';
+  var isNegocio = isEmp || isAut;
+  document.getElementById('block-par').style.display = isPar ? 'block' : 'none';
+  document.getElementById('block-emp').style.display = isEmp ? 'block' : 'none';
+  document.getElementById('block-aut').style.display = isAut ? 'block' : 'none';
+  document.getElementById('card-negocio').style.display = isNegocio ? 'block' : 'none';
+  document.getElementById('card-vtos-per-ask').style.display = isNegocio ? 'block' : 'none';
+  var showPar = isPar || (isNegocio && vtosPerSi);
+  document.getElementById('card-par-segs').style.display = showPar ? 'block' : 'none';
+  updateNegocioGroups();
 }
 
-// ─── SEGUROS TOGGLE ───────────────────────────────────────────
-document.querySelectorAll('.seg-opt input').forEach(cb => {
-  cb.addEventListener('change', function() {
-    this.closest('.seg-opt').classList.toggle('active', this.checked);
-    updProg();
-  });
-});
+function setVtosPer(val) {
+  vtosPerSi = val === 'si';
+  var si = document.getElementById('vper-si'); var no = document.getElementById('vper-no');
+  si.classList.remove('si','no'); no.classList.remove('si','no');
+  if (vtosPerSi) si.classList.add('si'); else no.classList.add('no');
+  updateVisibility();
+}
 
-// ─── ORIGEN ───────────────────────────────────────────────────
-document.querySelectorAll('.origen-opt input').forEach(rb => {
-  rb.addEventListener('change', function() {
-    document.querySelectorAll('.origen-opt').forEach(o => o.classList.remove('active'));
-    this.closest('.origen-opt').classList.add('active');
-    document.getElementById('referido-block').style.display = this.value === 'referido' ? 'block' : 'none';
-    updProg();
-  });
-});
+function setAutEmp(val) {
+  autEmpSi = val === 'si';
+  var si = document.getElementById('aut-emp-si'); var no = document.getElementById('aut-emp-no');
+  si.classList.remove('si','no'); no.classList.remove('si','no');
+  if (autEmpSi) si.classList.add('si'); else no.classList.add('no');
+  var wrap = document.getElementById('aut-emp-select-wrap');
+  if (wrap) wrap.style.display = autEmpSi ? 'block' : 'none';
+  updateNegocioGroups();
+}
 
-// ─── PROGRESS ─────────────────────────────────────────────────
+function setSexo(val, btn, fid) {
+  var sel = btn.closest('.sexo-selector');
+  sel.querySelectorAll('.sexo-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  var f = document.getElementById(fid); if (f) f.value = val;
+}
+
+function fillEmpleados(id) {
+  var s = document.getElementById(id); if (!s) return;
+  var h = '<option value="">\u2014 N\u00ba empleados \u2014</option>';
+  for (var i=1; i<=100; i++) h += '<option value="' + i + '">' + i + '</option>';
+  s.innerHTML = h;
+}
+
+function setColab(fila, c, el) {
+  if (fila==='recoge') colabRecoge = c; else colabAsigna = c;
+  var row = el.closest('.colab-row');
+  row.querySelectorAll('.colab-opt').forEach(function(o) { o.classList.remove('active'); });
+  el.classList.add('active'); updProg();
+}
+
 function updProg() {
-  var fields = [
-    document.getElementById(tipo === 'emp' ? 'razon' : 'nombre'),
-    document.getElementById(tipo === 'emp' ? 'cif' : 'nif'),
-    document.getElementById('tel1'),
-    document.getElementById('email1'),
-    document.getElementById('dir'),
-    document.getElementById('cp'),
-    document.getElementById('muni'),
-  ];
-  var filled = fields.filter(f => f && f.value.trim()).length;
-  var hasOrigen = !!document.querySelector('input[name="origen"]:checked');
-  var hasColab = !!colab;
-  var total = fields.length + 2;
-  var pct = Math.round(((filled + (hasOrigen?1:0) + (hasColab?1:0)) / total) * 100);
+  var fields = [];
+  if (tipo==='par') { fields.push(document.getElementById('par-nombre')); fields.push(document.getElementById('par-nif')); }
+  else if (tipo==='emp') { fields.push(document.getElementById('emp-razon')); fields.push(document.getElementById('emp-cif')); }
+  else if (tipo==='aut') { fields.push(document.getElementById('aut-nombre')); fields.push(document.getElementById('aut-nif')); }
+  ['tel1','email1','dir','cp','muni'].forEach(function(id) { fields.push(document.getElementById(id)); });
+  var filled = fields.filter(function(f) { return f && f.value.trim(); }).length;
+  var total = Math.max(fields.length, 1) + 2;
+  var pct = Math.min(Math.round(((filled + 2) / total) * 100), 100);
   document.getElementById('progFill').style.width = pct + '%';
 }
 
-document.querySelectorAll('input, select, textarea').forEach(el => {
-  el.addEventListener('input', updProg);
-  el.addEventListener('change', updProg);
+document.querySelectorAll('input, select, textarea').forEach(function(el) {
+  el.addEventListener('input', updProg); el.addEventListener('change', updProg);
 });
 
-// ─── VALIDATION ───────────────────────────────────────────────
-function v(id, req) {
+// ─── VALIDATION / COLLECT ────────────────────────────────────────
+function v(id) {
   var el = document.getElementById(id);
-  if (!el) return true;
-  if (req && !el.value.trim()) {
-    el.style.borderColor = '#DC0028';
-    el.focus();
-    return false;
-  }
-  el.style.borderColor = '';
-  return true;
+  if (!el || !el.value.trim()) { if(el){el.style.borderColor='#DC0028';el.focus();} return false; }
+  el.style.borderColor=''; return true;
 }
-
 function validate() {
   var ok = true;
-  if (tipo === 'emp') {
-    ok = v('razon', true) && ok;
-    ok = v('cif', true) && ok;
-  } else {
-    ok = v('nombre', true) && ok;
-    ok = v('ap1', true) && ok;
-    ok = v('nif', true) && ok;
-  }
-  ok = v('tel1', true) && ok;
-  ok = v('email1', true) && ok;
-  ok = v('dir', true) && ok;
-  ok = v('cp', true) && ok;
-  ok = v('muni', true) && ok;
-  if (!document.querySelector('input[name="origen"]:checked')) {
-    alert('Por favor selecciona el origen del cliente');
-    ok = false;
-  }
+  if (tipo==='par') { if(!v('par-nombre'))ok=false; if(!v('par-nif'))ok=false; }
+  else if (tipo==='emp') { if(!v('emp-razon'))ok=false; if(!v('emp-cif'))ok=false; }
+  else if (tipo==='aut') { if(!v('aut-nombre'))ok=false; if(!v('aut-nif'))ok=false; }
+  if(!v('tel1'))ok=false; if(!v('email1'))ok=false;
+  if(!v('dir'))ok=false; if(!v('cp'))ok=false; if(!v('muni'))ok=false;
   return ok;
 }
-
-// ─── COLLECT DATA ─────────────────────────────────────────────
 function collectData() {
-  var g = id => (document.getElementById(id)?.value || '').trim();
-  var seguros = Array.from(document.querySelectorAll('input[name="seg"]:checked')).map(c => c.value);
-  var origen = document.querySelector('input[name="origen"]:checked')?.value || '';
-  var colabs = {'M441819E':'Dany Hernandez','M354046Y':'Fadoua Khachach','MA48168T':'Silvia Famoso'};
+  var g = function(id){var el=document.getElementById(id);return el?el.value.trim():'';};
+  var seguros = Array.from(document.querySelectorAll('.ramo-pill.active input[name="seg"]')).map(function(c){return c.value;});
+  var origenSw = Array.from(document.querySelectorAll('input[name="origen-sw"]:checked')).map(function(c){return c.value;});
+  var tipoLabel = {par:'Particular',emp:'Empresa',aut:'Aut\u00f3nomo'}[tipo]||tipo;
+  var nombreCompleto = tipo==='emp' ? g('emp-razon') :
+    tipo==='aut' ? [g('aut-nombre'),g('aut-ap1'),g('aut-ap2')].filter(Boolean).join(' ') :
+    [g('par-nombre'),g('par-ap1'),g('par-ap2')].filter(Boolean).join(' ');
   return {
-    tipo,
-    nombre_completo: tipo === 'emp' ? g('razon') : [g('nombre'),g('ap1'),g('ap2')].filter(Boolean).join(' '),
-    nif_cif: tipo === 'emp' ? g('cif') : g('nif'),
-    fecha_nacimiento: g('fnac'),
-    sexo: g('sexo'),
-    contacto: tipo === 'emp' ? g('contacto') : '',
-    cargo: g('cargo'),
-    tel1: g('tel1'), tel2: g('tel2'), whatsapp: g('wapp'),
-    email1: g('email1'), email2: g('email2'),
-    direccion: g('dir'),
-    cp: g('cp'), municipio: g('muni'), provincia: g('prov'), pais: g('pais'),
-    seguros,
-    origen,
-    referido_por: origen === 'referido' ? g('referido-por') : '',
-    colaborador: colabs[colab] || colab,
-    colaborador_racf: colab,
-    observaciones: g('obs'),
-    primera_accion: g('primera-accion'),
-    fecha_accion: g('fecha-accion'),
-    seg_actual: g('seg-actual'),
-    timestamp: new Date().toLocaleString('es-ES')
+    tipo:tipo, tipo_label:tipoLabel, nombre_completo:nombreCompleto,
+    nif_cif:tipo==='emp'?g('emp-cif'):(tipo==='aut'?g('aut-nif'):g('par-nif')),
+    fecha_nacimiento:tipo==='aut'?g('aut-fnac'):g('par-fnac'),
+    sexo:tipo==='aut'?g('aut-sexo'):g('par-sexo'),
+    estado_civil:g('par-estcivil'), hijos:g('par-hijos'),
+    actividad:tipo==='emp'?g('emp-actividad'):g('aut-actividad'),
+    antiguedad:tipo==='emp'?g('emp-antiguedad'):g('aut-antiguedad'),
+    empleados:tipo==='emp'?g('empleados-emp'):g('empleados-aut'),
+    tel1:g('tel1'), whatsapp:g('wapp'), redes:g('redes'),
+    email1:g('email1'), email2:g('email2'),
+    direccion:g('dir'), cp:g('cp'), localidad:g('muni'),
+    seguros:seguros, ramo_data:JSON.stringify(ramoData),
+    colab_recoge:COLABS[colabRecoge]||colabRecoge, colab_recoge_racf:colabRecoge,
+    colab_asigna:COLABS[colabAsigna]||colabAsigna, colab_asigna_racf:colabAsigna,
+    motivo_contacto:g('obs'), primera_accion:g('primera-accion'), fecha_accion:g('fecha-accion'),
+    origen_sw:origenSw.join(', '), origen_detalle:g('origen-detalle'),
+    timestamp:new Date().toLocaleString('es-ES'),
+    // Individual fields for reliable restoration
+    par_nombre:g('par-nombre'), par_ap1:g('par-ap1'), par_ap2:g('par-ap2'),
+    par_nif:g('par-nif'), par_fnac:g('par-fnac'), par_sexo:g('par-sexo'),
+    par_estcivil:g('par-estcivil'), par_hijos:g('par-hijos'),
+    emp_razon:g('emp-razon'), emp_cif:g('emp-cif'), emp_actividad:g('emp-actividad'),
+    emp_antiguedad:g('emp-antiguedad'), emp_empleados:g('empleados-emp'),
+    aut_nombre:g('aut-nombre'), aut_ap1:g('aut-ap1'), aut_ap2:g('aut-ap2'),
+    aut_nif:g('aut-nif'), aut_fnac:g('aut-fnac'), aut_sexo:g('aut-sexo'),
+    aut_actividad:g('aut-actividad'), aut_antiguedad:g('aut-antiguedad'),
+    aut_empleados:g('empleados-aut'),
+    vtos_per:vtosPerSi, aut_emp:autEmpSi
   };
 }
 
-// ─── SUBMIT ───────────────────────────────────────────────────
+// ─── SUBMIT / CLEAR / SAVE ────────────────────────────────────────
 function submitForm() {
   if (!validate()) return;
   lastData = collectData();
-  // Save to localStorage
-  var key = 'optimizarte_clientes';
-  var lista = JSON.parse(localStorage.getItem(key) || '[]');
   lastData.id = Date.now();
-  lista.push(lastData);
-  localStorage.setItem(key, JSON.stringify(lista));
-  // Show modal
-  var md = document.getElementById('modal-data');
-  md.innerHTML = buildSummary(lastData);
+  // Save to localStorage (fallback)
+  try{var lista=JSON.parse(localStorage.getItem('optimizarte_clientes')||'[]');lista.push(lastData);localStorage.setItem('optimizarte_clientes',JSON.stringify(lista));}catch(e){}
+  // Save to file if folder connected
+  if (clientesDir) {
+    saveClientToFile(lastData).then(function(fname) {
+      if (fname) console.log('Guardado:', fname);
+    });
+  }
+  document.getElementById('modal-data').innerHTML = buildSummary(lastData);
   document.getElementById('modal').classList.add('show');
 }
-
 function buildSummary(d) {
-  var lines = [
-    '<strong>'+d.nombre_completo+'</strong> ('+{par:'Particular',emp:'Empresa',aut:'Autónomo'}[d.tipo]+')',
-    'NIF/CIF: '+d.nif_cif,
-    'Tel: '+d.tel1+(d.email1?' · '+d.email1:''),
-    'Dir: '+d.direccion+', '+d.cp+' '+d.municipio,
-    'Intereses: '+(d.seguros.join(', ')||'—'),
-    'Origen: '+d.origen+(d.referido_por?' ('+d.referido_por+')':''),
-    'Asignado a: '+d.colaborador,
-    (d.primera_accion?'Acción: '+d.primera_accion+(d.fecha_accion?' · '+d.fecha_accion:''):''),
-    d.observaciones?'Obs: '+d.observaciones:''
-  ].filter(Boolean);
-  return lines.join('<br>');
+  return ['<strong>'+d.nombre_completo+'</strong> ('+d.tipo_label+')',
+    'NIF/CIF: '+d.nif_cif,'Tel: '+d.tel1+(d.email1?' \u00b7 '+d.email1:''),
+    'Dir: '+d.direccion+', '+d.cp+' '+d.localidad,
+    'Ramos: '+(d.seguros.join(', ')||'\u2014'),
+    'Recoge: '+d.colab_recoge+' \u00b7 Asignado: '+d.colab_asigna,
+    d.primera_accion?'Acci\u00f3n: '+d.primera_accion+(d.fecha_accion?' \u00b7 '+d.fecha_accion:''):'',
+    d.motivo_contacto?'Motivo: '+d.motivo_contacto:''
+  ].filter(Boolean).join('<br>');
+}
+function copyData() {
+  var lines=[lastData.nombre_completo+' ('+lastData.tipo_label+')',
+    'NIF/CIF: '+lastData.nif_cif,'Tel: '+lastData.tel1+(lastData.email1?' | '+lastData.email1:''),
+    'Dir: '+lastData.direccion+', '+lastData.cp+' '+lastData.localidad,
+    'Ramos: '+(lastData.seguros.join(', ')||'\u2014'),
+    'Recoge: '+lastData.colab_recoge+' | Asignado: '+lastData.colab_asigna,
+    lastData.motivo_contacto?'Motivo: '+lastData.motivo_contacto:''
+  ].filter(Boolean).join('\n');
+  navigator.clipboard.writeText(lines).then(function(){
+    var btn=event.target;var orig=btn.textContent;btn.textContent='\u2713 Copiado!';
+    setTimeout(function(){btn.textContent=orig;},2000);
+  });
+}
+function newAlt(){document.getElementById('modal').classList.remove('show');clearForm();}
+function clearForm(){
+  setFormDates(null, null);
+  document.getElementById('altaForm').reset();
+  tipo='par';vtosPerSi=false;autEmpSi=false;
+  document.querySelectorAll('.tipo-opt').forEach(function(o){o.classList.remove('active');o.querySelector('input').checked=false;});
+  document.getElementById('tipo-par').classList.add('active');
+  document.getElementById('tipo-par').querySelector('input').checked=true;
+  document.querySelectorAll('.sexo-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('aut-emp-select-wrap').style.display='none';
+  document.getElementById('aut-emp-si').classList.remove('si','no');
+  document.getElementById('aut-emp-no').classList.remove('si','no');
+  colabRecoge='M441819E';colabAsigna='M441819E';
+  document.querySelectorAll('.colab-opt').forEach(function(o,i){o.classList.toggle('active',i===0||i===3);});
+  ramoData={};ramoCounts={};
+  initGrids();updateVisibility();updProg();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function saveDraft(){
+  var d=collectData();
+  try{localStorage.setItem('optimizarte_draft',JSON.stringify(d));}catch(e){}
+  var btn=event.target;var orig=btn.textContent;
+  btn.textContent='\u2713 Guardado';btn.style.borderColor='#10B981';btn.style.color='#10B981';
+  setTimeout(function(){btn.textContent=orig;btn.style.borderColor='';btn.style.color='';},2000);
 }
 
-function copyData() {
-  var lines = [
-    lastData.nombre_completo+' ('+{par:'Particular',emp:'Empresa',aut:'Autónomo'}[lastData.tipo]+')',
-    'NIF/CIF: '+lastData.nif_cif,
-    'Tel: '+lastData.tel1+(lastData.email1?' | '+lastData.email1:''),
-    'Dirección: '+lastData.direccion+', '+lastData.cp+' '+lastData.municipio+' ('+lastData.provincia+')',
-    'Seguros: '+(lastData.seguros.join(', ')||'—'),
-    'Origen: '+lastData.origen,
-    'Asignado: '+lastData.colaborador,
-    lastData.observaciones?'Obs: '+lastData.observaciones:''
-  ].filter(Boolean).join('\n');
-  navigator.clipboard.writeText(lines).then(() => {
-    var btn = event.target;
-    var orig = btn.textContent;
-    btn.textContent = '✓ Copiado!';
-    setTimeout(() => btn.textContent = orig, 2000);
+// ─── RAMO MODAL ──────────────────────────────────────────────────
+function openRamoModal(type, key) {
+  if (!RAMO_CONFIG[type] || !RAMO_CONFIG[type].hasModal) return;
+  currentRamoKey = key;
+  currentRamoType = type;
+  var d = ramoData[key] || {};
+  var num = key.split('-').pop();
+  document.getElementById('rmIcon').textContent = RAMO_CONFIG[type].emoji;
+  document.getElementById('rmTitle').textContent = RAMO_CONFIG[type].name + (parseInt(num)>1?' #'+num:'');
+  document.getElementById('rmBody').innerHTML = buildModalBody(type, d);
+  document.getElementById('ramoOverlay').classList.add('show');
+}
+function closeRamoModal(){document.getElementById('ramoOverlay').classList.remove('show');currentRamoKey=null;currentRamoType=null;}
+document.getElementById('ramoOverlay').addEventListener('click',function(e){if(e.target===this)closeRamoModal();});
+
+// ─── PERSON ICONS ────────────────────────────────────────────────
+function buildPersonIcons(fid, n, maxIcons) {
+  maxIcons = maxIcons || 6;
+  var svg='<svg viewBox="0 0 28 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="8.5" r="7"/><path d="M1 32c0-7.18 5.82-13 13-13s13 5.82 13 13"/></svg>';
+  n = Math.min(n, maxIcons);
+  var h='<div class="p-icons" data-field="'+fid+'" data-value="'+n+'">';
+  for(var i=1;i<=maxIcons;i++) h+='<span class="p-icon'+(i<=n?' lit':'')+'" data-n="'+i+'" onclick="selectPersonCount(this)">'+svg+'</span>';
+  return h+'</div>';
+}
+function selectPersonCount(icon) {
+  var c=icon.closest('.p-icons');var n=parseInt(icon.getAttribute('data-n'));
+  c.querySelectorAll('.p-icon').forEach(function(ic){ic.classList.toggle('lit',parseInt(ic.getAttribute('data-n'))<=n);});
+  c.setAttribute('data-value',n);
+  var fid=c.getAttribute('data-field');
+  if(fid==='salud-p') updateSaludFechas(n);
+  if(fid==='decesos-p') updateDecesosFechas(n);
+  if(fid==='vida-p') updateVidaFechas(n);
+}
+
+function setPropType(btn){
+  btn.closest('.prop-switcher').querySelectorAll('.prop-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+}
+
+// yn-group with optional data-target to show/hide a panel
+function setYN(btn,val){
+  var g=btn.closest('.yn-group');
+  g.querySelectorAll('.yn-btn').forEach(function(b){b.classList.remove('yes','no');});
+  if(val==='Si') btn.classList.add('yes'); else btn.classList.add('no');
+  var tid=g.getAttribute('data-target');
+  if(tid){var tw=document.getElementById(tid);if(tw)tw.style.display=val==='Si'?'':'none';}
+}
+
+function buildMesOptions(sel){
+  var m=['','INMEDIATO','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  return m.map(function(x,i){var v=i===0?'':x;return '<option value="'+v+'"'+(v===(sel||'')?' selected':'')+'>'+(i===0?'\u2014 Mes \u2014':x)+'</option>';}).join('');
+}
+
+// ─── PER-PERSON FIELD BUILDERS ───────────────────────────────────
+function buildPersonRowHtml(i, ex, extraFields) {
+  var h='<div style="border:1px solid var(--border);border-radius:6px;padding:10px;margin-bottom:8px">';
+  h+='<div style="font-size:10px;font-weight:700;color:var(--gray);margin-bottom:8px">Persona '+i+'</div>';
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
+  h+='<div class="rm-field" style="margin:0"><span class="rm-label" style="font-size:9px">F. Nacimiento</span>';
+  h+='<input class="rm-input" type="date" data-fnac="'+i+'" value="'+(ex.fnac||'')+'"></div>';
+  h+='<div class="rm-field" style="margin:0"><span class="rm-label" style="font-size:9px">Sexo</span>';
+  h+='<select class="rm-input" data-sexo="'+i+'">';
+  h+='<option value=""'+((!ex.sexo)?' selected':'')+'>&#8212;</option>';
+  h+='<option value="H"'+(ex.sexo==='H'?' selected':'')+'>Hombre</option>';
+  h+='<option value="M"'+(ex.sexo==='M'?' selected':'')+'>Mujer</option>';
+  h+='</select></div>';
+  if(extraFields){
+    h+='<div class="rm-field" style="margin:0"><span class="rm-label" style="font-size:9px">Profesi&#243;n</span>';
+    h+='<input class="rm-input" type="text" data-prof="'+i+'" placeholder="Profesi&#243;n..." value="'+(ex.prof||'')+'"></div>';
+    h+='<div class="rm-field" style="margin:0"><span class="rm-label" style="font-size:9px">Deportes</span>';
+    h+='<select class="rm-input" data-deporte="'+i+'" onchange="toggleDeporteCampo(this)">';
+    h+='<option value=""'+((!ex.deporte)?' selected':'')+'>&#8212;</option>';
+    h+='<option value="No"'+(ex.deporte==='No'?' selected':'')+'>No</option>';
+    h+='<option value="Si"'+(ex.deporte==='Si'?' selected':'')+'>S&#237; (aficionado)</option>';
+    h+='<option value="Competicion"'+(ex.deporte==='Competicion'?' selected':'')+'>Competici&#243;n</option>';
+    h+='</select></div>';
+    h+='<div id="rm-dep-campo-'+i+'" class="rm-field" style="margin:0;grid-column:span 2;'+(( ex.deporte==='Si'||ex.deporte==='Competicion')?'':'display:none')+'">';
+    h+='<span class="rm-label" style="font-size:9px">Deporte practicado</span>';
+    h+='<input class="rm-input" type="text" data-deportenombre="'+i+'" placeholder="Running, nataci&#243;n, ciclismo..." value="'+(ex.deporteNombre||'')+'"></div>';
+  }
+  h+='</div></div>';
+  return h;
+}
+
+function toggleDeporteCampo(sel){
+  var i=sel.getAttribute('data-deporte');
+  var wrap=document.getElementById('rm-dep-campo-'+i);
+  if(wrap)wrap.style.display=(sel.value==='Si'||sel.value==='Competicion')?'':'none';
+}
+
+function buildSaludFechasHtml(n, personasData){
+  if(!n||n<1)return '';
+  var h='';
+  for(var i=1;i<=n;i++){var ex=(personasData&&personasData[i-1])||{};h+=buildPersonRowHtml(i,ex,true);}
+  return h;
+}
+function buildDecesosFechasHtml(n, personasData){
+  if(!n||n<1)return '';
+  var h='';
+  for(var i=1;i<=n;i++){var ex=(personasData&&personasData[i-1])||{};h+=buildPersonRowHtml(i,ex,false);}
+  return h;
+}
+
+function updateSaludFechas(n){
+  var wrap=document.getElementById('rm-fechas-wrap');if(!wrap)return;
+  var existing=[];
+  for(var i=1;i<=6;i++){
+    var fnEl=wrap.querySelector('[data-fnac="'+i+'"]');
+    var sxEl=wrap.querySelector('[data-sexo="'+i+'"]');
+    var prEl=wrap.querySelector('[data-prof="'+i+'"]');
+    var dpEl=wrap.querySelector('[data-deporte="'+i+'"]');
+    if(fnEl)existing[i-1]={fnac:fnEl.value,sexo:sxEl?sxEl.value:'',prof:prEl?prEl.value:'',deporte:dpEl?dpEl.value:''};
+  }
+  wrap.innerHTML=buildSaludFechasHtml(n,existing);
+}
+function updateDecesosFechas(n){
+  var wrap=document.getElementById('rm-decesos-fechas-wrap');if(!wrap)return;
+  var existing=[];
+  for(var i=1;i<=6;i++){
+    var fnEl=wrap.querySelector('[data-fnac="'+i+'"]');
+    var sxEl=wrap.querySelector('[data-sexo="'+i+'"]');
+    if(fnEl)existing[i-1]={fnac:fnEl.value,sexo:sxEl?sxEl.value:''};
+  }
+  wrap.innerHTML=buildDecesosFechasHtml(n,existing);
+}
+
+function buildVidaFechasHtml(n, personasData){
+  if(!n||n<1)return '';
+  var h='';
+  for(var i=1;i<=n;i++){var ex=(personasData&&personasData[i-1])||{};h+=buildPersonRowHtml(i,ex,false);}
+  return h;
+}
+function updateVidaFechas(n){
+  var wrap=document.getElementById('rm-vida-fechas-wrap');if(!wrap)return;
+  var existing=[];
+  for(var i=1;i<=4;i++){
+    var fnEl=wrap.querySelector('[data-fnac="'+i+'"]');
+    var sxEl=wrap.querySelector('[data-sexo="'+i+'"]');
+    if(fnEl)existing[i-1]={fnac:fnEl.value,sexo:sxEl?sxEl.value:''};
+  }
+  wrap.innerHTML=buildVidaFechasHtml(n,existing);
+}
+
+// Persona block fields for autos (used in addAutoConductor)
+function buildPersonBlockFields(prefix,carnetLabel){
+  var cl=carnetLabel||'F. Carnet B';
+  return '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px">'+
+    '<div class="rm-field" style="margin:0"><span class="rm-label" style="font-size:9px">Nombre</span><input class="rm-input" id="'+prefix+'-nombre"></div>'+
+    '<div class="rm-field" style="margin:0"><span class="rm-label" style="font-size:9px">Primer apellido</span><input class="rm-input" id="'+prefix+'-ap1"></div>'+
+    '<div class="rm-field" style="margin:0"><span class="rm-label" style="font-size:9px">Segundo apellido</span><input class="rm-input" id="'+prefix+'-ap2"></div>'+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">'+
+    '<div class="rm-field" style="margin:0"><span class="rm-label" style="font-size:9px">DNI / NIE</span><input class="rm-input" id="'+prefix+'-dni" style="text-transform:uppercase"></div>'+
+    '<div class="rm-field" style="margin:0"><span class="rm-label" style="font-size:9px">F. Nacimiento</span><input class="rm-input" type="date" id="'+prefix+'-fnac"></div>'+
+    '<div class="rm-field" style="margin:0"><span class="rm-label" style="font-size:9px">'+cl+'</span><input class="rm-input" type="date" id="'+prefix+'-fcarnet"></div>'+
+    '</div>';
+}
+
+// Auto section toggle (propietario / conductor)
+function setAutoSection(which, btn, val){
+  var sw=document.getElementById('rm-'+which+'-switcher');
+  if(sw)sw.querySelectorAll('.prop-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  var fld=document.getElementById('rm-'+which+'-fields');
+  if(fld)fld.style.display=(val==='otro')?'block':'none';
+}
+
+function addAutoConductor(){
+  var c=document.getElementById('rm-otros-conductores');
+  var n=c.querySelectorAll('.rm-conductor-block').length+1;
+  var div=document.createElement('div');
+  div.className='rm-conductor-block rm-block';
+  div.innerHTML='<div class="rm-block-lbl">Conductor '+n+
+    '<button class="rpa-btn rpa-del" type="button" style="margin-left:auto" onclick="this.closest(\'.rm-conductor-block\').remove()">\u2715</button></div>'+
+    buildPersonBlockFields('rm-cond-'+n);
+  c.appendChild(div);
+}
+
+function addSinco(){
+  var c=document.getElementById('rm-sincos');
+  var n=c.querySelectorAll('.rm-sinco-block').length+1;
+  var div=document.createElement('div');
+  div.className='rm-sinco-block rm-block';
+  div.innerHTML='<div class="rm-block-lbl">SINCO '+n+
+    (n>1?'<button class="rpa-btn rpa-del" type="button" style="margin-left:auto" onclick="this.closest(\'.rm-sinco-block\').remove()">\u2715</button>':'')+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">'+
+    '<div class="rm-field" style="margin:0"><span class="rm-label" style="font-size:9px">Compa\u00f1\u00eda</span><input class="rm-input rm-sinco-cia" placeholder="Nombre compa\u00f1\u00eda"></div>'+
+    '<div class="rm-field" style="margin:0"><span class="rm-label" style="font-size:9px">P\u00f3liza</span><input class="rm-input rm-sinco-poliza" placeholder="N\u00ba p\u00f3liza"></div>'+
+    '<div class="rm-field" style="margin:0"><span class="rm-label" style="font-size:9px">Matr\u00edcula</span><input class="rm-input rm-sinco-mat" placeholder="1234 ABC"></div>'+
+    '</div>';
+  c.appendChild(div);
+}
+
+function addMascotaDecesos(){
+  var list=document.getElementById('rm-mascotas-list');
+  var n=list.querySelectorAll('.rm-mascota-block').length+1;
+  var div=document.createElement('div');
+  div.className='rm-mascota-block rm-block';
+  div.innerHTML='<div class="rm-block-lbl">Mascota '+n+
+    '<button class="rpa-btn rpa-del" type="button" style="margin-left:auto" onclick="this.closest(\'.rm-mascota-block\').remove()">\u2715</button></div>'+
+    '<div class="rm-field"><span class="rm-label" style="font-size:9px">Tipo</span>'+
+    '<div class="prop-switcher rm-raza-sw">'+
+    '<button class="prop-btn active" type="button" onclick="setMascotaTipo(this,\'mestizo\')">Mestizo</button>'+
+    '<button class="prop-btn" type="button" onclick="setMascotaTipo(this,\'raza\')">Raza</button>'+
+    '</div></div>'+
+    '<div class="rm-raza-fields" style="display:none">'+
+    '<div class="rm-field"><span class="rm-label" style="font-size:9px">\u00bfEs PPI?</span>'+
+    '<div class="yn-group">'+
+    '<button class="yn-btn" type="button" onclick="setMascotaPPI(this,\'Si\')">\u2713 S\u00ed</button>'+
+    '<button class="yn-btn" type="button" onclick="setMascotaPPI(this,\'No\')">\u2717 No</button>'+
+    '</div></div>'+
+    '<div class="rm-pppi-fields" style="display:none">'+
+    '<div class="rm-field"><span class="rm-label" style="font-size:9px">Raza PPPI</span>'+
+    '<select class="rm-input rm-pppi-select">'+
+    '<option value="">\u2014 Seleccionar raza \u2014</option>'+
+    '<option>Pit Bull Terrier</option><option>Staffordshire Bull Terrier</option>'+
+    '<option>American Staffordshire Terrier</option><option>Rottweiler</option>'+
+    '<option>Dogo Argentino</option><option>Fila Brasileiro</option>'+
+    '<option>Tosa Inu</option><option>Akita Inu</option>'+
+    '</select></div>'+
+    '<div class="rm-field"><span class="rm-label" style="font-size:9px">F. Nacimiento</span>'+
+    '<input class="rm-input rm-masc-fnac" type="date"></div>'+
+    '</div></div>';
+  list.appendChild(div);
+}
+
+function setMascotaTipo(btn,tipo){
+  var block=btn.closest('.rm-mascota-block');
+  btn.closest('.rm-raza-sw').querySelectorAll('.prop-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  var rf=block.querySelector('.rm-raza-fields');if(rf)rf.style.display=tipo==='raza'?'block':'none';
+}
+function setMascotaPPI(btn,val){
+  var g=btn.closest('.yn-group');
+  g.querySelectorAll('.yn-btn').forEach(function(b){b.classList.remove('yes','no');});
+  if(val==='Si')btn.classList.add('yes');else btn.classList.add('no');
+  var block=btn.closest('.rm-mascota-block');
+  var pf=block.querySelector('.rm-pppi-fields');if(pf)pf.style.display=val==='Si'?'block':'none';
+}
+
+// ─── BUILD MODAL BODY ────────────────────────────────────────────
+function buildModalBody(type, d){
+  d=d||{};
+  var carnetOpts='<option value="">\u2014</option><option>AM/LCM</option><option>A1</option><option>A2</option><option>A</option><option>B</option><option>C</option>';
+
+  switch(type){
+
+    // ── HOGAR ──────────────────────────────────────────────────────
+    case 'hogar':
+      return '<div class="rm-grid2" style="margin-bottom:14px">'+
+        '<div>'+
+          '<div class="rm-field"><span class="rm-label">Tipo de uso</span>'+
+            '<div class="prop-switcher">'+
+              '<button class="prop-btn'+(d.tipoProp==='Propietario'?' active':'')+'" type="button" onclick="setPropType(this)">Propietario</button>'+
+              '<button class="prop-btn'+(d.tipoProp==='Alquiler'?' active':'')+'" type="button" onclick="setPropType(this)">Alquiler</button>'+
+              '<button class="prop-btn'+(d.tipoProp==='Inquilino'?' active':'')+'" type="button" onclick="setPropType(this)">Inquilino</button>'+
+            '</div></div>'+
+          '<div class="rm-field"><span class="rm-label">Tipo de vivienda</span>'+
+            '<div class="prop-switcher" id="rm-tipo-viv">'+
+              '<button class="prop-btn'+(d.tipoViv==='Principal'?' active':'')+'" type="button" onclick="setPropType(this)">Principal</button>'+
+              '<button class="prop-btn'+(d.tipoViv==='Secundaria'?' active':'')+'" type="button" onclick="setPropType(this)">Secundaria</button>'+
+              '<button class="prop-btn'+(d.tipoViv==='Tur\u00edstica'?' active':'')+'" type="button" onclick="setPropType(this)">Tur\u00edstica</button>'+
+            '</div></div>'+
+        '</div>'+
+        '<div>'+
+          '<div class="rm-field">'+buildPersonIcons('hogar-p',d.personas||0)+
+            '<span class="rm-label" style="margin-top:6px">Personas que habitan</span></div>'+
+          '<div class="rm-field"><span class="rm-label">Piscina</span>'+
+            '<div class="yn-group">'+
+              '<button class="yn-btn'+(d.piscina==='Si'?' yes':'')+'" type="button" onclick="setYN(this,\'Si\')">\u2713 S\u00ed</button>'+
+              '<button class="yn-btn'+(d.piscina==='No'?' no':'')+'" type="button" onclick="setYN(this,\'No\')">\u2717 No</button>'+
+            '</div></div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="rm-field"><span class="rm-label">Hipoteca</span>'+
+        '<div class="yn-group" data-target="rm-capital-wrap">'+
+          '<button class="yn-btn'+(d.hipoteca==='Si'?' yes':'')+'" type="button" onclick="setYN(this,\'Si\')">\u2713 S\u00ed</button>'+
+          '<button class="yn-btn'+(d.hipoteca==='No'?' no':'')+'" type="button" onclick="setYN(this,\'No\')">\u2717 No</button>'+
+        '</div></div>'+
+      '<div class="rm-field" id="rm-capital-wrap" style="'+(d.hipoteca==='Si'?'':'display:none')+'">'+
+        '<span class="rm-label">Capital pendiente (\u20ac)</span>'+
+        '<input class="rm-input" type="number" id="rm-capital" placeholder="150.000" value="'+(d.capital||'')+'">'+
+      '</div>'+
+      '<div class="divider" style="margin:12px 0"></div>'+
+      '<div class="sec-tit" style="margin-bottom:8px">Direcci\u00f3n del inmueble <span style="font-weight:400;color:var(--gray2)">(cambiar si distinta)</span></div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px">'+
+        '<div class="rm-field" style="grid-column:span 2;margin:0"><span class="rm-label" style="font-size:9px">Direcci\u00f3n</span><input class="rm-input" id="rm-dir-inmueble" placeholder="Calle, n\u00famero..." value="'+(d.dirInmueble||(document.getElementById('dir')?document.getElementById('dir').value:''))+'"></div>'+
+        '<div class="rm-field" style="margin:0"><span class="rm-label" style="font-size:9px">CP</span><input class="rm-input" id="rm-cp-inmueble" placeholder="17600" value="'+(d.cpInmueble||(document.getElementById('cp')?document.getElementById('cp').value:''))+'"></div>'+
+      '</div>'+
+      '<div class="rm-field"><span class="rm-label" style="font-size:9px">Localidad</span><input class="rm-input" id="rm-loc-inmueble" placeholder="Localidad" value="'+(d.locInmueble||(document.getElementById('muni')?document.getElementById('muni').value:''))+'"></div>'+
+        '<div class="divider" style="margin:12px 0"></div>'+
+        '<div class="rm-field"><span class="rm-label">Observaciones</span>'+
+          '<div class="yn-group" data-target="rm-hogar-obs-wrap">'+
+            '<button class="yn-btn'+(d.observaciones==='Si'?' yes':'')+'" type="button" onclick="setYN(this,\'Si\')">✓ Sí</button>'+
+            '<button class="yn-btn'+(d.observaciones==='No'?' no':'')+'" type="button" onclick="setYN(this,\'No\')">✗ No</button>'+
+          '</div>'+
+          '<div id="rm-hogar-obs-wrap" style="'+(d.observaciones==='Si'?'':'display:none')+'">'+
+            '<textarea class="rm-input rm-textarea" id="rm-hogar-obs" placeholder="Observaciones adicionales..." style="margin-top:6px;min-height:80px;resize:vertical">'+(d.observacionesNota||'')+'</textarea>'+
+          '</div></div>';
+
+    // ── AUTO / MOTO ────────────────────────────────────────────────
+    case 'auto': case 'moto':
+      var isAuto = type==='auto';
+      var carnetLbl = isAuto ? 'F. Carnet B' : 'F. Carnet A1';
+      var ownerVal = d.propietario||'tomador';
+      var driverVal = d.conductor||'tomador';
+      return '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">'+
+          '<div class="rm-field" style="margin:0"><span class="rm-label">Matr\u00edcula</span><input class="rm-input" id="rm-matricula" placeholder="1234 ABC" style="text-transform:uppercase" value="'+(d.matricula||'')+'"></div>'+
+          '<div class="rm-field" style="margin:0"><span class="rm-label">Mes vencimiento</span><select class="rm-input" id="rm-mes-vcto">'+buildMesOptions(d.mesVcto)+'</select></div>'+
+        '</div>'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px">'+
+          '<div class="rm-field" style="margin:0"><span class="rm-label">Marca</span><input class="rm-input" id="rm-marca" placeholder="Volkswagen" value="'+(d.marca||'')+'"></div>'+
+          '<div class="rm-field" style="margin:0"><span class="rm-label">Modelo</span><input class="rm-input" id="rm-modelo" placeholder="Golf" value="'+(d.modelo||'')+'"></div>'+
+          '<div class="rm-field" style="margin:0"><span class="rm-label">Versi\u00f3n</span><input class="rm-input" id="rm-version" placeholder="1.5 TSI" value="'+(d.version||'')+'"></div>'+
+        '</div>'+
+        '<div class="divider" style="margin:10px 0"></div>'+
+        '<div class="sec-tit" style="margin-bottom:8px">Propietario</div>'+
+        '<div class="prop-switcher" id="rm-owner-switcher" style="margin-bottom:10px">'+
+          '<button class="prop-btn'+(ownerVal==='tomador'?' active':'')+'" type="button" onclick="setAutoSection(\'owner\',this,\'tomador\')">Tomador</button>'+
+          '<button class="prop-btn'+(ownerVal==='otro'?' active':'')+'" type="button" onclick="setAutoSection(\'owner\',this,\'otro\')">Otro</button>'+
+        '</div>'+
+        '<div id="rm-owner-fields" style="'+(ownerVal==='otro'?'':'display:none')+'">'+
+          buildPersonBlockFields('rm-owner', carnetLbl)+
+        '</div>'+
+        '<div class="divider" style="margin:10px 0"></div>'+
+        '<div class="sec-tit" style="margin-bottom:8px">Conductor habitual</div>'+
+        '<div class="prop-switcher" id="rm-driver-switcher" style="margin-bottom:10px">'+
+          '<button class="prop-btn'+(driverVal==='tomador'?' active':'')+'" type="button" onclick="setAutoSection(\'driver\',this,\'tomador\')">Tomador</button>'+
+          '<button class="prop-btn'+(driverVal==='propietario'?' active':'')+'" type="button" onclick="setAutoSection(\'driver\',this,\'propietario\')">Propietario</button>'+
+          '<button class="prop-btn'+(driverVal==='otro'?' active':'')+'" type="button" onclick="setAutoSection(\'driver\',this,\'otro\')">Otro</button>'+
+        '</div>'+
+        '<div id="rm-driver-fields" style="'+(driverVal==='otro'?'':'display:none')+'">'+
+          buildPersonBlockFields('rm-driver', carnetLbl)+
+        '</div>'+
+        '<div class="divider" style="margin:10px 0"></div>'+
+        '<div class="rm-section-hdr"><span class="sec-tit" style="margin:0">Otros conductores</span>'+
+          '<button class="rpa-btn rpa-dup" type="button" onclick="addAutoConductor()">+ A\u00f1adir</button></div>'+
+        '<div id="rm-otros-conductores" style="margin-top:8px"></div>'+
+        '<div class="divider" style="margin:10px 0"></div>'+
+        '<div class="rm-section-hdr"><span class="sec-tit" style="margin:0">SINCO (competencia)</span>'+
+          '<button class="rpa-btn rpa-dup" type="button" onclick="addSinco()">+ A\u00f1adir</button></div>'+
+        '<div id="rm-sincos" style="margin-top:8px"></div>'+
+        '<script>setTimeout(function(){addSinco();},10);<\/script>'+
+        '<div class="divider" style="margin:12px 0"></div>'+
+        '<div class="rm-field"><span class="rm-label">Observaciones</span>'+
+          '<div class="yn-group" data-target="rm-auto-obs-wrap">'+
+            '<button class="yn-btn'+(d.observaciones==='Si'?' yes':'')+'" type="button" onclick="setYN(this,\'Si\')">✓ Sí</button>'+
+            '<button class="yn-btn'+(d.observaciones==='No'?' no':'')+'" type="button" onclick="setYN(this,\'No\')">✗ No</button>'+
+          '</div>'+
+          '<div id="rm-auto-obs-wrap" style="'+(d.observaciones==='Si'?'':'display:none')+'">'+
+            '<textarea class="rm-input rm-textarea" id="rm-auto-obs" placeholder="Observaciones adicionales..." style="margin-top:6px;min-height:80px;resize:vertical">'+(d.observacionesNota||'')+'</textarea>'+
+          '</div></div>';
+
+    // ── SALUD ──────────────────────────────────────────────────────
+    case 'salud':
+      return '<div class="rm-field">'+
+          '<span class="rm-label">Modalidad</span>'+
+          '<div class="prop-switcher">'+
+            '<button class="prop-btn'+(d.modalidad==='Cuadro m\u00e9dico'?' active':'')+'" type="button" onclick="setPropType(this)">Cuadro m\u00e9dico</button>'+
+            '<button class="prop-btn'+(d.modalidad==='Reembolso'?' active':'')+'" type="button" onclick="setPropType(this)">Reembolso</button>'+
+          '</div></div>'+
+        '<div class="rm-field"><span class="rm-label">Copago</span>'+
+          '<div class="yn-group">'+
+            '<button class="yn-btn'+(d.copago==='Si'?' yes':'')+'" type="button" onclick="setYN(this,\'Si\')">\u2713 S\u00ed</button>'+
+            '<button class="yn-btn'+(d.copago==='No'?' no':'')+'" type="button" onclick="setYN(this,\'No\')">\u2717 No</button>'+
+          '</div></div>'+
+        '<div class="rm-field">'+buildPersonIcons('salud-p',d.personas||0)+
+          '<span class="rm-label" style="margin-top:8px">Personas a asegurar</span></div>'+
+        '<div id="rm-fechas-wrap">'+buildSaludFechasHtml(d.personas||0,d.personasData)+'</div>'+
+        '<div class="divider" style="margin:12px 0"></div>'+
+        '<div class="rm-field"><span class="rm-label">Observaciones</span>'+
+          '<div class="yn-group" data-target="rm-salud-obs-wrap">'+
+            '<button class="yn-btn'+(d.observaciones==='Si'?' yes':'')+'" type="button" onclick="setYN(this,\'Si\')">\u2713 S\u00ed</button>'+
+            '<button class="yn-btn'+(d.observaciones==='No'?' no':'')+'" type="button" onclick="setYN(this,\'No\')">\u2717 No</button>'+
+          '</div>'+
+          '<div id="rm-salud-obs-wrap" style="'+(d.observaciones==='Si'?'':'display:none')+'">'+
+            '<textarea class="rm-input rm-textarea" id="rm-salud-obs" placeholder="Observaciones adicionales..." style="margin-top:6px;min-height:80px;resize:vertical">'+(d.observacionesNota||'')+'</textarea>'+
+          '</div></div>';
+
+    // ── DECESOS ────────────────────────────────────────────────────
+    case 'decesos':
+      return '<div class="rm-field">'+buildPersonIcons('decesos-p',d.personas||0)+
+          '<span class="rm-label" style="margin-top:8px">Personas a asegurar</span></div>'+
+        '<div id="rm-decesos-fechas-wrap">'+buildDecesosFechasHtml(d.personas||0,d.personasData)+'</div>'+
+        '<div class="divider" style="margin:12px 0"></div>'+
+        '<div class="rm-section-hdr" style="margin-bottom:10px">'+
+          '<span class="sec-tit" style="margin:0">Mascotas</span>'+
+          '<button class="rpa-btn rpa-dup" type="button" onclick="addMascotaDecesos()">+ A\u00f1adir mascota</button>'+
+        '</div>'+
+        '<div id="rm-mascotas-list"></div>'+
+        '<div class="divider" style="margin:12px 0"></div>'+
+        '<div class="rm-field"><span class="rm-label">Observaciones</span>'+
+          '<div class="yn-group" data-target="rm-decesos-obs-wrap">'+
+            '<button class="yn-btn'+(d.observaciones==='Si'?' yes':'')+'" type="button" onclick="setYN(this,\'Si\')">✓ Sí</button>'+
+            '<button class="yn-btn'+(d.observaciones==='No'?' no':'')+'" type="button" onclick="setYN(this,\'No\')">✗ No</button>'+
+          '</div>'+
+          '<div id="rm-decesos-obs-wrap" style="'+(d.observaciones==='Si'?'':'display:none')+'">'+
+            '<textarea class="rm-input rm-textarea" id="rm-decesos-obs" placeholder="Observaciones adicionales..." style="margin-top:6px;min-height:80px;resize:vertical">'+(d.observacionesNota||'')+'</textarea>'+
+          '</div></div>';
+
+    // ── VIDA ───────────────────────────────────────────────────────
+    case 'vida':
+      return '<div class="rm-field" style="margin-bottom:6px">'+buildPersonIcons('vida-p',d.personas||0,4)+
+          '<span class="rm-label" style="margin-top:8px">Personas a asegurar (m\u00e1x. 4)</span></div>'+
+        '<div id="rm-vida-fechas-wrap" style="margin-bottom:14px">'+buildVidaFechasHtml(d.personas||0,d.personasData)+'</div>'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">'+
+          '<div class="rm-field" style="margin:0"><span class="rm-label">Profesi\u00f3n</span>'+
+            '<input class="rm-input" id="rm-vida-profesion" placeholder="M\u00e9dico, fontanero..." value="'+(d.profesion||'')+'"></div>'+
+          '<div class="rm-field" style="margin:0"><span class="rm-label">Deportes (aficionado)</span>'+
+            '<div class="yn-group" data-target="rm-vida-dep-campo">'+
+              '<button class="yn-btn'+(d.deportes==='Si'?' yes':'')+'" type="button" onclick="setYN(this,\'Si\')">\u2713 S\u00ed</button>'+
+              '<button class="yn-btn'+(d.deportes==='No'?' no':'')+'" type="button" onclick="setYN(this,\'No\')">\u2717 No</button>'+
+            '</div>'+
+            '<div id="rm-vida-dep-campo" style="'+(d.deportes==='Si'?'':'display:none')+'">'+
+              '<input class="rm-input" id="rm-vida-deporte-campo" placeholder="Running, nataci\u00f3n..." value="'+(d.deporteNombre||'')+'" style="margin-top:6px"></div>'+
+          '</div>'+
+        '</div>'+
+        '<div class="rm-field"><span class="rm-label">Destino del capital</span>'+
+          '<div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">'+
+            '<label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12.5px">'+
+              '<input type="checkbox" id="rm-destino-hipoteca"'+(d.destinoHipoteca?' checked':'')+' style="width:auto">'+
+              'Hipotecas / Pr\u00e9stamos</label>'+
+            '<label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12.5px">'+
+              '<input type="checkbox" id="rm-destino-sucesiones"'+(d.destinoSucesiones?' checked':'')+' style="width:auto">'+
+              'Impuesto Sucesiones</label>'+
+            '<label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12.5px">'+
+              '<input type="checkbox" id="rm-destino-familiar"'+(d.destinoFamiliar?' checked':'')+' style="width:auto">'+
+              'Protecci\u00f3n Familiar</label>'+
+          '</div></div>'+
+        '<div class="rm-field"><span class="rm-label">Capital asegurado (\u20ac)</span>'+
+          '<input class="rm-input" type="number" id="rm-vida-capital" placeholder="100.000" value="'+(d.capital||'')+'"></div>'+
+        '<div class="divider" style="margin:12px 0"></div>'+
+        '<div class="rm-field"><span class="rm-label">Observaciones</span>'+
+          '<div class="yn-group" data-target="rm-vida-obs-wrap">'+
+            '<button class="yn-btn'+(d.observaciones==='Si'?' yes':'')+'" type="button" onclick="setYN(this,\'Si\')">\u2713 S\u00ed</button>'+
+            '<button class="yn-btn'+(d.observaciones==='No'?' no':'')+'" type="button" onclick="setYN(this,\'No\')">\u2717 No</button>'+
+          '</div>'+
+          '<div id="rm-vida-obs-wrap" style="'+(d.observaciones==='Si'?'':'display:none')+'">'+
+            '<textarea class="rm-input rm-textarea" id="rm-vida-obs" placeholder="Observaciones adicionales..." style="margin-top:6px;min-height:80px;resize:vertical">'+(d.observacionesNota||'')+'</textarea>'+
+          '</div></div>';
+
+    // ── AHORRO ─────────────────────────────────────────────────────
+    case 'ahorro-g': case 'ahorro-i':
+      return '<div class="rm-field"><span class="rm-label">Notas sobre el ahorro</span>'+
+          '<textarea class="rm-input rm-textarea" id="rm-notas" placeholder="Tiene ahorro en banco, fondos...">'+(d.notas||'')+'</textarea></div>'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+
+          '<div class="rm-field" style="margin:0"><span class="rm-label">Activo acumulado (\u20ac)</span><input class="rm-input" type="number" id="rm-activo" placeholder="25.000" value="'+(d.activo||'')+'"></div>'+
+          '<div class="rm-field" style="margin:0"><span class="rm-label">Aportaci\u00f3n mensual (\u20ac)</span><input class="rm-input" type="number" id="rm-aportaciones" placeholder="200" value="'+(d.aportaciones||'')+'"></div>'+
+        '</div>'+
+        '<div class="divider" style="margin:12px 0"></div>'+
+        '<div class="rm-field"><span class="rm-label">Observaciones</span>'+
+          '<div class="yn-group" data-target="rm-ahorro-obs-wrap">'+
+            '<button class="yn-btn'+(d.observaciones==='Si'?' yes':'')+'" type="button" onclick="setYN(this,\'Si\')">✓ Sí</button>'+
+            '<button class="yn-btn'+(d.observaciones==='No'?' no':'')+'" type="button" onclick="setYN(this,\'No\')">✗ No</button>'+
+          '</div>'+
+          '<div id="rm-ahorro-obs-wrap" style="'+(d.observaciones==='Si'?'':'display:none')+'">'+
+            '<textarea class="rm-input rm-textarea" id="rm-ahorro-obs" placeholder="Observaciones adicionales..." style="margin-top:6px;min-height:80px;resize:vertical">'+(d.observacionesNota||'')+'</textarea>'+
+          '</div></div>';
+
+    // ── COMUNIDADES ────────────────────────────────────────────────
+    case 'comunidades':
+      return '<div class="rm-field"><span class="rm-label">Nombre de la comunidad</span>'+
+          '<input class="rm-input" id="rm-nombre-com" placeholder="Comunidad Calle Mayor 15" value="'+(d.nombreCom||'')+'"></div>'+
+        '<div class="rm-field"><span class="rm-label">Administrador</span>'+
+          '<input class="rm-input" id="rm-admin" placeholder="Nombre del administrador de fincas" value="'+(d.admin||'')+'"></div>'+
+        '<div class="divider" style="margin:12px 0"></div>'+
+        '<div class="rm-field"><span class="rm-label">Observaciones</span>'+
+          '<div class="yn-group" data-target="rm-comunidades-obs-wrap">'+
+            '<button class="yn-btn'+(d.observaciones==='Si'?' yes':'')+'" type="button" onclick="setYN(this,\'Si\')">✓ Sí</button>'+
+            '<button class="yn-btn'+(d.observaciones==='No'?' no':'')+'" type="button" onclick="setYN(this,\'No\')">✗ No</button>'+
+          '</div>'+
+          '<div id="rm-comunidades-obs-wrap" style="'+(d.observaciones==='Si'?'':'display:none')+'">'+
+            '<textarea class="rm-input rm-textarea" id="rm-comunidades-obs" placeholder="Observaciones adicionales..." style="margin-top:6px;min-height:80px;resize:vertical">'+(d.observacionesNota||'')+'</textarea>'+
+          '</div></div>';
+
+    // ── EMBARCACIONES ──────────────────────────────────────────────
+    case 'embarcaciones':
+      return '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">'+
+          '<div class="rm-field" style="margin:0"><span class="rm-label">Bandera / Pa\u00eds</span>'+
+            '<input class="rm-input" id="rm-bandera" placeholder="Espa\u00f1a" value="'+(d.bandera||'')+'"></div>'+
+          '<div class="rm-field" style="margin:0"><span class="rm-label">Zona de navegaci\u00f3n</span>'+
+            '<select class="rm-input" id="rm-zona">'+
+              '<option value=""'+((!d.zona)?' selected':'')+'>&#8212; Seleccionar &#8212;</option>'+
+              '<option value="6a"'+(d.zona==='6a'?' selected':'')+'>6\u00aa Lista &#8212; Zona 1 (0&#8211;12 nm)</option>'+
+              '<option value="7a"'+(d.zona==='7a'?' selected':'')+'>7\u00aa Lista &#8212; Zona 2 (alta mar)</option>'+
+            '</select></div>'+
+        '</div>'+
+        '<div class="rm-field"><span class="rm-label">Material (casco)</span>'+
+          '<div class="prop-switcher" id="rm-mat-casco">'+
+            '<button class="prop-btn'+(d.materialCasco==='Fibra'?' active':'')+'" type="button" onclick="setPropType(this)">Fibra</button>'+
+            '<button class="prop-btn'+(d.materialCasco==='Madera'?' active':'')+'" type="button" onclick="setPropType(this)">Madera</button>'+
+            '<button class="prop-btn'+(d.materialCasco==='Metal'?' active':'')+'" type="button" onclick="setPropType(this)">Metal</button>'+
+            '<button class="prop-btn'+(d.materialCasco==='Goma'?' active':'')+'" type="button" onclick="setPropType(this)">Goma</button>'+
+          '</div></div>'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">'+
+          '<div class="rm-field" style="margin:0"><span class="rm-label">Eslora (m)</span>'+
+            '<input class="rm-input" type="number" id="rm-eslora" placeholder="8.5" step="0.1" value="'+(d.eslora||'')+'"></div>'+
+          '<div class="rm-field" style="margin:0"><span class="rm-label">N\u00ba motores</span>'+
+            '<select class="rm-input" id="rm-nmotores">'+
+              '<option value=""'+((!d.nmotores)?' selected':'')+'>&#8212;</option>'+
+              '<option value="1"'+(d.nmotores==='1'?' selected':'')+'>1</option>'+
+              '<option value="2"'+(d.nmotores==='2'?' selected':'')+'>2</option>'+
+              '<option value="3"'+(d.nmotores==='3'?' selected':'')+'>3</option>'+
+            '</select></div>'+
+          '<div class="rm-field" style="margin:0"><span class="rm-label">Potencia / motor (CV)</span>'+
+            '<input class="rm-input" type="number" id="rm-potencia" placeholder="150" value="'+(d.potencia||'')+'"></div>'+
+        '</div>'+
+        '<div class="divider" style="margin:12px 0"></div>'+
+        '<div class="sec-tit" style="margin-bottom:10px">Da\u00f1os propios</div>'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">'+
+          '<div class="rm-field" style="margin:0"><span class="rm-label">Valor casco + motor (\u20ac)</span>'+
+            '<input class="rm-input" type="number" id="rm-valor-casco" placeholder="25.000" value="'+(d.valorCasco||'')+'"></div>'+
+          '<div class="rm-field" style="margin:0"><span class="rm-label">Valor accesorios (\u20ac)</span>'+
+            '<input class="rm-input" type="number" id="rm-valor-acc" placeholder="2.000" value="'+(d.valorAcc||'')+'"></div>'+
+        '</div>'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+
+          '<div class="rm-field" style="margin:0"><span class="rm-label">A\u00f1o construcci\u00f3n</span>'+
+            '<input class="rm-input" type="number" id="rm-anio-const" placeholder="2018" value="'+(d.anioConst||'')+'"></div>'+
+          '<div class="rm-field" style="margin:0"><span class="rm-label">Material construcci\u00f3n</span>'+
+            '<div class="prop-switcher" id="rm-mat-const">'+
+              '<button class="prop-btn'+(d.materialConst==='Fibra'?' active':'')+'" type="button" onclick="setPropType(this)">Fibra</button>'+
+              '<button class="prop-btn'+(d.materialConst==='Madera'?' active':'')+'" type="button" onclick="setPropType(this)">Madera</button>'+
+              '<button class="prop-btn'+(d.materialConst==='Metal'?' active':'')+'" type="button" onclick="setPropType(this)">Metal</button>'+
+              '<button class="prop-btn'+(d.materialConst==='Goma'?' active':'')+'" type="button" onclick="setPropType(this)">Goma</button>'+
+            '</div></div>'+
+        '</div>'+
+        '<div class="divider" style="margin:12px 0"></div>'+
+        '<div class="rm-field"><span class="rm-label">Observaciones</span>'+
+          '<div class="yn-group" data-target="rm-embarcaciones-obs-wrap">'+
+            '<button class="yn-btn'+(d.observaciones==='Si'?' yes':'')+'" type="button" onclick="setYN(this,\'Si\')">✓ Sí</button>'+
+            '<button class="yn-btn'+(d.observaciones==='No'?' no':'')+'" type="button" onclick="setYN(this,\'No\')">✗ No</button>'+
+          '</div>'+
+          '<div id="rm-embarcaciones-obs-wrap" style="'+(d.observaciones==='Si'?'':'display:none')+'">'+
+            '<textarea class="rm-input rm-textarea" id="rm-embarcaciones-obs" placeholder="Observaciones adicionales..." style="margin-top:6px;min-height:80px;resize:vertical">'+(d.observacionesNota||'')+'</textarea>'+
+          '</div></div>';
+
+    // ── OTRO ───────────────────────────────────────────────────────
+    case 'otro':
+      return '<div class="rm-field"><span class="rm-label">Ramo / Producto</span>'+
+          '<input class="rm-input" id="rm-otro-nombre" placeholder="Nombre del ramo o producto..." value="'+(d.nombre||'')+'"></div>'+
+        '<div class="rm-field"><span class="rm-label">Anotaciones</span>'+
+          '<textarea class="rm-input rm-textarea" id="rm-notas" placeholder="Notas libres sobre este seguro, vencimiento, compañía..." style="min-height:100px">'+(d.notas||'')+'</textarea></div>'+
+        '<div class="divider" style="margin:12px 0"></div>'+
+        '<div class="rm-field"><span class="rm-label">Observaciones</span>'+
+          '<div class="yn-group" data-target="rm-otro-obs-wrap">'+
+            '<button class="yn-btn'+(d.observaciones==='Si'?' yes':'')+'" type="button" onclick="setYN(this,\'Si\')">✓ Sí</button>'+
+            '<button class="yn-btn'+(d.observaciones==='No'?' no':'')+'" type="button" onclick="setYN(this,\'No\')">✗ No</button>'+
+          '</div>'+
+          '<div id="rm-otro-obs-wrap" style="'+(d.observaciones==='Si'?'':'display:none')+'">'+
+            '<textarea class="rm-input rm-textarea" id="rm-otro-obs" placeholder="Observaciones adicionales..." style="margin-top:6px;min-height:80px;resize:vertical">'+(d.observacionesNota||'')+'</textarea>'+
+          '</div></div>';
+
+    default:
+      return '<p style="color:var(--gray2);font-size:13px">Sin datos adicionales para este ramo.</p>';
+  }
+}
+
+// ─── SAVE RAMO DATA ───────────────────────────────────────────────
+function saveRamoData(){
+  if(!currentRamoKey)return;
+  // Use stored type (avoids key-parsing failures for pills with grid-prefixed keys like 'otro')
+  var type = currentRamoType || (function(){var p=currentRamoKey.split('-');p.pop();return p.join('-');})();
+  var g=function(id){var el=document.getElementById(id);return el?el.value.trim():'';};
+  var d={};
+
+  if(type==='hogar'){
+    var switchers=document.querySelectorAll('#ramoOverlay .prop-switcher');
+    d.tipoProp=switchers[0]?(switchers[0].querySelector('.prop-btn.active')||{textContent:''}).textContent.trim():'';
+    d.tipoViv=document.getElementById('rm-tipo-viv')?(document.querySelector('#rm-tipo-viv .prop-btn.active')||{textContent:''}).textContent.trim():'';
+    var piscinaYes=document.querySelector('#ramoOverlay .yn-group:not([data-target]) .yn-btn.yes');
+    d.piscina=piscinaYes?'Si':(document.querySelector('#ramoOverlay .yn-group:not([data-target]) .yn-btn.no')?'No':'');
+    var hipoGroup=document.querySelector('#ramoOverlay .yn-group[data-target="rm-capital-wrap"]');
+    d.hipoteca=hipoGroup?(hipoGroup.querySelector('.yn-btn.yes')?'Si':(hipoGroup.querySelector('.yn-btn.no')?'No':'')):'';
+    d.capital=g('rm-capital');
+    var pi=document.querySelector('.p-icons[data-field="hogar-p"]');d.personas=pi?parseInt(pi.getAttribute('data-value'))||0:0;
+    d.dirInmueble=g('rm-dir-inmueble');d.cpInmueble=g('rm-cp-inmueble');d.locInmueble=g('rm-loc-inmueble');
+    var obsGrp_hogar=document.querySelector('#ramoOverlay .yn-group[data-target="rm-hogar-obs-wrap"]');
+    d.observaciones=obsGrp_hogar?(obsGrp_hogar.querySelector('.yn-btn.yes')?'Si':(obsGrp_hogar.querySelector('.yn-btn.no')?'No':'')):''; 
+    d.observacionesNota=g('rm-hogar-obs');
+
+  }else if(type==='auto'||type==='moto'){
+    d.matricula=g('rm-matricula');d.mesVcto=g('rm-mes-vcto');
+    d.marca=g('rm-marca');d.modelo=g('rm-modelo');d.version=g('rm-version');
+    var owSw=document.getElementById('rm-owner-switcher');
+    d.propietario=owSw?(owSw.querySelector('.prop-btn.active')||{textContent:'tomador'}).textContent.trim().toLowerCase():'tomador';
+    if(d.propietario==='otro'){
+      d.ownerNombre=g('rm-owner-nombre');d.ownerAp1=g('rm-owner-ap1');d.ownerAp2=g('rm-owner-ap2');
+      d.ownerDni=g('rm-owner-dni');d.ownerFnac=g('rm-owner-fnac');d.ownerFcarnet=g('rm-owner-fcarnet');
+    }
+    var drSw=document.getElementById('rm-driver-switcher');
+    d.conductor=drSw?(drSw.querySelector('.prop-btn.active')||{textContent:'tomador'}).textContent.trim().toLowerCase():'tomador';
+    if(d.conductor==='otro'){
+      d.driverNombre=g('rm-driver-nombre');d.driverAp1=g('rm-driver-ap1');
+      d.driverDni=g('rm-driver-dni');d.driverFnac=g('rm-driver-fnac');d.driverFcarnet=g('rm-driver-fcarnet');
+    }
+    d.sincos=[];
+    document.querySelectorAll('#rm-sincos .rm-sinco-block').forEach(function(blk){
+      var cia=blk.querySelector('.rm-sinco-cia');var pol=blk.querySelector('.rm-sinco-poliza');var mat=blk.querySelector('.rm-sinco-mat');
+      d.sincos.push({cia:cia?cia.value:'',poliza:pol?pol.value:'',matricula:mat?mat.value:''});
+    });
+    var obsGrp_auto=document.querySelector('#ramoOverlay .yn-group[data-target="rm-auto-obs-wrap"]');
+    d.observaciones=obsGrp_auto?(obsGrp_auto.querySelector('.yn-btn.yes')?'Si':(obsGrp_auto.querySelector('.yn-btn.no')?'No':'')):''; 
+    d.observacionesNota=g('rm-auto-obs');
+
+  }else if(type==='salud'){
+    var modBtn=document.querySelector('#ramoOverlay .prop-btn.active');d.modalidad=modBtn?modBtn.textContent.trim():'';
+    var copGrp=document.querySelector('#ramoOverlay .yn-group');
+    d.copago=copGrp?(copGrp.querySelector('.yn-btn.yes')?'Si':(copGrp.querySelector('.yn-btn.no')?'No':'')):'';
+    var pi=document.querySelector('.p-icons[data-field="salud-p"]');d.personas=pi?parseInt(pi.getAttribute('data-value'))||0:0;
+    d.personasData=[];
+    var wrap=document.getElementById('rm-fechas-wrap');
+    if(wrap){for(var i=1;i<=d.personas;i++){
+      var fnEl=wrap.querySelector('[data-fnac="'+i+'"]');var sxEl=wrap.querySelector('[data-sexo="'+i+'"]');
+      var prEl=wrap.querySelector('[data-prof="'+i+'"]');var dpEl=wrap.querySelector('[data-deporte="'+i+'"]');
+      var dnEl=wrap.querySelector('[data-deportenombre="'+i+'"');d.personasData.push({fnac:fnEl?fnEl.value:'',sexo:sxEl?sxEl.value:'',prof:prEl?prEl.value:'',deporte:dpEl?dpEl.value:'',deporteNombre:dnEl?dnEl.value:''});
+    }}
+    var saludObs=document.querySelector('#ramoOverlay .yn-group[data-target="rm-salud-obs-wrap"]');
+    d.observaciones=saludObs?(saludObs.querySelector('.yn-btn.yes')?'Si':(saludObs.querySelector('.yn-btn.no')?'No':'')):''; 
+    d.observacionesNota=g('rm-salud-obs');
+
+  }else if(type==='decesos'){
+    var pi=document.querySelector('.p-icons[data-field="decesos-p"]');d.personas=pi?parseInt(pi.getAttribute('data-value'))||0:0;
+    d.personasData=[];
+    var wrap=document.getElementById('rm-decesos-fechas-wrap');
+    if(wrap){for(var i=1;i<=d.personas;i++){
+      var fnEl=wrap.querySelector('[data-fnac="'+i+'"]');var sxEl=wrap.querySelector('[data-sexo="'+i+'"]');
+      d.personasData.push({fnac:fnEl?fnEl.value:'',sexo:sxEl?sxEl.value:''});
+    }}
+    d.mascotas=[];
+    document.querySelectorAll('#rm-mascotas-list .rm-mascota-block').forEach(function(blk){
+      var razaBtn=blk.querySelector('.rm-raza-sw .prop-btn.active');
+      var tipoMasc=razaBtn?razaBtn.textContent.trim():'Mestizo';
+      var ppiYes=blk.querySelector('.yn-btn.yes');var ppiNo=blk.querySelector('.yn-btn.no');
+      var ppi=ppiYes?'Si':(ppiNo?'No':'');
+      var pppiSel=blk.querySelector('.rm-pppi-select');var pppiRaza=pppiSel?pppiSel.value:'';
+      var fnacEl=blk.querySelector('.rm-masc-fnac');var fnac=fnacEl?fnacEl.value:'';
+      d.mascotas.push({tipo:tipoMasc,ppi:ppi,pppiRaza:pppiRaza,fnac:fnac});
+    });
+    var obsGrp_decesos=document.querySelector('#ramoOverlay .yn-group[data-target="rm-decesos-obs-wrap"]');
+    d.observaciones=obsGrp_decesos?(obsGrp_decesos.querySelector('.yn-btn.yes')?'Si':(obsGrp_decesos.querySelector('.yn-btn.no')?'No':'')):''; 
+    d.observacionesNota=g('rm-decesos-obs');
+
+  }else if(type==='vida'){
+    var pi=document.querySelector('.p-icons[data-field="vida-p"]');d.personas=pi?parseInt(pi.getAttribute('data-value'))||0:0;
+    d.profesion=g('rm-vida-profesion');d.capital=g('rm-vida-capital');
+    var depGrp=document.querySelector('#ramoOverlay .yn-group[data-target="rm-vida-dep-campo"]');
+    d.deportes=depGrp?(depGrp.querySelector('.yn-btn.yes')?'Si':(depGrp.querySelector('.yn-btn.no')?'No':'')):'';
+    d.deporteNombre=g('rm-vida-deporte-campo');
+    d.personasData=[];
+    var vidaWrap=document.getElementById('rm-vida-fechas-wrap');
+    if(vidaWrap){for(var i=1;i<=Math.min(d.personas,4);i++){
+      var fnEl=vidaWrap.querySelector('[data-fnac="'+i+'"]');var sxEl=vidaWrap.querySelector('[data-sexo="'+i+'"]');
+      d.personasData.push({fnac:fnEl?fnEl.value:'',sexo:sxEl?sxEl.value:''});
+    }}
+    var ckH=document.getElementById('rm-destino-hipoteca');d.destinoHipoteca=ckH?ckH.checked:false;
+    var ckS=document.getElementById('rm-destino-sucesiones');d.destinoSucesiones=ckS?ckS.checked:false;
+    var ckF=document.getElementById('rm-destino-familiar');d.destinoFamiliar=ckF?ckF.checked:false;
+    var obsGrp=document.querySelector('#ramoOverlay .yn-group[data-target="rm-vida-obs-wrap"]');
+    d.observaciones=obsGrp?(obsGrp.querySelector('.yn-btn.yes')?'Si':(obsGrp.querySelector('.yn-btn.no')?'No':'')):'';
+    d.observacionesNota=g('rm-vida-obs');
+
+  }else if(type==='ahorro-g'||type==='ahorro-i'){
+    d.notas=g('rm-notas');d.activo=g('rm-activo');d.aportaciones=g('rm-aportaciones');
+    var obsGrp_ahorro=document.querySelector('#ramoOverlay .yn-group[data-target="rm-ahorro-obs-wrap"]');
+    d.observaciones=obsGrp_ahorro?(obsGrp_ahorro.querySelector('.yn-btn.yes')?'Si':(obsGrp_ahorro.querySelector('.yn-btn.no')?'No':'')):''; 
+    d.observacionesNota=g('rm-ahorro-obs');
+
+  }else if(type==='comunidades'){
+    d.nombreCom=g('rm-nombre-com');d.admin=g('rm-admin');
+    var obsGrp_comunidades=document.querySelector('#ramoOverlay .yn-group[data-target="rm-comunidades-obs-wrap"]');
+    d.observaciones=obsGrp_comunidades?(obsGrp_comunidades.querySelector('.yn-btn.yes')?'Si':(obsGrp_comunidades.querySelector('.yn-btn.no')?'No':'')):''; 
+    d.observacionesNota=g('rm-comunidades-obs');
+
+  }else if(type==='otro'){
+    d.nombre=g('rm-otro-nombre');d.notas=g('rm-notas');
+    var obsGrp_otro=document.querySelector('#ramoOverlay .yn-group[data-target="rm-otro-obs-wrap"]');
+    d.observaciones=obsGrp_otro?(obsGrp_otro.querySelector('.yn-btn.yes')?'Si':(obsGrp_otro.querySelector('.yn-btn.no')?'No':'')):''; 
+    d.observacionesNota=g('rm-otro-obs');
+
+  }else if(type==='embarcaciones'){
+    d.bandera=g('rm-bandera');d.zona=g('rm-zona');
+    var mcBtn=document.querySelector('#rm-mat-casco .prop-btn.active');d.materialCasco=mcBtn?mcBtn.textContent.trim():'';
+    d.eslora=g('rm-eslora');d.nmotores=g('rm-nmotores');d.potencia=g('rm-potencia');
+    d.valorCasco=g('rm-valor-casco');d.valorAcc=g('rm-valor-acc');d.anioConst=g('rm-anio-const');
+    var mkBtn=document.querySelector('#rm-mat-const .prop-btn.active');d.materialConst=mkBtn?mkBtn.textContent.trim():'';
+    var obsGrp_embarcaciones=document.querySelector('#ramoOverlay .yn-group[data-target="rm-embarcaciones-obs-wrap"]');
+    d.observaciones=obsGrp_embarcaciones?(obsGrp_embarcaciones.querySelector('.yn-btn.yes')?'Si':(obsGrp_embarcaciones.querySelector('.yn-btn.no')?'No':'')):''; 
+    d.observacionesNota=g('rm-embarcaciones-obs');
+
+  }
+
+  // Merge preserving pill state
+  var prev=ramoData[currentRamoKey]||{};
+  if(prev.estado)d.estado=prev.estado;
+  d._saved=true;
+  ramoData[currentRamoKey]=d;
+  var pill=document.querySelector('[data-key="'+currentRamoKey+'"]');
+  if(pill){var cb=pill.querySelector('input[name="seg"]');if(cb)cb.checked=true;}
+  refreshPillBadge(currentRamoKey);
+  closeRamoModal();
+}
+
+// ─── FILE SYSTEM ACCESS + INDEXEDDB ──────────────────────────────
+var clientesDir = null;
+var allClients  = [];
+var searchDebounce = null;
+
+function openIDB() {
+  return new Promise(function(resolve, reject) {
+    var req = indexedDB.open('optimizarte-alta-v1', 1);
+    req.onupgradeneeded = function(e) { e.target.result.createObjectStore('handles'); };
+    req.onsuccess = function(e) { resolve(e.target.result); };
+    req.onerror   = function(e) { reject(e.target.error); };
+  });
+}
+function idbPut(key, val) {
+  return openIDB().then(function(db) {
+    return new Promise(function(resolve, reject) {
+      var tx = db.transaction('handles', 'readwrite');
+      tx.objectStore('handles').put(val, key);
+      tx.oncomplete = resolve; tx.onerror = function(e){reject(e.target.error);};
+    });
+  });
+}
+function idbGet(key) {
+  return openIDB().then(function(db) {
+    return new Promise(function(resolve, reject) {
+      var tx  = db.transaction('handles', 'readonly');
+      var req = tx.objectStore('handles').get(key);
+      req.onsuccess = function(e) { resolve(e.target.result); };
+      req.onerror   = function(e) { reject(e.target.error); };
+    });
   });
 }
 
-function newAlt() {
-  document.getElementById('modal').classList.remove('show');
-  clearForm();
-}
-
-function clearForm() {
-  document.getElementById('altaForm').reset();
-  document.querySelectorAll('.tipo-opt').forEach((o,i) => o.classList.toggle('active', i===0));
-  document.querySelectorAll('.seg-opt').forEach(o => o.classList.remove('active'));
-  document.querySelectorAll('.origen-opt').forEach(o => o.classList.remove('active'));
-  document.querySelectorAll('.colab-opt').forEach((o,i) => o.classList.toggle('active', i===0));
-  tipo = 'par'; colab = 'M441819E';
-  document.getElementById('block-par').classList.add('show');
-  document.getElementById('block-emp').classList.remove('show');
-  document.getElementById('referido-block').style.display = 'none';
-  document.getElementById('progFill').style.width = '0%';
-  document.querySelectorAll('input, select, textarea').forEach(el => el.style.borderColor = '');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function saveDraft() {
-  var d = collectData();
-  localStorage.setItem('optimizarte_draft', JSON.stringify(d));
-  var btn = event.target;
-  var orig = btn.textContent;
-  btn.textContent = '✓ Guardado';
-  btn.style.borderColor = '#10B981';
-  btn.style.color = '#10B981';
-  setTimeout(() => { btn.textContent = orig; btn.style.borderColor = ''; btn.style.color = ''; }, 2000);
-}
-
-// Restore draft on load
-(function() {
-  var draft = localStorage.getItem('optimizarte_draft');
-  if (draft) {
-    try {
-      var d = JSON.parse(draft);
-      // Just update progress indicator
-      updProg();
-    } catch(e) {}
+async function selectClientesDir() {
+  if (!window.showDirectoryPicker) {
+    alert('Tu navegador no soporta acceso a carpetas locales.\nUsa Google Chrome o Microsoft Edge.');
+    return;
   }
-  // Set min date for fecha-accion to today
-  var today = new Date().toISOString().split('T')[0];
-  var fa = document.getElementById('fecha-accion');
-  if (fa) fa.min = today;
-})();
+  try {
+    clientesDir = await window.showDirectoryPicker({ id: 'clientes-dir', mode: 'readwrite' });
+    await idbPut('clientesDir', clientesDir);
+    setDirBtn(true, clientesDir.name);
+    await refreshAllClients();
+  } catch(e) { if (e.name !== 'AbortError') console.error(e); }
+}
+
+function setDirBtn(ok, name) {
+  var btn = document.getElementById('dirBtn');
+  var lbl = document.getElementById('dirStatus');
+  if (!btn) return;
+  btn.className = ok ? 'dir-btn connected' : 'dir-btn';
+  if (lbl) lbl.textContent = ok ? (name || 'Conectado') : 'Conectar carpeta';
+}
+
+async function initDirFromIDB() {
+  if (!window.showDirectoryPicker) return;
+  try {
+    var h = await idbGet('clientesDir');
+    if (!h) return;
+    var perm = await h.requestPermission({ mode: 'readwrite' });
+    if (perm === 'granted') {
+      clientesDir = h;
+      setDirBtn(true, h.name);
+      await refreshAllClients();
+    }
+  } catch(e) { /* silent fail */ }
+}
+
+function formatDatetimeDisplay(iso) {
+  if (!iso) return '—';
+  var d = new Date(iso);
+  var day = String(d.getDate()).padStart(2,'0');
+  var mon = String(d.getMonth()+1).padStart(2,'0');
+  var yr  = d.getFullYear();
+  var hh  = String(d.getHours()).padStart(2,'0');
+  var mm  = String(d.getMinutes()).padStart(2,'0');
+  return day+'/'+mon+'/'+yr+' '+hh+':'+mm;
+}
+function setFormDates(creacion, modificacion) {
+  var fc = document.getElementById('fecha-creacion');
+  var fm = document.getElementById('fecha-modificacion');
+  var fma = document.getElementById('fecha-modificacion-asigna');
+  if (fc) fc.textContent = formatDatetimeDisplay(creacion);
+  if (fm) fm.textContent = formatDatetimeDisplay(modificacion);
+  if (fma) fma.textContent = formatDatetimeDisplay(modificacion);
+}
+async function saveClientToFile(data) {
+  if (!clientesDir) return null;
+  try {
+    var now = new Date();
+    var pad = function(n){return n<10?'0'+n:''+n;};
+    var d = now.getFullYear()+''+pad(now.getMonth()+1)+pad(now.getDate());
+    var t = pad(now.getHours())+pad(now.getMinutes())+pad(now.getSeconds());
+    var nom = (data.nombre_completo||'cliente').replace(/[^a-zA-Z\u00C0-\u024F0-9 ]/g,'').replace(/ +/g,'_').slice(0,30);
+    var fname = d+'_'+t+'_'+nom+'.json';
+    var fh = await clientesDir.getFileHandle(fname, {create:true});
+    var now = new Date().toISOString();
+    if (!data.fechaCreacion) data.fechaCreacion = now;
+    data.fechaModificacion = now;
+    setFormDates(data.fechaCreacion, data.fechaModificacion);
+    var wr = await fh.createWritable();
+    await wr.write(JSON.stringify(data, null, 2));
+    await wr.close();
+    await refreshAllClients();
+    return fname;
+  } catch(e) { console.error('saveClientToFile:', e); return null; }
+}
+
+async function refreshAllClients() {
+  if (!clientesDir) return;
+  try {
+    var list = [];
+    for await (var [name, handle] of clientesDir.entries()) {
+      if (name.endsWith('.json') && handle.kind === 'file') {
+        try {
+          var file = await handle.getFile();
+          var d    = JSON.parse(await file.text());
+          d._filename = name;
+          d._mtime    = file.lastModified;
+          list.push(d);
+        } catch(e) {}
+      }
+    }
+    allClients = list.sort(function(a,b){return (b._mtime||0)-(a._mtime||0);});
+  } catch(e) {}
+}
+
+// ─── SEARCH ───────────────────────────────────────────────────────
+function onSearchFocus() {
+  if (allClients.length > 0 && !document.getElementById('searchInput').value.trim()) {
+    showSearchResults(allClients.slice(0,8));
+  }
+}
+
+function onSearchInput(val) {
+  clearTimeout(searchDebounce);
+  searchDebounce = setTimeout(function() {
+    if (!val.trim()) { hideSearchResults(); return; }
+    var q = val.trim().toLowerCase();
+    var res = allClients.filter(function(c) { return matchClient(c, q); }).slice(0,10);
+    showSearchResults(res);
+  }, 180);
+}
+
+function matchClient(c, q) {
+  var fields = [
+    c.nombre_completo, c.nif_cif, c.tel1, c.email1, c.email2,
+    c.localidad, c.cp, c.tipo_label, c.motivo_contacto,
+    c.par_nombre, c.par_ap1, c.par_ap2, c.par_nif,
+    c.emp_razon, c.emp_cif, c.aut_nombre, c.aut_ap1
+  ];
+  return fields.some(function(f) { return f && (f+'').toLowerCase().indexOf(q) >= 0; });
+}
+
+function showSearchResults(results) {
+  var el    = document.getElementById('searchResults');
+  var input = document.getElementById('searchInput');
+  if (!el || !input) return;
+  // Position below the input
+  var rect = input.getBoundingClientRect();
+  el.style.top   = (rect.bottom + 4) + 'px';
+  el.style.right  = (window.innerWidth - rect.right) + 'px';
+  el.style.left   = 'auto';
+  if (!results.length) {
+    el.innerHTML = '<div class="sr-empty">Sin resultados</div>';
+    el.classList.add('show'); return;
+  }
+  var html = '<div class="sr-header">' + results.length + ' registro' + (results.length>1?'s':'') + ' encontrado' + (results.length>1?'s':'') + '</div>';
+  html += results.map(function(c) {
+    var fn  = c._filename || '';
+    var fecha = fn.length >= 8 ? fn.slice(6,8)+'/'+fn.slice(4,6)+'/'+fn.slice(0,4) : '';
+    var nif = c.nif_cif ? ' \u00b7 '+c.nif_cif : '';
+    var tel = c.tel1    ? ' \u00b7 '+c.tel1    : '';
+    var meta = (c.tipo_label||'') + nif + tel + (fecha?' \u00b7 '+fecha:'');
+    var safe = JSON.stringify(fn).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return '<div class="sr-item" onclick="loadClientAndClose('+safe+')" tabindex="0">' +
+      '<div style="flex:1"><div class="sr-name">' + (c.nombre_completo||'\u2014') + '</div>' +
+      '<div class="sr-meta">' + meta + '</div></div>' +
+      '<span class="sr-tipo">' + (c.tipo_label||'\u2014') + '</span></div>';
+  }).join('');
+  el.innerHTML = html;
+  el.classList.add('show');
+}
+
+function hideSearchResults() {
+  var el = document.getElementById('searchResults');
+  if (el) el.classList.remove('show');
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.search-box')) hideSearchResults();
+});
+
+async function loadClientAndClose(filename) {
+  hideSearchResults();
+  document.getElementById('searchInput').value = '';
+  var client = allClients.find(function(c) { return c._filename === filename; });
+  if (client) loadClientIntoForm(client);
+}
+
+// ─── LOAD CLIENT INTO FORM ────────────────────────────────────────
+function loadClientIntoForm(d) {
+  // Reset first
+  clearForm();
+
+  var sf = function(id, val) {
+    if (val===undefined||val===null||val==='') return;
+    var el = document.getElementById(id);
+    if (el) { el.value = val; }
+  };
+
+  // Tipo
+  var t = d.tipo || 'par';
+  var tipoEl = document.getElementById('tipo-' + t);
+  if (tipoEl) setTipo(t, tipoEl);
+
+  // Restore autEmpSi before updateVisibility
+  if (d.aut_emp && t==='aut') {
+    autEmpSi = true;
+    var si=document.getElementById('aut-emp-si');var no=document.getElementById('aut-emp-no');
+    if(si){si.classList.add('si');} if(no){no.classList.remove('no');}
+    var w=document.getElementById('aut-emp-select-wrap');if(w)w.style.display='block';
+    updateNegocioGroups();
+  }
+  if (d.vtos_per) {
+    vtosPerSi = true;
+    var si=document.getElementById('vper-si');var no=document.getElementById('vper-no');
+    if(si)si.classList.add('si'); if(no)no.classList.remove('no');
+    updateVisibility();
+  }
+
+  // Datos par
+  sf('par-nombre',   d.par_nombre);  sf('par-ap1', d.par_ap1); sf('par-ap2', d.par_ap2);
+  sf('par-nif',      d.par_nif);     sf('par-fnac', d.par_fnac);
+  sf('par-estcivil', d.par_estcivil); sf('par-hijos', d.par_hijos);
+
+  // Datos emp
+  sf('emp-razon',     d.emp_razon);    sf('emp-cif',      d.emp_cif);
+  sf('emp-actividad', d.emp_actividad); sf('emp-antiguedad', d.emp_antiguedad);
+  sf('empleados-emp', d.emp_empleados);
+
+  // Datos aut
+  sf('aut-nombre',    d.aut_nombre);   sf('aut-ap1',      d.aut_ap1); sf('aut-ap2', d.aut_ap2);
+  sf('aut-nif',       d.aut_nif);      sf('aut-fnac',     d.aut_fnac);
+  sf('aut-actividad', d.aut_actividad); sf('aut-antiguedad', d.aut_antiguedad);
+  sf('empleados-aut', d.aut_empleados);
+
+  // Sexo buttons (visual)
+  setSexoVal('par-sexo', d.par_sexo || d.sexo);
+  setSexoVal('aut-sexo', d.aut_sexo || (t==='aut' ? d.sexo : ''));
+
+  // Contacto
+  sf('tel1',   d.tel1);   sf('wapp',  d.whatsapp); sf('redes',  d.redes);
+  sf('email1', d.email1); sf('email2', d.email2);
+  sf('dir',    d.direccion); sf('cp', d.cp); sf('muni', d.localidad);
+
+  // Observaciones
+  sf('obs',            d.motivo_contacto);
+  sf('primera-accion', d.primera_accion);
+  sf('fecha-accion',   d.fecha_accion);
+  sf('origen-detalle', d.origen_detalle);
+
+  // Origen sw (radio)
+  if (d.origen_sw) {
+    document.querySelectorAll('input[name="origen-sw"]').forEach(function(r) {
+      r.checked = (r.value === d.origen_sw || d.origen_sw.indexOf(r.value) >= 0);
+    });
+  }
+
+  // Colaboradores
+  function restoreColab(radioName, racf, stateVar) {
+    document.querySelectorAll('[name="'+radioName+'"]').forEach(function(r) {
+      if (r.value === racf) {
+        r.checked = true;
+        var opt = r.closest('.colab-opt');
+        if (opt) {
+          opt.closest('.colab-row').querySelectorAll('.colab-opt').forEach(function(o){o.classList.remove('active');});
+          opt.classList.add('active');
+        }
+      }
+    });
+  }
+  if (d.colab_recoge_racf) { colabRecoge=d.colab_recoge_racf; restoreColab('colab-recoge', d.colab_recoge_racf); }
+  if (d.colab_asigna_racf) { colabAsigna=d.colab_asigna_racf; restoreColab('colab-asigna', d.colab_asigna_racf); }
+
+  // Ramo data + pill states
+  try { ramoData = d.ramo_data ? JSON.parse(d.ramo_data) : {}; } catch(e) { ramoData={}; }
+  setTimeout(function() {
+    Object.keys(ramoData).forEach(function(key) {
+      var st = ramoData[key] && ramoData[key].estado;
+      if (st) {
+        var pill = document.querySelector('[data-key="'+key+'"]');
+        if (pill) applyPillState(pill, st, false);
+      }
+      refreshPillBadge(key);
+    });
+    updProg();
+  }, 120);
+
+  // Show load banner
+  setFormDates(d.fechaCreacion||null, d.fechaModificacion||null);
+  var banner = document.getElementById('loadBanner');
+  if (banner) {
+    document.getElementById('loadBannerText').textContent = '\uD83D\uDC64 Cargado: ' + (d.nombre_completo||'cliente') + (d.timestamp ? '  \u00b7  ' + d.timestamp : '');
+    banner.style.display = 'flex';
+  }
+
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function setSexoVal(hiddenId, val) {
+  if (!val) return;
+  var hid = document.getElementById(hiddenId);
+  if (!hid) return;
+  document.querySelectorAll('.sexo-selector').forEach(function(sel) {
+    sel.querySelectorAll('.sexo-btn').forEach(function(b) {
+      var oc = b.getAttribute('onclick')||'';
+      if (oc.indexOf(hiddenId) >= 0 && oc.indexOf("'"+val+"'") >= 0) {
+        sel.querySelectorAll('.sexo-btn').forEach(function(x){x.classList.remove('active');});
+        b.classList.add('active');
+        hid.value = val;
+      }
+    });
+  });
+}
+
+// ─── INIT ────────────────────────────────────────────────────────
+fillEmpleados('empleados-emp');
+fillEmpleados('empleados-aut');
+initGrids();
+updateVisibility();
+updateNegocioGroups();
+updProg();
+initDirFromIDB();
 </script>
 </body>
 </html>

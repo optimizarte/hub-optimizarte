@@ -313,6 +313,12 @@ body{background:var(--gray3);font-family:var(--font-sans);font-size:15px;color:v
 .btn-gestiona:hover{background:#000}
 .btn-agenda{padding:11px 20px;border-radius:var(--radius-sm);border:1px solid #1e6f5c;background:#1e6f5c;color:#fff;font-size:13.5px;font-weight:500;cursor:pointer;font-family:var(--font-sans);letter-spacing:-.003em;display:inline-flex;align-items:center;gap:6px}
 .btn-agenda:hover{background:#155747;border-color:#155747}
+body[data-flow="search"] .form-hideable{display:none}
+body[data-flow="search"] .page-side a:not([data-side="sec-search-gestiona"]){opacity:0.4;pointer-events:none}
+body[data-flow="found"] #sec-search-gestiona,body[data-flow="empty"] #sec-search-gestiona{border-color:#10B981;background:linear-gradient(135deg,#F0FDF4 0%,#FFFFFF 100%)}
+.search-flag{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.4px;margin-left:8px}
+.search-flag-found{background:rgba(16,185,129,.18);color:#059669;border:1px solid #10B981}
+.search-flag-empty{background:rgba(245,158,11,.18);color:#B45309;border:1px solid #F59E0B}
 
 /* =========================================================
    SUCCESS MODAL
@@ -455,7 +461,7 @@ body{background:var(--gray3);font-family:var(--font-sans);font-size:15px;color:v
   <div class="hdr-actions">
     <div class="search-wrap">
       <button class="dir-btn" id="reportesDirBtn" type="button" onclick="getReportesDir()" title="Selecciona la carpeta AltaClientesLocal para guardar informes HTML" style="margin-right:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:4px"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg><span id="reportesDirStatus">&#128203; Informes</span></button>
-      <button class="dir-btn" id="dirBtn" type="button" onclick="selectClientesDir()" title="Selecciona la carpeta donde se guardar&#225;n los archivos JSON de clientes. Necesario Chrome/Edge."><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:5px"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg><span id="dirStatus"></span></button>
+      <button class="dir-btn" id="dirBtn" type="button" onclick="selectClientesDir()" title="Carpeta a OneDrive on es guarden els JSON dels clients i els informes HTML. Cal seleccionar-la un sol cop al primer ús. Ruta esperada: OneDrive - OPTIMIZARTE 3.0 - SCO\!!IA\!!GitHub-Repository-HUB\hub-optimizarte"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:5px"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg><span id="dirStatus">Conectar OneDrive...</span></button>
       <div class="search-box">
         <input type="text" id="searchInput" class="search-input" placeholder="&#128269; Buscar cliente..." autocomplete="off" oninput="onSearchInput(this.value)" onfocus="onSearchFocus()">
         <div class="search-results" id="searchResults"></div>
@@ -486,8 +492,27 @@ body{background:var(--gray3);font-family:var(--font-sans);font-size:15px;color:v
 
   <form id="altaForm" novalidate>
 
+  <!-- 0. CERCADOR INICIAL CLIENT GESTIONA -->
+  <div class="card" id="sec-search-gestiona" style="border:2px solid #DC0028;background:linear-gradient(135deg,#FEF3F4 0%,#FFFFFF 100%)">
+    <div class="card-hdr">
+      <div class="card-icon" style="background:#FEE2E2">&#128269;</div>
+      <div><h2>Buscar cliente en Gestiona</h2><p>Antes de empezar, comprueba si el cliente ya existe en el CRM</p></div>
+    </div>
+    <div class="card-body">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px">
+        <div style="flex:1;min-width:280px">
+          <label class="lbl" style="display:block;margin-bottom:6px;font-size:11px;font-weight:600;color:#333">NIF / CIF / Nombre del cliente</label>
+          <input type="text" id="search-gestiona-input" class="ipt" placeholder="Ej: 12345678A &#183; Anna P&#233;rez S.L. &#183; ..." autocomplete="off" style="width:100%">
+        </div>
+        <button type="button" id="btn-buscar-gestiona" class="btn-pri" style="height:38px"><span>&#128269;</span> Buscar en Gestiona</button>
+        <button type="button" id="btn-skip-search" class="btn-sec" style="height:38px" title="Si ya sabes que el cliente no existe, salta directamente al alta">Saltar &rarr; alta directa</button>
+      </div>
+      <div id="search-gestiona-result" style="display:none;margin-top:12px;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.5"></div>
+    </div>
+  </div>
+
   <!-- 1. TIPO DE CLIENTE -->
-  <div class="card" id="sec-tipo">
+  <div class="card form-hideable" id="sec-tipo">
     <div class="card-hdr">
       <div class="card-icon" style="background:#FEF3C7">&#127991;&#65039;</div>
       <div><h2>Tipo de cliente</h2><p>Selecciona la naturaleza jur&#237;dica del cliente</p></div>
@@ -520,7 +545,7 @@ body{background:var(--gray3);font-family:var(--font-sans);font-size:15px;color:v
   </div>
 
   <!-- 2. DATOS DE IDENTIFICACIÓN -->
-  <div class="card" id="sec-datos">
+  <div class="card form-hideable" id="sec-datos">
     <div class="card-hdr">
       <div class="card-icon" style="background:#EEF2FF">&#129514;</div>
       <div><h2>Datos de identificaci&#243;n</h2><p>Informaci&#243;n personal o fiscal</p></div>
@@ -683,7 +708,7 @@ body{background:var(--gray3);font-family:var(--font-sans);font-size:15px;color:v
   </div>
 
   <!-- 3. CONTACTO -->
-  <div class="card" id="sec-contacto">
+  <div class="card form-hideable" id="sec-contacto">
     <div class="card-hdr">
       <div class="card-icon" style="background:#ECFDF5">&#128241;</div>
       <div><h2>Datos de contacto</h2><p>Tel&#233;fonos, redes, email y direcci&#243;n</p></div>
@@ -713,6 +738,7 @@ body{background:var(--gray3);font-family:var(--font-sans);font-size:15px;color:v
   </div>
 
 
+  <div class="form-hideable" id="vencimientos-wrap">
   <span id="sec-vencimientos" style="display:block;position:relative;top:-80px"></span>
   <!-- 4b. VENCIMIENTOS NEGOCIO -->
   <div class="card" id="card-negocio" data-anchor="sec-vencimientos" style="display:none">
@@ -766,7 +792,8 @@ body{background:var(--gray3);font-family:var(--font-sans);font-size:15px;color:v
   </div>
 
   <!-- 5. OBSERVACIONES -->
-  <div class="card" id="sec-obs">
+  </div><!-- end vencimientos-wrap -->
+  <div class="card form-hideable" id="sec-obs">
     <div class="card-hdr">
       <div class="card-icon" style="background:#FFF7ED">&#128221;</div>
       <div><h2>Actividad, Observaciones y Notas</h2><p>Crear primera actividad, motivo del contacto, origen e informaci&#243;n adicional</p></div>
@@ -815,7 +842,7 @@ body{background:var(--gray3);font-family:var(--font-sans);font-size:15px;color:v
   </div>
 
   <!-- 6. USUARIO -->
-  <div class="card" id="sec-usuario">
+  <div class="card form-hideable" id="sec-usuario">
     <div class="card-hdr">
       <div class="card-icon" style="background:#EFF6FF">&#128101;</div>
       <div><h2>Usuario tratado / Asignado</h2><p>Qui&#233;n recoge los datos y a qui&#233;n se asigna el cliente</p></div>
@@ -873,11 +900,31 @@ body{background:var(--gray3);font-family:var(--font-sans);font-size:15px;color:v
     <h3>Cliente registrado correctamente</h3>
     <p>Los datos del cliente se han guardado. A continuaci&#243;n puedes copiarlos para introducirlos en el CRM de Occident.</p>
     <div class="modal-data" id="modal-data"></div>
-    <div class="modal-actions">
-      <button class="btn-sec" onclick="copyData()">&#128203; Copiar datos</button>
-      <button class="btn-gestiona" onclick="registrarEnGestiona()" title="Abre Gestiona y rellena el alta automáticamente">&#127968; Registrar en Gestiona</button>
-      <button class="btn-agenda" onclick="crearOposEnAgenda()" title="Abre la Agenda Comercial y crea las OPOs/ACTs automáticamente desde los vencimientos del formulario">&#128197; Crear OPOs en Agenda</button>
-      <button class="btn-pri" onclick="newAlt()"><span>+</span> Nuevo cliente</button>
+    <div class="modal-actions" style="display:flex;flex-direction:column;gap:14px;align-items:stretch">
+      <!-- Secció CLIENT -->
+      <div style="border:1px solid #E5E7EB;border-radius:10px;padding:12px 14px;background:#FAFAFB">
+        <div style="font-size:10.5px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:.6px;margin-bottom:9px;display:flex;align-items:center;gap:6px">
+          <span style="font-size:13px">&#128100;</span> Dades del client
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn-sec" onclick="copyData()" title="Copia les dades al porta-retalls">&#128203; Copiar dades</button>
+          <button class="btn-gestiona" onclick="registrarEnGestiona()" title="Obre Gestiona i emplena el formulari d&#39;alta autom&#224;ticament">&#127968; Registrar a Gestiona</button>
+        </div>
+      </div>
+      <!-- Secció OPOs/ACTs -->
+      <div style="border:1px solid #C7E5DC;border-radius:10px;padding:12px 14px;background:#F0F9F4">
+        <div style="font-size:10.5px;font-weight:700;color:#1e6f5c;text-transform:uppercase;letter-spacing:.6px;margin-bottom:9px;display:flex;align-items:center;gap:6px">
+          <span style="font-size:13px">&#128197;</span> Crear OPOs i activitats a l&#39;Agenda
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <button class="btn-agenda" onclick="crearOposEnAgenda()" title="Obre l&#39;Agenda Comercial i mostra el modal de previsualitzaci&#243; per crear les OPOs/ACTs">&#128197; Crear OPOs en Agenda</button>
+          <span style="font-size:11px;color:#6B7280;flex:1;min-width:200px">Crea oportunitats des dels venciments marcats al formulari (vto-inmediato, facilita, no-cambia-vto) i activitats des de necesita / no-cambia / primera acci&#243;.</span>
+        </div>
+      </div>
+      <!-- Tancar -->
+      <div style="display:flex;justify-content:flex-end;padding-top:6px;border-top:1px solid #F0F0F2">
+        <button class="btn-pri" onclick="newAlt()"><span>+</span> Nou client</button>
+      </div>
     </div>
     <div id="bkmk-hint" style="margin-top:14px;padding:10px 14px;background:#F0F4FF;border:1px solid #C7D4F5;border-radius:8px;font-size:11.5px;color:#374151;line-height:1.6;text-align:left">
       <strong style="color:#1a56a0">&#128278; Primer uso &#8212; Bookmarklet Gestiona</strong><br>
@@ -2423,14 +2470,43 @@ async function initReportesDirFromIDB() {
 
 async function selectClientesDir() {
   if (!window.showDirectoryPicker) {
-    alert('Tu navegador no soporta acceso a carpetas locales.\nUsa Google Chrome o Microsoft Edge.');
+    alert('Tu navegador no admet l\'acc\u00e9s a carpetes locals.\nUsa Google Chrome o Microsoft Edge.');
     return;
+  }
+  // Assistent visual només la primera vegada
+  var alreadySetup = false;
+  try { alreadySetup = !!(await idbGet('clientesDir')); } catch(e) {}
+  if (!alreadySetup) {
+    var ok = confirm(
+      '\ud83d\udcc1 SELECCIONA LA CARPETA D\'ALMACENATGE A ONEDRIVE\n\n' +
+      'Els formularis (JSON) i els informes es guardaran a OneDrive perqu\u00e8 tot l\'equip hi tingui acc\u00e9s.\n\n' +
+      'Ruta recomanada:\n' +
+      'C:\\Users\\<TU_USUARI>\\OneDrive - OPTIMIZARTE 3.0 - SCO\\!!IA\\!!GitHub-Repository-HUB\\hub-optimizarte\n\n' +
+      'Quan premis OK, s\'obrir\u00e0 el selector de carpetes. Navega a la ruta de dalt i selecciona la carpeta hub-optimizarte.\n\n' +
+      'Aquest pas nom\u00e9s cal fer-lo UN COP. Despr\u00e9s el navegador la recordar\u00e0 autom\u00e0ticament.'
+    );
+    if (!ok) return;
   }
   try {
     clientesDir = await window.showDirectoryPicker({ id: 'clientes-dir', mode: 'readwrite' });
+    // Validar que el nom fa pinta de ser la carpeta correcta
+    var dirName = clientesDir.name || '';
+    if (dirName && !alreadySetup && dirName.toLowerCase().indexOf('hub-optimizarte') === -1 && dirName.toLowerCase().indexOf('optimizarte') === -1) {
+      var continuar = confirm(
+        '\u26a0 La carpeta seleccionada \u00e9s "' + dirName + '"\n\n' +
+        'No conté "hub-optimizarte" al nom. Estàs segur que és la carpeta correcta?\n\n' +
+        'OK = Continuar amb aquesta carpeta\nCancel = Tornar a triar'
+      );
+      if (!continuar) {
+        return selectClientesDir();
+      }
+    }
     await idbPut('clientesDir', clientesDir);
     setDirBtn(true, clientesDir.name);
     await refreshAllClients();
+    if (!alreadySetup) {
+      showToast('\u2713 Carpeta connectada: ' + dirName + '. Ja no et tornar\u00e0 a demanar.', 'ok');
+    }
   } catch(e) { if (e.name !== 'AbortError') console.error(e); }
 }
 
@@ -2439,7 +2515,19 @@ function setDirBtn(ok, name) {
   var lbl = document.getElementById('dirStatus');
   if (!btn) return;
   btn.className = ok ? 'dir-btn connected' : 'dir-btn';
-  if (lbl) lbl.textContent = ok ? (name || 'Conectado') : '';
+  if (lbl) lbl.textContent = ok ? '\u2713 ' + (name || 'OneDrive') : 'Conectar OneDrive...';
+  // Estil visual: verd si connectat, vermell pulsant si no
+  if (ok) {
+    btn.style.background = '#10B981';
+    btn.style.color = '#fff';
+    btn.style.borderColor = '#059669';
+    btn.style.fontWeight = '700';
+  } else {
+    btn.style.background = '';
+    btn.style.color = '';
+    btn.style.borderColor = '';
+    btn.style.fontWeight = '';
+  }
 }
 
 async function initDirFromIDB() {
@@ -3493,6 +3581,99 @@ function registrarEnGestiona() {
   }
 }
 // ─── END INTEGRACIÓN GESTIONA ──────────────────────────────
+
+// ─── BUSCAR CLIENTE EN GESTIONA (flow inicial) ────────────────────
+// Inicialment el formulari està en mode "search": només la card 0 visible.
+// Després de "Buscar" o "Saltar", es revela la resta del formulari.
+(function() {
+  document.body.setAttribute('data-flow','search');
+  function setFlow(mode) {
+    document.body.setAttribute('data-flow', mode);
+    // Si revelem el formulari, fem scroll a la card 1
+    if (mode === 'found' || mode === 'empty') {
+      setTimeout(function(){
+        var t = document.getElementById('sec-tipo');
+        if (t) t.scrollIntoView({behavior:'smooth', block:'start'});
+      }, 200);
+    }
+  }
+  function showResult(html, type){
+    var box = document.getElementById('search-gestiona-result');
+    if (!box) return;
+    box.style.display = 'block';
+    var bg = type==='found'?'#F0FDF4':type==='empty'?'#FFFBEB':type==='err'?'#FEE2E2':'#F3F4F6';
+    var bd = type==='found'?'#10B981':type==='empty'?'#F59E0B':type==='err'?'#DC0028':'#D1D5DB';
+    var co = type==='found'?'#065F46':type==='empty'?'#92400E':type==='err'?'#991B1B':'#374151';
+    box.style.background = bg;
+    box.style.border = '1.5px solid ' + bd;
+    box.style.color = co;
+    box.innerHTML = html;
+  }
+  function buscarEnGestiona(){
+    var inp = document.getElementById('search-gestiona-input');
+    var q = inp ? inp.value.trim() : '';
+    if (!q) {
+      showResult('<strong>&#9888; Introdueix un NIF/CIF o nom abans de buscar</strong>', 'err');
+      inp && inp.focus();
+      return;
+    }
+    showResult('<strong>&#128269; Buscant a Gestiona...</strong> <span style="font-size:11px;opacity:.8">Obrirem una nova pestanya. Si el client existeix, copia les dades manualment al formulari (encara no &#233;s autom&#224;tic).</span>', 'info');
+    // Obrir Gestiona amb la cerca pre-filtrada
+    var url = 'https://gestiona.gco.global/gestionadministrativa/gestiondeclientes/gestionclientesoccident?q=' + encodeURIComponent(q);
+    try { window.open(url, '_blank'); } catch(e){}
+    // Després de 1.5s donar opcions: trobat / no trobat
+    setTimeout(function(){
+      showResult(
+        '<div style="font-weight:700;margin-bottom:8px">&#128269; Has trobat el client a Gestiona?</div>'+
+        '<div style="display:flex;gap:8px;flex-wrap:wrap">'+
+        '<button type="button" id="btn-found" class="btn-pri" style="height:34px;padding:7px 16px"><span>&#9989;</span> S&#237;, ja existeix &mdash; importar dades manualment</button>'+
+        '<button type="button" id="btn-not-found" class="btn-sec" style="height:34px;padding:7px 16px">&#10060; No, no existeix &mdash; alta nova</button>'+
+        '</div>'+
+        '<div style="font-size:11px;color:#6B7280;margin-top:8px;line-height:1.5">Si el client existeix, copia el seu NIF i nom al pas seg&#252;ent. Si no existeix, omple totes les dades del nou client.</div>'
+      , 'info');
+      var bF = document.getElementById('btn-found');
+      var bN = document.getElementById('btn-not-found');
+      if (bF) bF.addEventListener('click', function(){
+        showResult(
+          '<div style="display:flex;align-items:center;gap:6px"><strong>&#9989; Client existent al CRM</strong><span class="search-flag search-flag-found">trobat</span></div>'+
+          '<div style="font-size:11px;color:#065F46;margin-top:4px">Continua omplint el formulari amb les dades del client. Les OPOs/ACTs es vincular&#224;n al client existent al CRM via NIF.</div>'+
+          '<button type="button" onclick="document.body.setAttribute(\'data-flow\',\'search\');document.getElementById(\'search-gestiona-result\').style.display=\'none\';document.getElementById(\'search-gestiona-input\').value=\'\';document.getElementById(\'search-gestiona-input\').focus();" class="btn-sec" style="height:30px;padding:5px 12px;font-size:11px;margin-top:8px">&#128269; Buscar de nou</button>'
+        , 'found');
+        setFlow('found');
+      });
+      if (bN) bN.addEventListener('click', function(){
+        showResult(
+          '<div style="display:flex;align-items:center;gap:6px"><strong>&#10060; Client no existent al CRM</strong><span class="search-flag search-flag-empty">alta nova</span></div>'+
+          '<div style="font-size:11px;color:#92400E;margin-top:4px">El client es crear&#224; a Gestiona. Quan acabis el formulari, el bot&#243; "Registrar a Gestiona" obrir&#224; el formulari d\'alta nova.</div>'+
+          '<button type="button" onclick="document.body.setAttribute(\'data-flow\',\'search\');document.getElementById(\'search-gestiona-result\').style.display=\'none\';document.getElementById(\'search-gestiona-input\').value=\'\';document.getElementById(\'search-gestiona-input\').focus();" class="btn-sec" style="height:30px;padding:5px 12px;font-size:11px;margin-top:8px">&#128269; Buscar de nou</button>'
+        , 'empty');
+        setFlow('empty');
+      });
+    }, 1200);
+  }
+  function skipSearch(){
+    showResult(
+      '<div style="display:flex;align-items:center;gap:6px"><strong>&#9197; Cerca omesa</strong><span class="search-flag search-flag-empty">alta nova</span></div>'+
+      '<div style="font-size:11px;color:#92400E;margin-top:4px">Continua amb l\'alta directa. Recorda comprovar a Gestiona si el client ja existeix abans d\'enviar.</div>'+
+      '<button type="button" onclick="document.body.setAttribute(\'data-flow\',\'search\');document.getElementById(\'search-gestiona-result\').style.display=\'none\';document.getElementById(\'search-gestiona-input\').value=\'\';document.getElementById(\'search-gestiona-input\').focus();" class="btn-sec" style="height:30px;padding:5px 12px;font-size:11px;margin-top:8px">&#128269; Buscar abans</button>'
+    , 'empty');
+    setFlow('empty');
+  }
+  // Lligar handlers quan el DOM està llest
+  function attach(){
+    var btn = document.getElementById('btn-buscar-gestiona');
+    var skip = document.getElementById('btn-skip-search');
+    var inp = document.getElementById('search-gestiona-input');
+    if (btn) btn.addEventListener('click', buscarEnGestiona);
+    if (skip) skip.addEventListener('click', skipSearch);
+    if (inp) inp.addEventListener('keydown', function(e){
+      if (e.key === 'Enter') { e.preventDefault(); buscarEnGestiona(); }
+    });
+    if (inp) setTimeout(function(){ inp.focus(); }, 100);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', attach);
+  else attach();
+})();
 
 // ─── INTEGRACIÓN AGENDA OPTICRM ────────────────────────────
 // Codifica el payload de l'alta a base64 URL-safe i obre el CRM Gestiona

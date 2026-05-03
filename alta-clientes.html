@@ -311,6 +311,8 @@ body{background:var(--gray3);font-family:var(--font-sans);font-size:15px;color:v
 .btn-report:hover{background:#2A5FB8;color:#fff}
 .btn-gestiona{padding:11px 20px;border-radius:var(--radius-sm);border:1px solid var(--dark);background:var(--dark);color:#fff;font-size:13.5px;font-weight:500;cursor:pointer;font-family:var(--font-sans);letter-spacing:-.003em}
 .btn-gestiona:hover{background:#000}
+.btn-agenda{padding:11px 20px;border-radius:var(--radius-sm);border:1px solid #1e6f5c;background:#1e6f5c;color:#fff;font-size:13.5px;font-weight:500;cursor:pointer;font-family:var(--font-sans);letter-spacing:-.003em;display:inline-flex;align-items:center;gap:6px}
+.btn-agenda:hover{background:#155747;border-color:#155747}
 
 /* =========================================================
    SUCCESS MODAL
@@ -874,6 +876,7 @@ body{background:var(--gray3);font-family:var(--font-sans);font-size:15px;color:v
     <div class="modal-actions">
       <button class="btn-sec" onclick="copyData()">&#128203; Copiar datos</button>
       <button class="btn-gestiona" onclick="registrarEnGestiona()" title="Abre Gestiona y rellena el alta automáticamente">&#127968; Registrar en Gestiona</button>
+      <button class="btn-agenda" onclick="crearOposEnAgenda()" title="Abre la Agenda Comercial y crea las OPOs/ACTs automáticamente desde los vencimientos del formulario">&#128197; Crear OPOs en Agenda</button>
       <button class="btn-pri" onclick="newAlt()"><span>+</span> Nuevo cliente</button>
     </div>
     <div id="bkmk-hint" style="margin-top:14px;padding:10px 14px;background:#F0F4FF;border:1px solid #C7D4F5;border-radius:8px;font-size:11.5px;color:#374151;line-height:1.6;text-align:left">
@@ -3490,6 +3493,86 @@ function registrarEnGestiona() {
   }
 }
 // ─── END INTEGRACIÓN GESTIONA ──────────────────────────────
+
+// ─── INTEGRACIÓN AGENDA OPTICRM ────────────────────────────
+// Codifica el payload de l'alta a base64 URL-safe i obre el CRM Gestiona
+// amb el hash #opticrm_alta=<B64> perquè l'extensió OPTICRM ho processi.
+function crearOposEnAgenda() {
+  var d = lastData;
+  if (!d || !d.tipo) {
+    showToast('\u26a0\ufe0f Primer cal registrar el client.', 'warn');
+    return;
+  }
+
+  // Comprovar que hi ha alguna pill amb estat OPO/ACT-friendly
+  try {
+    var rd = d.ramo_data ? JSON.parse(d.ramo_data) : {};
+    var hasAny = false;
+    Object.keys(rd).forEach(function(k){
+      var st = rd[k] && rd[k].estado;
+      if (st === 'vto-inmediato' || st === 'facilita' || st === 'no-cambia-vto'
+          || st === 'necesita' || st === 'no-cambia') hasAny = true;
+    });
+    if (!hasAny && !d.primera_accion) {
+      showToast('\u26a0\ufe0f No hi ha cap pill marcat com VTO/Facilita/No cambia/Necesita ni primera acci\u00f3 prevista. No es generaria cap OPO.', 'warn');
+      return;
+    }
+  } catch(e) {}
+
+  // Construir payload net (només els camps que necessita l'agenda)
+  var payload = {
+    id: d.id,
+    timestamp: d.timestamp,
+    tipo: d.tipo, tipo_label: d.tipo_label,
+    nombre_completo: d.nombre_completo,
+    nif_cif: d.nif_cif,
+    fecha_nacimiento: d.fecha_nacimiento,
+    sexo: d.sexo, estado_civil: d.estado_civil, hijos: d.hijos,
+    actividad: d.actividad, antiguedad: d.antiguedad, empleados: d.empleados,
+    tel1: d.tel1, whatsapp: d.whatsapp, redes: d.redes,
+    email1: d.email1, email2: d.email2,
+    direccion: d.direccion, cp: d.cp, localidad: d.localidad,
+    seguros: d.seguros, ramo_data: d.ramo_data,
+    colab_recoge: d.colab_recoge, colab_recoge_racf: d.colab_recoge_racf,
+    colab_asigna: d.colab_asigna, colab_asigna_racf: d.colab_asigna_racf,
+    motivo_contacto: d.motivo_contacto,
+    primera_accion: d.primera_accion, fecha_accion: d.fecha_accion,
+    origen_sw: d.origen_sw, origen_detalle: d.origen_detalle
+  };
+
+  var jsonStr;
+  try { jsonStr = JSON.stringify(payload); }
+  catch(e) {
+    showToast('\u26a0\ufe0f Error codificant les dades: ' + (e.message||e), 'error');
+    return;
+  }
+
+  // UTF-8 safe + base64 URL-safe
+  var b64;
+  try {
+    b64 = btoa(unescape(encodeURIComponent(jsonStr)));
+    b64 = b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  } catch(e) {
+    showToast('\u26a0\ufe0f Error codificant base64: ' + (e.message||e), 'error');
+    return;
+  }
+
+  // Avis si la URL queda massa llarga (Chrome ~32KB; ens deixem marge)
+  var url = 'https://grupoaplicaciones.gco.global/FE/ISC.Gaan.CRM.FE.Inicio/#opticrm_alta=' + encodeURIComponent(b64);
+  if (url.length > 28000) {
+    showToast('\u26a0\ufe0f Les dades s\u00f3n massa grans per a l\'URL (' + url.length + ' chars). Redueix observacions.', 'error');
+    return;
+  }
+
+  // Obrir en una nova pestanya
+  try {
+    window.open(url, '_blank');
+    showToast('\ud83d\udcc5 Obrint Agenda OPTICRM... confirma la creaci\u00f3 al modal que apareixer\u00e0', 'ok');
+  } catch(e) {
+    showToast('\u26a0\ufe0f Error obrint l\'Agenda: ' + (e.message||e), 'error');
+  }
+}
+// ─── END INTEGRACIÓN AGENDA OPTICRM ────────────────────────
 
 </script>
 

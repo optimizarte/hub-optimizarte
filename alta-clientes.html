@@ -370,6 +370,13 @@ body{background:var(--gray3);font-family:var(--font-sans);font-size:15px;color:v
 .rm-block{border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px;position:relative;background:#fff}
 .rm-block-lbl{font-size:10.5px;font-weight:700;color:var(--gray);margin-bottom:10px;display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.1em}
 
+/* COBERTURAS PILLS (multiselect en modal Auto/Moto) */
+.cob-switcher{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.cob-btn{flex:1 1 calc(50% - 6px);min-width:140px;padding:9px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--white);cursor:pointer;font-size:11.5px;font-weight:500;color:var(--gray);transition:all .12s;text-align:center;font-family:var(--font-sans);letter-spacing:-.003em;display:flex;align-items:center;justify-content:center;gap:6px}
+.cob-btn:hover{border-color:var(--border-strong);color:var(--dark)}
+.cob-btn.active{border-color:var(--red);background:var(--red-bg);color:var(--red);font-weight:700}
+.cob-btn.active::before{content:'\2713';font-size:11px;font-weight:900}
+
 /* =========================================================
    SEARCH (header)
    ========================================================= */
@@ -876,21 +883,6 @@ body{background:var(--gray3);font-family:var(--font-sans);font-size:15px;color:v
 </div>
 
 
-<!-- RAMO MODAL CLOSE WARNING -->
-<div id="ramoCloseWarn" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:10000;background:rgba(0,0,0,.55);align-items:center;justify-content:center">
-  <div style="background:#fff;border-radius:14px;padding:24px 26px;max-width:420px;width:90%;box-shadow:0 16px 40px rgba(0,0,0,.22)">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-      <span style="font-size:22px">⚠️</span>
-      <div style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:#202020">Datos incompletos</div>
-    </div>
-    <div id="ramoWarnMsg" style="font-family:'Inter',sans-serif;font-size:12.5px;color:#414141;margin-bottom:18px;line-height:1.6"></div>
-    <div style="display:flex;gap:10px;justify-content:flex-end">
-      <button onclick="ramoWarnContinue()" style="padding:8px 16px;border-radius:8px;border:1.5px solid #D1D5DB;background:#f8f8f8;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#414141;cursor:pointer">Continuar sin datos</button>
-      <button onclick="ramoWarnReview()" style="padding:8px 16px;border-radius:8px;border:none;background:var(--red);font-family:'Inter',sans-serif;font-size:12px;font-weight:700;color:#fff;cursor:pointer">Revisar Datos</button>
-    </div>
-  </div>
-</div>
-
 <!-- RAMO MODAL -->
 <div id="ramoOverlay">
   <div class="ramo-modal-box">
@@ -901,7 +893,6 @@ body{background:var(--gray3);font-family:var(--font-sans);font-size:15px;color:v
     </div>
     <div id="rmBody"></div>
     <div class="ramo-modal-footer">
-      <button class="btn-sec" type="button" onclick="closeRamoModalWithCheck()">Cancelar</button>
       <button class="btn-pri" type="button" onclick="saveRamoData()"><span>&#10003;</span> Guardar datos</button>
     </div>
   </div>
@@ -972,20 +963,20 @@ var RAMO_CONFIG = {
   'ahorro-i':      { name: 'Ahorro Inversion',   emoji: '\uD83D\uDCC8', hasModal: true  },
   'embarcaciones': { name: 'Embarcaciones',      emoji: '\u26F5', hasModal: true  },
   'comunidades':   { name: 'Comunidades',        emoji: '\uD83C\uDFD8\uFE0F', hasModal: true  },
-  'movilidad':     { name: 'Movilidad Personal', emoji: '\uD83D\uDEF4', hasModal: false },
-  'mascotas':      { name: 'Mascotas',           emoji: '\uD83D\uDC3E', hasModal: false },
-  'bienes-consumo':{ name: 'Bienes Consumo',     emoji: '\uD83D\uDED2', hasModal: false },
-  'plan-pensiones':{ name: 'Plan Pensiones',     emoji: '\uD83C\uDFE6', hasModal: false },
-  'accidentes':    { name: 'Accidentes',         emoji: '\uD83E\uDE79', hasModal: false },
-  'comercio-pyme': { name: 'Comercio / Pyme',    emoji: '\uD83C\uDFEA', hasModal: false },
-  'rc':            { name: 'Resp. Civil',        emoji: '\u2696\uFE0F', hasModal: false },
-  'acc-convenio':  { name: 'Acc. Convenio',      emoji: '\uD83D\uDCCB', hasModal: false },
-  'acc-autonomo':  { name: 'Acc. Autonomo',      emoji: '\uD83D\uDCBC', hasModal: false },
-  'salud-col':     { name: 'Salud Colectivo',    emoji: '\uD83D\uDC65', hasModal: false },
-  'ahorro-col':    { name: 'Ahorro Colectivo',   emoji: '\uD83D\uDC8E', hasModal: false },
-  'transportes':   { name: 'Transportes',        emoji: '\uD83D\uDE9A', hasModal: false },
-  'baja-ilt-aut':  { name: 'Baja ILT Aut\u00f3nomo', emoji: '\uD83E\uDE7A', hasModal: false },
-  'subsidio':      { name: 'Subsidio',           emoji: '\uD83D\uDCB6', hasModal: false },
+  'movilidad':     { name: 'Movilidad Personal', emoji: '\uD83D\uDEF4', hasModal: true },
+  'mascotas':      { name: 'Mascotas',           emoji: '\uD83D\uDC3E', hasModal: true },
+  'bienes-consumo':{ name: 'Bienes Consumo',     emoji: '\uD83D\uDED2', hasModal: true },
+  'plan-pensiones':{ name: 'Plan Pensiones',     emoji: '\uD83C\uDFE6', hasModal: true },
+  'accidentes':    { name: 'Accidentes',         emoji: '\uD83E\uDE79', hasModal: true },
+  'comercio-pyme': { name: 'Comercio / Pyme',    emoji: '\uD83C\uDFEA', hasModal: true },
+  'rc':            { name: 'Resp. Civil',        emoji: '\u2696\uFE0F', hasModal: true },
+  'acc-convenio':  { name: 'Acc. Convenio',      emoji: '\uD83D\uDCCB', hasModal: true },
+  'acc-autonomo':  { name: 'Acc. Autonomo',      emoji: '\uD83D\uDCBC', hasModal: true },
+  'salud-col':     { name: 'Salud Colectivo',    emoji: '\uD83D\uDC65', hasModal: true },
+  'ahorro-col':    { name: 'Ahorro Colectivo',   emoji: '\uD83D\uDC8E', hasModal: true },
+  'transportes':   { name: 'Transportes',        emoji: '\uD83D\uDE9A', hasModal: true },
+  'baja-ilt-aut':  { name: 'Baja ILT Aut\u00f3nomo', emoji: '\uD83E\uDE7A', hasModal: true },
+  'subsidio':      { name: 'Subsidio',           emoji: '\uD83D\uDCB6', hasModal: true },
   'otro':          { name: 'Otro',               emoji: '\uD83D\uDCDD', hasModal: true  }
 };
 
@@ -1009,7 +1000,8 @@ function isModalComplete(type, d) {
   if (type==='comunidades') return !!(d.nombreCom);
   if (type==='embarcaciones') return !!(d.eslora && d.nmotores);
   if (type==='otro') return !!(d.notas && d.notas.trim());
-  return false;
+  // Rams genèrics (modal default amb Fecha + Notas)
+  return !!((d.vto && d.vto.trim()) || (d.notas && d.notas.trim()));
 }
 function hasAnyData(type, d) {
   if (!d) return false;
@@ -1513,91 +1505,17 @@ function openRamoModal(type, key) {
   document.getElementById('ramoOverlay').classList.add('show');
 }
 function getMissingFieldLabels(type){
-  var missing=[];
-  var d={};
-  // Read current modal DOM state (without saving)
-  if(type==='hogar'){
-    var sw=document.querySelectorAll('#ramoOverlay .prop-switcher');
-    if(!sw[0]||!sw[0].querySelector('.prop-btn.active')) missing.push('Tipo de inmueble');
-    var pi=document.querySelector('.p-icons[data-field="hogar-p"]');
-    if(!pi||!parseInt(pi.getAttribute('data-value'))) missing.push('Nº personas');
-  } else if(type==='auto'||type==='moto'){
-    var mat=document.getElementById('rm-matricula');if(!mat||!mat.value.trim()) missing.push('Matrícula');
-    var mes=document.getElementById('rm-mes-vcto');if(!mes||!mes.value) missing.push('Mes vencimiento');
-  } else if(type==='salud'){
-    var modBtn=document.querySelector('#ramoOverlay .prop-btn.active');
-    if(!modBtn) missing.push('Modalidad');
-    var pi=document.querySelector('.p-icons[data-field="salud-p"]');
-    if(!pi||!parseInt(pi.getAttribute('data-value'))) missing.push('Nº personas');
-  } else if(type==='decesos'){
-    var pi=document.querySelector('.p-icons[data-field="decesos-p"]');
-    if(!pi||!parseInt(pi.getAttribute('data-value'))) missing.push('Nº personas');
-  } else if(type==='vida'){
-    var pi=document.querySelector('.p-icons[data-field="vida-p"]');
-    var cap=document.getElementById('rm-vida-capital');
-    if((!pi||!parseInt(pi.getAttribute('data-value')))&&(!cap||!cap.value.trim())) missing.push('Personas o Capital asegurado');
-  } else if(type==='ahorro-g'||type==='ahorro-i'){
-    var tGrp=document.querySelector('#ramoOverlay .yn-group[data-target="rm-tiene-ahorro-wrap"]');
-    var qGrp=document.querySelector('#ramoOverlay .yn-group[data-target="rm-quiere-ahorrar-wrap"]');
-    var tAnswered=tGrp&&(tGrp.querySelector('.yn-btn.yes')||tGrp.querySelector('.yn-btn.no'));
-    var qAnswered=qGrp&&(qGrp.querySelector('.yn-btn.yes')||qGrp.querySelector('.yn-btn.no'));
-    if(!tAnswered) missing.push('¿Tiene ahorros?');
-    if(!qAnswered) missing.push('¿Quiere ahorrar?');
-  } else if(type==='comunidades'){
-    var nc=document.getElementById('rm-nombre-com');if(!nc||!nc.value.trim()) missing.push('Nombre de la comunidad');
-  } else if(type==='embarcaciones'){
-    var esl=document.getElementById('rm-eslora');var nm=document.getElementById('rm-nmotores');
-    if(!esl||!esl.value.trim()) missing.push('Eslora');
-    if(!nm||!nm.value) missing.push('Nº motores');
-  } else if(type==='otro'){
-    var nt=document.getElementById('rm-notas');if(!nt||!nt.value.trim()) missing.push('Anotaciones');
-  }
-  return missing;
+  // Conservada per compatibilitat (no s'utilitza per a l'avís de tancament).
+  return [];
 }
 
 function closeRamoModalWithCheck(){
-  if(!currentRamoType) { closeRamoModal(); return; }
-  var typeBase=currentRamoType.replace(/-\d+$/,'');
-  if(!RAMO_CONFIG[typeBase]||!RAMO_CONFIG[typeBase].hasModal){ closeRamoModal(); return; }
-  var missing=getMissingFieldLabels(typeBase);
-  if(!missing.length){ closeRamoModal(); return; }
-  var msg='<strong>Campos sin completar:</strong><ul style="margin:8px 0 0;padding-left:18px">';
-  missing.forEach(function(m){msg+='<li>'+m+'</li>';});
-  msg+='</ul>';
-  document.getElementById('ramoWarnMsg').innerHTML=msg;
-  var wd=document.getElementById('ramoCloseWarn');
-  wd.style.display='flex';
-}
-function ramoWarnContinue(){
-  document.getElementById('ramoCloseWarn').style.display='none';
+  // Simplificat: tanca directament sense confirmació.
+  // L'usuari guarda explícitament amb el botó "Guardar datos".
   closeRamoModal();
 }
-function ramoWarnReview(){
-  document.getElementById('ramoCloseWarn').style.display='none';
-  // Focus first missing-field element
-  var typeBase=currentRamoType?currentRamoType.replace(/-\d+$/,''):'';
-  var firstFocus=null;
-  if(typeBase==='hogar'){firstFocus=document.querySelector('#ramoOverlay .prop-switcher .prop-btn')||null;}
-  else if(typeBase==='auto'||typeBase==='moto'){
-    var mat=document.getElementById('rm-matricula');
-    firstFocus=(!mat||!mat.value.trim())?mat:(document.getElementById('rm-mes-vcto'));
-  } else if(typeBase==='salud'){
-    firstFocus=document.querySelector('#ramoOverlay .prop-btn')||document.querySelector('.p-icons[data-field="salud-p"] .p-icon');
-  } else if(typeBase==='decesos'){
-    firstFocus=document.querySelector('.p-icons[data-field="decesos-p"] .p-icon');
-  } else if(typeBase==='vida'){
-    firstFocus=document.querySelector('.p-icons[data-field="vida-p"] .p-icon');
-  } else if(typeBase==='ahorro-g'||typeBase==='ahorro-i'){
-    firstFocus=document.querySelector('#ramoOverlay .yn-btn');
-  } else if(typeBase==='comunidades'){
-    firstFocus=document.getElementById('rm-nombre-com');
-  } else if(typeBase==='embarcaciones'){
-    var esl=document.getElementById('rm-eslora');firstFocus=(!esl||!esl.value.trim())?esl:document.getElementById('rm-nmotores');
-  } else if(typeBase==='otro'){
-    firstFocus=document.getElementById('rm-notas');
-  }
-  if(firstFocus&&firstFocus.focus) firstFocus.focus();
-}
+function ramoWarnContinue(){ closeRamoModal(); }
+function ramoWarnReview(){ /* no-op: ja no hi ha avís de cancel·lació */ }
 function closeRamoModal(){document.getElementById('ramoOverlay').classList.remove('show');currentRamoKey=null;currentRamoType=null;}
 document.getElementById('ramoOverlay').addEventListener('click',function(e){if(e.target===this)closeRamoModalWithCheck();});
 
@@ -1632,6 +1550,11 @@ function setYN(btn,val){
   if(val==='Si') btn.classList.add('yes'); else btn.classList.add('no');
   var tid=g.getAttribute('data-target');
   if(tid){var tw=document.getElementById(tid);if(tw)tw.style.display=val==='Si'?'':'none';}
+}
+
+// cob-switcher (selecció múltiple de cobertures Auto/Moto)
+function toggleCobertura(btn){
+  btn.classList.toggle('active');
 }
 
 function buildMesOptions(sel){
@@ -1770,7 +1693,7 @@ function addSinco(){
   var div=document.createElement('div');
   div.className='rm-sinco-block rm-block';
   div.innerHTML='<div class="rm-block-lbl">SINCO '+n+
-    (n>1?'<button class="rpa-btn rpa-del" type="button" style="margin-left:auto" onclick="this.closest(\'.rm-sinco-block\').remove()">\u2715</button>':'')+
+    '<button class="rpa-btn rpa-del" type="button" style="margin-left:auto" title="Eliminar SINCO" onclick="this.closest(\'.rm-sinco-block\').remove()">\u2715</button>'+
     '</div>'+
     '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">'+
     '<div class="rm-field" style="margin:0"><span class="rm-label" style="font-size:9px">Compa\u00f1\u00eda</span><input class="rm-input rm-sinco-cia" placeholder="Nombre compa\u00f1\u00eda"></div>'+
@@ -1870,6 +1793,15 @@ function buildModalBody(type, d){
         '<span class="rm-label">Capital pendiente (\u20ac)</span>'+
         '<input class="rm-input" type="text" inputmode="numeric" id="rm-capital" placeholder="150.000" oninput="numFmtInput(this)" value="'+(d.capital?numFmt(d.capital):'')+'">'+
       '</div>'+
+      '<div class="rm-field"><span class="rm-label">\u00bfTiene mascotas?</span>'+
+        '<div class="yn-group" data-target="rm-hogar-mascotas-wrap">'+
+          '<button class="yn-btn'+(d.tieneMascotas==='Si'?' yes':'')+'" type="button" onclick="setYN(this,\'Si\')">\u2713 S\u00ed</button>'+
+          '<button class="yn-btn'+(d.tieneMascotas==='No'?' no':'')+'" type="button" onclick="setYN(this,\'No\')">\u2717 No</button>'+
+        '</div>'+
+        '<div id="rm-hogar-mascotas-wrap" style="'+(d.tieneMascotas==='Si'?'':'display:none')+'">'+
+          '<input class="rm-input" id="rm-hogar-raza" placeholder="Raza (Labrador, Bulldog franc\u00e9s, com\u00fan...)" value="'+(d.raza||'')+'" style="margin-top:6px">'+
+        '</div>'+
+      '</div>'+
       '<div class="divider" style="margin:12px 0"></div>'+
       '<div class="sec-tit" style="margin-bottom:8px">Direcci\u00f3n del inmueble <span style="font-weight:400;color:var(--gray2)">(cambiar si distinta)</span></div>'+
       '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px">'+
@@ -1877,7 +1809,7 @@ function buildModalBody(type, d){
         '<div class="rm-field" style="margin:0"><span class="rm-label" style="font-size:9px">CP</span><input class="rm-input" id="rm-cp-inmueble" placeholder="17600" value="'+(d.cpInmueble||(document.getElementById('cp')?document.getElementById('cp').value:''))+'"></div>'+
       '</div>'+
       '<div class="rm-field"><span class="rm-label" style="font-size:9px">Localidad</span><input class="rm-input" id="rm-loc-inmueble" placeholder="Localidad" value="'+(d.locInmueble||(document.getElementById('muni')?document.getElementById('muni').value:''))+'"></div>'+
-        '<div class="rm-field" style="margin-bottom:8px"><span class="rm-label">Fecha de vencimiento</span><input class="rm-input" type="date" id="rm-vto" style="max-width:160px" value="'+(d.vto||'')+'"></div>'+
+        '<div class="rm-field" style="margin-bottom:8px"><span class="rm-label">Fecha de Vencimiento / Cierre Estimado</span><input class="rm-input" type="date" id="rm-vto" style="max-width:160px" value="'+(d.vto||'')+'"></div>'+
         '<div class="divider" style="margin:12px 0"></div>'+
         '<div class="rm-field"><span class="rm-label">Observaciones</span>'+
           '<div class="yn-group" data-target="rm-hogar-obs-wrap">'+
@@ -1894,7 +1826,16 @@ function buildModalBody(type, d){
       var carnetLbl = isAuto ? 'F. Carnet B' : 'F. Carnet A1';
       var ownerVal = d.propietario||'tomador';
       var driverVal = d.conductor||'tomador';
-      return '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">'+
+      var cobs = Array.isArray(d.coberturas)?d.coberturas:[];
+      var cobOpts = ['Terceros B\u00e1sico','Terceros Completo','Todo Riesgo Franquicia','Todo Riesgo'];
+      var cobsHtml = cobOpts.map(function(opt){
+        var on = cobs.indexOf(opt)>=0;
+        return '<button class="cob-btn'+(on?' active':'')+'" type="button" data-cob="'+opt+'" onclick="toggleCobertura(this)">'+opt+'</button>';
+      }).join('');
+      return '<div class="rm-field" style="margin-bottom:14px"><span class="rm-label">Coberturas solicitadas \u2014 Opciones</span>'+
+          '<div class="cob-switcher">'+cobsHtml+'</div>'+
+        '</div>'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">'+
           '<div class="rm-field" style="margin:0"><span class="rm-label">Matr\u00edcula</span><input class="rm-input" id="rm-matricula" placeholder="1234 ABC" style="text-transform:uppercase" value="'+(d.matricula||'')+'"></div>'+
           '<div class="rm-field" style="margin:0"><span class="rm-label">Mes vencimiento</span><select class="rm-input" id="rm-mes-vcto">'+buildMesOptions(d.mesVcto)+'</select></div>'+
         '</div>'+
@@ -1931,7 +1872,7 @@ function buildModalBody(type, d){
           '<button class="rpa-btn rpa-dup" type="button" onclick="addSinco()">+ A\u00f1adir</button></div>'+
         '<div id="rm-sincos" style="margin-top:8px"></div>'+
         '<script>setTimeout(function(){addSinco();},10);<\/script>'+
-        '<div class="rm-field" style="margin-bottom:8px"><span class="rm-label">Fecha de vencimiento</span><input class="rm-input" type="date" id="rm-vto" style="max-width:160px" value="'+(d.vto||'')+'"></div>'+
+        '<div class="rm-field" style="margin-bottom:8px"><span class="rm-label">Fecha de Vencimiento / Cierre Estimado</span><input class="rm-input" type="date" id="rm-vto" style="max-width:160px" value="'+(d.vto||'')+'"></div>'+
         '<div class="divider" style="margin:12px 0"></div>'+
         '<div class="rm-field"><span class="rm-label">Observaciones</span>'+
           '<div class="yn-group" data-target="rm-auto-obs-wrap">'+
@@ -1958,7 +1899,7 @@ function buildModalBody(type, d){
         '<div class="rm-field">'+buildPersonIcons('salud-p',d.personas||0)+
           '<span class="rm-label" style="margin-top:8px">Personas a asegurar</span></div>'+
         '<div id="rm-fechas-wrap">'+buildSaludFechasHtml(d.personas||0,d.personasData)+'</div>'+
-        '<div class="rm-field" style="margin-bottom:8px"><span class="rm-label">Fecha de vencimiento</span><input class="rm-input" type="date" id="rm-vto" style="max-width:160px" value="'+(d.vto||'')+'"></div>'+
+        '<div class="rm-field" style="margin-bottom:8px"><span class="rm-label">Fecha de Vencimiento / Cierre Estimado</span><input class="rm-input" type="date" id="rm-vto" style="max-width:160px" value="'+(d.vto||'')+'"></div>'+
         '<div class="divider" style="margin:12px 0"></div>'+
         '<div class="rm-field"><span class="rm-label">Observaciones</span>'+
           '<div class="yn-group" data-target="rm-salud-obs-wrap">'+
@@ -1980,7 +1921,7 @@ function buildModalBody(type, d){
           '<button class="rpa-btn rpa-dup" type="button" onclick="addMascotaDecesos()">+ A\u00f1adir mascota</button>'+
         '</div>'+
         '<div id="rm-mascotas-list"></div>'+
-        '<div class="rm-field" style="margin-bottom:8px"><span class="rm-label">Fecha de vencimiento</span><input class="rm-input" type="date" id="rm-vto" style="max-width:160px" value="'+(d.vto||'')+'"></div>'+
+        '<div class="rm-field" style="margin-bottom:8px"><span class="rm-label">Fecha de Vencimiento / Cierre Estimado</span><input class="rm-input" type="date" id="rm-vto" style="max-width:160px" value="'+(d.vto||'')+'"></div>'+
         '<div class="divider" style="margin:12px 0"></div>'+
         '<div class="rm-field"><span class="rm-label">Observaciones</span>'+
           '<div class="yn-group" data-target="rm-decesos-obs-wrap">'+
@@ -2022,7 +1963,7 @@ function buildModalBody(type, d){
           '</div></div>'+
         '<div class="rm-field"><span class="rm-label">Capital asegurado / Capital a contratar</span>'+
           '<input class="rm-input" type="text" inputmode="numeric" id="rm-vida-capital" placeholder="100.000" oninput="numFmtInput(this)" value="'+(d.capital?numFmt(d.capital):'')+'">'+'</div>'+
-        '<div class="rm-field" style="margin-bottom:8px"><span class="rm-label">Fecha de vencimiento</span><input class="rm-input" type="date" id="rm-vto" style="max-width:160px" value="'+(d.vto||'')+'"></div>'+
+        '<div class="rm-field" style="margin-bottom:8px"><span class="rm-label">Fecha de Vencimiento / Cierre Estimado</span><input class="rm-input" type="date" id="rm-vto" style="max-width:160px" value="'+(d.vto||'')+'"></div>'+
         '<div class="divider" style="margin:12px 0"></div>'+
         '<div class="rm-field"><span class="rm-label">Observaciones</span>'+
           '<div class="yn-group" data-target="rm-vida-obs-wrap">'+
@@ -2067,7 +2008,7 @@ function buildModalBody(type, d){
             '<div class="rm-field" style="margin-top:10px"><span class="rm-label">Notas (objetivo de ahorro)</span>'+
               '<textarea class="rm-input rm-textarea" id="rm-notas-quiere" placeholder="Objetivo, plazo, perfil de riesgo...">'+(d.notasQuiere||'')+'</textarea></div>'+
           '</div></div>'+
-        '<div class="rm-field" style="margin-bottom:8px"><span class="rm-label">Fecha de vencimiento</span><input class="rm-input" type="date" id="rm-vto" style="max-width:160px" value="'+(d.vto||'')+'"></div>'+
+        '<div class="rm-field" style="margin-bottom:8px"><span class="rm-label">Fecha de Vencimiento / Cierre Estimado</span><input class="rm-input" type="date" id="rm-vto" style="max-width:160px" value="'+(d.vto||'')+'"></div>'+
         '<div class="divider" style="margin:12px 0"></div>'+
         '<div class="rm-field"><span class="rm-label">Observaciones</span>'+
           '<div class="yn-group" data-target="rm-ahorro-obs-wrap">'+
@@ -2084,7 +2025,7 @@ function buildModalBody(type, d){
           '<input class="rm-input" id="rm-nombre-com" placeholder="Comunidad Calle Mayor 15" value="'+(d.nombreCom||'')+'"></div>'+
         '<div class="rm-field"><span class="rm-label">Administrador</span>'+
           '<input class="rm-input" id="rm-admin" placeholder="Nombre del administrador de fincas" value="'+(d.admin||'')+'"></div>'+
-        '<div class="rm-field" style="margin-bottom:8px"><span class="rm-label">Fecha de vencimiento</span><input class="rm-input" type="date" id="rm-vto" style="max-width:160px" value="'+(d.vto||'')+'"></div>'+
+        '<div class="rm-field" style="margin-bottom:8px"><span class="rm-label">Fecha de Vencimiento / Cierre Estimado</span><input class="rm-input" type="date" id="rm-vto" style="max-width:160px" value="'+(d.vto||'')+'"></div>'+
         '<div class="divider" style="margin:12px 0"></div>'+
         '<div class="rm-field"><span class="rm-label">Observaciones</span>'+
           '<div class="yn-group" data-target="rm-comunidades-obs-wrap">'+
@@ -2146,7 +2087,7 @@ function buildModalBody(type, d){
               '<button class="prop-btn'+(d.materialConst==='Goma'?' active':'')+'" type="button" onclick="setPropType(this)">Goma</button>'+
             '</div></div>'+
         '</div>'+
-        '<div class="rm-field" style="margin-bottom:8px"><span class="rm-label">Fecha de vencimiento</span><input class="rm-input" type="date" id="rm-vto" style="max-width:160px" value="'+(d.vto||'')+'"></div>'+
+        '<div class="rm-field" style="margin-bottom:8px"><span class="rm-label">Fecha de Vencimiento / Cierre Estimado</span><input class="rm-input" type="date" id="rm-vto" style="max-width:160px" value="'+(d.vto||'')+'"></div>'+
         '<div class="divider" style="margin:12px 0"></div>'+
         '<div class="rm-field"><span class="rm-label">Observaciones</span>'+
           '<div class="yn-group" data-target="rm-embarcaciones-obs-wrap">'+
@@ -2163,7 +2104,7 @@ function buildModalBody(type, d){
           '<input class="rm-input" id="rm-otro-nombre" placeholder="Nombre del ramo o producto..." value="'+(d.nombre||'')+'"></div>'+
         '<div class="rm-field"><span class="rm-label">Anotaciones</span>'+
           '<textarea class="rm-input rm-textarea" id="rm-notas" placeholder="Notas libres sobre este seguro, vencimiento, compañía..." style="min-height:100px">'+(d.notas||'')+'</textarea></div>'+
-        '<div class="rm-field" style="margin-bottom:8px"><span class="rm-label">Fecha de vencimiento</span><input class="rm-input" type="date" id="rm-vto" style="max-width:160px" value="'+(d.vto||'')+'"></div>'+
+        '<div class="rm-field" style="margin-bottom:8px"><span class="rm-label">Fecha de Vencimiento / Cierre Estimado</span><input class="rm-input" type="date" id="rm-vto" style="max-width:160px" value="'+(d.vto||'')+'"></div>'+
         '<div class="divider" style="margin:12px 0"></div>'+
         '<div class="rm-field"><span class="rm-label">Observaciones</span>'+
           '<div class="yn-group" data-target="rm-otro-obs-wrap">'+
@@ -2175,7 +2116,13 @@ function buildModalBody(type, d){
           '</div></div>';
 
     default:
-      return '<p style="color:var(--gray2);font-size:13px">Sin datos adicionales para este ramo.</p>';
+      // Modal genèric per rams sense camps específics:
+      // només data de venciment + notes lliures (6 files).
+      return '<div class="rm-field" style="margin-bottom:12px"><span class="rm-label">Fecha de Vencimiento / Cierre Estimado</span>'+
+          '<input class="rm-input" type="date" id="rm-vto" style="max-width:180px" value="'+(d.vto||'')+'"></div>'+
+        '<div class="rm-field"><span class="rm-label">Notas</span>'+
+          '<textarea class="rm-input rm-textarea" id="rm-notas-generico" rows="6" placeholder="Notas libres sobre este ramo..." style="min-height:140px;resize:vertical">'+(d.notas||'')+'</textarea>'+
+        '</div>';
   }
 }
 
@@ -2197,6 +2144,9 @@ function saveRamoData(){
     var hipoGroup=document.querySelector('#ramoOverlay .yn-group[data-target="rm-capital-wrap"]');
     d.hipoteca=hipoGroup?(hipoGroup.querySelector('.yn-btn.yes')?'Si':(hipoGroup.querySelector('.yn-btn.no')?'No':'')):'';
     d.capital=gn('rm-capital');
+    var mascGroup=document.querySelector('#ramoOverlay .yn-group[data-target="rm-hogar-mascotas-wrap"]');
+    d.tieneMascotas=mascGroup?(mascGroup.querySelector('.yn-btn.yes')?'Si':(mascGroup.querySelector('.yn-btn.no')?'No':'')):'';
+    d.raza=g('rm-hogar-raza');
     var pi=document.querySelector('.p-icons[data-field="hogar-p"]');d.personas=pi?parseInt(pi.getAttribute('data-value'))||0:0;
     d.dirInmueble=g('rm-dir-inmueble');d.cpInmueble=g('rm-cp-inmueble');d.locInmueble=g('rm-loc-inmueble');
     var obsGrp_hogar=document.querySelector('#ramoOverlay .yn-group[data-target="rm-hogar-obs-wrap"]');
@@ -2207,6 +2157,10 @@ function saveRamoData(){
   }else if(type==='auto'||type==='moto'){
     d.matricula=g('rm-matricula');d.mesVcto=g('rm-mes-vcto');
     d.marca=g('rm-marca');d.modelo=g('rm-modelo');d.version=g('rm-version');
+    d.coberturas=[];
+    document.querySelectorAll('#ramoOverlay .cob-btn.active').forEach(function(b){
+      var v=b.getAttribute('data-cob');if(v)d.coberturas.push(v);
+    });
     var owSw=document.getElementById('rm-owner-switcher');
     d.propietario=owSw?(owSw.querySelector('.prop-btn.active')||{textContent:'tomador'}).textContent.trim().toLowerCase():'tomador';
     if(d.propietario==='otro'){
@@ -2326,6 +2280,10 @@ function saveRamoData(){
     d.observacionesNota=g('rm-embarcaciones-obs');
     d.vto=g('rm-vto');
 
+  }else{
+    // Fallback genèric: rams sense lògica específica (modal default amb només Fecha + Notas)
+    d.vto=g('rm-vto');
+    d.notas=g('rm-notas-generico');
   }
 
   // Merge preserving pill state
@@ -2894,6 +2852,7 @@ function rptPillDetails(type, key) {
     if(d.manobraContenido) lines.push(['Contenido', fmtMoney(d.manobraContenido)]);
     if(d.capital) lines.push(['Capital', fmtMoney(d.capital)]);
     if(d.hipoteca) lines.push(['Hipoteca', d.hipoteca]);
+    if(d.tieneMascotas) lines.push(['Mascotas', d.tieneMascotas+(d.tieneMascotas==='Si'&&d.raza?' \u2014 '+d.raza:'')]);
     if(d.dirInmueble) lines.push(['Inmueble', [d.dirInmueble,d.cpInmueble,d.locInmueble].filter(Boolean).join(', ')]);
     if(d.primaActual) lines.push(['Prima actual', fmtMoney(d.primaActual)]);
     if(d.vto) lines.push(['Vencimiento', fmtDate(d.vto)]);
@@ -2902,6 +2861,7 @@ function rptPillDetails(type, key) {
     if(d.matricula) lines.push(['Matr\u00edcula', d.matricula]);
     if(d.marca||d.modelo||d.version) lines.push(['Veh\u00edculo', [d.marca,d.modelo,d.version].filter(Boolean).join(' ')]);
     if(d.mesVcto) lines.push(['Mes vencimiento', d.mesVcto]);
+    if(d.coberturas && d.coberturas.length) lines.push(['Coberturas solicitadas', d.coberturas.join(' \u00b7 ')]);
     if(d.propietario) lines.push(['Propietario', d.propietario==='otro'?
       [d.ownerNombre,d.ownerAp1,d.ownerAp2].filter(Boolean).join(' ')||'Otro (sin nombre)':
       d.propietario.charAt(0).toUpperCase()+d.propietario.slice(1)]);
@@ -3014,6 +2974,12 @@ function rptPillDetails(type, key) {
     if(d.nombre) lines.push(['Ramo personalizado', d.nombre]);
     if(d.notas) lines.push(['Notas / Detalle', d.notas]);
     if(d.vto) lines.push(['Vencimiento', fmtDate(d.vto)]);
+    if(d.cia) lines.push(['Compa\u00f1\u00eda actual', d.cia]);
+  } else {
+    // Fallback per rams amb modal genèric (Fecha + Notas)
+    if(d.vto) lines.push(['Vencimiento / Cierre', fmtDate(d.vto)]);
+    if(d.notas) lines.push(['Notas', d.notas]);
+    if(d.primaActual) lines.push(['Prima actual', fmtMoney(d.primaActual)]);
     if(d.cia) lines.push(['Compa\u00f1\u00eda actual', d.cia]);
   }
   // Common fields for all types

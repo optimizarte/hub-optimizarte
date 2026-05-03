@@ -315,6 +315,12 @@ body{background:var(--gray3);font-family:var(--font-sans);font-size:15px;color:v
 .btn-agenda:hover{background:#155747;border-color:#155747}
 body[data-flow="search"] .form-hideable{display:none}
 body[data-flow="search"] .page-side a:not([data-side="sec-search-gestiona"]){opacity:0.4;pointer-events:none}
+.suggestion-item{padding:9px 12px;border-bottom:1px solid #F0F0F2;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .1s}
+.suggestion-item:last-child{border-bottom:none}
+.suggestion-item:hover{background:#FEF3F4}
+.suggestion-item .si-name{flex:1;font-size:12.5px;font-weight:600;color:#1a1a2e;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.suggestion-item .si-meta{font-size:10.5px;color:#6B7280;font-family:Consolas,Monaco,monospace}
+.suggestion-item .si-nif{font-size:10.5px;background:rgba(220,0,40,.1);color:#DC0028;padding:1px 6px;border-radius:3px;font-weight:600}
 body[data-flow="found"] #sec-search-gestiona,body[data-flow="empty"] #sec-search-gestiona{border-color:#10B981;background:linear-gradient(135deg,#F0FDF4 0%,#FFFFFF 100%)}
 .search-flag{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.4px;margin-left:8px}
 .search-flag-found{background:rgba(16,185,129,.18);color:#059669;border:1px solid #10B981}
@@ -496,18 +502,23 @@ body[data-flow="found"] #sec-search-gestiona,body[data-flow="empty"] #sec-search
   <div class="card" id="sec-search-gestiona" style="border:2px solid #DC0028;background:linear-gradient(135deg,#FEF3F4 0%,#FFFFFF 100%)">
     <div class="card-hdr">
       <div class="card-icon" style="background:#FEE2E2">&#128269;</div>
-      <div><h2>Buscar cliente en Gestiona</h2><p>Antes de empezar, comprueba si el cliente ya existe en el CRM</p></div>
+      <div><h2>Buscar cliente en Agenda OPTICRM</h2><p>Cerca a la base de clients amb activitat actual. Escriu nom, cognoms o NIF (3+ car&#224;cters)</p></div>
     </div>
     <div class="card-body">
-      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px">
-        <div style="flex:1;min-width:280px">
-          <label class="lbl" style="display:block;margin-bottom:6px;font-size:11px;font-weight:600;color:#333">NIF / CIF / Nombre del cliente</label>
-          <input type="text" id="search-gestiona-input" class="ipt" placeholder="Ej: 12345678A &#183; Anna P&#233;rez S.L. &#183; ..." autocomplete="off" style="width:100%">
+      <div style="position:relative">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:6px">
+          <div style="flex:1;min-width:280px;position:relative">
+            <label class="lbl" style="display:block;margin-bottom:6px;font-size:11px;font-weight:600;color:#333">Nom, cognoms o NIF</label>
+            <input type="text" id="search-gestiona-input" class="ipt" placeholder="Ex: Anna P&#233;rez &#183; 12345678A &#183; Empresa SL ..." autocomplete="off" style="width:100%">
+            <!-- Suggeriments -->
+            <div id="search-suggestions" style="display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:1.5px solid #DC0028;border-top:none;border-radius:0 0 8px 8px;max-height:340px;overflow-y:auto;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.18)"></div>
+          </div>
+          <button type="button" id="btn-skip-search" class="btn-sec" style="height:38px" title="Si saps que el client no existeix a l&#39;agenda, salta directament">Saltar &rarr; alta directa</button>
+          <button type="button" id="btn-refresh-cache" class="btn-sec" style="height:38px;padding:0 12px" title="Refrescar la llista de clients des de l&#39;Agenda">&#128260;</button>
         </div>
-        <button type="button" id="btn-buscar-gestiona" class="btn-pri" style="height:38px"><span>&#128269;</span> Buscar en Gestiona</button>
-        <button type="button" id="btn-skip-search" class="btn-sec" style="height:38px" title="Si ya sabes que el cliente no existe, salta directamente al alta">Saltar &rarr; alta directa</button>
+        <div id="search-cache-status" style="font-size:10.5px;color:#6B7280;margin-top:4px"></div>
+        <div id="search-gestiona-result" style="display:none;margin-top:12px;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.5"></div>
       </div>
-      <div id="search-gestiona-result" style="display:none;margin-top:12px;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.5"></div>
     </div>
   </div>
 
@@ -879,8 +890,8 @@ body[data-flow="found"] #sec-search-gestiona,body[data-flow="empty"] #sec-search
     </div>
   </div>
 
-  <!-- ACTIONS -->
-  <div class="card">
+  <!-- ACTIONS — només visibles després de la cerca inicial -->
+  <div class="card form-hideable">
     <div class="actions">
       <button type="button" class="btn-sec" onclick="confirmClear()">&#128465;&#65039; Limpiar todo</button>
       <button type="button" class="btn-warn" onclick="saveDraft()">&#128190; Guardar Cliente</button>
@@ -2468,6 +2479,66 @@ async function initReportesDirFromIDB() {
   } catch(e) {}
 }
 
+// Modal d'instruccions per configurar OneDrive compartit (només primer cop)
+function _showOneDriveSetupModal() {
+  return new Promise(function(resolve) {
+    var SHARED_LINK = 'https://optimizartesco-my.sharepoint.com/:f:/g/personal/dany_optimizarte_com/IgB3v2Fo5KddTL9fzsJl0C6jAdzz1vrimprMXkn_EZ88tv8';
+    var ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;background:rgba(10,10,15,.7);z-index:99999;display:flex;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(3px);font-family:Inter,system-ui,sans-serif';
+    var box = document.createElement('div');
+    box.style.cssText = 'background:#fff;border-radius:14px;width:min(640px,100%);max-height:90vh;overflow-y:auto;padding:26px 28px;box-shadow:0 16px 48px rgba(0,0,0,.4)';
+    box.innerHTML =
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">'+
+      '<div style="font-size:26px">&#128193;</div>'+
+      '<div><div style="font-size:16px;font-weight:800;color:#1a1a2e">Configurar OneDrive compartit</div>'+
+      '<div style="font-size:12px;color:#6B7280;margin-top:2px">Aquest pas nom&#233;s cal fer-lo UNA vegada per usuari</div></div></div>'+
+      
+      '<div style="background:#FEF3F4;border:1px solid #FECACA;border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:12.5px;color:#7F1D1D;line-height:1.5">'+
+      '<strong>&#9888;&#65039; Important:</strong> tots els formularis JSON i informes es guarden a una carpeta compartida d&#39;OneDrive. Aix&#237; tot l&#39;equip (DH, FK, SF) hi t&#233; acc&#233;s autom&#224;tic.'+
+      '</div>'+
+      
+      '<div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:8px">Pas 1 &#8212; Vincula la carpeta compartida al teu OneDrive</div>'+
+      '<div style="font-size:12px;color:#374151;line-height:1.5;margin-bottom:10px">Obre l&#39;enlla&#231; de SharePoint, prem el bot&#243; <strong>"Afegir drecera al meu OneDrive"</strong> (icona <span style="display:inline-block;background:#0EA5E9;color:#fff;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:700">+</span>), i espera 1-2 minuts perqu&#232; OneDrive sincronitzi:</div>'+
+      
+      '<a href="' + SHARED_LINK + '" target="_blank" style="display:flex;align-items:center;gap:10px;padding:11px 14px;background:linear-gradient(135deg,#0078D4 0%,#005A9E 100%);color:#fff;text-decoration:none;border-radius:8px;font-size:12.5px;font-weight:600;margin-bottom:14px;transition:transform .12s">'+
+      '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>'+
+      '<span style="flex:1">Obrir carpeta compartida hub-optimizarte a SharePoint</span>'+
+      '<span style="font-size:18px">&#8599;</span></a>'+
+      
+      '<div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:8px">Pas 2 &#8212; Selecciona la carpeta sincronitzada</div>'+
+      '<div style="font-size:12px;color:#374151;line-height:1.5;margin-bottom:10px">Un cop OneDrive ha sincronitzat (icona verda &#9989; al taskbar), prem <strong>"Continuar i seleccionar"</strong>. S&#39;obrir&#224; el selector de carpetes. Navega a:</div>'+
+      
+      '<div style="background:#F3F4F6;border:1px solid #D1D5DB;border-radius:6px;padding:10px 12px;font-family:Consolas,Monaco,monospace;font-size:11.5px;color:#374151;margin-bottom:14px;word-break:break-all">'+
+      'C:\\Users\\<strong style="color:#DC0028">&lt;TU_USUARI&gt;</strong>\\OneDrive - OPTIMIZARTE 3.0 - SCO\\<strong style="color:#10B981">hub-optimizarte</strong>'+
+      '</div>'+
+      
+      '<div style="font-size:11px;color:#6B7280;line-height:1.5;margin-bottom:18px">El navegador recordar&#224; aquesta carpeta. Les properes vegades es connectar&#224; sola sense intervenci&#243;.</div>'+
+      
+      '<div style="display:flex;gap:10px;justify-content:flex-end;border-top:1px solid #E5E7EB;padding-top:14px">'+
+      '<button id="onedrv-cancel" type="button" style="padding:9px 18px;background:transparent;border:1.5px solid #D1D5DB;border-radius:8px;color:#6B7280;font-size:12.5px;cursor:pointer;font-weight:600">Cancel&#183;lar</button>'+
+      '<button id="onedrv-ok" type="button" style="padding:9px 22px;background:#10B981;border:none;border-radius:8px;color:#fff;font-size:12.5px;cursor:pointer;font-weight:700">&#10003; Continuar i seleccionar</button>'+
+      '</div>';
+    
+    ov.appendChild(box);
+    document.body.appendChild(ov);
+    
+    box.querySelector('#onedrv-cancel').addEventListener('click', function() {
+      ov.remove();
+      resolve(false);
+    });
+    box.querySelector('#onedrv-ok').addEventListener('click', function() {
+      ov.remove();
+      resolve(true);
+    });
+    ov.addEventListener('click', function(e) {
+      if (e.target === ov) {
+        ov.remove();
+        resolve(false);
+      }
+    });
+  });
+}
+
 async function selectClientesDir() {
   if (!window.showDirectoryPicker) {
     alert('Tu navegador no admet l\'acc\u00e9s a carpetes locals.\nUsa Google Chrome o Microsoft Edge.');
@@ -2477,15 +2548,9 @@ async function selectClientesDir() {
   var alreadySetup = false;
   try { alreadySetup = !!(await idbGet('clientesDir')); } catch(e) {}
   if (!alreadySetup) {
-    var ok = confirm(
-      '\ud83d\udcc1 SELECCIONA LA CARPETA D\'ALMACENATGE A ONEDRIVE\n\n' +
-      'Els formularis (JSON) i els informes es guardaran a OneDrive perqu\u00e8 tot l\'equip hi tingui acc\u00e9s.\n\n' +
-      'Ruta recomanada:\n' +
-      'C:\\Users\\<TU_USUARI>\\OneDrive - OPTIMIZARTE 3.0 - SCO\\!!IA\\!!GitHub-Repository-HUB\\hub-optimizarte\n\n' +
-      'Quan premis OK, s\'obrir\u00e0 el selector de carpetes. Navega a la ruta de dalt i selecciona la carpeta hub-optimizarte.\n\n' +
-      'Aquest pas nom\u00e9s cal fer-lo UN COP. Despr\u00e9s el navegador la recordar\u00e0 autom\u00e0ticament.'
-    );
-    if (!ok) return;
+    // Mostrar modal d'instruccions amb opció d'obrir SharePoint
+    var setupOk = await _showOneDriveSetupModal();
+    if (!setupOk) return;
   }
   try {
     clientesDir = await window.showDirectoryPicker({ id: 'clientes-dir', mode: 'readwrite' });
@@ -3609,67 +3674,377 @@ function registrarEnGestiona() {
     box.style.color = co;
     box.innerHTML = html;
   }
-  function buscarEnGestiona(){
-    var inp = document.getElementById('search-gestiona-input');
-    var q = inp ? inp.value.trim() : '';
-    if (!q) {
-      showResult('<strong>&#9888; Introdueix un NIF/CIF o nom abans de buscar</strong>', 'err');
-      inp && inp.focus();
+  // Auto-omplir camps amb dades extretes de Gestiona
+  function _autofillFromGestiona(d){
+    if (!d) return;
+    var setVal = function(id, v){
+      var el = document.getElementById(id);
+      if (!el || !v) return;
+      el.value = v;
+      el.dispatchEvent(new Event('input', {bubbles:true}));
+      el.dispatchEvent(new Event('change', {bubbles:true}));
+    };
+    
+    // Detectar tipus client
+    var tipoDetected = null;
+    var nif = (d.nif || '').trim().toUpperCase();
+    if (nif) {
+      // CIF empresa: comença per A-W (excepte K, L, M)
+      if (/^[ABCDEFGHJNPQRSUVW]/.test(nif)) tipoDetected = 'emp';
+      // NIF autònom: depen del context (no es pot inferir només del NIF, deixar particular per defecte)
+      else tipoDetected = 'par';
+    }
+    if (tipoDetected && typeof setTipo === 'function') {
+      setTipo(tipoDetected);
+    }
+    
+    // Omplir camps comuns
+    if (tipoDetected === 'emp') {
+      if (d.nombre || d.nombreCompleto) setVal('emp-razon', d.nombre || d.nombreCompleto);
+      if (d.nif) setVal('emp-cif', d.nif);
+    } else {
+      // Particular o autònom (mateixos camps base)
+      var prefix = tipoDetected === 'aut' ? 'aut' : 'par';
+      // Separar nom i cognoms si vé com a "Nom Cognom1 Cognom2"
+      var fullName = (d.nombre || d.nombreCompleto || '').trim();
+      if (fullName) {
+        var parts = fullName.split(/\s+/);
+        setVal(prefix+'-nombre', parts[0] || '');
+        setVal(prefix+'-ap1', parts[1] || '');
+        setVal(prefix+'-ap2', parts.slice(2).join(' ') || '');
+      }
+      if (d.nif) setVal(prefix+'-nif', d.nif);
+      if (d.fnac) setVal(prefix+'-fnac', d.fnac);
+      if (d.sexo) setVal(prefix+'-sexo', d.sexo);
+    }
+    
+    // Contacte
+    if (d.telefon || d.telefono) setVal('tel1', d.telefon || d.telefono);
+    if (d.movil) setVal('wapp', d.movil);
+    if (d.email) setVal('email1', d.email);
+    if (d.email2) setVal('email2', d.email2);
+    
+    // Adreça
+    if (d.direccion || d.dir) setVal('dir', d.direccion || d.dir);
+    if (d.cp) setVal('cp', d.cp);
+    if (d.localidad || d.poblacio || d.poblacion) setVal('muni', d.localidad || d.poblacio || d.poblacion);
+  }
+  
+  // ─── CACHE DE CLIENTS DE L'AGENDA ─────────────────────────────────
+  var CLIENT_CACHE_KEY = 'opticrm_clients_cache_v1';
+  var CACHE_MAX_AGE_MS = 12 * 60 * 60 * 1000; // 12h
+  var clientCache = null; // [{nom, ref, nif}]
+  var cacheLoading = false;
+  
+  function getClientCacheFromStorage() {
+    try {
+      var raw = localStorage.getItem(CLIENT_CACHE_KEY);
+      if (!raw) return null;
+      var data = JSON.parse(raw);
+      if (!data || !data.clients || !Array.isArray(data.clients)) return null;
+      if (Date.now() - data.timestamp > CACHE_MAX_AGE_MS) return null;
+      return data;
+    } catch(e) { return null; }
+  }
+  
+  function setClientCacheToStorage(clients) {
+    try {
+      localStorage.setItem(CLIENT_CACHE_KEY, JSON.stringify({timestamp: Date.now(), clients: clients}));
+    } catch(e) { console.warn('No s\'ha pogut desar cache:', e.message); }
+  }
+  
+  function fmtCacheAge(ts) {
+    var diff = Date.now() - ts;
+    var mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'fa segons';
+    if (mins < 60) return 'fa ' + mins + ' min';
+    var hrs = Math.floor(mins / 60);
+    return 'fa ' + hrs + 'h ' + (mins % 60) + 'min';
+  }
+  
+  function updateCacheStatus() {
+    var box = document.getElementById('search-cache-status');
+    if (!box) return;
+    var cached = getClientCacheFromStorage();
+    if (cacheLoading) {
+      box.innerHTML = '<span style="color:#3B82F6">&#x21bb; Carregant cache de l\'Agenda...</span>';
+    } else if (cached) {
+      box.innerHTML = '<span style="color:#10B981">&#x2713;</span> ' + cached.clients.length + ' clients en cache (' + fmtCacheAge(cached.timestamp) + ')';
+    } else {
+      box.innerHTML = '<span style="color:#F59E0B">&#x26a0;</span> Sense cache. La primera cerca demanar\u00e0 dades a l\'Agenda.';
+    }
+  }
+  
+  // ─── AUTO-OMPLIR ─────────────────────────────────────────────
+  function _autofillFromAgenda(client) {
+    if (!client) return;
+    var setVal = function(id, v) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.value = v || '';
+      el.dispatchEvent(new Event('input', {bubbles:true}));
+      el.dispatchEvent(new Event('change', {bubbles:true}));
+    };
+    
+    // Detectar tipus
+    var tipoDetected = null;
+    var nif = (client.nif || '').trim().toUpperCase();
+    if (nif) {
+      if (/^[ABCDEFGHJNPQRSUVW]/.test(nif)) tipoDetected = 'emp';
+      else tipoDetected = 'par';
+    }
+    if (tipoDetected && typeof setTipo === 'function') {
+      setTipo(tipoDetected);
+    }
+    
+    var nom = (client.nom || '').trim();
+    if (tipoDetected === 'emp') {
+      setVal('emp-razon', nom);
+      setVal('emp-cif', nif);
+    } else {
+      var prefix = tipoDetected === 'aut' ? 'aut' : 'par';
+      var parts = nom.split(/\s+/);
+      setVal(prefix+'-nombre', parts[0] || '');
+      setVal(prefix+'-ap1', parts[1] || '');
+      setVal(prefix+'-ap2', parts.slice(2).join(' ') || '');
+      if (nif) setVal(prefix+'-nif', nif);
+    }
+  }
+  
+  // ─── DEMANAR CACHE A L\'AGENDA ────────────────────────────────
+  function requestCacheFromAgenda() {
+    return new Promise(function(resolve) {
+      cacheLoading = true;
+      updateCacheStatus();
+      
+      var url = 'https://grupoaplicaciones.gco.global/FE/ISC.Gaan.CRM.FE.Inicio/#opticrm_export_clients';
+      var win;
+      try {
+        win = window.open(url, 'opticrm_export', 'width=600,height=400');
+      } catch(e) { win = null; }
+      
+      if (!win) {
+        cacheLoading = false;
+        updateCacheStatus();
+        showResult('<strong>&#9888; No s\'ha pogut obrir l\'Agenda</strong> &#8212; permet pop-ups per a aquest lloc i prova de nou.', 'err');
+        resolve(null);
+        return;
+      }
+      
+      var resolved = false;
+      var listener = function(e) {
+        var data = e.data;
+        if (!data || data.type !== '_opticrm_clients_export' || data._opticrm !== true) return;
+        if (resolved) return;
+        resolved = true;
+        window.removeEventListener('message', listener);
+        try { win.close(); } catch(e2) {}
+        cacheLoading = false;
+        if (data.clients && data.clients.length > 0) {
+          setClientCacheToStorage(data.clients);
+          clientCache = data.clients;
+        }
+        updateCacheStatus();
+        resolve(data.clients || []);
+      };
+      window.addEventListener('message', listener);
+      
+      // Timeout 35s
+      setTimeout(function() {
+        if (resolved) return;
+        resolved = true;
+        window.removeEventListener('message', listener);
+        try { win.close(); } catch(e2) {}
+        cacheLoading = false;
+        updateCacheStatus();
+        showResult('<strong>&#9888; Timeout carregant cache</strong> &#8212; revisa que l\'extensi\u00f3 OPTICRM estigui activa i prova de nou.', 'err');
+        resolve(null);
+      }, 35000);
+    });
+  }
+  
+  // ─── AUTOCOMPLETE ────────────────────────────────────────────
+  function renderSuggestions(matches, query) {
+    var box = document.getElementById('search-suggestions');
+    if (!box) return;
+    
+    if (!matches || matches.length === 0) {
+      box.innerHTML = '<div style="padding:14px;text-align:center;color:#6B7280;font-size:12px"><strong>Sense coincid&#232;ncies</strong> per "<b>'+escapeHtml(query)+'</b>"<br><span style="font-size:11px">Si \u00e9s un client nou, prem <b>Saltar</b> per fer l\'alta directa.</span></div>';
+      box.style.display = 'block';
       return;
     }
-    showResult('<strong>&#128269; Buscant a Gestiona...</strong> <span style="font-size:11px;opacity:.8">Obrirem una nova pestanya. Si el client existeix, copia les dades manualment al formulari (encara no &#233;s autom&#224;tic).</span>', 'info');
-    // Obrir Gestiona amb la cerca pre-filtrada
-    var url = 'https://gestiona.gco.global/gestionadministrativa/gestiondeclientes/gestionclientesoccident?q=' + encodeURIComponent(q);
-    try { window.open(url, '_blank'); } catch(e){}
-    // Després de 1.5s donar opcions: trobat / no trobat
-    setTimeout(function(){
-      showResult(
-        '<div style="font-weight:700;margin-bottom:8px">&#128269; Has trobat el client a Gestiona?</div>'+
-        '<div style="display:flex;gap:8px;flex-wrap:wrap">'+
-        '<button type="button" id="btn-found" class="btn-pri" style="height:34px;padding:7px 16px"><span>&#9989;</span> S&#237;, ja existeix &mdash; importar dades manualment</button>'+
-        '<button type="button" id="btn-not-found" class="btn-sec" style="height:34px;padding:7px 16px">&#10060; No, no existeix &mdash; alta nova</button>'+
-        '</div>'+
-        '<div style="font-size:11px;color:#6B7280;margin-top:8px;line-height:1.5">Si el client existeix, copia el seu NIF i nom al pas seg&#252;ent. Si no existeix, omple totes les dades del nou client.</div>'
-      , 'info');
-      var bF = document.getElementById('btn-found');
-      var bN = document.getElementById('btn-not-found');
-      if (bF) bF.addEventListener('click', function(){
-        showResult(
-          '<div style="display:flex;align-items:center;gap:6px"><strong>&#9989; Client existent al CRM</strong><span class="search-flag search-flag-found">trobat</span></div>'+
-          '<div style="font-size:11px;color:#065F46;margin-top:4px">Continua omplint el formulari amb les dades del client. Les OPOs/ACTs es vincular&#224;n al client existent al CRM via NIF.</div>'+
-          '<button type="button" onclick="document.body.setAttribute(\'data-flow\',\'search\');document.getElementById(\'search-gestiona-result\').style.display=\'none\';document.getElementById(\'search-gestiona-input\').value=\'\';document.getElementById(\'search-gestiona-input\').focus();" class="btn-sec" style="height:30px;padding:5px 12px;font-size:11px;margin-top:8px">&#128269; Buscar de nou</button>'
-        , 'found');
-        setFlow('found');
+    
+    var html = matches.slice(0, 12).map(function(c, idx) {
+      var nifPart = c.nif ? '<span class="si-nif">'+escapeHtml(c.nif)+'</span>' : '';
+      return '<div class="suggestion-item" data-idx="'+idx+'">'+
+        '<div class="si-name">'+escapeHtml(c.nom)+'</div>'+
+        nifPart+
+        '<div class="si-meta">'+escapeHtml(c.ref)+'</div>'+
+      '</div>';
+    }).join('');
+    
+    if (matches.length > 12) {
+      html += '<div style="padding:8px 12px;font-size:10.5px;color:#6B7280;text-align:center;background:#F9FAFB">'+(matches.length-12)+' coincid&#232;ncies m&#233;s &#8212; afina la cerca per veure-les.</div>';
+    }
+    
+    box.innerHTML = html;
+    box.style.display = 'block';
+    
+    // Lligar clicks
+    box.querySelectorAll('.suggestion-item').forEach(function(item) {
+      item.addEventListener('click', function() {
+        var idx = parseInt(item.getAttribute('data-idx'));
+        if (isNaN(idx)) return;
+        var picked = matches[idx];
+        if (!picked) return;
+        selectClient(picked);
       });
-      if (bN) bN.addEventListener('click', function(){
-        showResult(
-          '<div style="display:flex;align-items:center;gap:6px"><strong>&#10060; Client no existent al CRM</strong><span class="search-flag search-flag-empty">alta nova</span></div>'+
-          '<div style="font-size:11px;color:#92400E;margin-top:4px">El client es crear&#224; a Gestiona. Quan acabis el formulari, el bot&#243; "Registrar a Gestiona" obrir&#224; el formulari d\'alta nova.</div>'+
-          '<button type="button" onclick="document.body.setAttribute(\'data-flow\',\'search\');document.getElementById(\'search-gestiona-result\').style.display=\'none\';document.getElementById(\'search-gestiona-input\').value=\'\';document.getElementById(\'search-gestiona-input\').focus();" class="btn-sec" style="height:30px;padding:5px 12px;font-size:11px;margin-top:8px">&#128269; Buscar de nou</button>'
-        , 'empty');
-        setFlow('empty');
-      });
-    }, 1200);
+    });
   }
-  function skipSearch(){
+  
+  function escapeHtml(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  
+  function filterCache(query) {
+    var q = String(query || '').trim().toUpperCase().replace(/\s+/g, ' ');
+    if (!q || !clientCache) return [];
+    return clientCache.filter(function(c) {
+      var nom = String(c.nom||'').toUpperCase();
+      var ref = String(c.ref||'').toUpperCase();
+      var nif = String(c.nif||'').toUpperCase();
+      return nom.indexOf(q) >= 0 || ref.indexOf(q) >= 0 || (nif && nif.indexOf(q) >= 0);
+    });
+  }
+  
+  async function onInputChange(value) {
+    var box = document.getElementById('search-suggestions');
+    if (!box) return;
+    
+    if (!value || value.length < 3) {
+      box.style.display = 'none';
+      return;
+    }
+    
+    // Si encara no tenim cache en mem\u00f2ria, intentar carregar-lo
+    if (!clientCache) {
+      var stored = getClientCacheFromStorage();
+      if (stored && stored.clients) {
+        clientCache = stored.clients;
+        updateCacheStatus();
+      }
+    }
+    
+    if (!clientCache) {
+      // No hi ha cache: oferir carregar-lo
+      box.innerHTML = '<div style="padding:14px;text-align:center"><div style="margin-bottom:8px;font-size:12px;color:#374151"><strong>&#x21bb; No tens cache de clients</strong></div><div style="font-size:11px;color:#6B7280;margin-bottom:10px">Cal carregar la llista des de l\'Agenda OPTICRM (un sol cop, v&#224;lid 12h).</div><button type="button" id="btn-load-cache" class="btn-pri" style="height:32px;padding:6px 14px;font-size:11.5px">&#x21bb; Carregar cache ara</button></div>';
+      box.style.display = 'block';
+      var btnLoad = document.getElementById('btn-load-cache');
+      if (btnLoad) {
+        btnLoad.addEventListener('click', async function() {
+          await requestCacheFromAgenda();
+          // Re-disparar la cerca
+          onInputChange(value);
+        });
+      }
+      return;
+    }
+    
+    var matches = filterCache(value);
+    renderSuggestions(matches, value);
+  }
+  
+  function selectClient(client) {
+    // Amagar suggeriments
+    var box = document.getElementById('search-suggestions');
+    if (box) box.style.display = 'none';
+    
+    // Auto-omplir camps b\u00e0sics que tenim al cache (nom + nif si est\u00e0 a OBSACT)
+    _autofillFromAgenda(client);
+    
     showResult(
-      '<div style="display:flex;align-items:center;gap:6px"><strong>&#9197; Cerca omesa</strong><span class="search-flag search-flag-empty">alta nova</span></div>'+
-      '<div style="font-size:11px;color:#92400E;margin-top:4px">Continua amb l\'alta directa. Recorda comprovar a Gestiona si el client ja existeix abans d\'enviar.</div>'+
-      '<button type="button" onclick="document.body.setAttribute(\'data-flow\',\'search\');document.getElementById(\'search-gestiona-result\').style.display=\'none\';document.getElementById(\'search-gestiona-input\').value=\'\';document.getElementById(\'search-gestiona-input\').focus();" class="btn-sec" style="height:30px;padding:5px 12px;font-size:11px;margin-top:8px">&#128269; Buscar abans</button>'
+      '<div style="display:flex;align-items:center;gap:6px"><strong>&#x2713; Client trobat a l\'Agenda</strong><span class="search-flag search-flag-found">trobat</span></div>'+
+      '<div style="font-size:11.5px;color:#065F46;margin-top:4px;line-height:1.5"><b>'+escapeHtml(client.nom)+'</b> &#183; '+escapeHtml(client.ref)+(client.nif?' &#183; <b>'+escapeHtml(client.nif)+'</b>':'')+'<br><span style="font-size:10.5px">Camps b&#224;sics omplerts. Revisa i completa la resta (tel&#232;fon, email, adre&#231;a). Les OPOs/ACTs es vincular&#224;n al client existent al CRM via NIF.</span></div>'+
+      '<button type="button" onclick="document.body.setAttribute(\'data-flow\',\'search\');document.getElementById(\'search-gestiona-result\').style.display=\'none\';document.getElementById(\'search-gestiona-input\').value=\'\';document.getElementById(\'search-suggestions\').style.display=\'none\';document.getElementById(\'search-gestiona-input\').focus();" class="btn-sec" style="height:30px;padding:5px 12px;font-size:11px;margin-top:8px">&#x1f50d; Buscar de nou</button>'
+    , 'found');
+    setFlow('found');
+  }
+  
+  function skipSearch() {
+    showResult(
+      '<div style="display:flex;align-items:center;gap:6px"><strong>&#x23ed; Cerca omesa</strong><span class="search-flag search-flag-empty">alta nova</span></div>'+
+      '<div style="font-size:11px;color:#92400E;margin-top:4px">Continua amb l\'alta directa. Aquest client es crear&#224; com a nou al CRM.</div>'+
+      '<button type="button" onclick="document.body.setAttribute(\'data-flow\',\'search\');document.getElementById(\'search-gestiona-result\').style.display=\'none\';document.getElementById(\'search-gestiona-input\').value=\'\';document.getElementById(\'search-gestiona-input\').focus();" class="btn-sec" style="height:30px;padding:5px 12px;font-size:11px;margin-top:8px">&#x1f50d; Buscar abans</button>'
     , 'empty');
     setFlow('empty');
   }
-  // Lligar handlers quan el DOM està llest
-  function attach(){
-    var btn = document.getElementById('btn-buscar-gestiona');
-    var skip = document.getElementById('btn-skip-search');
+  
+  function attach() {
     var inp = document.getElementById('search-gestiona-input');
-    if (btn) btn.addEventListener('click', buscarEnGestiona);
+    var skip = document.getElementById('btn-skip-search');
+    var refresh = document.getElementById('btn-refresh-cache');
+    var box = document.getElementById('search-suggestions');
+    
+    // Carregar cache de localStorage si existeix i \u00e9s vigent
+    var stored = getClientCacheFromStorage();
+    if (stored && stored.clients) {
+      clientCache = stored.clients;
+    }
+    updateCacheStatus();
+    
+    if (inp) {
+      inp.addEventListener('input', function() {
+        onInputChange(inp.value);
+      });
+      inp.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && box) {
+          box.style.display = 'none';
+        }
+        // Navegaci\u00f3 amb fletxes
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (!box || box.style.display === 'none') return;
+          var items = Array.from(box.querySelectorAll('.suggestion-item'));
+          if (!items.length) return;
+          var current = box.querySelector('.suggestion-item.focused');
+          var idx = current ? items.indexOf(current) : -1;
+          if (current) current.classList.remove('focused');
+          if (e.key === 'ArrowDown') idx = (idx + 1) % items.length;
+          else idx = idx <= 0 ? items.length - 1 : idx - 1;
+          items[idx].classList.add('focused');
+          items[idx].style.background = '#FEF3F4';
+          items[idx].scrollIntoView({block:'nearest'});
+        }
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          if (!box || box.style.display === 'none') return;
+          var focused = box.querySelector('.suggestion-item.focused');
+          if (focused) focused.click();
+        }
+      });
+      setTimeout(function() { inp.focus(); }, 100);
+    }
+    
     if (skip) skip.addEventListener('click', skipSearch);
-    if (inp) inp.addEventListener('keydown', function(e){
-      if (e.key === 'Enter') { e.preventDefault(); buscarEnGestiona(); }
+    
+    if (refresh) {
+      refresh.addEventListener('click', async function() {
+        if (cacheLoading) return;
+        // Esborrar cache
+        try { localStorage.removeItem(CLIENT_CACHE_KEY); } catch(e){}
+        clientCache = null;
+        await requestCacheFromAgenda();
+        // Refrescar la cerca actual si hi ha text
+        if (inp && inp.value) onInputChange(inp.value);
+      });
+    }
+    
+    // Click fora dels suggeriments els amaga
+    document.addEventListener('click', function(e) {
+      if (!box) return;
+      if (e.target.closest('#search-suggestions') || e.target === inp) return;
+      box.style.display = 'none';
     });
-    if (inp) setTimeout(function(){ inp.focus(); }, 100);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', attach);
   else attach();

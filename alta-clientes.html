@@ -469,7 +469,7 @@ body{background:var(--gray3);font-family:var(--font-sans);font-size:15px;color:v
     <a href="#sec-datos" data-side="sec-datos"><span class="side-num">2</span>Identificación</a>
     <a href="#sec-contacto" data-side="sec-contacto"><span class="side-num">3</span>Contacto</a>
     <a href="#sec-vencimientos" data-side="sec-vencimientos"><span class="side-num">4</span>Vencimientos</a>
-    <a href="#sec-obs" data-side="sec-obs"><span class="side-num">5</span>Observaciones</a>
+    <a href="#sec-obs" data-side="sec-obs"><span class="side-num">5</span>Actividad y Notas</a>
     <a href="#sec-usuario" data-side="sec-usuario"><span class="side-num">6</span>Usuario</a>
   </aside>
   <div class="page-main">
@@ -767,7 +767,7 @@ body{background:var(--gray3);font-family:var(--font-sans);font-size:15px;color:v
   <div class="card" id="sec-obs">
     <div class="card-hdr">
       <div class="card-icon" style="background:#FFF7ED">&#128221;</div>
-      <div><h2>Observaciones y notas</h2><p>Motivo del contacto, origen e informaci&#243;n adicional</p></div>
+      <div><h2>Actividad, Observaciones y Notas</h2><p>Crear primera actividad, motivo del contacto, origen e informaci&#243;n adicional</p></div>
     </div>
     <div class="card-body">
       <div class="field-grid g2" style="margin-bottom:18px;align-items:stretch">
@@ -776,12 +776,19 @@ body{background:var(--gray3);font-family:var(--font-sans);font-size:15px;color:v
           <label>Primera acci&#243;n prevista</label>
           <select id="primera-accion" style="margin-bottom:8px">
             <option value="">&#8212; Sin acci&#243;n inmediata &#8212;</option>
+            <option value="Llamada">&#128222; Llamada</option>
+            <option value="Cita">&#128197; Cita</option>
+            <option value="Tarea">&#9989; Tarea</option>
+            <option value="Carta">&#9993;&#65039; Carta</option>
+            <option value="Fax">&#128224; Fax</option>
+            <option value="Visita">&#128064; Visita</option>
+            <option value="Correo">&#128231; Correo</option>
+            <option value="Propension">&#127919; Propensi&#243;n</option>
+            <option value="WhatsApp">&#128172; WhatsApp</option>
+            <option disabled>&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</option>
             <option value="Team">&#128203; Enviar registro a Team</option>
-            <option value="Llamada">&#128222; Llamada de bienvenida</option>
-            <option value="Cita">&#128197; Concertar cita</option>
             <option value="Presupuesto">&#128196; Enviar presupuesto</option>
             <option value="Formulario">&#128221; Enviar formulario</option>
-            <option value="Visita">&#129309; Visita comercial</option>
             <option value="Email">&#9993;&#65039; Enviar email informativo</option>
           </select>
           <label>Fecha para la acci&#243;n</label>
@@ -1510,12 +1517,14 @@ function getMissingFieldLabels(type){
 }
 
 function closeRamoModalWithCheck(){
-  // Simplificat: tanca directament sense confirmació.
-  // L'usuari guarda explícitament amb el botó "Guardar datos".
-  closeRamoModal();
+  // Tancament intel·ligent: si hi ha un ram actiu, fa autoSave perquè
+  // el pill mostri pulse/badge en funció de la complesa de les dades.
+  // Si no hi ha res, simplement tanca.
+  if(!currentRamoType || !currentRamoKey){ closeRamoModal(); return; }
+  saveRamoData(); // guarda + tanca + refreshPillBadge (badge ! / pulse vermell si incomplet)
 }
 function ramoWarnContinue(){ closeRamoModal(); }
-function ramoWarnReview(){ /* no-op: ja no hi ha avís de cancel·lació */ }
+function ramoWarnReview(){ /* no-op */ }
 function closeRamoModal(){document.getElementById('ramoOverlay').classList.remove('show');currentRamoKey=null;currentRamoType=null;}
 document.getElementById('ramoOverlay').addEventListener('click',function(e){if(e.target===this)closeRamoModalWithCheck();});
 
@@ -3297,7 +3306,7 @@ function generateReport() {
     if(obs) obsHtml += '<div class="rpt-data-item" style="grid-column:1/-1"><strong>Notas / Motivo</strong><div style="margin-top:4px;white-space:pre-wrap;color:#202020">'+obs+'</div></div>';
     obsHtml += '</div>';
   }
-  html += rptSection(sectionNum,'Observaciones y Notas','#6B7280', obsHtml, 'Sin observaciones registradas.');
+  html += rptSection(sectionNum,'Actividad, Observaciones y Notas','#6B7280', obsHtml, 'Sin observaciones registradas.');
   sectionNum++;
 
   // ── USUARIOS ────────────────────────────────────────────────────

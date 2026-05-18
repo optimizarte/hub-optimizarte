@@ -5549,6 +5549,8 @@ function registrarEnGestiona() {
   }
   
   function skipSearch() {
+    // FIX: netejar el formulari abans de mostrar mode 'empty' (per si veníem d'un client carregat)
+    try { clearForm(); } catch(eCF) { console.warn('[skipSearch] clearForm fail:', eCF); }
     showResult(
       '<div style="display:flex;align-items:center;gap:6px"><strong>&#x23ed; Cerca omesa</strong><span class="search-flag search-flag-empty">alta nova</span></div>'+
       '<div style="font-size:11px;color:#92400E;margin-top:4px">Continua amb l\'alta directa. Aquest client es crear&#224; com a nou al CRM.</div>'+

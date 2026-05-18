@@ -5650,8 +5650,11 @@ function crearOposEnAgenda() {
           || st === 'necesita' || st === 'no-cambia') hasAny = true;
     });
     if (!hasAny && !d.primera_accion) {
-      showToast('\u26a0\ufe0f No hi ha cap pill marcat com VTO/Facilita/No cambia/Necesita ni primera acci\u00f3 prevista. No es generaria cap OPO.', 'warn');
-      return;
+      // FIX 2026-05-18: ja no bloquem aquí. Permetem que el modal d'accions aparegui
+      // perquè ofereix l'opció "Crear a Gestiona" (alta del client sense OPOs).
+      // L'usuari podrà afegir OPOs/ACTs manualment al CRM després de l'alta.
+      showToast('\u2139\ufe0f Sense VTO/ACT \u2014 al seg\u00fcent modal pots fer alta directa a Gestiona', 'warn');
+      // (sense return; continuem)
     }
   } catch(e) {}
 

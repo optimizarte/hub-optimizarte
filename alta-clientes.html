@@ -494,8 +494,7 @@ body[data-flow="found"] #sec-search-gestiona,body[data-flow="empty"] #sec-search
   </aside>
   <div class="page-main">
   <div class="page-title">
-    <h1>Alta de Cliente</h1>
-    <p>Registro de nuevo cliente en la base de datos de OPTIMIZARTE</p>
+    <h1>Alta de Cliente / Recogida Vencimientos</h1>
   </div>
 
   <div id="loadBanner" style="display:none;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12.5px;color:#1E40AF;align-items:center;gap:8px"><span id="loadBannerText">&#128100; Cliente cargado</span><button style="margin-left:auto;cursor:pointer;font-size:12px;color:#60A5FA;font-weight:700;background:none;border:none;padding:0" onclick="this.closest('#loadBanner').style.display='none'">&#10005; Nuevo alta</button></div>
@@ -510,25 +509,20 @@ body[data-flow="found"] #sec-search-gestiona,body[data-flow="empty"] #sec-search
   <input type="hidden" id="hidden-source" name="source" value=""><!-- "agenda" | "json" | "manual" -->
   <input type="hidden" id="hidden-import-ts" name="import_ts" value="">
 
-  <!-- 0. CERCADOR INICIAL CLIENT GESTIONA -->
+  <!-- 0. CERCADOR INICIAL CLIENT (auto-sync silenciós des de l'agenda) -->
   <div class="card" id="sec-search-gestiona" style="border:2px solid #DC0028;background:linear-gradient(135deg,#FEF3F4 0%,#FFFFFF 100%)">
-    <div class="card-hdr">
-      <div class="card-icon" style="background:#FEE2E2">&#128269;</div>
-      <div><h2>Buscar cliente en Agenda OPTICRM</h2><p>Cerca a la base de clients amb activitat actual. Escriu nom, cognoms o NIF (3+ car&#224;cters)</p></div>
-    </div>
-    <div class="card-body">
-      <div style="position:relative">
-        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:6px">
-          <div style="flex:1;min-width:280px;position:relative">
-            <label class="lbl" style="display:block;margin-bottom:6px;font-size:11px;font-weight:600;color:#333">Nom, cognoms o NIF</label>
-            <input type="text" id="search-gestiona-input" class="ipt" placeholder="Ex: Anna P&#233;rez &#183; 12345678A &#183; Empresa SL ..." autocomplete="off" style="width:100%">
-            <!-- Suggeriments -->
-            <div id="search-suggestions" style="display:none;position:fixed;background:#fff;border:1.5px solid #DC0028;border-top:none;border-radius:0 0 8px 8px;max-height:280px;overflow-y:auto;z-index:2147483647;box-shadow:0 8px 24px rgba(0,0,0,.25)"></div>
-          </div>
-          <button type="button" id="btn-skip-search" class="btn-sec" style="height:38px" title="Si saps que el client no existeix a l&#39;agenda, salta directament">Saltar &rarr; alta directa</button>
-          <button type="button" id="btn-refresh-cache" class="btn-sec" style="height:38px;padding:0 12px" title="Refrescar la llista de clients des de l&#39;Agenda">&#128260;</button>
-        </div>
-        <div id="search-cache-status" style="font-size:10.5px;color:#6B7280;margin-top:4px"></div>
+    <div class="card-body" style="padding:18px 20px">
+      <div style="max-width:640px;margin:0 auto;position:relative">
+        <input type="text" id="search-gestiona-input" class="ipt"
+               placeholder="&#128269;  Busca por nombre, NIF, tel&#233;fono o email..."
+               autocomplete="off" autocapitalize="off" spellcheck="false"
+               style="width:100%;height:48px;font-size:14.5px;padding:10px 16px;text-align:center;border:1.5px solid rgba(220,0,40,.25);border-radius:10px;background:#fff">
+        <!-- Suggeriments dropdown -->
+        <div id="search-suggestions" style="display:none;position:fixed;background:#fff;border:1.5px solid #DC0028;border-radius:10px;max-height:320px;overflow-y:auto;z-index:2147483647;box-shadow:0 8px 28px rgba(0,0,0,.22)"></div>
+        <!-- Botons ocults: mantenim referencia per compatibilitat amb codi existent -->
+        <button type="button" id="btn-skip-search" style="display:none"></button>
+        <button type="button" id="btn-refresh-cache" style="display:none"></button>
+        <div id="search-cache-status" style="display:none"></div>
         <div id="search-gestiona-result" style="display:none;margin-top:12px;padding:14px;border-radius:8px;font-size:12.5px;line-height:1.5"></div>
       </div>
     </div>
@@ -749,10 +743,10 @@ body[data-flow="found"] #sec-search-gestiona,body[data-flow="empty"] #sec-search
       </div>
       <div class="sec-tit">Direcci&#243;n</div>
       <div class="field-grid g3" style="margin-bottom:10px">
-        <div class="field" style="grid-column:span 2"><label>Direcci&#243;n<span class="req">*</span></label><input type="text" id="dir" placeholder="Calle / Avenida / Plaza, n&#250;mero, piso, puerta"></div>
-        <div class="field"><label>C&#243;digo postal<span class="req">*</span></label><input type="text" id="cp" placeholder="17600" maxlength="5"></div>
+        <div class="field" style="grid-column:span 2"><label>Direcci&#243;n</label><input type="text" id="dir" placeholder="Calle / Avenida / Plaza, n&#250;mero, piso, puerta"></div>
+        <div class="field"><label>C&#243;digo postal</label><input type="text" id="cp" placeholder="17600" maxlength="5"></div>
       </div>
-      <div class="field" style="margin-bottom:14px"><label>Localidad<span class="req">*</span></label><input type="text" id="muni" placeholder="Figueres, Girona..."></div>
+      <div class="field" style="margin-bottom:14px"><label>Localidad</label><input type="text" id="muni" placeholder="Figueres, Girona..."></div>
       <div class="sec-tit">Redes sociales</div>
       <div class="field-grid">
         <div class="field"><label>Redes sociales</label><input type="text" id="redes" placeholder="@instagram &#183; linkedin.com/in/... &#183; Facebook..."><span class="field-hint">Varios perfiles separados por &#183;</span></div>
@@ -1450,7 +1444,7 @@ function validate() {
   else if (tipo==='emp') { if(!v('emp-razon'))ok=false; if(!v('emp-cif'))ok=false; }
   else if (tipo==='aut') { if(!v('aut-nombre'))ok=false; if(!v('aut-nif'))ok=false; }
   if(!v('tel1'))ok=false; if(!v('email1'))ok=false;
-  if(!v('dir'))ok=false; if(!v('cp'))ok=false; if(!v('muni'))ok=false;
+  // Adreça, CP, Localitat ja no són obligatoris (eliminada validació 2026-05-18)
   return ok;
 }
 function collectData() {
@@ -4650,12 +4644,62 @@ function registrarEnGestiona() {
   async function requestCacheFromOneDrive() {
     cacheLoading = true;
     updateCacheStatus();
-    
+
     var data = null;
-    
+
+    // ── PRIORITAT 1: Intentar carregar opticrm-clients-index.json (NOU format enriquit)
+    //    Si existeix, conté {clients: {refnumpers: {nom, nif, tel1, email1, ...}}}
+    //    És lleuger (kB) i ja té tel/email pre-cachejat pel sync silenciós d'app.js.
+    var indexData = null;
+    try {
+      if (_isInIframe()) {
+        var indexResp = await _iframeBridgeRequest('_opticrm_form_load_client', { filename: 'opticrm-clients-index.json' }, 15000);
+        if (indexResp && indexResp.ok && indexResp.client && indexResp.client.clients) {
+          indexData = indexResp.client;
+        }
+      } else if (clientesDir) {
+        try {
+          var _hubIdx = await getHubFolder();
+          var fhIdx = await (_hubIdx||clientesDir).getFileHandle('opticrm-clients-index.json', { create: false });
+          var fileIdx = await fhIdx.getFile();
+          var textIdx = await fileIdx.text();
+          var parsed = JSON.parse(textIdx);
+          if (parsed && parsed.clients) indexData = parsed;
+        } catch(eIdx) { /* no existeix encara — fallback al cache antic */ }
+      }
+    } catch(eOuter) {
+      console.warn('[CACHE] Error carregant index nou:', eOuter);
+    }
+
+    if (indexData && indexData.clients) {
+      // Format nou: indexData.clients és un object { refnumpers: {...} }
+      var clientsFromIndex = [];
+      var indexedKeys = Object.keys(indexData.clients);
+      for (var ik = 0; ik < indexedKeys.length; ik++) {
+        var ci = indexData.clients[indexedKeys[ik]];
+        if (!ci || !ci.nom) continue;
+        clientsFromIndex.push({
+          nom: ci.nom,
+          ref: ci.refnumpers || indexedKeys[ik],
+          nif: ci.nif || '',
+          // Camps enriquits opcionals
+          tel1: ci.tel1 || '',
+          email1: ci.email1 || '',
+          _enriched: !!(ci.tel1 || ci.email1)
+        });
+      }
+      setClientCacheToStorage(clientsFromIndex);
+      clientCache = clientsFromIndex;
+      cacheLoading = false;
+      updateCacheStatus();
+      console.log('[OPTICRM] Índex enriquit carregat:', clientsFromIndex.length, 'clients (generat ' + (indexData.generated_at || '?') + ')');
+      return clientsFromIndex;
+    }
+
+    // ── FALLBACK: opticrm-cache.json (format antic, sense tel/email)
     // OPCIÓ A: Mode iframe → llegir via bridge postMessage
     if (_isInIframe()) {
-      console.log('[CACHE] Carregant opticrm-cache.json via bridge...');
+      console.log('[CACHE] Carregant opticrm-cache.json via bridge (fallback)...');
       try {
         var bridgeResp = await _iframeBridgeRequest('_opticrm_form_load_client', { filename: 'opticrm-cache.json' }, 30000);
         if (bridgeResp.ok && bridgeResp.client && (bridgeResp.client.activitats || bridgeResp.client.opos || bridgeResp.client.clients)) {
@@ -4664,7 +4708,6 @@ function registrarEnGestiona() {
         } else if (bridgeResp.ok && !bridgeResp.client) {
           throw new Error('opticrm-cache.json no trobat o buit a OneDrive. Comprova que l\'Agenda ha sincronitzat al menys una vegada.');
         } else if (bridgeResp.ok && bridgeResp.client) {
-          // Resposta amb client però sense activitats/opos/clients → estructura inesperada
           throw new Error('Estructura inesperada al cache: keys=' + Object.keys(bridgeResp.client).slice(0,10).join(','));
         } else {
           throw new Error(bridgeResp.error || 'Resposta del bridge sense dades');
@@ -4833,111 +4876,117 @@ function registrarEnGestiona() {
     _positionDropdown();
   }
   
-  // Renderitza el dropdown amb dues columnes: Agenda (esquerra) i JSON guardats (dreta)
+  // Renderitza el dropdown MERGED amb emojis segons proveniència:
+  //   ✨ both (CRM + OD)  → cas ideal: dades enriquides
+  //   💼 crm only        → té nom/NIF/ref, no tel/email
+  //   📂 od only         → té payload complet (esborrany), no és al CRM
   function renderSuggestionsDual(matchesAgenda, matchesJson, query) {
     var box = document.getElementById('search-suggestions');
     if (!box) return;
-    
-    if ((!matchesAgenda || matchesAgenda.length === 0) && (!matchesJson || matchesJson.length === 0)) {
-      box.innerHTML = '<div style="padding:14px;text-align:center;color:#6B7280;font-size:12px"><strong>Sense coincid&#232;ncies</strong> per "<b>'+escapeHtml(query)+'</b>"<br><span style="font-size:11px">Si \u00e9s un client nou, prem <b>Saltar</b> per fer l\'alta directa.</span></div>';
+
+    var merged = mergeResults(matchesAgenda, matchesJson);
+
+    if (!merged || merged.length === 0) {
+      box.innerHTML = '<div style="padding:14px;text-align:center;color:#6B7280;font-size:12px">'+
+        '<strong>Sense coincid&#232;ncies</strong> per &quot;<b>'+escapeHtml(query)+'</b>&quot;<br>'+
+        '<span style="font-size:11px">Continua omplint el formulari per donar d\'alta un client nou.</span>'+
+        '</div>';
       _showDropdown();
       return;
     }
-    
-    // Construir 2 columnes
-    var maxItems = 8;
-    var leftItems = (matchesAgenda||[]).slice(0, maxItems);
-    var rightItems = (matchesJson||[]).slice(0, maxItems);
-    
-    var leftHtml = leftItems.map(function(c, idx) {
-      var nifPart = c.nif ? '<span class="si-nif">'+escapeHtml(c.nif)+'</span>' : '';
-      return '<div class="suggestion-item" data-source="agenda" data-idx="'+idx+'">'+
+
+    var maxItems = 12;
+    var items = merged.slice(0, maxItems);
+
+    var rowsHtml = items.map(function(m, idx) {
+      var nom, nif, ref, tel, email;
+      if (m.source === 'crm') {
+        nom = m.agenda.nom; nif = m.agenda.nif; ref = m.agenda.ref || '';
+        // De l'índex enriquit, tel/email vénen directament al client
+        tel = m.agenda.tel1 || ''; email = m.agenda.email1 || '';
+      } else if (m.source === 'od') {
+        nom = m.json.nom; nif = m.json.nif; ref = m.json.refnumpers || '';
+        var fO = m.json._full || {};
+        tel = fO.tel1 || ''; email = fO.email1 || '';
+      } else { /* both */
+        // Preferim nom CRM (oficial) i contacte (combinació de les dues fonts)
+        nom = m.agenda.nom || m.json.nom;
+        nif = m.agenda.nif || m.json.nif;
+        ref = m.agenda.ref || m.json.refnumpers || '';
+        var fB = m.json._full || {};
+        tel = m.agenda.tel1 || fB.tel1 || '';
+        email = m.agenda.email1 || fB.email1 || '';
+      }
+
+      var emoji, label, color, bg;
+      if (m.source === 'both') {
+        emoji = '\u2728'; label = 'OD+CRM'; color = '#7C3AED'; bg = 'rgba(124,58,237,.10)';
+      } else if (m.source === 'crm') {
+        emoji = '\ud83d\udcbc'; label = 'CRM'; color = '#DC0028'; bg = 'rgba(220,0,40,.08)';
+      } else {
+        emoji = '\ud83d\udcc2'; label = 'OD'; color = '#059669'; bg = 'rgba(16,185,129,.10)';
+      }
+
+      var nifPart = nif ? '<span class="si-nif">'+escapeHtml(nif)+'</span>' : '';
+      var refPart = ref ? '<span class="si-meta">'+escapeHtml(ref)+'</span>' : '';
+      var contactPart = '';
+      if (tel) contactPart += '<span class="si-meta" style="color:#6B7280">\ud83d\udcde '+escapeHtml(tel)+'</span>';
+      if (email) contactPart += '<span class="si-meta" style="color:#6B7280;margin-left:8px">\u2709 '+escapeHtml(email)+'</span>';
+
+      return '<div class="suggestion-item" data-source="'+m.source+'" data-idx="'+idx+'" style="display:flex;gap:10px;align-items:center;padding:9px 14px;border-bottom:1px solid #F3F4F6;cursor:pointer;transition:background .12s" onmouseenter="this.style.background=\'#FAFAFA\'" onmouseleave="this.style.background=\'transparent\'">'+
+        '<div style="display:flex;align-items:center;gap:5px;padding:3px 8px;border-radius:14px;background:'+bg+';color:'+color+';font-size:10px;font-weight:700;flex-shrink:0">'+
+          '<span style="font-size:12px">'+emoji+'</span>'+
+          '<span>'+label+'</span>'+
+        '</div>'+
         '<div style="flex:1;min-width:0">'+
-        '<div class="si-name">'+escapeHtml(c.nom)+'</div>'+
-        '<div style="display:flex;gap:6px;align-items:center;margin-top:2px">'+nifPart+
-        '<div class="si-meta">'+escapeHtml(c.ref||'')+'</div></div>'+
-        '</div></div>';
+          '<div class="si-name" style="font-weight:600;font-size:12.5px;color:#111;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+escapeHtml(nom)+'</div>'+
+          '<div style="display:flex;gap:6px;align-items:center;margin-top:2px;flex-wrap:wrap">'+nifPart+refPart+contactPart+'</div>'+
+        '</div>'+
+      '</div>';
     }).join('');
-    
-    var rightHtml = rightItems.map(function(c, idx) {
-      var nifPart = c.nif ? '<span class="si-nif" style="background:rgba(16,185,129,.12);color:#059669;border-color:#10B981">'+escapeHtml(c.nif)+'</span>' : '';
-      var dateStr = c._modified ? new Date(c._modified).toLocaleDateString('ca-ES',{day:'2-digit',month:'2-digit',year:'numeric'}) : '';
-      return '<div class="suggestion-item" data-source="json" data-idx="'+idx+'">'+
-        '<div style="flex:1;min-width:0">'+
-        '<div class="si-name">'+escapeHtml(c.nom)+'</div>'+
-        '<div style="display:flex;gap:6px;align-items:center;margin-top:2px">'+nifPart+
-        (dateStr?'<div class="si-meta">'+escapeHtml(dateStr)+'</div>':'')+'</div>'+
-        '</div></div>';
-    }).join('');
-    
-    var html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid #E5E7EB">'+
-      // Header agenda
-      '<div style="padding:7px 12px;background:#FEF3F4;border-right:1px solid #E5E7EB;font-size:9.5px;font-weight:700;color:#DC0028;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #E5E7EB">'+
-      '\ud83d\udcc5 Agenda <span style="opacity:.7;font-weight:500;text-transform:none">('+(leftItems.length)+(matchesAgenda&&matchesAgenda.length>maxItems?'/'+matchesAgenda.length:'')+')</span></div>'+
-      '<div style="padding:7px 12px;background:#F0FDF4;font-size:9.5px;font-weight:700;color:#059669;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #E5E7EB">'+
-      '\ud83d\udcbe JSON guardats <span style="opacity:.7;font-weight:500;text-transform:none">('+(rightItems.length)+(matchesJson&&matchesJson.length>maxItems?'/'+matchesJson.length:'')+')</span></div>'+
-      // Columnes
-      '<div style="border-right:1px solid #E5E7EB;min-height:60px" id="si-col-agenda">'+
-      (leftHtml || '<div style="padding:14px 12px;text-align:center;color:#9CA3AF;font-size:11px;font-style:italic">Sense coincid\u00e8ncies a l\'agenda</div>')+
-      '</div>'+
-      '<div style="min-height:60px" id="si-col-json">'+
-      (rightHtml || '<div style="padding:14px 12px;text-align:center;color:#9CA3AF;font-size:11px;font-style:italic">Sense coincid\u00e8ncies als JSON</div>')+
-      '</div>'+
-    '</div>';
-    
-    box.innerHTML = html;
+
+    var moreNote = merged.length > maxItems
+      ? '<div style="padding:8px 14px;text-align:center;color:#9CA3AF;font-size:10.5px;background:#FAFAFA">'+(merged.length-maxItems)+' resultats m&#233;s · refina la cerca</div>'
+      : '';
+
+    box.innerHTML = rowsHtml + moreNote;
     _showDropdown();
-    
-    // Guardem els resultats al global per al delegated handler
-    window._currentDualResults = { agenda: leftItems, json: rightItems };
-    console.log('[RENDER-DUAL] HTML pintat. Agenda:', leftItems.length, 'JSON:', rightItems.length);
-    
+
+    // Guardem els resultats merged per al click handler
+    window._currentMergedResults = items;
+    console.log('[RENDER-MERGED] Total merged:', merged.length, '· Mostrant:', items.length);
+
     // EVENT DELEGATION: un sol listener al box (es manté entre re-renders)
     if (!box._delegatedClickBound) {
       box.addEventListener('click', function(e) {
         var item = e.target.closest('.suggestion-item');
-        if (!item) {
-          console.log('[CLICK] target sense .suggestion-item ancestre:', e.target);
-          return;
-        }
-        var source = item.getAttribute('data-source');
+        if (!item) return;
         var idx = parseInt(item.getAttribute('data-idx'));
-        console.log('[CLICK] item source=' + source + ' idx=' + idx);
         if (isNaN(idx)) return;
-        var dualState = window._currentDualResults || { agenda: [], json: [] };
-        if (source === 'agenda') {
-          var picked = dualState.agenda[idx];
-          if (picked) {
-            picked._source = 'agenda';
-            console.log('[CLICK] → selectClient(agenda)', picked.nom);
-            selectClient(picked);
-          } else {
-            console.warn('[CLICK] agenda[' + idx + '] és undefined');
-          }
-        } else if (source === 'json') {
-          var picked2 = dualState.json[idx];
-          if (picked2) {
-            picked2._source = 'json';
-            console.log('[CLICK] → selectClientFromJson', picked2.nom);
-            selectClientFromJson(picked2);
-          } else {
-            console.warn('[CLICK] json[' + idx + '] és undefined');
-          }
-        }
-      });
-      // Capturem mousedown també com a fallback (alguns events click no propaguen)
-      box.addEventListener('mousedown', function(e) {
-        var item = e.target.closest('.suggestion-item');
-        if (item) {
-          console.log('[MOUSEDOWN] sobre item ' + item.getAttribute('data-source') + '-' + item.getAttribute('data-idx'));
+        var picked = (window._currentMergedResults || [])[idx];
+        if (!picked) return;
+        // Per a 'crm' o 'both' (que té agenda + json): seleccionar via agenda (que té ref del CRM)
+        // Per a 'od' only: usar selectClientFromJson (té tot el payload)
+        if (picked.source === 'crm') {
+          var pc = Object.assign({}, picked.agenda, { _source: 'agenda' });
+          console.log('[CLICK] → selectClient(crm)', pc.nom);
+          selectClient(pc);
+        } else if (picked.source === 'od') {
+          var po = Object.assign({}, picked.json, { _source: 'json' });
+          console.log('[CLICK] → selectClientFromJson(od)', po.nom);
+          selectClientFromJson(po);
+        } else {
+          // both: seleccionar via JSON (té el payload complet i el refnumpers ja relacionat)
+          var pb = Object.assign({}, picked.json, { _source: 'json', _hasCrm: true });
+          console.log('[CLICK] → selectClientFromJson(both)', pb.nom);
+          selectClientFromJson(pb);
         }
       });
       box._delegatedClickBound = true;
-      console.log('[RENDER-DUAL] Event delegation lligat al box (un sol cop)');
     }
   }
-  
-  // Funció antiga per compatibilitat: ara redirigeix a la versió dual
+
+  // Funció antiga per compatibilitat: ara redirigeix a la versió merged
   function renderSuggestions(matches, query) {
     renderSuggestionsDual(matches, [], query);
   }
@@ -4949,24 +4998,98 @@ function registrarEnGestiona() {
   function filterCache(query) {
     var q = String(query || '').trim().toUpperCase().replace(/\s+/g, ' ');
     if (!q || !clientCache) return [];
+    var qDigits = q.replace(/[\s\-\.\+]/g,'').replace(/^34/,'');
     return clientCache.filter(function(c) {
       var nom = String(c.nom||'').toUpperCase();
       var ref = String(c.ref||'').toUpperCase();
       var nif = String(c.nif||'').toUpperCase();
-      return nom.indexOf(q) >= 0 || ref.indexOf(q) >= 0 || (nif && nif.indexOf(q) >= 0);
+      if (nom.indexOf(q) >= 0) return true;
+      if (ref.indexOf(q) >= 0) return true;
+      if (nif && nif.indexOf(q) >= 0) return true;
+      // Camps enriquits per l'índex nou (sync silenciós app.js)
+      var tel1 = String(c.tel1||'').replace(/[\s\-\.\+]/g,'');
+      var email1 = String(c.email1||'').toUpperCase();
+      if (qDigits.length >= 3 && tel1 && tel1.indexOf(qDigits) >= 0) return true;
+      if (email1 && email1.indexOf(q) >= 0) return true;
+      return false;
     });
+  }
+
+  // Cerca als JSON guardats — AMPLIADA: nom, NIF, refnumpers, tel1, tel2, email1, email2
+  function filterJsonCache(query) {
+    var q = String(query || '').trim().toUpperCase().replace(/\s+/g, ' ');
+    if (!q || !jsonClientCache || jsonClientCache.length === 0) return [];
+    // Per cerca de telèfon, treure espais/guions/punts/+34
+    var qDigits = q.replace(/[\s\-\.\+]/g,'').replace(/^34/,'');
+    return jsonClientCache.filter(function(c) {
+      var nom = String(c.nom||'').toUpperCase();
+      var nif = String(c.nif||'').toUpperCase();
+      var refnumpers = String(c.refnumpers||'').toUpperCase();
+      if (nom.indexOf(q) >= 0) return true;
+      if (nif && nif.indexOf(q) >= 0) return true;
+      if (refnumpers && refnumpers.indexOf(q) >= 0) return true;
+      // Cerca per tel/email dins _full (payload complet desat al hub)
+      var full = c._full || {};
+      var tel1 = String(full.tel1||'').replace(/[\s\-\.\+]/g,'');
+      var tel2 = String(full.tel2||'').replace(/[\s\-\.\+]/g,'');
+      var email1 = String(full.email1||'').toUpperCase();
+      var email2 = String(full.email2||'').toUpperCase();
+      if (qDigits.length >= 3 && tel1 && tel1.indexOf(qDigits) >= 0) return true;
+      if (qDigits.length >= 3 && tel2 && tel2.indexOf(qDigits) >= 0) return true;
+      if (email1 && email1.indexOf(q) >= 0) return true;
+      if (email2 && email2.indexOf(q) >= 0) return true;
+      return false;
+    });
+  }
+
+  // MERGE: combina matches d'agenda + JSON, dedupant per NIF/refnumpers
+  // Retorna llista amb metadata 'source': 'crm' | 'od' | 'both'
+  function mergeResults(matchesAgenda, matchesJson) {
+    var byKey = {};
+    // Index helper: NIF preferent, sinó refnumpers, sinó nom normalitzat
+    var keyOf = function(c) {
+      var nif = String(c.nif||'').replace(/[^A-Z0-9]/gi,'').toUpperCase();
+      if (nif) return 'NIF:'+nif;
+      var ref = String(c.ref||c.refnumpers||'').toUpperCase();
+      if (ref) return 'REF:'+ref;
+      return 'NOM:'+String(c.nom||'').toUpperCase().replace(/\s+/g,' ').trim();
+    };
+    (matchesAgenda||[]).forEach(function(c) {
+      var k = keyOf(c);
+      byKey[k] = { source: 'crm', agenda: c, json: null, key: k };
+    });
+    (matchesJson||[]).forEach(function(c) {
+      var k = keyOf(c);
+      if (byKey[k]) {
+        byKey[k].source = 'both';
+        byKey[k].json = c;
+      } else {
+        byKey[k] = { source: 'od', agenda: null, json: c, key: k };
+      }
+    });
+    // Convertir a array, ordenar: ✨ both > 💼 crm > 📂 od; dins de cada grup, alfabètic per nom
+    var arr = Object.keys(byKey).map(function(k){ return byKey[k]; });
+    var srcOrder = { 'both':0, 'crm':1, 'od':2 };
+    arr.sort(function(a,b){
+      var sa = srcOrder[a.source]||9, sb = srcOrder[b.source]||9;
+      if (sa !== sb) return sa - sb;
+      var na = String((a.agenda||a.json||{}).nom||'').toLowerCase();
+      var nb = String((b.agenda||b.json||{}).nom||'').toLowerCase();
+      return na.localeCompare(nb);
+    });
+    return arr;
   }
   
   async function onInputChange(value) {
     var box = document.getElementById('search-suggestions');
     if (!box) return;
-    
+
     if (!value || value.length < 3) {
       box.style.display = 'none';
       return;
     }
-    
-    // Si encara no tenim cache en mem\u00f2ria, intentar carregar-lo
+
+    // 1. Cache CRM en memòria? Sinó intentar localStorage
     if (!clientCache) {
       var stored = getClientCacheFromStorage();
       if (stored && stored.clients) {
@@ -4974,73 +5097,41 @@ function registrarEnGestiona() {
         updateCacheStatus();
       }
     }
-    
-    if (!clientCache) {
-      // No hi ha cache en memòria: oferir carregar-lo
-      // Cal saber si tenim algun mètode disponible per accedir a opticrm-cache.json
-      var canLoad = !!clientesDir || _isInIframe(); // bridge si dins iframe; clientesDir si no
-      
-      var msgHtml;
-      if (canLoad) {
-        var srcLabel = _isInIframe() ? '<b>via Agenda parent</b> (postMessage)' : '<b>hub-optimizarte</b> (carpeta local)';
-        msgHtml = '<div style="padding:14px;text-align:center">'+
-          '<div style="margin-bottom:8px;font-size:12px;color:#374151"><strong>&#x21bb; Carregar cache de clients</strong></div>'+
-          '<div style="font-size:11px;color:#6B7280;margin-bottom:10px;line-height:1.5">Llegir&#224; <code>opticrm-cache.json</code> ' + srcLabel + ' (instantani).</div>'+
-          '<button type="button" id="btn-load-cache" class="btn-pri" style="height:32px;padding:6px 14px;font-size:11.5px">&#x21bb; Carregar cache</button>'+
-          '</div>';
-      } else {
-        msgHtml = '<div style="padding:14px;text-align:center">'+
-          '<div style="margin-bottom:8px;font-size:12px;color:#374151"><strong>&#9888; OneDrive no connectat</strong></div>'+
-          '<div style="font-size:11px;color:#6B7280;margin-bottom:10px;line-height:1.5">Cal connectar la carpeta <b>hub-optimizarte</b> abans de poder cercar.<br>Prem <b>"&#128193; Conectar OneDrive..."</b> al header.</div>'+
-          '</div>';
-      }
-      box.innerHTML = msgHtml;
-      _showDropdown();
-      var btnLoad = document.getElementById('btn-load-cache');
-      if (btnLoad) {
-        btnLoad.addEventListener('click', async function() {
-          btnLoad.disabled = true;
-          btnLoad.textContent = '\u23f3 Carregant...';
-          await requestCacheFromOneDrive();
-          onInputChange(value);
-        });
-      }
-      return;
+
+    // 2. Si encara no, llançar càrrega silenciosa des d'OneDrive en background
+    //    (sense bloquejar UI ni mostrar botons)
+    if (!clientCache && !cacheLoading) {
+      console.log('[ONCHANGE] Sense cache CRM, llançant càrrega silenciosa...');
+      cacheLoading = true;
+      // requestCacheFromOneDrive omple clientCache si va bé
+      requestCacheFromOneDrive().then(function() {
+        cacheLoading = false;
+        // Re-disparar cerca un cop carregat
+        if (document.getElementById('search-gestiona-input')) {
+          var cur = document.getElementById('search-gestiona-input').value;
+          if (cur && cur.length >= 3) onInputChange(cur);
+        }
+      }).catch(function() { cacheLoading = false; });
     }
-    
-    // Cerca dual: agenda + JSON
-    var matchesAgenda = filterCache(value);
-    var matchesJson = filterJsonCache(value);
-    
-    console.log('[ONCHANGE] query="' + value + '" agenda=' + matchesAgenda.length + ' json=' + matchesJson.length + ' cache=' + (jsonClientCache===null?'null':jsonClientCache.length));
-    
-    // Si no tenim jsonCache i estem dins iframe (o tenim clientesDir), intentar carregar-lo en background
+
+    // 3. Cache JSON hub: també silenciós en background
     if (jsonClientCache === null) {
-      console.log('[ONCHANGE] Cache JSON és null, llançant càrrega...');
-      // Carregar i refrescar
-      jsonClientCache = []; // marcar com a "carregant" per evitar recursió
+      jsonClientCache = []; // marcar com "carregant"
       loadJsonClientsCache().then(function() {
-        console.log('[ONCHANGE] Càrrega JSON acabada, jsonClientCache té ' + jsonClientCache.length + ' clients. Re-cerca...');
-        // Re-disparar la cerca
-        onInputChange(value);
+        if (document.getElementById('search-gestiona-input')) {
+          var cur2 = document.getElementById('search-gestiona-input').value;
+          if (cur2 && cur2.length >= 3) onInputChange(cur2);
+        }
       }).catch(function(err){
-        console.error('[ONCHANGE] Error en loadJsonClientsCache:', err);
+        console.warn('[ONCHANGE] loadJsonClientsCache err:', err);
       });
     }
-    
+
+    // 4. Renderitzar amb el que tinguem (potser buit la primera vegada, es refrescarà al recibir cache)
+    var matchesAgenda = clientCache ? filterCache(value) : [];
+    var matchesJson = filterJsonCache(value);
+    console.log('[ONCHANGE] q="'+value+'" agenda='+matchesAgenda.length+' json='+matchesJson.length);
     renderSuggestionsDual(matchesAgenda, matchesJson, value);
-  }
-  
-  // Cerca als JSON guardats
-  function filterJsonCache(query) {
-    var q = String(query || '').trim().toUpperCase().replace(/\s+/g, ' ');
-    if (!q || !jsonClientCache || jsonClientCache.length === 0) return [];
-    return jsonClientCache.filter(function(c) {
-      var nom = String(c.nom||'').toUpperCase();
-      var nif = String(c.nif||'').toUpperCase();
-      var refnumpers = String(c.refnumpers||'').toUpperCase();
-      return nom.indexOf(q) >= 0 || (nif && nif.indexOf(q) >= 0) || (refnumpers && refnumpers.indexOf(q) >= 0);
-    });
   }
   
   // Carregar cache dels JSON guardats (llistar + parse parcial)

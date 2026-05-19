@@ -1759,16 +1759,23 @@ function matchClient(c, q) {
 }
 
 function showSearchResults(results) {
-  var el = document.getElementById('searchResults');
+  var el = document.getElementById('searchSuggestions');
+  var cardTipo = document.getElementById('card-tipo-cliente');
+  
   if (!el) return;
   
   if (!results.length) {
-    el.innerHTML = '<div style="padding:12px;text-align:center;color:#999;font-size:12px">No s\'han trobat resultats</div>';
+    el.innerHTML = '<div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:12px;text-align:center;color:#999;font-size:12px">No s\'han trobat resultats amb aquest criteri</div>';
     el.style.display = 'block';
+    if (cardTipo) cardTipo.style.display = 'none'; // Col·lapsar card tipo
     return;
   }
   
-  var html = '<div style="padding:8px 12px;background:#f5f5f5;border-bottom:1px solid #ddd;font-size:11px;font-weight:600;color:#666">' + 
+  // Col·lapsar card tipo cliente quan hi ha resultats
+  if (cardTipo) cardTipo.style.display = 'none';
+  
+  var html = '<div style="background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden">';
+  html += '<div style="padding:10px 14px;background:#f5f5f5;border-bottom:1px solid #ddd;font-size:12px;font-weight:600;color:#666">' + 
     results.length + ' client' + (results.length>1?'s':'') + ' trobat' + (results.length>1?'s':'') + '</div>';
   
   html += results.map(function(c) {
@@ -1792,20 +1799,27 @@ function showSearchResults(results) {
     }
     
     var safeFn = fn.replace(/'/g,"&#39;").replace(/"/g,"&quot;");
-    return '<div onclick="loadClientAndClose(\'' + safeFn + '\')" style="padding:10px 12px;border-bottom:1px solid #eee;cursor:pointer;transition:background .15s" onmouseover="this.style.background=\'#f5f5f5\'" onmouseout="this.style.background=\'#fff\'">' +
+    return '<div onclick="loadClientAndClose(\'' + safeFn + '\')" style="padding:12px 14px;border-bottom:1px solid #eee;cursor:pointer;transition:background .15s" onmouseover="this.style.background=\'#f8f8f8\'" onmouseout="this.style.background=\'#fff\'">' +
       '<div style="display:flex;align-items:center;justify-content:space-between">' +
-      '<div style="flex:1"><div style="font-weight:600;font-size:13px;color:#333">' + (c.nombre_completo||'—') + origen + '</div>' +
-      '<div style="font-size:11px;color:#666;margin-top:2px">' + meta + '</div></div>' +
-      '<span style="font-size:10px;color:#999;background:#f0f0f0;padding:3px 8px;border-radius:4px;font-weight:600">' + (c.tipo_label||'—') + '</span></div></div>';
+      '<div style="flex:1"><div style="font-weight:600;font-size:14px;color:#333">' + (c.nombre_completo||'—') + origen + '</div>' +
+      '<div style="font-size:12px;color:#666;margin-top:3px">' + meta + '</div></div>' +
+      '<span style="font-size:11px;color:#999;background:#f0f0f0;padding:4px 10px;border-radius:5px;font-weight:600">' + (c.tipo_label||'—') + '</span></div></div>';
   }).join('');
+  
+  html += '</div>';
   
   el.innerHTML = html;
   el.style.display = 'block';
 }
 
 function hideSearchResults() {
-  var el = document.getElementById('searchResults');
+  var el = document.getElementById('searchSuggestions');
+  var cardTipo = document.getElementById('card-tipo-cliente');
+  
   if (el) el.style.display = 'none';
+  
+  // Restaurar card tipo cliente
+  if (cardTipo) cardTipo.style.display = 'block';
 }
 
 document.addEventListener('click', function(e) {
@@ -2774,5 +2788,65 @@ function activarNouClient() {
     if (primer) primer.focus();
   }, 100);
 }
+// ──────────────────────────────────────────────────────────
+
+// ─── INICIALITZACIÓ: CARREGAR CLIENTS ─────────────────────
+async function initLoadClients() {
+  // Intentar carregar clients des de la carpeta seleccionada
+  if (!clientesDir) {
+    console.log('⚠️ No hi ha carpeta de clients seleccionada');
+    return;
+  }
+  
+  try {
+    var entries = [];
+    for await (var entry of clientesDir.values()) {
+      if (entry.kind === 'file' && entry.name.endsWith('.json')) {
+        entries.push(entry);
+      }
+    }
+    
+    console.log('📁 Trobats ' + entries.length + ' fitxers JSON');
+    
+    // Carregar cada fitxer
+    var loaded = 0;
+    for (var i = 0; i < entries.length; i++) {
+      try {
+        var fh = await clientesDir.getFileHandle(entries[i].name);
+        var file = await fh.getFile();
+        var data = JSON.parse(await file.text());
+        data._filename = entries[i].name;
+        data._source = 'od'; // OneDrive
+        allClients.push(data);
+        loaded++;
+      } catch(e) {
+        console.error('Error carregant ' + entries[i].name, e);
+      }
+    }
+    
+    console.log('✅ Carregats ' + loaded + ' clients');
+    
+    if (loaded > 0) {
+      showToast(loaded + ' clients carregats des de OneDrive', 'success');
+    }
+    
+  } catch(e) {
+    console.error('Error carregant clients:', e);
+  }
+}
+
+// Cridar inicialització al carregar la pàgina
+window.addEventListener('DOMContentLoaded', function() {
+  console.log('🚀 Formulari Alta Clients inicialitzat');
+  
+  // Intentar carregar clients si hi ha carpeta seleccionada
+  setTimeout(function() {
+    if (clientesDir) {
+      initLoadClients();
+    } else {
+      console.log('ℹ️ Selecciona una carpeta de clients per habilitar la cerca');
+    }
+  }, 500);
+});
 // ──────────────────────────────────────────────────────────
 

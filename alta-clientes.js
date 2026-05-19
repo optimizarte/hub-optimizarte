@@ -1832,18 +1832,35 @@ async function loadClientAndClose(filename) {
   if(si) si.value = '';
   // Try to find from allClients cache first
   var client = allClients.find(function(cl) { return cl._filename === filename; });
-  if (client) {
-    loadClientIntoForm(client);
+
+  // Si el client no està al cache i ve d'OD index (filename comença amb 'od:'), no podem fer fallback al disc
+  if (!client && filename && filename.indexOf('od:') === 0) {
+    showToast('Client no disponible al cache.','error');
     return;
   }
-  // Fallback: read directly from file
+
+  // Si tenim client al cache → respectem el toggle
+  if (client) {
+    if (_showOdModal) {
+      // Toggle ON → mostrem fitxa al card 0 per confirmar
+      showClientFitxaCard0(client);
+    } else {
+      // Toggle OFF → carrega directe
+      loadClientIntoForm(client);
+    }
+    return;
+  }
+
+  // Fallback: read directly from file (només per clients de clientesDir)
   if (clientesDir) {
     try {
       var fh = await clientesDir.getFileHandle(filename);
       var file = await fh.getFile();
       var data = JSON.parse(await file.text());
       data._filename = filename;
-      loadClientIntoForm(data);
+      data._source = 'od';
+      if (_showOdModal) showClientFitxaCard0(data);
+      else loadClientIntoForm(data);
     } catch(e) {
       showToast('No se pudo cargar el cliente.','error');
     }
@@ -2775,6 +2792,127 @@ function mostrarToastToggle(msg) {
 // ─── END DOBLE CLIC CARDS ──────────────────────────────────
 
 // ─── FUNCIÓ BOTÓ "NOU CLIENT" ─────────────────────────────
+// ─── TOGGLE MODAL OD + FITXA-MODAL CARD 0 ───────────────────
+// Toggle ON  (defecte) → en seleccionar un client existent, mostra fitxa al card 0 (cal confirmar càrrega)
+// Toggle OFF           → en seleccionar un client existent, carrega directe al formulari
+var _showOdModal = true;
+
+function _readShowOdModal() {
+  try {
+    var v = localStorage.getItem('optiAlta_showOdModal');
+    return v === null ? true : v === '1';
+  } catch(e) { return true; }
+}
+function _writeShowOdModal(on) {
+  try { localStorage.setItem('optiAlta_showOdModal', on ? '1' : '0'); } catch(e) {}
+}
+
+function _applyToggleVisual(on) {
+  var track = document.getElementById('toggleModalODTrack');
+  var knob  = document.getElementById('toggleModalODKnob');
+  var lbl   = document.getElementById('toggleModalODLbl');
+  if (track) track.style.background = on ? '#10B981' : '#6B7280';
+  if (knob)  knob.style.left = on ? '18px' : '2px';
+  if (lbl)   lbl.textContent = on ? 'Fitxa' : 'Directe';
+}
+
+function onToggleModalOD(checked) {
+  _showOdModal = !!checked;
+  _writeShowOdModal(_showOdModal);
+  _applyToggleVisual(_showOdModal);
+}
+
+function initToggleModalOD() {
+  _showOdModal = _readShowOdModal();
+  var cb = document.getElementById('toggleModalOD');
+  if (cb) cb.checked = _showOdModal;
+  _applyToggleVisual(_showOdModal);
+}
+
+// Renderitza fitxa del client substituint el card-tipo-cliente (card 0)
+// L'usuari ha de confirmar (Carregar) o cancel·lar.
+function showClientFitxaCard0(client) {
+  var cardTipo = document.getElementById('card-tipo-cliente');
+  if (!cardTipo) { loadClientIntoForm(client); return; }
+
+  // Origen visual
+  var origen = '';
+  var hasOD = client._source && (client._source === 'od' || client._source === 'both');
+  var hasCRM = client._source && (client._source === 'crm' || client._source === 'both');
+  if (hasOD && hasCRM) origen = '<span style="background:#10B981;color:#fff;padding:3px 9px;border-radius:5px;font-size:11px;font-weight:700;letter-spacing:.3px">📁 OD + 💼 CRM</span>';
+  else if (hasOD) origen = '<span style="background:#3B82F6;color:#fff;padding:3px 9px;border-radius:5px;font-size:11px;font-weight:700;letter-spacing:.3px">📁 ONEDRIVE</span>';
+  else if (hasCRM) origen = '<span style="background:#DC0028;color:#fff;padding:3px 9px;border-radius:5px;font-size:11px;font-weight:700;letter-spacing:.3px">💼 CRM</span>';
+
+  var nom = client.nombre_completo || ((client.par_nombre||client.aut_nombre||client.emp_razon||'') + ' ' + (client.par_ap1||client.aut_ap1||'')).trim() || '—';
+  var nif = client.nif_cif || client.par_nif || client.aut_nif || client.emp_cif || '—';
+  var tel = client.tel1 || '—';
+  var email = client.email1 || client.email2 || '—';
+  var loc = (client.localidad || '') + (client.cp ? ' (' + client.cp + ')' : '') || '—';
+  var refp = client._refnumpers ? '<div style="font-size:11px;color:#999;margin-top:2px">RefPers: ' + client._refnumpers + '</div>' : '';
+  var enriched = client._enrichedAt ? '<div style="font-size:10px;color:#10B981;margin-top:2px">✓ Enriquit ' + new Date(client._enrichedAt).toLocaleDateString('ca-ES') + '</div>' : '';
+
+  // Guardar referència del client per al botó "Carregar"
+  window._pendingClient = client;
+
+  var html =
+    '<div class="card-body" style="padding:18px 22px">' +
+      '<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #eee">' +
+        '<div style="width:42px;height:42px;border-radius:50%;background:#FEF3C7;display:flex;align-items:center;justify-content:center;font-size:22px">👤</div>' +
+        '<div style="flex:1">' +
+          '<div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#202020;display:flex;align-items:center;gap:8px">' + nom + '</div>' +
+          '<div style="font-size:12px;color:#666;margin-top:2px">Client existent — revisa abans de carregar</div>' +
+        '</div>' +
+        origen +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 24px;font-size:13px">' +
+        '<div><div style="font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">NIF / CIF</div><div style="font-weight:600;color:#202020">' + nif + '</div>' + refp + '</div>' +
+        '<div><div style="font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Telèfon</div><div style="font-weight:600;color:#202020">' + tel + '</div>' + enriched + '</div>' +
+        '<div><div style="font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Email</div><div style="font-weight:600;color:#202020;word-break:break-all">' + email + '</div></div>' +
+        '<div><div style="font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Localitat</div><div style="font-weight:600;color:#202020">' + loc + '</div></div>' +
+      '</div>' +
+      '<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;padding-top:14px;border-top:1px solid #eee">' +
+        '<button type="button" onclick="cancelClientFitxaCard0()" style="padding:9px 16px;border-radius:8px;border:1.5px solid #D1D5DB;background:#fff;font-size:12.5px;font-weight:600;color:#414141;cursor:pointer">✕ Cancel·lar</button>' +
+        '<button type="button" onclick="confirmClientFitxaCard0()" style="padding:9px 18px;border-radius:8px;border:none;background:#DC0028;color:#fff;font-size:12.5px;font-weight:700;cursor:pointer">📝 Carregar al formulari</button>' +
+      '</div>' +
+    '</div>';
+
+  // Guardem el contingut original per restaurar després
+  if (!cardTipo._originalHTML) cardTipo._originalHTML = cardTipo.innerHTML;
+  cardTipo.innerHTML = html;
+  cardTipo.style.display = 'block';
+  // Amaguem el contenidor de suggerencies
+  var sug = document.getElementById('searchSuggestions');
+  if (sug) sug.style.display = 'none';
+  // Scroll suau cap a la fitxa
+  cardTipo.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function confirmClientFitxaCard0() {
+  var c = window._pendingClient;
+  window._pendingClient = null;
+  // Restaurar card 0 original
+  var cardTipo = document.getElementById('card-tipo-cliente');
+  if (cardTipo && cardTipo._originalHTML) {
+    cardTipo.innerHTML = cardTipo._originalHTML;
+    cardTipo._originalHTML = null;
+  }
+  if (c) loadClientIntoForm(c);
+}
+
+function cancelClientFitxaCard0() {
+  window._pendingClient = null;
+  // Restaurar card 0 original
+  var cardTipo = document.getElementById('card-tipo-cliente');
+  if (cardTipo && cardTipo._originalHTML) {
+    cardTipo.innerHTML = cardTipo._originalHTML;
+    cardTipo._originalHTML = null;
+  }
+  // Reset cercador
+  var si = document.getElementById('searchInput');
+  if (si) si.value = '';
+}
+// ──────────────────────────────────────────────────────────
+
 function activarNouClient() {
   // Cridar funció reset existent
   resetFormulariNouClient();
@@ -2791,62 +2929,127 @@ function activarNouClient() {
 // ──────────────────────────────────────────────────────────
 
 // ─── INICIALITZACIÓ: CARREGAR CLIENTS ─────────────────────
+// FONT PRIMÀRIA: parent.OD (índex enriquit per app.js cada 10 min)
+// FONT SECUNDÀRIA: clientesDir (carpeta local File System Access)
 async function initLoadClients() {
-  // Intentar carregar clients des de la carpeta seleccionada
-  if (!clientesDir) {
-    console.log('⚠️ No hi ha carpeta de clients seleccionada');
-    return;
-  }
-  
+  var loadedOD = 0;
+  var loadedDir = 0;
+  // Buidar la llista per evitar duplicats en refrescos periòdics
+  allClients = [];
+
+  // ── FONT 1: índex OneDrive via parent.OD ───────────────────
   try {
-    var entries = [];
-    for await (var entry of clientesDir.values()) {
-      if (entry.kind === 'file' && entry.name.endsWith('.json')) {
-        entries.push(entry);
+    var od = null;
+    try { if (window.parent && window.parent.OD && window.parent.OD.isReady && window.parent.OD.isReady()) od = window.parent.OD; } catch(e) {}
+    if (!od) { try { if (window.OD && window.OD.isReady && window.OD.isReady()) od = window.OD; } catch(e) {} }
+
+    if (od && typeof od.loadFile === 'function') {
+      var indexData = await od.loadFile('opticrm-clients-index.json');
+      if (indexData && indexData.clients && typeof indexData.clients === 'object') {
+        var keys = Object.keys(indexData.clients);
+        for (var k = 0; k < keys.length; k++) {
+          var src = indexData.clients[keys[k]];
+          if (!src) continue;
+          // Mapping índex OD → format allClients (compatible amb matchClient)
+          var enriched = !!(src.tel1 || src.email1);
+          var c = {
+            _filename: 'od:' + keys[k],
+            _source: enriched ? 'both' : 'crm',
+            _refnumpers: src.refnumpers || keys[k],
+            _enrichedAt: src._enrichedAt || null,
+            _odIndex: true,
+            nombre_completo: src.nom || src.nombre_completo || '',
+            nif_cif: src.nif || '',
+            tel1: src.tel1 || '',
+            email1: src.email1 || '',
+            tipo_label: src.tipo_label || (src.nif && /^[A-Z]/i.test(src.nif) && src.nif.length===9 ? 'EMP' : 'PAR')
+          };
+          allClients.push(c);
+          loadedOD++;
+        }
+        console.log('☁️ [OD] Índex carregat: ' + loadedOD + ' clients enriquits');
+      } else {
+        console.log('☁️ [OD] Índex buit o no disponible');
       }
+    } else {
+      console.log('☁️ [OD] parent.OD no disponible (form obert standalone)');
     }
-    
-    console.log('📁 Trobats ' + entries.length + ' fitxers JSON');
-    
-    // Carregar cada fitxer
-    var loaded = 0;
-    for (var i = 0; i < entries.length; i++) {
-      try {
-        var fh = await clientesDir.getFileHandle(entries[i].name);
-        var file = await fh.getFile();
-        var data = JSON.parse(await file.text());
-        data._filename = entries[i].name;
-        data._source = 'od'; // OneDrive
-        allClients.push(data);
-        loaded++;
-      } catch(e) {
-        console.error('Error carregant ' + entries[i].name, e);
-      }
-    }
-    
-    console.log('✅ Carregats ' + loaded + ' clients');
-    
-    if (loaded > 0) {
-      showToast(loaded + ' clients carregats des de OneDrive', 'success');
-    }
-    
   } catch(e) {
-    console.error('Error carregant clients:', e);
+    console.warn('☁️ [OD] Error carregant índex:', e && e.message);
+  }
+
+  // ── FONT 2: clientesDir (carpeta local) ────────────────────
+  if (clientesDir) {
+    try {
+      var entries = [];
+      for await (var entry of clientesDir.values()) {
+        if (entry.kind === 'file' && entry.name.endsWith('.json')) entries.push(entry);
+      }
+      console.log('📁 [DIR] Trobats ' + entries.length + ' fitxers JSON');
+      for (var i = 0; i < entries.length; i++) {
+        try {
+          var fh = await clientesDir.getFileHandle(entries[i].name);
+          var file = await fh.getFile();
+          var data = JSON.parse(await file.text());
+          data._filename = entries[i].name;
+          // Si ja és a OD, marcar com a 'both' (combinant origens)
+          var existingIdx = -1;
+          if (data.nif_cif) {
+            for (var j = 0; j < allClients.length; j++) {
+              if (allClients[j].nif_cif && allClients[j].nif_cif.toUpperCase() === data.nif_cif.toUpperCase()) { existingIdx = j; break; }
+            }
+          }
+          if (existingIdx >= 0) {
+            // Merge: les dades locals tenen prioritat (són completes amb tots els camps del formulari)
+            data._source = 'both';
+            data._refnumpers = allClients[existingIdx]._refnumpers || null;
+            allClients[existingIdx] = data;
+          } else {
+            data._source = 'od';
+            allClients.push(data);
+          }
+          loadedDir++;
+        } catch(e) {
+          console.error('Error carregant ' + entries[i].name, e);
+        }
+      }
+      console.log('📁 [DIR] Carregats ' + loadedDir + ' clients de la carpeta');
+    } catch(e) {
+      console.error('📁 [DIR] Error:', e);
+    }
+  }
+
+  var total = allClients.length;
+  console.log('✅ Total clients disponibles: ' + total + ' (OD: ' + loadedOD + ', DIR: ' + loadedDir + ')');
+  if (total > 0 && typeof showToast === 'function') {
+    // Toast només la primera vegada (no a cada refresc periòdic)
+    if (!window._clientsLoadedToastShown) {
+      showToast(total + ' clients carregats (☁️ ' + loadedOD + ' · 📁 ' + loadedDir + ')', 'success');
+      window._clientsLoadedToastShown = true;
+    }
   }
 }
 
 // Cridar inicialització al carregar la pàgina
 window.addEventListener('DOMContentLoaded', function() {
   console.log('🚀 Formulari Alta Clients inicialitzat');
-  
-  // Intentar carregar clients si hi ha carpeta seleccionada
+
+  // Inicialitzar toggle Modal OD ON/OFF (persistència localStorage)
+  try { initToggleModalOD(); } catch(e) { console.warn('initToggleModalOD:', e); }
+
+  // Carregar clients (OD index + carpeta local). NO depèn només de clientesDir
+  // perquè dins l'iframe OPTICRM la font primària és parent.OD.loadFile()
   setTimeout(function() {
-    if (clientesDir) {
-      initLoadClients();
-    } else {
-      console.log('ℹ️ Selecciona una carpeta de clients per habilitar la cerca');
-    }
+    initLoadClients();
   }, 500);
+
+  // Refresc periòdic de l'índex cada 10 min (alineat amb sync silenciós d'app.js)
+  if (!window._clientsRefreshTimer) {
+    window._clientsRefreshTimer = setInterval(function() {
+      console.log('🔄 Refrescant índex de clients (10 min tick)');
+      initLoadClients();
+    }, 10 * 60 * 1000);
+  }
 });
 // ──────────────────────────────────────────────────────────
 

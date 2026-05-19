@@ -1683,12 +1683,19 @@ function onSearchFocus() {
 function onSearchInput(val) {
   clearTimeout(searchDebounce);
   searchDebounce = setTimeout(function() {
-    // TASCA 2: Si esborra el text, reset formulari a estat nou client
+    // Si esborra el text, reset formulari
     if (!val.trim()) { 
       hideSearchResults(); 
       resetFormulariNouClient();
       return; 
     }
+    
+    // MÍNIM 3 CARÀCTERS per cercar
+    if (val.trim().length < 3) {
+      hideSearchResults();
+      return;
+    }
+    
     var q = val.trim().toLowerCase();
     var res = allClients.filter(function(c) { return matchClient(c, q); }).slice(0,10);
     showSearchResults(res);
@@ -1752,39 +1759,53 @@ function matchClient(c, q) {
 }
 
 function showSearchResults(results) {
-  var el    = document.getElementById('searchResults');
-  var input = document.getElementById('searchInput');
-  if (!el || !input) return;
-  // Position below the input
-  var rect = input.getBoundingClientRect();
-  el.style.top   = (rect.bottom + 4) + 'px';
-  el.style.right  = (window.innerWidth - rect.right) + 'px';
-  el.style.left   = 'auto';
+  var el = document.getElementById('searchResults');
+  if (!el) return;
+  
   if (!results.length) {
-    el.innerHTML = '<div class="sr-empty">Sin resultados</div>';
-    el.classList.add('show'); return;
+    el.innerHTML = '<div style="padding:12px;text-align:center;color:#999;font-size:12px">No s\'han trobat resultats</div>';
+    el.style.display = 'block';
+    return;
   }
-  var html = '<div class="sr-header">' + results.length + ' registro' + (results.length>1?'s':'') + ' encontrado' + (results.length>1?'s':'') + '</div>';
+  
+  var html = '<div style="padding:8px 12px;background:#f5f5f5;border-bottom:1px solid #ddd;font-size:11px;font-weight:600;color:#666">' + 
+    results.length + ' client' + (results.length>1?'s':'') + ' trobat' + (results.length>1?'s':'') + '</div>';
+  
   html += results.map(function(c) {
-    var fn  = c._filename || '';
+    var fn = c._filename || '';
     var fecha = fn.length >= 8 ? fn.slice(6,8)+'/'+fn.slice(4,6)+'/'+fn.slice(0,4) : '';
-    var nif = c.nif_cif ? ' \u00b7 '+c.nif_cif : '';
-    var tel = c.tel1    ? ' \u00b7 '+c.tel1    : '';
-    var meta = (c.tipo_label||'') + nif + tel + (fecha?' \u00b7 '+fecha:'');
-    // Use single-quote wrapping for the onclick attribute to avoid HTML quote issues
+    var nif = c.nif_cif ? ' · '+c.nif_cif : '';
+    var tel = c.tel1 ? ' · '+c.tel1 : '';
+    var meta = (c.tipo_label||'') + nif + tel + (fecha?' · '+fecha:'');
+    
+    // EMOJIS segons origen
+    var origen = '';
+    var hasOD = c._source && (c._source === 'od' || c._source === 'both');
+    var hasCRM = c._source && (c._source === 'crm' || c._source === 'both');
+    
+    if (hasOD && hasCRM) {
+      origen = '<span style="margin-left:6px" title="OneDrive + CRM">📁💼</span>';
+    } else if (hasOD) {
+      origen = '<span style="margin-left:6px" title="OneDrive">📁</span>';
+    } else if (hasCRM) {
+      origen = '<span style="margin-left:6px" title="CRM">💼</span>';
+    }
+    
     var safeFn = fn.replace(/'/g,"&#39;").replace(/"/g,"&quot;");
-    return '<div class="sr-item" onclick="loadClientAndClose(\'' + safeFn + '\')" tabindex="0">' +
-      '<div style="flex:1"><div class="sr-name">' + (c.nombre_completo||'\u2014') + '</div>' +
-      '<div class="sr-meta">' + meta + '</div></div>' +
-      '<span class="sr-tipo">' + (c.tipo_label||'\u2014') + '</span></div>';
+    return '<div onclick="loadClientAndClose(\'' + safeFn + '\')" style="padding:10px 12px;border-bottom:1px solid #eee;cursor:pointer;transition:background .15s" onmouseover="this.style.background=\'#f5f5f5\'" onmouseout="this.style.background=\'#fff\'">' +
+      '<div style="display:flex;align-items:center;justify-content:space-between">' +
+      '<div style="flex:1"><div style="font-weight:600;font-size:13px;color:#333">' + (c.nombre_completo||'—') + origen + '</div>' +
+      '<div style="font-size:11px;color:#666;margin-top:2px">' + meta + '</div></div>' +
+      '<span style="font-size:10px;color:#999;background:#f0f0f0;padding:3px 8px;border-radius:4px;font-weight:600">' + (c.tipo_label||'—') + '</span></div></div>';
   }).join('');
+  
   el.innerHTML = html;
-  el.classList.add('show');
+  el.style.display = 'block';
 }
 
 function hideSearchResults() {
   var el = document.getElementById('searchResults');
-  if (el) el.classList.remove('show');
+  if (el) el.style.display = 'none';
 }
 
 document.addEventListener('click', function(e) {

@@ -2699,14 +2699,14 @@ var cardsOcultas = false; // Estado toggle
 function toggleCardsVisibility() {
   cardsOcultas = !cardsOcultas;
   
-  // Selectors de les 4 cards a amagar (Identificación, Contacto, Dirección, Bancarios)
+  // Selectors de les 2 cards a amagar (només Identificación i Contacto)
   // Card 0 = Tipo Cliente (no tocar)
   // Card 1 = Identificación
   // Card 2 = Contacto
-  // Card 3 = Dirección
-  // Card 4 = Bancarios
+  // Card 3 = Dirección (SEMPRE VISIBLE)
+  // Card 4 = Bancarios (SEMPRE VISIBLE)
   var allCards = document.querySelectorAll('.card');
-  var cardsToToggle = [allCards[1], allCards[2], allCards[3], allCards[4]];
+  var cardsToToggle = [allCards[1], allCards[2]]; // Només 2 cards!
   
   cardsToToggle.forEach(function(card) {
     if (card) {
@@ -2715,7 +2715,7 @@ function toggleCardsVisibility() {
   });
   
   // Feedback visual temporal
-  mostrarToastToggle(cardsOcultas ? '🔒 Cards ocultades (doble clic per mostrar)' : '👁️ Cards visibles');
+  mostrarToastToggle(cardsOcultas ? '🔒 Dades personals ocultades' : '👁️ Dades personals visibles');
   
   // Actualitzar progress bar
   updProg();
@@ -2738,4 +2738,20 @@ function mostrarToastToggle(msg) {
   }, 2000);
 }
 // ─── END DOBLE CLIC CARDS ──────────────────────────────────
+
+// ─── FUNCIÓ BOTÓ "NOU CLIENT" ─────────────────────────────
+function activarNouClient() {
+  // Cridar funció reset existent
+  resetFormulariNouClient();
+  
+  // Feedback visual
+  mostrarToastToggle('✨ Nou client activat — formulari resetejat');
+  
+  // Focus al primer camp
+  setTimeout(function() {
+    var primer = document.getElementById('par-nombre');
+    if (primer) primer.focus();
+  }, 100);
+}
+// ──────────────────────────────────────────────────────────
 

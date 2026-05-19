@@ -2929,56 +2929,105 @@ function activarNouClient() {
 // ──────────────────────────────────────────────────────────
 
 // ─── INICIALITZACIÓ: CARREGAR CLIENTS ─────────────────────
-// FONT PRIMÀRIA: parent.OD (índex enriquit per app.js cada 10 min)
-// FONT SECUNDÀRIA: clientesDir (carpeta local File System Access)
+// FONT 1A: parent.OD directe (mateix origen — extension popup)
+// FONT 1B: postMessage al parent (cross-origin — iframe GitHub Pages ↔ CRM)
+// FONT 2 : clientesDir (carpeta local File System Access)
+
+function _requestIndexViaPostMessage(timeoutMs) {
+  timeoutMs = timeoutMs || 4000;
+  return new Promise(function(resolve) {
+    var done = false;
+    function handler(ev) {
+      if (!ev.data || typeof ev.data !== 'object') return;
+      if (ev.data.type !== 'opticrm_clients_index_response') return;
+      if (done) return;
+      done = true;
+      window.removeEventListener('message', handler);
+      var n = ev.data.data && ev.data.data.clients ? Object.keys(ev.data.data.clients).length : 0;
+      console.log('☁️ [PM] Resposta del parent: ' + n + ' clients');
+      resolve(ev.data.data || null);
+    }
+    window.addEventListener('message', handler);
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({type:'opticrm_request_clients_index'}, '*');
+        console.log('☁️ [PM] Petició enviada al parent');
+      } else {
+        console.log('☁️ [PM] No hi ha parent (form standalone)');
+        done = true;
+        resolve(null);
+        return;
+      }
+    } catch(e) {
+      console.warn('☁️ [PM] No es pot enviar postMessage:', e && e.message);
+    }
+    setTimeout(function(){
+      if (!done) {
+        done = true;
+        window.removeEventListener('message', handler);
+        console.log('☁️ [PM] Timeout sense resposta del parent (' + timeoutMs + 'ms)');
+        resolve(null);
+      }
+    }, timeoutMs);
+  });
+}
+
 async function initLoadClients() {
   var loadedOD = 0;
   var loadedDir = 0;
   // Buidar la llista per evitar duplicats en refrescos periòdics
   allClients = [];
 
-  // ── FONT 1: índex OneDrive via parent.OD ───────────────────
+  // ── FONT 1A: parent.OD directament (només funciona same-origin) ───
+  var indexData = null;
   try {
     var od = null;
-    try { if (window.parent && window.parent.OD && window.parent.OD.isReady && window.parent.OD.isReady()) od = window.parent.OD; } catch(e) {}
-    if (!od) { try { if (window.OD && window.OD.isReady && window.OD.isReady()) od = window.OD; } catch(e) {} }
+    try {
+      if (window.parent && window.parent !== window && window.parent.OD && window.parent.OD.isReady && window.parent.OD.isReady()) od = window.parent.OD;
+    } catch(e) { /* cross-origin: ignorem */ }
+    try { if (!od && window.OD && window.OD.isReady && window.OD.isReady()) od = window.OD; } catch(e) {}
 
     if (od && typeof od.loadFile === 'function') {
-      var indexData = await od.loadFile('opticrm-clients-index.json');
-      if (indexData && indexData.clients && typeof indexData.clients === 'object') {
-        var keys = Object.keys(indexData.clients);
-        for (var k = 0; k < keys.length; k++) {
-          var src = indexData.clients[keys[k]];
-          if (!src) continue;
-          // Mapping índex OD → format allClients (compatible amb matchClient)
-          var enriched = !!(src.tel1 || src.email1);
-          var c = {
-            _filename: 'od:' + keys[k],
-            _source: enriched ? 'both' : 'crm',
-            _refnumpers: src.refnumpers || keys[k],
-            _enrichedAt: src._enrichedAt || null,
-            _odIndex: true,
-            nombre_completo: src.nom || src.nombre_completo || '',
-            nif_cif: src.nif || '',
-            tel1: src.tel1 || '',
-            email1: src.email1 || '',
-            tipo_label: src.tipo_label || (src.nif && /^[A-Z]/i.test(src.nif) && src.nif.length===9 ? 'EMP' : 'PAR')
-          };
-          allClients.push(c);
-          loadedOD++;
-        }
-        console.log('☁️ [OD] Índex carregat: ' + loadedOD + ' clients enriquits');
-      } else {
-        console.log('☁️ [OD] Índex buit o no disponible');
-      }
-    } else {
-      console.log('☁️ [OD] parent.OD no disponible (form obert standalone)');
+      indexData = await od.loadFile('opticrm-clients-index.json');
+      if (indexData) console.log('☁️ [OD-direct] Lectura directa parent.OD OK');
     }
   } catch(e) {
-    console.warn('☁️ [OD] Error carregant índex:', e && e.message);
+    console.log('☁️ [OD-direct] Falla (probable cross-origin):', e && e.message);
   }
 
-  // ── FONT 2: clientesDir (carpeta local) ────────────────────
+  // ── FONT 1B: postMessage (cross-origin fallback) ───────────────────
+  if (!indexData) {
+    indexData = await _requestIndexViaPostMessage();
+  }
+
+  // ── Processar índex rebut (sigui per FONT 1A o 1B) ─────────────────
+  if (indexData && indexData.clients && typeof indexData.clients === 'object') {
+    var keys = Object.keys(indexData.clients);
+    for (var k = 0; k < keys.length; k++) {
+      var src = indexData.clients[keys[k]];
+      if (!src) continue;
+      var enriched = !!(src.tel1 || src.email1);
+      var c = {
+        _filename: 'od:' + keys[k],
+        _source: enriched ? 'both' : 'crm',
+        _refnumpers: src.refnumpers || keys[k],
+        _enrichedAt: src._enrichedAt || null,
+        _odIndex: true,
+        nombre_completo: src.nom || src.nombre_completo || '',
+        nif_cif: src.nif || '',
+        tel1: src.tel1 || '',
+        email1: src.email1 || '',
+        tipo_label: src.tipo_label || (src.nif && /^[A-Z]/i.test(src.nif) && src.nif.length===9 ? 'EMP' : 'PAR')
+      };
+      allClients.push(c);
+      loadedOD++;
+    }
+    console.log('☁️ Índex processat: ' + loadedOD + ' clients (FONT: ' + (indexData._via || 'auto') + ')');
+  } else {
+    console.log('☁️ Índex OD buit o no rebut');
+  }
+
+  // ── FONT 2: clientesDir (carpeta local, opcional) ──────────────────
   if (clientesDir) {
     try {
       var entries = [];
@@ -2992,7 +3041,6 @@ async function initLoadClients() {
           var file = await fh.getFile();
           var data = JSON.parse(await file.text());
           data._filename = entries[i].name;
-          // Si ja és a OD, marcar com a 'both' (combinant origens)
           var existingIdx = -1;
           if (data.nif_cif) {
             for (var j = 0; j < allClients.length; j++) {
@@ -3000,7 +3048,6 @@ async function initLoadClients() {
             }
           }
           if (existingIdx >= 0) {
-            // Merge: les dades locals tenen prioritat (són completes amb tots els camps del formulari)
             data._source = 'both';
             data._refnumpers = allClients[existingIdx]._refnumpers || null;
             allClients[existingIdx] = data;
@@ -3009,24 +3056,17 @@ async function initLoadClients() {
             allClients.push(data);
           }
           loadedDir++;
-        } catch(e) {
-          console.error('Error carregant ' + entries[i].name, e);
-        }
+        } catch(e) { console.error('Error carregant ' + entries[i].name, e); }
       }
       console.log('📁 [DIR] Carregats ' + loadedDir + ' clients de la carpeta');
-    } catch(e) {
-      console.error('📁 [DIR] Error:', e);
-    }
+    } catch(e) { console.error('📁 [DIR] Error:', e); }
   }
 
   var total = allClients.length;
-  console.log('✅ Total clients disponibles: ' + total + ' (OD: ' + loadedOD + ', DIR: ' + loadedDir + ')');
-  if (total > 0 && typeof showToast === 'function') {
-    // Toast només la primera vegada (no a cada refresc periòdic)
-    if (!window._clientsLoadedToastShown) {
-      showToast(total + ' clients carregats (☁️ ' + loadedOD + ' · 📁 ' + loadedDir + ')', 'success');
-      window._clientsLoadedToastShown = true;
-    }
+  console.log('✅ Total clients disponibles: ' + total + ' (☁️ ' + loadedOD + ' · 📁 ' + loadedDir + ')');
+  if (total > 0 && typeof showToast === 'function' && !window._clientsLoadedToastShown) {
+    showToast(total + ' clients carregats (☁️ ' + loadedOD + ' · 📁 ' + loadedDir + ')', 'success');
+    window._clientsLoadedToastShown = true;
   }
 }
 

@@ -1875,8 +1875,34 @@ async function loadClientAndClose(filename) {
     return;
   }
 
-  // Si tenim client al cache → respectem el toggle
+  // Si tenim client al cache → enriquir si cal i respectar el toggle
   if (client) {
+    // ── Enriquir amb dades completes si és client OD lleuger (només té nom/NIF/tel1/email1) ──
+    if (client._odIndex && !client._enriched && client.nif_cif) {
+      console.log('☁️ [ENRICH] Demanant dades completes per NIF ' + client.nif_cif);
+      try {
+        if (typeof showToast === 'function') showToast('Carregant dades del client...', 'info');
+        var details = await _requestClientDetailsViaPostMessage(client.nif_cif, 5000);
+        if (details && typeof details === 'object') {
+          // Merge: completes prevalen però conservem metadades de l'índex
+          var enrichedClient = Object.assign({}, client, details);
+          enrichedClient._enriched = true;
+          enrichedClient._enrichedAt = Date.now();
+          enrichedClient._filename = client._filename;
+          enrichedClient._source = client._source;
+          enrichedClient._refnumpers = client._refnumpers || details.refnumpers || null;
+          var idx = allClients.findIndex(function(c) { return c._filename === filename; });
+          if (idx >= 0) allClients[idx] = enrichedClient;
+          client = enrichedClient;
+          console.log('☁️ [ENRICH] Client enriquit amb ' + Object.keys(details).length + ' camps');
+        } else {
+          console.warn('☁️ [ENRICH] No s\'han rebut dades completes — usant dades lleugeres');
+        }
+      } catch(e) {
+        console.warn('☁️ [ENRICH] Error obtenint detalls:', e && e.message);
+      }
+    }
+
     if (_showOdModal) {
       // Toggle ON → fitxa al card 0 + identificación/contacto collapsed
       showClientFitxaCard0(client);

@@ -1979,12 +1979,12 @@ function _parseCRMAdreca(s) {
   return { dir: before, cp: cp, muni: after };
 }
 
-// Nom complet format CRM: "COGNOM1 COGNOM2 NOM [NOM_COMPOST]" o "COGNOM1 COGNOM2, NOM"
-// Convenció Espanya: cognoms primer, nom al final
+// Nom complet format ESPANYOL: "NOM AP1 AP2" (el que apareix als rebuts/sinistres)
+// Variant amb coma: "AP1 AP2, NOM"
 function _parseCRMNom(s) {
   if (!s || typeof s !== 'string') return { nombre: '', ap1: '', ap2: '' };
   s = s.trim().replace(/\s+/g, ' ');
-  // Variant 1: amb coma "COGNOMS, NOM"
+  // Variant amb coma: "AP1 AP2, NOM" (format CRM intern)
   if (s.indexOf(',') >= 0) {
     var parts = s.split(',');
     var cognoms = parts[0].trim().split(/\s+/);
@@ -1994,13 +1994,56 @@ function _parseCRMNom(s) {
       ap2: cognoms.slice(1).join(' ') || ''
     };
   }
-  // Variant 2: sense coma — convenció CRM Occident
+  // Sense coma: format espanyol natural "NOM AP1 AP2" o "NOM1 NOM2 AP1 AP2"
   var p = s.split(/\s+/);
   if (p.length === 1) return { nombre: p[0], ap1: '', ap2: '' };
-  if (p.length === 2) return { nombre: p[1], ap1: p[0], ap2: '' };
-  if (p.length === 3) return { nombre: p[2], ap1: p[0], ap2: p[1] };
-  // 4+ paraules: 2 cognoms + nom compost (la resta)
-  return { nombre: p.slice(2).join(' '), ap1: p[0], ap2: p[1] };
+  if (p.length === 2) return { nombre: p[0], ap1: p[1], ap2: '' };
+  if (p.length === 3) return { nombre: p[0], ap1: p[1], ap2: p[2] };
+  // 4+ paraules: heurística per nom compost a l'inici
+  // Casos comuns: "Maria Carmen X Y", "Jose Antonio X Y", "Maria del Carmen X Y"
+  var compounds = ['carmen','antonio','jose','jesus','luis','manuel','francisco',
+                   'alfonso','angel','enrique','dolores','del','de','la','los'];
+  var lower = p[1].toLowerCase();
+  if (compounds.indexOf(lower) >= 0 && p.length >= 4) {
+    // "Maria Carmen Faya Romero" → nom="Maria Carmen", ap1="Faya", ap2="Romero"
+    // "Maria del Carmen Faya Romero" → nom="Maria del Carmen", ap1="Faya", ap2="Romero"
+    var nomEnd = 2;
+    while (nomEnd < p.length - 2 && compounds.indexOf(p[nomEnd].toLowerCase()) >= 0) nomEnd++;
+    return {
+      nombre: p.slice(0, nomEnd).join(' '),
+      ap1: p[nomEnd] || '',
+      ap2: p.slice(nomEnd + 1).join(' ')
+    };
+  }
+  // Per defecte (4+ paraules sense partícula reconeguda): NOM=1a, AP1=2a, AP2=resta
+  return { nombre: p[0], ap1: p[1], ap2: p.slice(2).join(' ') };
+}
+
+// Extreure nom del client des dels rebuts/sinistres/pòlisses
+// Cerca patró "Asegurado: <NOM COMPLET> F. nacimiento:" o "Asegurada: ..."
+function _extractNameFromReceipts(d) {
+  var sources = [];
+  if (Array.isArray(d.rebuts)) sources = sources.concat(d.rebuts);
+  if (Array.isArray(d.sinistres)) sources = sources.concat(d.sinistres);
+  if (Array.isArray(d.polisses)) sources = sources.concat(d.polisses);
+  for (var i = 0; i < sources.length; i++) {
+    var row = sources[i];
+    if (!Array.isArray(row)) continue;
+    for (var j = 0; j < row.length; j++) {
+      var cell = row[j];
+      if (typeof cell !== 'string') continue;
+      // Patró estricte amb F. nacimiento
+      var m = cell.match(/Asegurad[oa]:\s*(.+?)\s+F\.\s*nacimiento/i);
+      if (m && m[1]) return m[1].trim();
+      // Variant més laxa: "Asegurado: NOM" sense més
+      var m2 = cell.match(/Asegurad[oa]:\s*([^,\n\r]+?)(?:\s*[-·]|\s*$)/i);
+      if (m2 && m2[1]) {
+        var v = m2[1].trim();
+        if (v.length > 3 && v.length < 80) return v;
+      }
+    }
+  }
+  return '';
 }
 
 // Detecta si una cadena és nom d'empresa (conté S.L., S.A., etc.)
@@ -2048,8 +2091,13 @@ function loadClientIntoForm(d) {
   }
 
   // ── PARSING ESPECIAL camps format CRM Occident català ──
-  // Si tenim 'nom' (format CRM) i no tenim els camps separats, parsejar
+  // El camp `nom` pot venir null si no s'extreu de la fitxa V360. En aquest cas,
+  // fem fallback als rebuts/sinistres/pòlisses que contenen "Asegurado: NOM COMPLET F. nacimiento:"
   var nomFromCRM = _pickField(d, 'nom', 'nombre_crm');
+  if (!nomFromCRM || nomFromCRM === null) {
+    nomFromCRM = _extractNameFromReceipts(d);
+    if (nomFromCRM) console.log('☁️ [ENRICH] Nom extret dels rebuts/sinistres:', nomFromCRM);
+  }
   if (nomFromCRM && !d.par_nombre && !d.aut_nombre && !d.emp_razon && !d.razon_social) {
     if (t === 'emp') {
       sf('emp-razon', nomFromCRM); // Empresa: nom complet → razón social
@@ -3122,13 +3170,50 @@ function showClientFitxaCard0(client) {
   else if (hasOD) origen = '<span style="background:#3B82F6;color:#fff;padding:3px 9px;border-radius:5px;font-size:11px;font-weight:700;letter-spacing:.3px">📁 ONEDRIVE</span>';
   else if (hasCRM) origen = '<span style="background:#DC0028;color:#fff;padding:3px 9px;border-radius:5px;font-size:11px;font-weight:700;letter-spacing:.3px">💼 CRM</span>';
 
-  var nom = client.nombre_completo || ((client.par_nombre||client.aut_nombre||client.emp_razon||'') + ' ' + (client.par_ap1||client.aut_ap1||'')).trim() || '—';
-  var nif = client.nif_cif || client.par_nif || client.aut_nif || client.emp_cif || '—';
-  var tel = client.tel1 || '—';
-  var email = client.email1 || client.email2 || '—';
-  var loc = (client.localidad || '') + (client.cp ? ' (' + client.cp + ')' : '') || '—';
+  // Camps formulari estàndard
+  var nom = client.nombre_completo || client.nom ||
+            ((client.par_nombre||client.aut_nombre||client.emp_razon||'') + ' ' + (client.par_ap1||client.aut_ap1||'')).trim() || '—';
+  // Si nom és null (CRM no l'ha extret), provar dels rebuts
+  if (!nom || nom === '—' || nom === 'null') {
+    var fromReceipts = (typeof _extractNameFromReceipts === 'function') ? _extractNameFromReceipts(client) : '';
+    if (fromReceipts) nom = fromReceipts;
+  }
+  var nif = client.nif_cif || client.par_nif || client.aut_nif || client.emp_cif || client.nif || '—';
+  var tel = client.tel1 || client.telefon || '—';
+  var email = client.email1 || client.email2 || client.email || '—';
+  var loc = (client.localidad || client.muni || '') + (client.cp ? ' (' + client.cp + ')' : '');
+  if (!loc) loc = '—';
+  var adreca = client.dir || client.direccion || client.adreca || '';
   var refp = client._refnumpers ? '<div style="font-size:11px;color:#999;margin-top:2px">RefPers: ' + client._refnumpers + '</div>' : '';
   var enriched = client._enrichedAt ? '<div style="font-size:10px;color:#10B981;margin-top:2px">✓ Enriquit ' + new Date(client._enrichedAt).toLocaleDateString('ca-ES') + '</div>' : '';
+
+  // ── Info addicional CRM (només si està present) ──
+  var infoCRM = [];
+  if (client.eclient) infoCRM.push('<span style="background:#FEF3C7;color:#92400E;padding:2px 7px;border-radius:4px;font-size:11px;font-weight:600">⭐ eClient: ' + client.eclient + '</span>');
+  if (client.antiguitat) infoCRM.push('<span style="background:#E0E7FF;color:#3730A3;padding:2px 7px;border-radius:4px;font-size:11px;font-weight:600">📅 Alta: ' + client.antiguitat + '</span>');
+  if (client.segment) infoCRM.push('<span style="background:#DBEAFE;color:#1E40AF;padding:2px 7px;border-radius:4px;font-size:11px;font-weight:600">🎯 ' + client.segment + '</span>');
+  if (client.rgpd && /si|s[ií]/i.test(client.rgpd)) infoCRM.push('<span style="background:#DCFCE7;color:#166534;padding:2px 7px;border-radius:4px;font-size:11px;font-weight:600">✓ RGPD OK</span>');
+  if (client.idioma) infoCRM.push('<span style="background:#F3F4F6;color:#374151;padding:2px 7px;border-radius:4px;font-size:11px;font-weight:600">🌐 ' + client.idioma + '</span>');
+  if (client.professio) infoCRM.push('<span style="background:#FCE7F3;color:#9F1239;padding:2px 7px;border-radius:4px;font-size:11px;font-weight:600">💼 ' + client.professio + '</span>');
+
+  // Estadístiques CRM
+  var stats = [];
+  if (client.totalProductes !== undefined && client.totalProductes !== null) stats.push({n: client.totalProductes, l: 'Productes'});
+  if (client.totalPrimes) stats.push({n: client.totalPrimes, l: 'Primes anuals'});
+  if (Array.isArray(client.polisses)) stats.push({n: client.polisses.length, l: 'Pòlisses'});
+  if (Array.isArray(client.rebuts)) stats.push({n: client.rebuts.length, l: 'Rebuts'});
+  if (Array.isArray(client.sinistres)) stats.push({n: client.sinistres.length, l: 'Sinistres'});
+
+  var statsHtml = '';
+  if (stats.length) {
+    statsHtml = '<div style="display:flex;gap:8px;margin-top:10px;padding:10px;background:#F9FAFB;border-radius:6px;border-left:3px solid #DC0028">';
+    stats.forEach(function(s){
+      statsHtml += '<div style="flex:1;text-align:center"><div style="font-size:16px;font-weight:700;color:#202020;font-family:Inter,sans-serif">' + s.n + '</div><div style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.3px">' + s.l + '</div></div>';
+    });
+    statsHtml += '</div>';
+  }
+
+  var infoCRMHtml = infoCRM.length ? '<div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;padding-top:10px;border-top:1px dashed #E5E7EB">' + infoCRM.join('') + '</div>' : '';
 
   // Guardar referència del client per al botó "Carregar"
   window._pendingClient = client;
@@ -3148,7 +3233,10 @@ function showClientFitxaCard0(client) {
         '<div><div style="font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Telèfon</div><div style="font-weight:600;color:#202020">' + tel + '</div>' + enriched + '</div>' +
         '<div><div style="font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Email</div><div style="font-weight:600;color:#202020;word-break:break-all">' + email + '</div></div>' +
         '<div><div style="font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Localitat</div><div style="font-weight:600;color:#202020">' + loc + '</div></div>' +
+        (adreca ? '<div style="grid-column:1/-1"><div style="font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Adreça</div><div style="font-weight:600;color:#202020">' + adreca + '</div></div>' : '') +
       '</div>' +
+      statsHtml +
+      infoCRMHtml +
       '<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;padding-top:14px;border-top:1px solid #eee">' +
         '<button type="button" onclick="cancelClientFitxaCard0()" style="padding:9px 16px;border-radius:8px;border:1.5px solid #D1D5DB;background:#fff;font-size:12.5px;font-weight:600;color:#414141;cursor:pointer">✕ Cancel·lar</button>' +
         '<button type="button" onclick="confirmClientFitxaCard0()" style="padding:9px 18px;border-radius:8px;border:none;background:#DC0028;color:#fff;font-size:12.5px;font-weight:700;cursor:pointer">📝 Carregar al formulari</button>' +

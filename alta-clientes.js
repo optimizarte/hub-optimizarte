@@ -1884,6 +1884,9 @@ async function loadClientAndClose(filename) {
         if (typeof showToast === 'function') showToast('Carregant dades del client...', 'info');
         var details = await _requestClientDetailsViaPostMessage(client.nif_cif, 5000);
         if (details && typeof details === 'object') {
+          // ── DEBUG: mostrar TOTS els camps rebuts per facilitar mapping ──
+          console.log('☁️ [ENRICH-DEBUG] Camps rebuts (' + Object.keys(details).length + '):', Object.keys(details));
+          console.log('☁️ [ENRICH-DEBUG] Sample valors:', JSON.stringify(details).substring(0, 1500));
           // Merge: completes prevalen però conservem metadades de l'índex
           var enrichedClient = Object.assign({}, client, details);
           enrichedClient._enriched = true;
@@ -1937,6 +1940,19 @@ async function loadClientAndClose(filename) {
 }
 
 // ─── LOAD CLIENT INTO FORM ────────────────────────────────────────
+// Helper: troba el primer valor no buit d'una llista de noms de camp candidats.
+// Permet acceptar JSONs amb diferents convencions (format formulari "par_nombre"
+// o format extret del CRM "nombre", "name", etc.) sense haver de saber l'origen.
+function _pickField(d) {
+  for (var i = 1; i < arguments.length; i++) {
+    var k = arguments[i];
+    if (!k) continue;
+    var v = d[k];
+    if (v !== undefined && v !== null && v !== '') return v;
+  }
+  return '';
+}
+
 function loadClientIntoForm(d) {
   // Reset first
   clearForm();
@@ -1947,13 +1963,22 @@ function loadClientIntoForm(d) {
     if (el) { el.value = val; }
   };
 
-  // Tipo
-  var t = d.tipo || 'par';
+  // ── Determinar el tipus de client ──
+  // Pot venir com 'par'/'emp'/'aut' o detectar-se per camps presents
+  var t = d.tipo || d.tipoCliente || d.tipo_cliente;
+  if (!t) {
+    // Detectar per heurística: empresa té CIF, autònom té NIF + actividad, particular per defecte
+    var nifCif = (d.nif_cif || d.nif || d.cif || '').toUpperCase();
+    var hasCif = nifCif && /^[A-HJNPQRSUVW]/.test(nifCif);
+    if (hasCif || d.emp_cif || d.razon_social || d.razonSocial) t = 'emp';
+    else if (d.aut_actividad || d.actividad_aut || d.es_autonomo) t = 'aut';
+    else t = 'par';
+  }
   var tipoEl = document.getElementById('tipo-' + t);
   if (tipoEl) setTipo(t, tipoEl);
 
   // Restore autEmpSi before updateVisibility
-  if (d.aut_emp && t==='aut') {
+  if ((d.aut_emp || d.aut_empresa) && t==='aut') {
     autEmpSi = true;
     var si=document.getElementById('aut-emp-si');var no=document.getElementById('aut-emp-no');
     if(si){si.classList.add('si');} if(no){no.classList.remove('no');}
@@ -1967,36 +1992,52 @@ function loadClientIntoForm(d) {
     updateVisibility();
   }
 
-  // Datos par
-  sf('par-nombre',   d.par_nombre);  sf('par-ap1', d.par_ap1); sf('par-ap2', d.par_ap2);
-  sf('par-nif',      d.par_nif);     sf('par-fnac', d.par_fnac);
-  sf('par-estcivil', d.par_estcivil); sf('par-hijos', d.par_hijos);
+  // ── Camps Particular ──
+  // Acceptar molts sinònims per ser compatible amb cli_crm_<NIF>.json (CRM) i amb el format del formulari
+  sf('par-nombre',   _pickField(d, 'par_nombre', 'par-nombre', 'nombre', 'name', 'first_name', 'firstName', 'NOMBRE'));
+  sf('par-ap1',      _pickField(d, 'par_ap1', 'par-ap1', 'apellido1', 'ap1', 'apellidoPaterno', 'AP1', 'apellido_1', 'primer_apellido'));
+  sf('par-ap2',      _pickField(d, 'par_ap2', 'par-ap2', 'apellido2', 'ap2', 'apellidoMaterno', 'AP2', 'apellido_2', 'segundo_apellido'));
+  sf('par-nif',      _pickField(d, 'par_nif', 'par-nif', 'nif', 'dni', 'nie', 'nif_cif', 'documento', 'NIF'));
+  sf('par-fnac',     _pickField(d, 'par_fnac', 'par-fnac', 'fecha_nacimiento', 'fechaNacimiento', 'fnac', 'birth_date', 'birthDate', 'FECHA_NACIMIENTO'));
+  sf('par-estcivil', _pickField(d, 'par_estcivil', 'par-estcivil', 'estado_civil', 'estadoCivil', 'estcivil', 'ESTADO_CIVIL'));
+  sf('par-hijos',    _pickField(d, 'par_hijos', 'par-hijos', 'hijos', 'numero_hijos', 'num_hijos'));
 
-  // Datos emp
-  sf('emp-razon',     d.emp_razon);    sf('emp-cif',      d.emp_cif);
-  sf('emp-actividad', d.emp_actividad); sf('emp-antiguedad', d.emp_antiguedad);
-  sf('empleados-emp', d.emp_empleados);
+  // ── Camps Empresa ──
+  sf('emp-razon',     _pickField(d, 'emp_razon', 'emp-razon', 'razon_social', 'razonSocial', 'denominacion', 'nombre_empresa', 'RAZON_SOCIAL', 'razon'));
+  sf('emp-cif',       _pickField(d, 'emp_cif', 'emp-cif', 'cif', 'nif_cif', 'NIF', 'CIF'));
+  sf('emp-actividad', _pickField(d, 'emp_actividad', 'emp-actividad', 'actividad', 'sector', 'cnae', 'actividad_economica'));
+  sf('emp-antiguedad',_pickField(d, 'emp_antiguedad', 'emp-antiguedad', 'antiguedad', 'fecha_constitucion', 'fundacion'));
+  sf('empleados-emp', _pickField(d, 'emp_empleados', 'empleados-emp', 'empleados', 'num_empleados', 'numero_empleados'));
 
-  // Datos aut
-  sf('aut-nombre',    d.aut_nombre);   sf('aut-ap1',      d.aut_ap1); sf('aut-ap2', d.aut_ap2);
-  sf('aut-nif',       d.aut_nif);      sf('aut-fnac',     d.aut_fnac);
-  sf('aut-actividad', d.aut_actividad); sf('aut-antiguedad', d.aut_antiguedad);
-  sf('empleados-aut', d.aut_empleados);
+  // ── Camps Autònom ──
+  sf('aut-nombre',    _pickField(d, 'aut_nombre', 'aut-nombre', 'nombre', 'name', 'NOMBRE'));
+  sf('aut-ap1',       _pickField(d, 'aut_ap1', 'aut-ap1', 'apellido1', 'ap1', 'primer_apellido', 'AP1'));
+  sf('aut-ap2',       _pickField(d, 'aut_ap2', 'aut-ap2', 'apellido2', 'ap2', 'segundo_apellido', 'AP2'));
+  sf('aut-nif',       _pickField(d, 'aut_nif', 'aut-nif', 'nif', 'dni', 'nif_cif', 'NIF'));
+  sf('aut-fnac',      _pickField(d, 'aut_fnac', 'aut-fnac', 'fecha_nacimiento', 'fechaNacimiento', 'fnac', 'FECHA_NACIMIENTO'));
+  sf('aut-actividad', _pickField(d, 'aut_actividad', 'aut-actividad', 'actividad', 'sector', 'cnae'));
+  sf('aut-antiguedad',_pickField(d, 'aut_antiguedad', 'aut-antiguedad', 'antiguedad', 'fecha_alta_autonomo'));
+  sf('empleados-aut', _pickField(d, 'aut_empleados', 'empleados-aut', 'empleados', 'num_empleados'));
 
   // Sexo buttons (visual)
-  setSexoVal('par-sexo', d.par_sexo || d.sexo);
-  setSexoVal('aut-sexo', d.aut_sexo || (t==='aut' ? d.sexo : ''));
+  setSexoVal('par-sexo', _pickField(d, 'par_sexo', 'par-sexo', 'sexo', 'SEXO', 'genero'));
+  setSexoVal('aut-sexo', _pickField(d, 'aut_sexo', 'aut-sexo', t==='aut' ? 'sexo' : '', t==='aut' ? 'SEXO' : '', t==='aut' ? 'genero' : ''));
 
-  // Contacto
-  sf('tel1',   d.tel1);   sf('wapp',  d.whatsapp); sf('redes',  d.redes);
-  sf('email1', d.email1); sf('email2', d.email2);
-  sf('dir',    d.direccion); sf('cp', d.cp); sf('muni', d.localidad);
+  // ── Contacte ──
+  sf('tel1',   _pickField(d, 'tel1', 'telefono1', 'telefono', 'telef', 'TELEFONO', 'TEL1', 'phone', 'phone1'));
+  sf('wapp',   _pickField(d, 'whatsapp', 'wapp', 'tel_whatsapp', 'telefono_whatsapp'));
+  sf('redes',  _pickField(d, 'redes', 'redes_sociales', 'social'));
+  sf('email1', _pickField(d, 'email1', 'email', 'EMAIL', 'EMAIL1', 'correo', 'correo_electronico', 'mail'));
+  sf('email2', _pickField(d, 'email2', 'EMAIL2', 'correo2', 'email_2', 'mail2'));
+  sf('dir',    _pickField(d, 'direccion', 'dir', 'address', 'domicilio', 'DIRECCION', 'calle', 'via'));
+  sf('cp',     _pickField(d, 'cp', 'codigo_postal', 'codigoPostal', 'CP', 'postal_code', 'zip'));
+  sf('muni',   _pickField(d, 'localidad', 'muni', 'municipio', 'poblacion', 'LOCALIDAD', 'city', 'ciudad'));
 
-  // Observaciones
-  sf('obs',            d.motivo_contacto);
-  sf('primera-accion', d.primera_accion);
-  sf('fecha-accion',   d.fecha_accion);
-  sf('origen-detalle', d.origen_detalle);
+  // ── Observacions ──
+  sf('obs',            _pickField(d, 'motivo_contacto', 'obs', 'observaciones', 'notas', 'comentarios'));
+  sf('primera-accion', _pickField(d, 'primera_accion', 'primera-accion', 'primeraAccion'));
+  sf('fecha-accion',   _pickField(d, 'fecha_accion', 'fecha-accion', 'fechaAccion'));
+  sf('origen-detalle', _pickField(d, 'origen_detalle', 'origen-detalle', 'origenDetalle'));
 
   // Origen sw (radio)
   if (d.origen_sw) {
@@ -2039,7 +2080,7 @@ function loadClientIntoForm(d) {
   setFormDates(d.fechaCreacion||null, d.fechaModificacion||null);
   var banner = document.getElementById('loadBanner');
   if (banner) {
-    document.getElementById('loadBannerText').textContent = '\uD83D\uDC64 Cargado: ' + (d.nombre_completo||'cliente') + (d.timestamp ? '  \u00b7  ' + d.timestamp : '');
+    document.getElementById('loadBannerText').textContent = '\uD83D\uDC64 Cargado: ' + (d.nombre_completo||d.nombre||'cliente') + (d.timestamp ? '  \u00b7  ' + d.timestamp : '');
     banner.style.display = 'flex';
   }
 

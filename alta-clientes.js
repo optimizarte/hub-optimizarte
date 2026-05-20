@@ -1683,19 +1683,40 @@ function onSearchFocus() {
 function onSearchInput(val) {
   clearTimeout(searchDebounce);
   searchDebounce = setTimeout(function() {
-    // Si esborra el text, reset formulari
-    if (!val.trim()) { 
-      hideSearchResults(); 
+    // Si esborra el text, reset complet
+    if (!val.trim()) {
+      hideSearchResults();
       resetFormulariNouClient();
-      return; 
+      // Restaurar card 0 si tenia fitxa
+      var cardTipo = document.getElementById('card-tipo-cliente');
+      if (cardTipo && cardTipo._originalHTML) {
+        cardTipo.innerHTML = cardTipo._originalHTML;
+        cardTipo._originalHTML = null;
+      }
+      window._pendingClient = null;
+      setFormMode('initial');
+      return;
     }
-    
+
+    // Si l'usuari escriu nou text i hi havia fitxa al card 0 o estàvem en mode carregat → reset card 0
+    var cardTipo = document.getElementById('card-tipo-cliente');
+    if (cardTipo && cardTipo._originalHTML) {
+      cardTipo.innerHTML = cardTipo._originalHTML;
+      cardTipo._originalHTML = null;
+      window._pendingClient = null;
+    }
+    // Si estàvem en mode carregat (directe/fitxa) i l'usuari torna a cercar → tornar a 'initial' visualment
+    if (_currentFormMode === 'client-loaded-directe' || _currentFormMode === 'client-loaded-fitxa') {
+      resetFormulariNouClient();
+      setFormMode('initial');
+    }
+
     // MÍNIM 3 CARÀCTERS per cercar
     if (val.trim().length < 3) {
       hideSearchResults();
       return;
     }
-    
+
     var q = val.trim().toLowerCase();
     var res = allClients.filter(function(c) { return matchClient(c, q); }).slice(0,10);
     showSearchResults(res);
@@ -1842,11 +1863,13 @@ async function loadClientAndClose(filename) {
   // Si tenim client al cache → respectem el toggle
   if (client) {
     if (_showOdModal) {
-      // Toggle ON → mostrem fitxa al card 0 per confirmar
+      // Toggle ON → fitxa al card 0 + identificación/contacto collapsed
       showClientFitxaCard0(client);
+      setFormMode('client-loaded-fitxa');
     } else {
-      // Toggle OFF → carrega directe
+      // Toggle OFF → carrega directe + identificación/contacto collapsed
       loadClientIntoForm(client);
+      setFormMode('client-loaded-directe');
     }
     return;
   }
@@ -1859,8 +1882,13 @@ async function loadClientAndClose(filename) {
       var data = JSON.parse(await file.text());
       data._filename = filename;
       data._source = 'od';
-      if (_showOdModal) showClientFitxaCard0(data);
-      else loadClientIntoForm(data);
+      if (_showOdModal) {
+        showClientFitxaCard0(data);
+        setFormMode('client-loaded-fitxa');
+      } else {
+        loadClientIntoForm(data);
+        setFormMode('client-loaded-directe');
+      }
     } catch(e) {
       showToast('No se pudo cargar el cliente.','error');
     }
@@ -2792,6 +2820,125 @@ function mostrarToastToggle(msg) {
 // ─── END DOBLE CLIC CARDS ──────────────────────────────────
 
 // ─── FUNCIÓ BOTÓ "NOU CLIENT" ─────────────────────────────
+// ─── MODE DE VISIBILITAT DE CARDS ─────────────────────────
+// 'initial'                → només card 0 visible
+// 'nou-client'             → totes les cards visibles
+// 'client-loaded-directe'  → totes visibles excepte Identificación + Contacto (strip-placeholder)
+// 'client-loaded-fitxa'    → fitxa al card 0, Identificación + Contacto en strip-placeholder
+var _currentFormMode = 'initial';
+
+function _getAllFormCards() {
+  // Tots els fills directes de #altaForm que siguin .card
+  var form = document.getElementById('altaForm');
+  if (!form) return [];
+  return Array.prototype.slice.call(form.querySelectorAll(':scope > .card'));
+}
+
+function _showCard(card) {
+  if (!card) return;
+  card.style.display = '';
+  card.removeAttribute('data-collapsed');
+  // Restaurar contingut original si estava com a strip
+  if (card._originalInnerHTML !== undefined) {
+    card.innerHTML = card._originalInnerHTML;
+    card._originalInnerHTML = undefined;
+    // Re-aplicar visibilitat condicional (block-par/block-emp segons tipo)
+    if (typeof updateVisibility === 'function') updateVisibility();
+  }
+}
+
+function _hideCard(card) {
+  if (!card) return;
+  card.style.display = 'none';
+  card.removeAttribute('data-collapsed');
+}
+
+function _collapseToStrip(card) {
+  if (!card) return;
+  if (card.getAttribute('data-collapsed') === '1') return; // ja és strip
+  // Guardar contingut original
+  if (card._originalInnerHTML === undefined) card._originalInnerHTML = card.innerHTML;
+  var title = card.getAttribute('data-card-title') || 'Card';
+  var icon = card.getAttribute('data-card-icon') || '📋';
+  var fields = card._originalInnerHTML ? (card._originalInnerHTML.match(/<input|<select|<textarea/g) || []).length : 0;
+  card.innerHTML = '' +
+    '<div class="strip-collapsed" ondblclick="expandCardFromStrip(\'' + card.id + '\')" style="display:flex;align-items:center;gap:12px;padding:10px 18px;background:linear-gradient(90deg,#FAFAFA,#F0F1F4);border-radius:10px;cursor:pointer;border:1px dashed #D1D5DB;transition:all .15s" onmouseover="this.style.borderColor=\'#9CA3AF\';this.style.background=\'linear-gradient(90deg,#F5F5F5,#E5E7EB)\'" onmouseout="this.style.borderColor=\'#D1D5DB\';this.style.background=\'linear-gradient(90deg,#FAFAFA,#F0F1F4)\'">' +
+      '<span style="font-size:18px;flex-shrink:0">' + icon + '</span>' +
+      '<div style="flex:1">' +
+        '<div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#414141">' + title + '</div>' +
+        '<div style="font-size:10.5px;color:#888;margin-top:1px">Dades carregades · doble-clic per editar</div>' +
+      '</div>' +
+      '<span style="font-size:10px;font-weight:700;color:#10B981;background:#D1FAE5;padding:3px 9px;border-radius:5px;letter-spacing:.4px">✓ COMPLERT</span>' +
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>' +
+    '</div>';
+  card.setAttribute('data-collapsed', '1');
+  card.style.display = '';
+}
+
+function expandCardFromStrip(cardId) {
+  var card = document.getElementById(cardId);
+  if (!card || card.getAttribute('data-collapsed') !== '1') return;
+  if (card._originalInnerHTML !== undefined) {
+    card.innerHTML = card._originalInnerHTML;
+    card._originalInnerHTML = undefined;
+  }
+  card.removeAttribute('data-collapsed');
+  if (typeof updateVisibility === 'function') updateVisibility();
+  // Afegir botó "↑ Plegar" a la card header per tornar a strip si vol
+  setTimeout(function() {
+    var hdr = card.querySelector('.card-hdr');
+    if (hdr && !hdr.querySelector('.btn-collapse-card')) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn-collapse-card';
+      btn.title = 'Plegar (doble-clic també)';
+      btn.style.cssText = 'margin-left:auto;background:transparent;border:1px solid #E5E7EB;border-radius:6px;padding:4px 10px;font-size:11px;color:#6B7280;cursor:pointer;font-weight:600';
+      btn.textContent = '↑ Plegar';
+      btn.onclick = function(){ _collapseToStrip(card); };
+      hdr.appendChild(btn);
+      // Doble-clic al header també plega
+      hdr.style.cursor = 'pointer';
+      hdr.title = 'Doble-clic per plegar';
+      hdr.ondblclick = function(e){ if (e.target.tagName !== 'BUTTON') _collapseToStrip(card); };
+    }
+  }, 50);
+}
+
+function setFormMode(mode) {
+  _currentFormMode = mode;
+  var cardTipo = document.getElementById('card-tipo-cliente');
+  var cardIdent = document.getElementById('card-identificacion');
+  var cardContact = document.getElementById('card-contacto');
+  var others = _getAllFormCards().filter(function(c){
+    return c !== cardTipo && c !== cardIdent && c !== cardContact;
+  });
+
+  if (mode === 'initial') {
+    _showCard(cardTipo);
+    _hideCard(cardIdent);
+    _hideCard(cardContact);
+    others.forEach(_hideCard);
+  } else if (mode === 'nou-client') {
+    _showCard(cardTipo);
+    _showCard(cardIdent);
+    _showCard(cardContact);
+    others.forEach(_showCard);
+  } else if (mode === 'client-loaded-directe') {
+    _showCard(cardTipo);
+    _collapseToStrip(cardIdent);
+    _collapseToStrip(cardContact);
+    others.forEach(_showCard);
+  } else if (mode === 'client-loaded-fitxa') {
+    // card 0 mostra la fitxa (la posa showClientFitxaCard0)
+    if (cardTipo) cardTipo.style.display = '';
+    _collapseToStrip(cardIdent);
+    _collapseToStrip(cardContact);
+    others.forEach(_showCard);
+  }
+
+  console.log('[FormMode] →', mode);
+}
+
 // ─── TOGGLE MODAL OD + FITXA-MODAL CARD 0 ───────────────────
 // Toggle ON  (defecte) → en seleccionar un client existent, mostra fitxa al card 0 (cal confirmar càrrega)
 // Toggle OFF           → en seleccionar un client existent, carrega directe al formulari
@@ -2896,7 +3043,11 @@ function confirmClientFitxaCard0() {
     cardTipo.innerHTML = cardTipo._originalHTML;
     cardTipo._originalHTML = null;
   }
-  if (c) loadClientIntoForm(c);
+  if (c) {
+    loadClientIntoForm(c);
+    // Després de carregar: el card 0 ja és normal, passem a mode directe (identificación/contacto strip)
+    setFormMode('client-loaded-directe');
+  }
 }
 
 function cancelClientFitxaCard0() {
@@ -2910,16 +3061,35 @@ function cancelClientFitxaCard0() {
   // Reset cercador
   var si = document.getElementById('searchInput');
   if (si) si.value = '';
+  // Tornar a estat inicial
+  setFormMode('initial');
 }
 // ──────────────────────────────────────────────────────────
 
 function activarNouClient() {
+  // Reset de la fitxa al card 0 si hi era
+  var cardTipo = document.getElementById('card-tipo-cliente');
+  if (cardTipo && cardTipo._originalHTML) {
+    cardTipo.innerHTML = cardTipo._originalHTML;
+    cardTipo._originalHTML = null;
+  }
+  window._pendingClient = null;
+  // Netejar cercador
+  var si = document.getElementById('searchInput');
+  if (si) si.value = '';
+  // Ocultar suggerencies
+  var sug = document.getElementById('searchSuggestions');
+  if (sug) sug.style.display = 'none';
+
   // Cridar funció reset existent
   resetFormulariNouClient();
-  
+
+  // Mostrar TOTES les cards (mode 'nou-client')
+  setFormMode('nou-client');
+
   // Feedback visual
-  mostrarToastToggle('✨ Nou client activat — formulari resetejat');
-  
+  mostrarToastToggle('✨ Nou client activat — formulari complet');
+
   // Focus al primer camp
   setTimeout(function() {
     var primer = document.getElementById('par-nombre');
@@ -3076,6 +3246,9 @@ window.addEventListener('DOMContentLoaded', function() {
 
   // Inicialitzar toggle Modal OD ON/OFF (persistència localStorage)
   try { initToggleModalOD(); } catch(e) { console.warn('initToggleModalOD:', e); }
+
+  // ESTAT INICIAL: només card 0 visible, resta amagada
+  try { setFormMode('initial'); } catch(e) { console.warn('setFormMode initial:', e); }
 
   // Carregar clients (OD index + carpeta local). NO depèn només de clientesDir
   // perquè dins l'iframe OPTICRM la font primària és parent.OD.loadFile()

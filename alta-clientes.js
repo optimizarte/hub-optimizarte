@@ -3072,8 +3072,12 @@ function activarNouClient() {
 // FONT 1B: postMessage al parent (cross-origin — iframe GitHub Pages ↔ CRM)
 // FONT 2 : clientesDir (carpeta local File System Access)
 
-function _requestIndexViaPostMessage(timeoutMs) {
+function _requestIndexViaPostMessage(timeoutMs, _attempt) {
   timeoutMs = timeoutMs || 4000;
+  _attempt = _attempt || 1;
+  var maxAttempts = 4;       // 4 intents
+  var retryDelayMs = 2000;   // 2s entre intents
+
   return new Promise(function(resolve) {
     var done = false;
     function handler(ev) {
@@ -3083,14 +3087,14 @@ function _requestIndexViaPostMessage(timeoutMs) {
       done = true;
       window.removeEventListener('message', handler);
       var n = ev.data.data && ev.data.data.clients ? Object.keys(ev.data.data.clients).length : 0;
-      console.log('☁️ [PM] Resposta del parent: ' + n + ' clients');
+      console.log('☁️ [PM] Resposta del parent (intent ' + _attempt + '/' + maxAttempts + '): ' + n + ' clients');
       resolve(ev.data.data || null);
     }
     window.addEventListener('message', handler);
     try {
       if (window.parent && window.parent !== window) {
         window.parent.postMessage({type:'opticrm_request_clients_index'}, '*');
-        console.log('☁️ [PM] Petició enviada al parent');
+        console.log('☁️ [PM] Petició enviada al parent (intent ' + _attempt + '/' + maxAttempts + ')');
       } else {
         console.log('☁️ [PM] No hi ha parent (form standalone)');
         done = true;
@@ -3101,10 +3105,16 @@ function _requestIndexViaPostMessage(timeoutMs) {
       console.warn('☁️ [PM] No es pot enviar postMessage:', e && e.message);
     }
     setTimeout(function(){
-      if (!done) {
-        done = true;
-        window.removeEventListener('message', handler);
-        console.log('☁️ [PM] Timeout sense resposta del parent (' + timeoutMs + 'ms)');
+      if (done) return;
+      done = true;
+      window.removeEventListener('message', handler);
+      if (_attempt < maxAttempts) {
+        console.log('☁️ [PM] Timeout intent ' + _attempt + ' — reintent en ' + retryDelayMs + 'ms');
+        setTimeout(function(){
+          _requestIndexViaPostMessage(timeoutMs, _attempt + 1).then(resolve);
+        }, retryDelayMs);
+      } else {
+        console.warn('☁️ [PM] Sense resposta del parent després de ' + maxAttempts + ' intents — silentsync potser no actiu');
         resolve(null);
       }
     }, timeoutMs);

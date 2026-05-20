@@ -1682,10 +1682,17 @@ async function refreshAllClients() {
 }
 
 // ─── SEARCH ───────────────────────────────────────────────────────
+// IMPORTANT: NO mostrar suggerencies només per fer focus al cercador.
+// Les suggerencies només apareixen quan l'usuari ha escrit 3+ caràcters.
 function onSearchFocus() {
-  if (allClients.length > 0 && !document.getElementById('searchInput').value.trim()) {
-    showSearchResults(allClients.slice(0,8));
+  var inp = document.getElementById('searchInput');
+  if (!inp) return;
+  var val = (inp.value || '').trim();
+  if (val.length >= 3) {
+    // Si ja hi havia text vàlid (cas tornada al cercador), re-executem el filtre
+    onSearchInput(inp.value);
   }
+  // Si no, no fem res — esperem 3+ caràcters
 }
 
 function onSearchInput(val) {
@@ -3117,6 +3124,45 @@ function _requestIndexViaPostMessage(timeoutMs, _attempt) {
         console.warn('☁️ [PM] Sense resposta del parent després de ' + maxAttempts + ' intents — silentsync potser no actiu');
         resolve(null);
       }
+    }, timeoutMs);
+  });
+}
+
+// Demanar dades completes d'un client (cli_crm_<NIF>.json) al parent via postMessage
+function _requestClientDetailsViaPostMessage(nif, timeoutMs) {
+  timeoutMs = timeoutMs || 5000;
+  return new Promise(function(resolve) {
+    if (!nif) { resolve(null); return; }
+    var done = false;
+    function handler(ev) {
+      if (!ev.data || typeof ev.data !== 'object') return;
+      if (ev.data.type !== 'opticrm_client_details_response') return;
+      if (ev.data.nif !== nif) return;
+      if (done) return;
+      done = true;
+      window.removeEventListener('message', handler);
+      console.log('☁️ [PM] Detalls client rebuts per NIF ' + nif + ':', ev.data.data ? 'OK' : 'BUIT');
+      resolve(ev.data.data || null);
+    }
+    window.addEventListener('message', handler);
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type:'opticrm_request_client_details', nif: nif }, '*');
+        console.log('☁️ [PM] Petició detalls enviada per NIF ' + nif);
+      } else {
+        done = true;
+        resolve(null);
+        return;
+      }
+    } catch(e) {
+      console.warn('☁️ [PM] Error enviant petició detalls:', e && e.message);
+    }
+    setTimeout(function() {
+      if (done) return;
+      done = true;
+      window.removeEventListener('message', handler);
+      console.warn('☁️ [PM] Timeout detalls per NIF ' + nif);
+      resolve(null);
     }, timeoutMs);
   });
 }

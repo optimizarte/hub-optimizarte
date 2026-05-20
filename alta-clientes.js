@@ -2829,13 +2829,14 @@ function mostrarToastToggle(msg) {
 
 // ─── FUNCIÓ BOTÓ "NOU CLIENT" ─────────────────────────────
 // ─── MODE DE VISIBILITAT DE CARDS ─────────────────────────
-// 'initial'                → només card 0 visible; resta amagada (display:none)
-// 'nou-client'             → totes les cards visibles (respectant updateVisibility per condicionals)
+// 'initial'                → només card 0 visible
+// 'nou-client'             → totes les cards visibles (updateVisibility per condicionals)
 // 'client-loaded-directe'  → totes visibles excepte Identificación + Contacto (amagades, dades preservades)
 // 'client-loaded-fitxa'    → fitxa al card 0; Identificación + Contacto amagades; resta visibles
 //
 // PRINCIPI: NO modifiquem mai innerHTML d'aquestes cards.
 // Sempre fem display:none / display:'' per preservar valors dels inputs.
+// L'usuari mostra/amaga Ident+Contacto fent DOBLE-CLIC sobre una opció de tipus (par/emp/aut).
 var _currentFormMode = 'initial';
 
 function _getAllFormCards() {
@@ -2844,71 +2845,43 @@ function _getAllFormCards() {
   return Array.prototype.slice.call(form.querySelectorAll(':scope > .card'));
 }
 
-function _showCard(card) {
-  if (!card) return;
-  card.style.display = '';
+function _showCard(card) { if (card) card.style.display = ''; }
+function _hideCard(card) { if (card) card.style.display = 'none'; }
+
+// Doble-clic sobre una opció de tipus client → toggle Ident + Contacto
+// Cridada des de #tipo-par / #tipo-emp / #tipo-aut (ondblclick)
+function toggleIdentContactCards() {
+  var ident = document.getElementById('card-identificacion');
+  var contact = document.getElementById('card-contacto');
+  if (!ident || !contact) return;
+  var anyHidden = (ident.style.display === 'none') || (contact.style.display === 'none');
+  if (anyHidden) {
+    ident.style.display = '';
+    contact.style.display = '';
+    // Scroll suau cap a Identificación
+    setTimeout(function(){ ident.scrollIntoView({behavior:'smooth', block:'center'}); }, 50);
+    console.log('[toggle Ident+Contacto] → MOSTRATS');
+  } else {
+    // Si estem en mode client-loaded, podem amagar de nou
+    if (_currentFormMode === 'client-loaded-directe' || _currentFormMode === 'client-loaded-fitxa') {
+      ident.style.display = 'none';
+      contact.style.display = 'none';
+      console.log('[toggle Ident+Contacto] → AMAGATS');
+    } else {
+      console.log('[toggle Ident+Contacto] → ja visibles, mode actual no permet amagar');
+    }
+  }
 }
 
-function _hideCard(card) {
-  if (!card) return;
-  card.style.display = 'none';
-}
-
-// Mostra/amaga la card cap-amagada (Identificación o Contacto)
+// Mantenim toggleHiddenCard per cridada externa (Console o futurs botons)
 function toggleHiddenCard(cardId) {
   var card = document.getElementById(cardId);
   if (!card) return;
   if (card.style.display === 'none') {
     card.style.display = '';
-    card.scrollIntoView({behavior:'smooth', block:'center'});
-    _updateHiddenCardsDivider();
+    setTimeout(function(){ card.scrollIntoView({behavior:'smooth', block:'center'}); }, 50);
   } else {
     card.style.display = 'none';
-    _updateHiddenCardsDivider();
-  }
-}
-
-// Divider que apareix quan Identificación/Contacto estan amagades
-// Permet mostrar-les amb un sol clic (i doble-clic per amagar-les)
-function _ensureHiddenCardsDivider() {
-  var existing = document.getElementById('hidden-cards-divider');
-  if (existing) return existing;
-  var div = document.createElement('div');
-  div.id = 'hidden-cards-divider';
-  div.style.cssText = 'display:none;align-items:center;gap:10px;padding:8px 16px;margin:6px 0;background:linear-gradient(90deg,#F9FAFB,#F3F4F6,#F9FAFB);border:1px dashed #D1D5DB;border-radius:8px;font-size:12px;color:#6B7280;user-select:none';
-  div.innerHTML =
-    '<span style="font-size:11px">🔒</span>' +
-    '<span style="flex:1">Dades del client carregades · ' +
-      '<span style="color:#DC0028;cursor:pointer;font-weight:600;text-decoration:underline;text-decoration-style:dotted" onclick="toggleHiddenCard(\'card-identificacion\')" title="Mostrar/amagar">Identificación</span>' +
-      ' · ' +
-      '<span style="color:#DC0028;cursor:pointer;font-weight:600;text-decoration:underline;text-decoration-style:dotted" onclick="toggleHiddenCard(\'card-contacto\')" title="Mostrar/amagar">Contacto</span>' +
-    '</span>' +
-    '<span style="font-size:10px;color:#9CA3AF">clic per editar</span>';
-  // Inserir abans del primer card no-card0 i no-identificacion/contacto
-  var form = document.getElementById('altaForm');
-  var ident = document.getElementById('card-identificacion');
-  if (form && ident) form.insertBefore(div, ident);
-  return div;
-}
-
-function _updateHiddenCardsDivider() {
-  var div = _ensureHiddenCardsDivider();
-  var ident = document.getElementById('card-identificacion');
-  var contact = document.getElementById('card-contacto');
-  var identHidden = ident && ident.style.display === 'none';
-  var contactHidden = contact && contact.style.display === 'none';
-  if (identHidden || contactHidden) {
-    // Adapta el text segons quines estan amagades
-    var parts = [];
-    if (identHidden) parts.push('<span style="color:#DC0028;cursor:pointer;font-weight:600;text-decoration:underline;text-decoration-style:dotted" onclick="toggleHiddenCard(\'card-identificacion\')" title="Mostrar Identificación">📇 Identificación</span>');
-    if (contactHidden) parts.push('<span style="color:#DC0028;cursor:pointer;font-weight:600;text-decoration:underline;text-decoration-style:dotted" onclick="toggleHiddenCard(\'card-contacto\')" title="Mostrar Contacto">📞 Contacto</span>');
-    div.innerHTML =
-      '<span style="font-size:13px">🔒</span>' +
-      '<span style="flex:1;font-size:12px;color:#6B7280">Dades carregades · ' + parts.join(' · ') + '</span>' +
-      '<span style="font-size:10px;color:#9CA3AF">clic per mostrar</span>';
-    div.style.display = 'flex';
-  } else {
-    div.style.display = 'none';
   }
 }
 
@@ -2920,27 +2893,16 @@ function setFormMode(mode) {
   var allCards = _getAllFormCards();
 
   if (mode === 'initial') {
-    // Només card 0 visible; resta amagada
     allCards.forEach(_hideCard);
     _showCard(cardTipo);
-    var div = document.getElementById('hidden-cards-divider');
-    if (div) div.style.display = 'none';
   } else if (mode === 'nou-client') {
-    // Totes visibles; updateVisibility() decideix les condicionals
     allCards.forEach(_showCard);
     if (typeof updateVisibility === 'function') updateVisibility();
-    var div2 = document.getElementById('hidden-cards-divider');
-    if (div2) div2.style.display = 'none';
   } else if (mode === 'client-loaded-directe' || mode === 'client-loaded-fitxa') {
-    // Totes visibles, condicionals respectades
     allCards.forEach(_showCard);
     if (typeof updateVisibility === 'function') updateVisibility();
-    // Amagar Identificación + Contacto (dades preservades als inputs)
     _hideCard(cardIdent);
     _hideCard(cardContact);
-    // Mostrar divider amb accés ràpid
-    _ensureHiddenCardsDivider();
-    _updateHiddenCardsDivider();
   }
 
   console.log('[FormMode] →', mode);

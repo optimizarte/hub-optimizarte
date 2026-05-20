@@ -67,21 +67,21 @@
   <div class="card" id="card-tipo-cliente">
     <div class="card-body">
       <div class="tipo-grid">
-        <div class="tipo-opt active" id="tipo-par" onclick="setTipo('par',this)">
+        <div class="tipo-opt active" id="tipo-par" onclick="setTipo('par',this)" ondblclick="toggleIdentContactCards()" title="Doble-clic per mostrar/amagar Identificación + Contacto">
           <input type="radio" name="tipo" value="par" checked>
           <span class="tipo-radio"></span>
           <span class="tipo-icon">&#128100;</span>
           <span class="tipo-label">Particular</span>
           <span class="tipo-desc">Persona f&#237;sica no empresarial</span>
         </div>
-        <div class="tipo-opt" id="tipo-emp" onclick="setTipo('emp',this)">
+        <div class="tipo-opt" id="tipo-emp" onclick="setTipo('emp',this)" ondblclick="toggleIdentContactCards()" title="Doble-clic per mostrar/amagar Identificación + Contacto">
           <input type="radio" name="tipo" value="emp">
           <span class="tipo-radio"></span>
           <span class="tipo-icon">&#127962;</span>
           <span class="tipo-label">Empresa</span>
           <span class="tipo-desc">Sociedad mercantil o entidad</span>
         </div>
-        <div class="tipo-opt" id="tipo-aut" onclick="setTipo('aut',this)">
+        <div class="tipo-opt" id="tipo-aut" onclick="setTipo('aut',this)" ondblclick="toggleIdentContactCards()" title="Doble-clic per mostrar/amagar Identificación + Contacto">
           <input type="radio" name="tipo" value="aut">
           <span class="tipo-radio"></span>
           <span class="tipo-icon">&#128188;</span>

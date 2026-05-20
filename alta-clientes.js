@@ -1953,6 +1953,62 @@ function _pickField(d) {
   return '';
 }
 
+// ─── Helpers de parsing per format CRM Occident (cli_crm_<NIF>.json) ──
+// Data DD.MM.YYYY o DD/MM/YYYY → YYYY-MM-DD (per input type="date")
+function _parseCRMDate(s) {
+  if (!s || typeof s !== 'string') return '';
+  var m = s.match(/^(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{4})$/);
+  if (m) {
+    var dd = ('0' + m[1]).slice(-2);
+    var mm = ('0' + m[2]).slice(-2);
+    return m[3] + '-' + mm + '-' + dd;
+  }
+  return s; // possiblement ja en format ISO
+}
+
+// Adreça format CRM: "C/ Núria, 1, 2n, - 17600 - FIGUERES"
+// Estratègia: localitzar CP (5 dígits) i separar la cadena
+function _parseCRMAdreca(s) {
+  if (!s || typeof s !== 'string') return { dir: '', cp: '', muni: '' };
+  var cpMatch = s.match(/\b(\d{5})\b/);
+  if (!cpMatch) return { dir: s.replace(/^[\s,-]+|[\s,-]+$/g, ''), cp: '', muni: '' };
+  var cp = cpMatch[1];
+  var idx = s.indexOf(cp);
+  var before = s.substring(0, idx).replace(/[\s,-]+$/g, '').trim();
+  var after = s.substring(idx + 5).replace(/^[\s,-]+/g, '').trim();
+  return { dir: before, cp: cp, muni: after };
+}
+
+// Nom complet format CRM: "COGNOM1 COGNOM2 NOM [NOM_COMPOST]" o "COGNOM1 COGNOM2, NOM"
+// Convenció Espanya: cognoms primer, nom al final
+function _parseCRMNom(s) {
+  if (!s || typeof s !== 'string') return { nombre: '', ap1: '', ap2: '' };
+  s = s.trim().replace(/\s+/g, ' ');
+  // Variant 1: amb coma "COGNOMS, NOM"
+  if (s.indexOf(',') >= 0) {
+    var parts = s.split(',');
+    var cognoms = parts[0].trim().split(/\s+/);
+    return {
+      nombre: parts.slice(1).join(',').trim(),
+      ap1: cognoms[0] || '',
+      ap2: cognoms.slice(1).join(' ') || ''
+    };
+  }
+  // Variant 2: sense coma — convenció CRM Occident
+  var p = s.split(/\s+/);
+  if (p.length === 1) return { nombre: p[0], ap1: '', ap2: '' };
+  if (p.length === 2) return { nombre: p[1], ap1: p[0], ap2: '' };
+  if (p.length === 3) return { nombre: p[2], ap1: p[0], ap2: p[1] };
+  // 4+ paraules: 2 cognoms + nom compost (la resta)
+  return { nombre: p.slice(2).join(' '), ap1: p[0], ap2: p[1] };
+}
+
+// Detecta si una cadena és nom d'empresa (conté S.L., S.A., etc.)
+function _isCompanyName(s) {
+  if (!s) return false;
+  return /\b(S\.?L\.?U?\.?|S\.?A\.?U?\.?|S\.?C\.?|S\.?C\.?P\.?|C\.?B\.?|S\.?L\.?L\.?|S\.?COOP\.?)\b/i.test(s);
+}
+
 function loadClientIntoForm(d) {
   // Reset first
   clearForm();
@@ -1963,21 +2019,20 @@ function loadClientIntoForm(d) {
     if (el) { el.value = val; }
   };
 
-  // ── Determinar el tipus de client ──
-  // Pot venir com 'par'/'emp'/'aut' o detectar-se per camps presents
+  // ── Determinar tipus de client ──
   var t = d.tipo || d.tipoCliente || d.tipo_cliente;
   if (!t) {
-    // Detectar per heurística: empresa té CIF, autònom té NIF + actividad, particular per defecte
     var nifCif = (d.nif_cif || d.nif || d.cif || '').toUpperCase();
     var hasCif = nifCif && /^[A-HJNPQRSUVW]/.test(nifCif);
-    if (hasCif || d.emp_cif || d.razon_social || d.razonSocial) t = 'emp';
+    var nameSeemsCompany = _isCompanyName(d.nom || d.razon_social || d.emp_razon || '');
+    if (hasCif || d.emp_cif || d.razon_social || d.razonSocial || nameSeemsCompany) t = 'emp';
     else if (d.aut_actividad || d.actividad_aut || d.es_autonomo) t = 'aut';
     else t = 'par';
   }
   var tipoEl = document.getElementById('tipo-' + t);
   if (tipoEl) setTipo(t, tipoEl);
 
-  // Restore autEmpSi before updateVisibility
+  // Restore autEmpSi
   if ((d.aut_emp || d.aut_empresa) && t==='aut') {
     autEmpSi = true;
     var si=document.getElementById('aut-emp-si');var no=document.getElementById('aut-emp-no');
@@ -1992,46 +2047,80 @@ function loadClientIntoForm(d) {
     updateVisibility();
   }
 
-  // ── Camps Particular ──
-  // Acceptar molts sinònims per ser compatible amb cli_crm_<NIF>.json (CRM) i amb el format del formulari
-  sf('par-nombre',   _pickField(d, 'par_nombre', 'par-nombre', 'nombre', 'name', 'first_name', 'firstName', 'NOMBRE'));
-  sf('par-ap1',      _pickField(d, 'par_ap1', 'par-ap1', 'apellido1', 'ap1', 'apellidoPaterno', 'AP1', 'apellido_1', 'primer_apellido'));
-  sf('par-ap2',      _pickField(d, 'par_ap2', 'par-ap2', 'apellido2', 'ap2', 'apellidoMaterno', 'AP2', 'apellido_2', 'segundo_apellido'));
+  // ── PARSING ESPECIAL camps format CRM Occident català ──
+  // Si tenim 'nom' (format CRM) i no tenim els camps separats, parsejar
+  var nomFromCRM = _pickField(d, 'nom', 'nombre_crm');
+  if (nomFromCRM && !d.par_nombre && !d.aut_nombre && !d.emp_razon && !d.razon_social) {
+    if (t === 'emp') {
+      sf('emp-razon', nomFromCRM); // Empresa: nom complet → razón social
+    } else {
+      var partsNom = _parseCRMNom(nomFromCRM);
+      if (t === 'aut') {
+        sf('aut-nombre', partsNom.nombre);
+        sf('aut-ap1', partsNom.ap1);
+        sf('aut-ap2', partsNom.ap2);
+      } else {
+        sf('par-nombre', partsNom.nombre);
+        sf('par-ap1', partsNom.ap1);
+        sf('par-ap2', partsNom.ap2);
+      }
+    }
+  }
+
+  // Adreça: parsejar si ve com a string únic (format CRM)
+  var adrecaFromCRM = _pickField(d, 'adreca', 'direccion_completa', 'adressComplete');
+  if (adrecaFromCRM && !d.direccion && !d.dir) {
+    var addr = _parseCRMAdreca(adrecaFromCRM);
+    sf('dir', addr.dir);
+    sf('cp', addr.cp);
+    sf('muni', addr.muni);
+  }
+
+  // Data naixement: convertir format si cal
+  var fnacRaw = _pickField(d, 'fnaixement', 'fecha_nacimiento', 'fechaNacimiento', 'par_fnac', 'aut_fnac');
+  if (fnacRaw) {
+    var fnacISO = _parseCRMDate(fnacRaw);
+    if (t === 'aut') sf('aut-fnac', fnacISO);
+    else sf('par-fnac', fnacISO);
+  }
+
+  // ── Camps Particular (sinònims si encara no s'han omplert) ──
+  if (!document.getElementById('par-nombre').value) sf('par-nombre', _pickField(d, 'par_nombre', 'par-nombre', 'nombre', 'name', 'first_name', 'firstName', 'NOMBRE'));
+  if (!document.getElementById('par-ap1').value) sf('par-ap1', _pickField(d, 'par_ap1', 'par-ap1', 'apellido1', 'ap1', 'apellidoPaterno', 'AP1', 'apellido_1', 'primer_apellido'));
+  if (!document.getElementById('par-ap2').value) sf('par-ap2', _pickField(d, 'par_ap2', 'par-ap2', 'apellido2', 'ap2', 'apellidoMaterno', 'AP2', 'apellido_2', 'segundo_apellido'));
   sf('par-nif',      _pickField(d, 'par_nif', 'par-nif', 'nif', 'dni', 'nie', 'nif_cif', 'documento', 'NIF'));
-  sf('par-fnac',     _pickField(d, 'par_fnac', 'par-fnac', 'fecha_nacimiento', 'fechaNacimiento', 'fnac', 'birth_date', 'birthDate', 'FECHA_NACIMIENTO'));
   sf('par-estcivil', _pickField(d, 'par_estcivil', 'par-estcivil', 'estado_civil', 'estadoCivil', 'estcivil', 'ESTADO_CIVIL'));
   sf('par-hijos',    _pickField(d, 'par_hijos', 'par-hijos', 'hijos', 'numero_hijos', 'num_hijos'));
 
   // ── Camps Empresa ──
-  sf('emp-razon',     _pickField(d, 'emp_razon', 'emp-razon', 'razon_social', 'razonSocial', 'denominacion', 'nombre_empresa', 'RAZON_SOCIAL', 'razon'));
-  sf('emp-cif',       _pickField(d, 'emp_cif', 'emp-cif', 'cif', 'nif_cif', 'NIF', 'CIF'));
-  sf('emp-actividad', _pickField(d, 'emp_actividad', 'emp-actividad', 'actividad', 'sector', 'cnae', 'actividad_economica'));
-  sf('emp-antiguedad',_pickField(d, 'emp_antiguedad', 'emp-antiguedad', 'antiguedad', 'fecha_constitucion', 'fundacion'));
+  if (!document.getElementById('emp-razon').value) sf('emp-razon', _pickField(d, 'emp_razon', 'emp-razon', 'razon_social', 'razonSocial', 'denominacion', 'nombre_empresa', 'RAZON_SOCIAL', 'razon'));
+  sf('emp-cif',       _pickField(d, 'emp_cif', 'emp-cif', 'cif', 'nif_cif', 'nif', 'NIF', 'CIF'));
+  sf('emp-actividad', _pickField(d, 'emp_actividad', 'emp-actividad', 'actividad', 'professio', 'sector', 'cnae', 'actividad_economica'));
+  sf('emp-antiguedad',_pickField(d, 'emp_antiguedad', 'emp-antiguedad', 'antiguedad', 'antiguitat', 'fecha_constitucion', 'fundacion'));
   sf('empleados-emp', _pickField(d, 'emp_empleados', 'empleados-emp', 'empleados', 'num_empleados', 'numero_empleados'));
 
   // ── Camps Autònom ──
-  sf('aut-nombre',    _pickField(d, 'aut_nombre', 'aut-nombre', 'nombre', 'name', 'NOMBRE'));
-  sf('aut-ap1',       _pickField(d, 'aut_ap1', 'aut-ap1', 'apellido1', 'ap1', 'primer_apellido', 'AP1'));
-  sf('aut-ap2',       _pickField(d, 'aut_ap2', 'aut-ap2', 'apellido2', 'ap2', 'segundo_apellido', 'AP2'));
+  if (!document.getElementById('aut-nombre').value) sf('aut-nombre', _pickField(d, 'aut_nombre', 'aut-nombre', 'nombre', 'NOMBRE'));
+  if (!document.getElementById('aut-ap1').value) sf('aut-ap1', _pickField(d, 'aut_ap1', 'aut-ap1', 'apellido1', 'ap1', 'primer_apellido', 'AP1'));
+  if (!document.getElementById('aut-ap2').value) sf('aut-ap2', _pickField(d, 'aut_ap2', 'aut-ap2', 'apellido2', 'ap2', 'segundo_apellido', 'AP2'));
   sf('aut-nif',       _pickField(d, 'aut_nif', 'aut-nif', 'nif', 'dni', 'nif_cif', 'NIF'));
-  sf('aut-fnac',      _pickField(d, 'aut_fnac', 'aut-fnac', 'fecha_nacimiento', 'fechaNacimiento', 'fnac', 'FECHA_NACIMIENTO'));
-  sf('aut-actividad', _pickField(d, 'aut_actividad', 'aut-actividad', 'actividad', 'sector', 'cnae'));
-  sf('aut-antiguedad',_pickField(d, 'aut_antiguedad', 'aut-antiguedad', 'antiguedad', 'fecha_alta_autonomo'));
+  sf('aut-actividad', _pickField(d, 'aut_actividad', 'aut-actividad', 'actividad', 'professio', 'sector', 'cnae'));
+  sf('aut-antiguedad',_pickField(d, 'aut_antiguedad', 'aut-antiguedad', 'antiguedad', 'antiguitat', 'fecha_alta_autonomo'));
   sf('empleados-aut', _pickField(d, 'aut_empleados', 'empleados-aut', 'empleados', 'num_empleados'));
 
-  // Sexo buttons (visual)
+  // Sexo (visual)
   setSexoVal('par-sexo', _pickField(d, 'par_sexo', 'par-sexo', 'sexo', 'SEXO', 'genero'));
   setSexoVal('aut-sexo', _pickField(d, 'aut_sexo', 'aut-sexo', t==='aut' ? 'sexo' : '', t==='aut' ? 'SEXO' : '', t==='aut' ? 'genero' : ''));
 
   // ── Contacte ──
-  sf('tel1',   _pickField(d, 'tel1', 'telefono1', 'telefono', 'telef', 'TELEFONO', 'TEL1', 'phone', 'phone1'));
+  sf('tel1',   _pickField(d, 'tel1', 'telefono1', 'telefono', 'telef', 'telefon', 'TELEFONO', 'TEL1', 'phone', 'phone1'));
   sf('wapp',   _pickField(d, 'whatsapp', 'wapp', 'tel_whatsapp', 'telefono_whatsapp'));
   sf('redes',  _pickField(d, 'redes', 'redes_sociales', 'social'));
   sf('email1', _pickField(d, 'email1', 'email', 'EMAIL', 'EMAIL1', 'correo', 'correo_electronico', 'mail'));
   sf('email2', _pickField(d, 'email2', 'EMAIL2', 'correo2', 'email_2', 'mail2'));
-  sf('dir',    _pickField(d, 'direccion', 'dir', 'address', 'domicilio', 'DIRECCION', 'calle', 'via'));
-  sf('cp',     _pickField(d, 'cp', 'codigo_postal', 'codigoPostal', 'CP', 'postal_code', 'zip'));
-  sf('muni',   _pickField(d, 'localidad', 'muni', 'municipio', 'poblacion', 'LOCALIDAD', 'city', 'ciudad'));
+  if (!document.getElementById('dir').value) sf('dir', _pickField(d, 'direccion', 'dir', 'address', 'domicilio', 'DIRECCION', 'calle', 'via'));
+  if (!document.getElementById('cp').value) sf('cp', _pickField(d, 'cp', 'codigo_postal', 'codigoPostal', 'CP', 'postal_code', 'zip'));
+  if (!document.getElementById('muni').value) sf('muni', _pickField(d, 'localidad', 'muni', 'municipio', 'poblacion', 'LOCALIDAD', 'city', 'ciudad'));
 
   // ── Observacions ──
   sf('obs',            _pickField(d, 'motivo_contacto', 'obs', 'observaciones', 'notas', 'comentarios'));
@@ -2080,7 +2169,7 @@ function loadClientIntoForm(d) {
   setFormDates(d.fechaCreacion||null, d.fechaModificacion||null);
   var banner = document.getElementById('loadBanner');
   if (banner) {
-    document.getElementById('loadBannerText').textContent = '\uD83D\uDC64 Cargado: ' + (d.nombre_completo||d.nombre||'cliente') + (d.timestamp ? '  \u00b7  ' + d.timestamp : '');
+    document.getElementById('loadBannerText').textContent = '\uD83D\uDC64 Cargado: ' + (d.nombre_completo||d.nom||d.nombre||'cliente') + (d.timestamp ? '  \u00b7  ' + d.timestamp : '');
     banner.style.display = 'flex';
   }
 

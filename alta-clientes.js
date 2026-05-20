@@ -371,7 +371,15 @@ function setTipo(t, el) {
   vtosPerSi = false;
   var vsi = document.getElementById('vper-si'); var vno = document.getElementById('vper-no');
   if (vsi) { vsi.classList.remove('si','no'); } if (vno) { vno.classList.remove('si','no'); }
-  updateVisibility(); updProg();
+
+  // Si estem en mode 'initial' (només card 0 visible) i l'usuari clica un tipus
+  // → mostrem TOT el formulari (mode 'nou-client')
+  if (typeof _currentFormMode !== 'undefined' && _currentFormMode === 'initial' && typeof setFormMode === 'function') {
+    setFormMode('nou-client');
+  } else {
+    updateVisibility();
+  }
+  updProg();
 }
 
 // TASCA 1: Funció per copiar dades personals entre particular i autònom
@@ -2821,14 +2829,16 @@ function mostrarToastToggle(msg) {
 
 // ─── FUNCIÓ BOTÓ "NOU CLIENT" ─────────────────────────────
 // ─── MODE DE VISIBILITAT DE CARDS ─────────────────────────
-// 'initial'                → només card 0 visible
-// 'nou-client'             → totes les cards visibles
-// 'client-loaded-directe'  → totes visibles excepte Identificación + Contacto (strip-placeholder)
-// 'client-loaded-fitxa'    → fitxa al card 0, Identificación + Contacto en strip-placeholder
+// 'initial'                → només card 0 visible; resta amagada (display:none)
+// 'nou-client'             → totes les cards visibles (respectant updateVisibility per condicionals)
+// 'client-loaded-directe'  → totes visibles excepte Identificación + Contacto (amagades, dades preservades)
+// 'client-loaded-fitxa'    → fitxa al card 0; Identificación + Contacto amagades; resta visibles
+//
+// PRINCIPI: NO modifiquem mai innerHTML d'aquestes cards.
+// Sempre fem display:none / display:'' per preservar valors dels inputs.
 var _currentFormMode = 'initial';
 
 function _getAllFormCards() {
-  // Tots els fills directes de #altaForm que siguin .card
   var form = document.getElementById('altaForm');
   if (!form) return [];
   return Array.prototype.slice.call(form.querySelectorAll(':scope > .card'));
@@ -2837,71 +2847,69 @@ function _getAllFormCards() {
 function _showCard(card) {
   if (!card) return;
   card.style.display = '';
-  card.removeAttribute('data-collapsed');
-  // Restaurar contingut original si estava com a strip
-  if (card._originalInnerHTML !== undefined) {
-    card.innerHTML = card._originalInnerHTML;
-    card._originalInnerHTML = undefined;
-    // Re-aplicar visibilitat condicional (block-par/block-emp segons tipo)
-    if (typeof updateVisibility === 'function') updateVisibility();
-  }
 }
 
 function _hideCard(card) {
   if (!card) return;
   card.style.display = 'none';
-  card.removeAttribute('data-collapsed');
 }
 
-function _collapseToStrip(card) {
-  if (!card) return;
-  if (card.getAttribute('data-collapsed') === '1') return; // ja és strip
-  // Guardar contingut original
-  if (card._originalInnerHTML === undefined) card._originalInnerHTML = card.innerHTML;
-  var title = card.getAttribute('data-card-title') || 'Card';
-  var icon = card.getAttribute('data-card-icon') || '📋';
-  var fields = card._originalInnerHTML ? (card._originalInnerHTML.match(/<input|<select|<textarea/g) || []).length : 0;
-  card.innerHTML = '' +
-    '<div class="strip-collapsed" ondblclick="expandCardFromStrip(\'' + card.id + '\')" style="display:flex;align-items:center;gap:12px;padding:10px 18px;background:linear-gradient(90deg,#FAFAFA,#F0F1F4);border-radius:10px;cursor:pointer;border:1px dashed #D1D5DB;transition:all .15s" onmouseover="this.style.borderColor=\'#9CA3AF\';this.style.background=\'linear-gradient(90deg,#F5F5F5,#E5E7EB)\'" onmouseout="this.style.borderColor=\'#D1D5DB\';this.style.background=\'linear-gradient(90deg,#FAFAFA,#F0F1F4)\'">' +
-      '<span style="font-size:18px;flex-shrink:0">' + icon + '</span>' +
-      '<div style="flex:1">' +
-        '<div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#414141">' + title + '</div>' +
-        '<div style="font-size:10.5px;color:#888;margin-top:1px">Dades carregades · doble-clic per editar</div>' +
-      '</div>' +
-      '<span style="font-size:10px;font-weight:700;color:#10B981;background:#D1FAE5;padding:3px 9px;border-radius:5px;letter-spacing:.4px">✓ COMPLERT</span>' +
-      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>' +
-    '</div>';
-  card.setAttribute('data-collapsed', '1');
-  card.style.display = '';
-}
-
-function expandCardFromStrip(cardId) {
+// Mostra/amaga la card cap-amagada (Identificación o Contacto)
+function toggleHiddenCard(cardId) {
   var card = document.getElementById(cardId);
-  if (!card || card.getAttribute('data-collapsed') !== '1') return;
-  if (card._originalInnerHTML !== undefined) {
-    card.innerHTML = card._originalInnerHTML;
-    card._originalInnerHTML = undefined;
+  if (!card) return;
+  if (card.style.display === 'none') {
+    card.style.display = '';
+    card.scrollIntoView({behavior:'smooth', block:'center'});
+    _updateHiddenCardsDivider();
+  } else {
+    card.style.display = 'none';
+    _updateHiddenCardsDivider();
   }
-  card.removeAttribute('data-collapsed');
-  if (typeof updateVisibility === 'function') updateVisibility();
-  // Afegir botó "↑ Plegar" a la card header per tornar a strip si vol
-  setTimeout(function() {
-    var hdr = card.querySelector('.card-hdr');
-    if (hdr && !hdr.querySelector('.btn-collapse-card')) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn-collapse-card';
-      btn.title = 'Plegar (doble-clic també)';
-      btn.style.cssText = 'margin-left:auto;background:transparent;border:1px solid #E5E7EB;border-radius:6px;padding:4px 10px;font-size:11px;color:#6B7280;cursor:pointer;font-weight:600';
-      btn.textContent = '↑ Plegar';
-      btn.onclick = function(){ _collapseToStrip(card); };
-      hdr.appendChild(btn);
-      // Doble-clic al header també plega
-      hdr.style.cursor = 'pointer';
-      hdr.title = 'Doble-clic per plegar';
-      hdr.ondblclick = function(e){ if (e.target.tagName !== 'BUTTON') _collapseToStrip(card); };
-    }
-  }, 50);
+}
+
+// Divider que apareix quan Identificación/Contacto estan amagades
+// Permet mostrar-les amb un sol clic (i doble-clic per amagar-les)
+function _ensureHiddenCardsDivider() {
+  var existing = document.getElementById('hidden-cards-divider');
+  if (existing) return existing;
+  var div = document.createElement('div');
+  div.id = 'hidden-cards-divider';
+  div.style.cssText = 'display:none;align-items:center;gap:10px;padding:8px 16px;margin:6px 0;background:linear-gradient(90deg,#F9FAFB,#F3F4F6,#F9FAFB);border:1px dashed #D1D5DB;border-radius:8px;font-size:12px;color:#6B7280;user-select:none';
+  div.innerHTML =
+    '<span style="font-size:11px">🔒</span>' +
+    '<span style="flex:1">Dades del client carregades · ' +
+      '<span style="color:#DC0028;cursor:pointer;font-weight:600;text-decoration:underline;text-decoration-style:dotted" onclick="toggleHiddenCard(\'card-identificacion\')" title="Mostrar/amagar">Identificación</span>' +
+      ' · ' +
+      '<span style="color:#DC0028;cursor:pointer;font-weight:600;text-decoration:underline;text-decoration-style:dotted" onclick="toggleHiddenCard(\'card-contacto\')" title="Mostrar/amagar">Contacto</span>' +
+    '</span>' +
+    '<span style="font-size:10px;color:#9CA3AF">clic per editar</span>';
+  // Inserir abans del primer card no-card0 i no-identificacion/contacto
+  var form = document.getElementById('altaForm');
+  var ident = document.getElementById('card-identificacion');
+  if (form && ident) form.insertBefore(div, ident);
+  return div;
+}
+
+function _updateHiddenCardsDivider() {
+  var div = _ensureHiddenCardsDivider();
+  var ident = document.getElementById('card-identificacion');
+  var contact = document.getElementById('card-contacto');
+  var identHidden = ident && ident.style.display === 'none';
+  var contactHidden = contact && contact.style.display === 'none';
+  if (identHidden || contactHidden) {
+    // Adapta el text segons quines estan amagades
+    var parts = [];
+    if (identHidden) parts.push('<span style="color:#DC0028;cursor:pointer;font-weight:600;text-decoration:underline;text-decoration-style:dotted" onclick="toggleHiddenCard(\'card-identificacion\')" title="Mostrar Identificación">📇 Identificación</span>');
+    if (contactHidden) parts.push('<span style="color:#DC0028;cursor:pointer;font-weight:600;text-decoration:underline;text-decoration-style:dotted" onclick="toggleHiddenCard(\'card-contacto\')" title="Mostrar Contacto">📞 Contacto</span>');
+    div.innerHTML =
+      '<span style="font-size:13px">🔒</span>' +
+      '<span style="flex:1;font-size:12px;color:#6B7280">Dades carregades · ' + parts.join(' · ') + '</span>' +
+      '<span style="font-size:10px;color:#9CA3AF">clic per mostrar</span>';
+    div.style.display = 'flex';
+  } else {
+    div.style.display = 'none';
+  }
 }
 
 function setFormMode(mode) {
@@ -2909,31 +2917,30 @@ function setFormMode(mode) {
   var cardTipo = document.getElementById('card-tipo-cliente');
   var cardIdent = document.getElementById('card-identificacion');
   var cardContact = document.getElementById('card-contacto');
-  var others = _getAllFormCards().filter(function(c){
-    return c !== cardTipo && c !== cardIdent && c !== cardContact;
-  });
+  var allCards = _getAllFormCards();
 
   if (mode === 'initial') {
+    // Només card 0 visible; resta amagada
+    allCards.forEach(_hideCard);
     _showCard(cardTipo);
+    var div = document.getElementById('hidden-cards-divider');
+    if (div) div.style.display = 'none';
+  } else if (mode === 'nou-client') {
+    // Totes visibles; updateVisibility() decideix les condicionals
+    allCards.forEach(_showCard);
+    if (typeof updateVisibility === 'function') updateVisibility();
+    var div2 = document.getElementById('hidden-cards-divider');
+    if (div2) div2.style.display = 'none';
+  } else if (mode === 'client-loaded-directe' || mode === 'client-loaded-fitxa') {
+    // Totes visibles, condicionals respectades
+    allCards.forEach(_showCard);
+    if (typeof updateVisibility === 'function') updateVisibility();
+    // Amagar Identificación + Contacto (dades preservades als inputs)
     _hideCard(cardIdent);
     _hideCard(cardContact);
-    others.forEach(_hideCard);
-  } else if (mode === 'nou-client') {
-    _showCard(cardTipo);
-    _showCard(cardIdent);
-    _showCard(cardContact);
-    others.forEach(_showCard);
-  } else if (mode === 'client-loaded-directe') {
-    _showCard(cardTipo);
-    _collapseToStrip(cardIdent);
-    _collapseToStrip(cardContact);
-    others.forEach(_showCard);
-  } else if (mode === 'client-loaded-fitxa') {
-    // card 0 mostra la fitxa (la posa showClientFitxaCard0)
-    if (cardTipo) cardTipo.style.display = '';
-    _collapseToStrip(cardIdent);
-    _collapseToStrip(cardContact);
-    others.forEach(_showCard);
+    // Mostrar divider amb accés ràpid
+    _ensureHiddenCardsDivider();
+    _updateHiddenCardsDivider();
   }
 
   console.log('[FormMode] →', mode);

@@ -31,6 +31,15 @@
       <div class="search-results" id="searchResults" style="position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid #ddd;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.15);max-height:400px;overflow-y:auto;z-index:9999;display:none"></div>
     </div>
     
+    <!-- TOGGLE MODAL OD ON/OFF (entre cercador i Nou client) -->
+    <label id="toggleModalODWrap" title="ON: en seleccionar client, mostrar fitxa al card 0  ·  OFF: carregar dades directament al formulari" style="display:flex;align-items:center;gap:6px;cursor:pointer;flex-shrink:0;user-select:none">
+      <input type="checkbox" id="toggleModalOD" checked onchange="onToggleModalOD(this.checked)" style="position:absolute;opacity:0;width:0;height:0;pointer-events:none">
+      <span style="display:inline-block;position:relative;width:38px;height:22px;background:#10B981;border-radius:11px;transition:background .2s" id="toggleModalODTrack">
+        <span id="toggleModalODKnob" style="position:absolute;top:2px;left:18px;width:18px;height:18px;background:#fff;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .2s"></span>
+      </span>
+      <span id="toggleModalODLbl" style="font-size:11px;font-weight:600;color:#fff;min-width:38px">Fitxa</span>
+    </label>
+
     <!-- PILL NOU CLIENT AMB ETIQUETA -->
     <button type="button" id="nouClientBtn" onclick="activarNouClient()" style="display:flex;align-items:center;gap:8px;padding:8px 14px;border:none;border-radius:8px;background:#DC0028;color:#fff;cursor:pointer;flex-shrink:0;font-size:13px;font-weight:600;height:40px" title="Nou client">
       <span>Nou client</span>
@@ -41,15 +50,6 @@
         <line x1="9" y1="14" x2="15" y2="14"/>
       </svg>
     </button>
-
-    <!-- TOGGLE MODAL OD ON/OFF -->
-    <label id="toggleModalODWrap" title="Quan seleccionis un client existent a OD/CRM, mostrar fitxa al card 0 (ON) o carregar directe al formulari (OFF)" style="display:flex;align-items:center;gap:6px;cursor:pointer;flex-shrink:0;user-select:none">
-      <input type="checkbox" id="toggleModalOD" checked onchange="onToggleModalOD(this.checked)" style="position:absolute;opacity:0;width:0;height:0;pointer-events:none">
-      <span style="display:inline-block;position:relative;width:38px;height:22px;background:#10B981;border-radius:11px;transition:background .2s" id="toggleModalODTrack">
-        <span id="toggleModalODKnob" style="position:absolute;top:2px;left:18px;width:18px;height:18px;background:#fff;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .2s"></span>
-      </span>
-      <span id="toggleModalODLbl" style="font-size:11px;font-weight:600;color:#fff;min-width:32px">Fitxa</span>
-    </label>
   </div>
 </header>
 
@@ -93,7 +93,7 @@
   </div>
 
   <!-- 2. DATOS DE IDENTIFICACIÓN -->
-  <div class="card">
+  <div class="card" id="card-identificacion" data-card-title="Datos de identificación" data-card-icon="🧪">
     <div class="card-hdr">
       <div class="card-icon" style="background:#EEF2FF">&#129514;</div>
       <div><h2>Datos de identificaci&#243;n</h2><p>Informaci&#243;n personal o fiscal</p></div>
@@ -256,7 +256,7 @@
   </div>
 
   <!-- 3. CONTACTO -->
-  <div class="card">
+  <div class="card" id="card-contacto" data-card-title="Datos de contacto" data-card-icon="📞">
     <div class="card-hdr">
       <div class="card-icon" style="background:#ECFDF5">&#128241;</div>
       <div><h2>Datos de contacto</h2><p>Tel&#233;fonos, redes, email y direcci&#243;n</p></div>

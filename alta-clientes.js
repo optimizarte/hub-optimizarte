@@ -530,7 +530,7 @@ function collectData() {
 }
 
 // ─── SUBMIT / CLEAR / SAVE ────────────────────────────────────────
-function submitForm() {
+async function submitForm() {
   if (!validate()) return;
   lastData = collectData();
   lastData.id = Date.now();
@@ -538,15 +538,20 @@ function submitForm() {
   try{var lista=JSON.parse(localStorage.getItem('optimizarte_clientes')||'[]');lista.push(lastData);localStorage.setItem('optimizarte_clientes',JSON.stringify(lista));}catch(e){}
   // Save to file if folder connected
   if (clientesDir) {
-    saveClientToFile(lastData).then(function(fname) {
+    try {
+      var fname = await saveClientToFile(lastData);
       if (fname) showToast('\ud83d\udcbe Registrado: '+fname,'');
       else showToast('Error al guardar el archivo','error');
-    });
+    } catch(e) {
+      showToast('Error al guardar el archivo: '+(e.message||e),'error');
+    }
   } else {
     showToast('\u26a0\ufe0f Conecta una carpeta para guardar el archivo. Guardado solo en localStorage.','warn');
   }
-  document.getElementById('modal-data').innerHTML = buildSummary(lastData);
-  document.getElementById('modal').classList.add('show');
+  // FLUX FASE 56 (Opcio B): salt directe al modal de 3 cards a l'Agenda
+  // (sense modal d'exit local intermedi)
+  try { document.getElementById('modal').classList.remove('show'); } catch(e) {}
+  crearOposEnAgenda();
 }
 function buildSummary(d) {
   return ['<strong>'+d.nombre_completo+'</strong> ('+d.tipo_label+')',
@@ -2923,6 +2928,101 @@ function downloadReportHTML() {
 // ─── END REPORT GENERATOR ─────────────────────────────────
 
 // ─── INTEGRACIÓN GESTIONA ─────────────────────────────────
+// === INTEGRACION AGENDA OPTICRM (Fase 56) =================
+// Restaurat 2026-05-27: connecta el formulari amb el modal de 3 cards
+// que viu a app.js (_showAltaPreviewModal). Estrategia:
+//   - Dins iframe -> postMessage al parent agenda
+//   - Pestanya independent -> window.open amb hash #opticrm_alta=<B64>
+function _isInIframe() {
+  try { return window.self !== window.top; }
+  catch(e) { return true; }
+}
+function crearOposEnAgenda() {
+  var d = lastData;
+  if (!d || !d.tipo) {
+    showToast('\u26a0\ufe0f Primer cal registrar el client.', 'warn');
+    return;
+  }
+  // Comprovar que hi ha alguna pill amb estat OPO/ACT-friendly o primera accio
+  try {
+    var rd = d.ramo_data ? JSON.parse(d.ramo_data) : {};
+    var hasAny = false;
+    Object.keys(rd).forEach(function(k){
+      var st = rd[k] && rd[k].estado;
+      if (st === 'vto-inmediato' || st === 'facilita' || st === 'no-cambia-vto'
+          || st === 'necesita' || st === 'no-cambia') hasAny = true;
+    });
+    if (!hasAny && !d.primera_accion) {
+      showToast('\u26a0\ufe0f No hi ha cap pill marcat (VTO/Facilita/No cambia/Necesita) ni primera acci\u00f3 prevista. No es generaria cap OPO/ACT.', 'warn');
+      return;
+    }
+  } catch(e) {}
+  // Construir payload net (nomes camps necessaris per a l'agenda)
+  var payload = {
+    id: d.id,
+    timestamp: d.timestamp,
+    tipo: d.tipo, tipo_label: d.tipo_label,
+    nombre_completo: d.nombre_completo,
+    nif_cif: d.nif_cif,
+    fecha_nacimiento: d.fecha_nacimiento,
+    sexo: d.sexo, estado_civil: d.estado_civil, hijos: d.hijos,
+    actividad: d.actividad, antiguedad: d.antiguedad, empleados: d.empleados,
+    tel1: d.tel1, whatsapp: d.whatsapp, redes: d.redes,
+    email1: d.email1, email2: d.email2,
+    direccion: d.direccion, cp: d.cp, localidad: d.localidad,
+    seguros: d.seguros, ramo_data: d.ramo_data,
+    colab_recoge: d.colab_recoge, colab_recoge_racf: d.colab_recoge_racf,
+    colab_asigna: d.colab_asigna, colab_asigna_racf: d.colab_asigna_racf,
+    motivo_contacto: d.motivo_contacto,
+    primera_accion: d.primera_accion, fecha_accion: d.fecha_accion,
+    origen_sw: d.origen_sw, origen_detalle: d.origen_detalle
+  };
+  var jsonStr;
+  try { jsonStr = JSON.stringify(payload); }
+  catch(e) {
+    showToast('\u26a0\ufe0f Error codificant les dades: ' + (e.message||e), 'error');
+    return;
+  }
+  // UTF-8 safe + base64 URL-safe
+  var b64;
+  try {
+    b64 = btoa(unescape(encodeURIComponent(jsonStr)));
+    b64 = b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  } catch(e) {
+    showToast('\u26a0\ufe0f Error codificant base64: ' + (e.message||e), 'error');
+    return;
+  }
+  // Estrategia d'enviament:
+  if (_isInIframe()) {
+    try {
+      console.log('[FORM] Enviant payload via postMessage al parent agenda');
+      window.parent.postMessage({
+        _opticrm: true,
+        type: '_opticrm_form_alta_payload',
+        payload: payload
+      }, '*');
+      showToast('\ud83d\udcc5 Enviant a l\'Agenda... confirma al modal d\'accions', 'ok');
+      return;
+    } catch(e) {
+      console.error('[FORM] Error postMessage:', e);
+      showToast('\u26a0\ufe0f Error enviant a l\'Agenda: ' + (e.message||e), 'error');
+      return;
+    }
+  }
+  var url = 'https://grupoaplicaciones.gco.global/FE/ISC.Gaan.CRM.FE.Inicio/#opticrm_alta=' + encodeURIComponent(b64);
+  if (url.length > 28000) {
+    showToast('\u26a0\ufe0f Les dades s\u00f3n massa grans per a l\'URL (' + url.length + ' chars). Redueix observacions.', 'error');
+    return;
+  }
+  try {
+    window.open(url, '_blank');
+    showToast('\ud83d\udcc5 Obrint Agenda OPTICRM... confirma la creaci\u00f3 al modal que apareixer\u00e0', 'ok');
+  } catch(e) {
+    showToast('\u26a0\ufe0f Error obrint l\'Agenda: ' + (e.message||e), 'error');
+  }
+}
+// === END INTEGRACION AGENDA OPTICRM ========================
+
 function registrarEnGestiona() {
   var d = lastData;
   if (!d) {
@@ -3535,3 +3635,5 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 // ──────────────────────────────────────────────────────────
 
+
+/* ALTA-INTEGRA-v1 applied */

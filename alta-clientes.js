@@ -1575,6 +1575,15 @@ async function initReportesDirFromIDB() {
 }
 
 async function selectClientesDir() {
+  /* PATCH-CLIENTS-UI-v1: lock RACF Dany - nomes M441819E pot canviar la carpeta */
+  if (typeof colabRecoge !== 'undefined' && colabRecoge !== 'M441819E') {
+    if (typeof showToast === 'function') {
+      showToast('\ud83d\udd12 Nomes Dany pot canviar la carpeta de clients', 'warn');
+    } else {
+      alert('Nomes Dany pot canviar la carpeta de clients');
+    }
+    return;
+  }
   if (!window.showDirectoryPicker) {
     alert('Tu navegador no soporta acceso a carpetas locales.\nUsa Google Chrome o Microsoft Edge.');
     return;
@@ -1584,6 +1593,9 @@ async function selectClientesDir() {
     await idbPut('clientesDir', clientesDir);
     setDirBtn(true, clientesDir.name);
     await refreshAllClients();
+    if (typeof showToast === 'function') {
+      showToast('\ud83d\udcc1 Carpeta connectada: '+clientesDir.name, '');
+    }
   } catch(e) { if (e.name !== 'AbortError') console.error(e); }
 }
 
@@ -1626,42 +1638,66 @@ function setFormDates(creacion, modificacion) {
   if (fma) fma.textContent = formatDatetimeDisplay(modificacion);
 }
 async function saveClientToFile(data) {
+  /* PATCH-CLIENTS-CANON-v1: ubicacio canonica <NIF>.json + schema ampliat */
   if (!clientesDir) return null;
   try {
-    var now = new Date();
-    var pad = function(n){return n<10?'0'+n:''+n;};
     var nif = (data.nif_cif||data.par_nif||data.aut_nif||data.emp_cif||'').trim().toUpperCase();
-    var fname = null;
-    // Check for existing file with same DNI/NIE/CIF
-    if (nif) {
-      for await (var [name, handle] of clientesDir.entries()) {
-        if (name.endsWith('.json') && handle.kind === 'file') {
-          try {
-            var existing = JSON.parse(await (await handle.getFile()).text());
-            var existNif = (existing.nif_cif||existing.par_nif||existing.aut_nif||existing.emp_cif||'').trim().toUpperCase();
-            if (existNif && existNif === nif) {
-              fname = name; // overwrite this file
-              showToast('\u267b\ufe0f Actualizando cliente existente: '+name,'warn');
-              break;
-            }
-          } catch(e) {}
-        }
-      }
+    var nifClean = nif.replace(/[^A-Z0-9]/g,'');
+    var fname;
+    if (nifClean) {
+      // Nom canonic: <NIF>.json (un sol fitxer per client, sobreescriu sempre)
+      fname = nifClean + '.json';
+    } else {
+      // Fallback si no hi ha NIF (no hauria de passar normalment)
+      var now0 = new Date();
+      var pad0 = function(n){return n<10?'0'+n:''+n;};
+      var d0 = now0.getFullYear()+''+pad0(now0.getMonth()+1)+pad0(now0.getDate());
+      var t0 = pad0(now0.getHours())+pad0(now0.getMinutes())+pad0(now0.getSeconds());
+      var nom0 = (data.nombre_completo||'cliente').replace(/[^a-zA-Z\u00C0-\u024F0-9 ]/g,'').replace(/ +/g,'_').slice(0,30);
+      fname = '_NONIF_'+d0+'_'+t0+'_'+nom0+'.json';
     }
-    if (!fname) {
-      var d = now.getFullYear()+''+pad(now.getMonth()+1)+pad(now.getDate());
-      var t = pad(now.getHours())+pad(now.getMinutes())+pad(now.getSeconds());
-      var nom = (data.nombre_completo||'cliente').replace(/[^a-zA-Z\u00C0-\u024F0-9 ]/g,'').replace(/ +/g,'_').slice(0,30);
-      fname = d+'_'+t+'_'+nom+'.json';
-    }
+    // Preservar fechaCreacion si el fitxer ja existia (bug-fix vs codi original)
+    var existingCreacion = null;
+    try {
+      var probe = await clientesDir.getFileHandle(fname);
+      var probeData = JSON.parse(await (await probe.getFile()).text());
+      if (probeData && probeData.fechaCreacion) existingCreacion = probeData.fechaCreacion;
+    } catch(e) { /* fitxer no existeix encara */ }
     var fh = await clientesDir.getFileHandle(fname, {create:true});
-    var now = new Date().toISOString();
-    if (!data.fechaCreacion) data.fechaCreacion = now;
-    data.fechaModificacion = now;
+    var nowIso = new Date().toISOString();
+    data.fechaCreacion = existingCreacion || data.fechaCreacion || nowIso;
+    data.fechaModificacion = nowIso;
     setFormDates(data.fechaCreacion, data.fechaModificacion);
+    // PATCH-CLIENTS-CANON-v1: schema ampliat
+    data._schemaVersion = 1;
+    data._savedAt = nowIso;
+    try {
+      data.ramos = data.ramo_data ? JSON.parse(data.ramo_data) : {};
+    } catch(e) {
+      data.ramos = {};
+    }
     var wr = await fh.createWritable();
     await wr.write(JSON.stringify(data, null, 2));
     await wr.close();
+    // PATCH-CLIENTS-CANON-v1: netejar fitxers vells del mateix NIF (format antic)
+    if (nifClean) {
+      try {
+        var toDelete = [];
+        for await (var [oldName, oldHandle] of clientesDir.entries()) {
+          if (oldName === fname) continue;
+          if (!oldName.endsWith('.json') || oldHandle.kind !== 'file') continue;
+          try {
+            var oldData = JSON.parse(await (await oldHandle.getFile()).text());
+            var oldNif = (oldData.nif_cif||oldData.par_nif||oldData.aut_nif||oldData.emp_cif||'').trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+            if (oldNif && oldNif === nifClean) toDelete.push(oldName);
+          } catch(e) {}
+        }
+        for (var i=0; i<toDelete.length; i++) {
+          try { await clientesDir.removeEntry(toDelete[i]); } catch(e) {}
+        }
+        if (toDelete.length) console.log('[PATCH-CLIENTS-CANON-v1] netejats '+toDelete.length+' duplicats antics: '+toDelete.join(', '));
+      } catch(e) {}
+    }
     await refreshAllClients();
     return fname;
   } catch(e) { console.error('saveClientToFile:', e); return null; }
@@ -3637,3 +3673,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
 /* ALTA-INTEGRA-v1 applied */
+
+/* PATCH-CLIENTS-CANON-v1 applied */
+
+/* PATCH-CLIENTS-UI-v1 applied */

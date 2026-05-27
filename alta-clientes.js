@@ -1575,7 +1575,7 @@ async function initReportesDirFromIDB() {
 }
 
 async function selectClientesDir() {
-  /* PATCH-CLIENTS-UI-v1: lock RACF Dany - nomes M441819E pot canviar la carpeta */
+  /* PATCH-CLIENTS-UI-v2: lock RACF Dany + bypass iframe via nova pestanya */
   if (typeof colabRecoge !== 'undefined' && colabRecoge !== 'M441819E') {
     if (typeof showToast === 'function') {
       showToast('\ud83d\udd12 Nomes Dany pot canviar la carpeta de clients', 'warn');
@@ -1588,23 +1588,48 @@ async function selectClientesDir() {
     alert('Tu navegador no soporta acceso a carpetas locales.\nUsa Google Chrome o Microsoft Edge.');
     return;
   }
+  /* Path canonic dels clients OPTICRM (junction NTFS - mateix path a PC1 i PC2) */
+  var CLIENTS_PATH = 'C:\\Users\\primo\\OneDrive - OPTIMIZARTE 3.0 - SCO\\!!IA\\!!!PortalOccident\\!!OPTICRM\\clients';
+  /* Si estem dins un iframe, obrir el portal en nova pestanya (showDirectoryPicker bloquejat en iframes per defecte) */
+  if (window.self !== window.top) {
+    try { await navigator.clipboard.writeText(CLIENTS_PATH); } catch(e) {}
+    var newWin = window.open(location.href, '_blank');
+    if (!newWin) {
+      alert('Cal permetre popups en aquesta pagina.\n\nObre el portal Alta Clients en pestanya separada i clica el boto carpeta.\n\nPath a connectar:\n' + CLIENTS_PATH);
+    } else if (typeof showToast === 'function') {
+      showToast('\ud83d\udcc4 Path copiat al portapapers. Clica "carpeta" a la nova pestanya', '');
+    }
+    return;
+  }
   try {
     clientesDir = await window.showDirectoryPicker({ id: 'clientes-dir', mode: 'readwrite' });
     await idbPut('clientesDir', clientesDir);
     setDirBtn(true, clientesDir.name);
     await refreshAllClients();
     if (typeof showToast === 'function') {
-      showToast('\ud83d\udcc1 Carpeta connectada: '+clientesDir.name, '');
+      showToast('\ud83d\udcc2 Carpeta connectada: '+clientesDir.name, '');
+    }
+    /* Si hem estat oberts des d'un iframe (opener existeix), notificar i auto-tancar */
+    if (window.opener && !window.opener.closed) {
+      try { window.opener.postMessage({type:'OPTI_CARPETA_CONNECTADA', name: clientesDir.name}, '*'); } catch(e) {}
+      setTimeout(function(){ try { window.close(); } catch(e) {} }, 1500);
     }
   } catch(e) { if (e.name !== 'AbortError') console.error(e); }
 }
 
 function setDirBtn(ok, name) {
+  /* PATCH-CLIENTS-UI-v2: emoji dinamic 📁/📂 + opacitat segons estat */
   var btn = document.getElementById('dirBtn');
-  var lbl = document.getElementById('dirStatus');
   if (!btn) return;
-  btn.className = ok ? 'dir-btn connected' : 'dir-btn';
-  if (lbl) lbl.textContent = ok ? (name || 'Conectado') : '';
+  btn.classList.toggle('connected', !!ok);
+  btn.title = ok ? ('Carpeta connectada: '+(name||'Conectado')+' (nomes Dany pot canviar)') : 'Connectar carpeta clients/ (nomes Dany pot modificar)';
+  var emojiSpan = btn.querySelector('.dir-emoji');
+  if (emojiSpan) {
+    emojiSpan.textContent = ok ? '\ud83d\udcc2' : '\ud83d\udcc1';
+  }
+  btn.style.opacity = ok ? '1' : '0.55';
+  var lbl = document.getElementById('dirStatus');
+  if (lbl) lbl.textContent = '';
 }
 
 async function initDirFromIDB() {
@@ -3198,6 +3223,7 @@ function _hideCard(card) { if (card) card.style.display = 'none'; }
 // Doble-clic sobre una opció de tipus client → toggle Ident + Contacto
 // Cridada des de #tipo-par / #tipo-emp / #tipo-aut (ondblclick)
 function toggleIdentContactCards() {
+  /* PATCH-CLIENTS-UI-v2: toggle SEMPRE bidireccional, sense restriccio per mode */
   var ident = document.getElementById('card-identificacion');
   var contact = document.getElementById('card-contacto');
   if (!ident || !contact) return;
@@ -3205,18 +3231,12 @@ function toggleIdentContactCards() {
   if (anyHidden) {
     ident.style.display = '';
     contact.style.display = '';
-    // Scroll suau cap a Identificación
     setTimeout(function(){ ident.scrollIntoView({behavior:'smooth', block:'center'}); }, 50);
-    console.log('[toggle Ident+Contacto] → MOSTRATS');
+    console.log('[toggle Ident+Contacto] -> MOSTRATS');
   } else {
-    // Si estem en mode client-loaded, podem amagar de nou
-    if (_currentFormMode === 'client-loaded-directe' || _currentFormMode === 'client-loaded-fitxa') {
-      ident.style.display = 'none';
-      contact.style.display = 'none';
-      console.log('[toggle Ident+Contacto] → AMAGATS');
-    } else {
-      console.log('[toggle Ident+Contacto] → ja visibles, mode actual no permet amagar');
-    }
+    ident.style.display = 'none';
+    contact.style.display = 'none';
+    console.log('[toggle Ident+Contacto] -> AMAGATS');
   }
 }
 
@@ -3676,4 +3696,19 @@ window.addEventListener('DOMContentLoaded', function() {
 
 /* PATCH-CLIENTS-CANON-v1 applied */
 
+/* PATCH-CLIENTS-UI-v2: listener per refresh quan la pestanya externa connecti carpeta */
+(function(){
+  if (typeof window !== 'undefined' && !window._optiClientsMsgListener) {
+    window._optiClientsMsgListener = true;
+    window.addEventListener('message', function(ev) {
+      if (ev && ev.data && ev.data.type === 'OPTI_CARPETA_CONNECTADA') {
+        console.log('[PATCH-CLIENTS-UI-v2] Carpeta connectada via postMessage: ' + (ev.data.name||''));
+        if (typeof initDirFromIDB === 'function') initDirFromIDB();
+      }
+    });
+  }
+})();
+
 /* PATCH-CLIENTS-UI-v1 applied */
+
+/* PATCH-CLIENTS-UI-v2 applied */

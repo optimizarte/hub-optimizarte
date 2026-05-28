@@ -536,8 +536,8 @@ async function submitForm() {
   lastData.id = Date.now();
   // Save to localStorage (fallback)
   try{var lista=JSON.parse(localStorage.getItem('optimizarte_clientes')||'[]');lista.push(lastData);localStorage.setItem('optimizarte_clientes',JSON.stringify(lista));}catch(e){}
-  // Save to file if folder connected
-  if (clientesDir) {
+  // Save sempre via saveClientToFile (decideix bridge OD vs FS) /* PATCH-SUBMIT-ALWAYS-SAVE-v1 */
+  if (true) {
     try {
       var fname = await saveClientToFile(lastData);
       if (fname) showToast('\ud83d\udcbe Registrado: '+fname,'');

@@ -1597,7 +1597,7 @@ async function selectClientesDir() {
       if (perm === 'granted') {
         clientesDir = existing;
         setDirBtn(true, existing.name);
-        await refreshAllClients();
+        await _refreshAllClientsViaFS();
         if (typeof showToast === 'function') {
           showToast('\ud83d\udcc2 Carpeta reactivada: '+existing.name, '');
         }
@@ -1626,7 +1626,7 @@ async function selectClientesDir() {
     clientesDir = await window.showDirectoryPicker({ id: 'clientes-dir', mode: 'readwrite' });
     await idbPut('clientesDir', clientesDir);
     setDirBtn(true, clientesDir.name);
-    await refreshAllClients();
+    await _refreshAllClientsViaFS();
     if (typeof showToast === 'function') {
       showToast('\ud83d\udcc2 Carpeta connectada: '+clientesDir.name, '');
     }
@@ -1670,7 +1670,7 @@ async function initDirFromIDB() {
     if (perm === 'granted') {
       clientesDir = h;
       setDirBtn(true, h.name);
-      await refreshAllClients();
+      await _refreshAllClientsViaFS();
     } else {
       /* Handle persistit pero permis caducat. UI ho mostra com a "needs reactivation". */
       setDirBtn(false, h.name);
@@ -1695,7 +1695,8 @@ function setFormDates(creacion, modificacion) {
   if (fc) fc.textContent = formatDatetimeDisplay(creacion);
   if (fma) fma.textContent = formatDatetimeDisplay(modificacion);
 }
-async function saveClientToFile(data) {
+async function _saveClientToFileViaFS(data) {
+  /* PATCH-OD-BRIDGE-A2: renombrada, ara es fallback de la nova saveClientToFile bridge */
   /* PATCH-CLIENTS-CANON-v1: ubicacio canonica <NIF>.json + schema ampliat */
   if (!clientesDir) return null;
   try {
@@ -1756,12 +1757,13 @@ async function saveClientToFile(data) {
         if (toDelete.length) console.log('[PATCH-CLIENTS-CANON-v1] netejats '+toDelete.length+' duplicats antics: '+toDelete.join(', '));
       } catch(e) {}
     }
-    await refreshAllClients();
+    await _refreshAllClientsViaFS();
     return fname;
-  } catch(e) { console.error('saveClientToFile:', e); return null; }
+  } catch(e) { console.error('_saveClientToFileViaFS:', e); return null; }
 }
 
-async function refreshAllClients() {
+async function _refreshAllClientsViaFS() {
+  /* PATCH-OD-BRIDGE-A2: renombrada, ara es fallback de la nova refreshAllClients bridge */
   if (!clientesDir) return;
   try {
     var list = [];
@@ -3746,7 +3748,7 @@ window.addEventListener('DOMContentLoaded', function() {
         if (perm === 'granted') {
           clientesDir = h;
           setDirBtn(true, h.name);
-          await refreshAllClients();
+          await _refreshAllClientsViaFS();
           if (typeof showToast === 'function') {
             showToast('\ud83d\udcc2 Carpeta sincronitzada: '+h.name, '');
           }
@@ -3785,6 +3787,180 @@ window.addEventListener('DOMContentLoaded', function() {
 
 /* PATCH-CLIENTS-UI-v2 applied */
 
+/* PATCH-OD-BRIDGE-A2: bridge OneDrive + fallback FS Access */
+(function(){
+  if (typeof window === 'undefined' || window._odBridgeA2Installed) return;
+  window._odBridgeA2Installed = true;
+
+  /* Helper Promise per a una crida bridge amb timeout */
+  async function _odBridgeCall(type, payload, timeoutMs) {
+    return new Promise(function(resolve, reject) {
+      var reqId = 'r_' + Date.now() + '_' + Math.random().toString(36).slice(2,8);
+      var to;
+      function cleanup() {
+        try { window.removeEventListener('message', lst); } catch(e){}
+        if (to) clearTimeout(to);
+      }
+      function lst(ev) {
+        var d = ev.data;
+        if (!d || d._opticrm !== true) return;
+        if (d.type !== type + '_response') return;
+        if (d.reqId !== reqId) return;
+        cleanup();
+        if (d.ok) resolve(d);
+        else reject(new Error(d.error || 'Bridge: resposta sense ok'));
+      }
+      window.addEventListener('message', lst);
+      to = setTimeout(function(){ cleanup(); reject(new Error('Bridge timeout ('+(timeoutMs||10000)+'ms)')); }, timeoutMs || 10000);
+      try {
+        var msg = Object.assign({ type: type, reqId: reqId }, payload || {});
+        /* Enviar al parent (extensió CRM). Si no hi ha parent diferent, fallback al top window */
+        var target = (window.parent && window.parent !== window) ? window.parent : window.top;
+        if (!target) throw new Error('No hi ha window.parent ni window.top');
+        target.postMessage(msg, '*');
+      } catch(e) {
+        cleanup();
+        reject(e);
+      }
+    });
+  }
+  window._odBridgeCall = _odBridgeCall;
+
+  /* Saber si estem dins un iframe (= podem usar el bridge al parent) */
+  function _isInIframe() {
+    try { return window.self !== window.top; } catch(e) { return true; }
+  }
+
+  /* Construeix el filename canonic per a un client (clients/<NIF>.json) */
+  function _buildClientFilename(data) {
+    var nif = (data.nif_cif||data.par_nif||data.aut_nif||data.emp_cif||'').trim().toUpperCase();
+    var nifClean = nif.replace(/[^A-Z0-9]/g,'');
+    if (nifClean) return 'clients/' + nifClean + '.json';
+    var now0 = new Date();
+    var pad0 = function(n){return n<10?'0'+n:''+n;};
+    var d0 = now0.getFullYear()+''+pad0(now0.getMonth()+1)+pad0(now0.getDate());
+    var t0 = pad0(now0.getHours())+pad0(now0.getMinutes())+pad0(now0.getSeconds());
+    var nom0 = (data.nombre_completo||'cliente').replace(/[^a-zA-Z\u00C0-\u024F0-9 ]/g,'').replace(/ +/g,'_').slice(0,30);
+    return 'clients/_NONIF_'+d0+'_'+t0+'_'+nom0+'.json';
+  }
+
+  /* Nova saveClientToFile: bridge OD primer, FS Access com a fallback */
+  async function saveClientToFile(data) {
+    var fname = _buildClientFilename(data);
+
+    /* Enriquir data amb camps automatics (igual que abans) */
+    var nowIso = new Date().toISOString();
+
+    /* Preservar fechaCreacion si fitxer ja existeix a OD (via bridge) */
+    var existingCreacion = null;
+    if (_isInIframe()) {
+      try {
+        var prev = await _odBridgeCall('_opticrm_form_load_client', { filename: fname }, 5000);
+        if (prev && prev.client && prev.client.fechaCreacion) {
+          existingCreacion = prev.client.fechaCreacion;
+        }
+      } catch(e) { /* fitxer no existeix encara, OK */ }
+    }
+    data.fechaCreacion = existingCreacion || data.fechaCreacion || nowIso;
+    data.fechaModificacion = nowIso;
+    if (typeof setFormDates === 'function') setFormDates(data.fechaCreacion, data.fechaModificacion);
+    data._schemaVersion = 1;
+    data._savedAt = nowIso;
+    try {
+      data.ramos = data.ramo_data ? JSON.parse(data.ramo_data) : {};
+    } catch(e) { data.ramos = {}; }
+
+    /* PAS 1: intentar via bridge (si dins iframe) */
+    if (_isInIframe()) {
+      try {
+        var res = await _odBridgeCall('_opticrm_form_save_client', { filename: fname, client: data }, 15000);
+        if (res && res.ok) {
+          console.log('[A2/saveClientToFile] bridge OK:', res.filename);
+          try { await refreshAllClients(); } catch(eR) { console.warn('[A2] refreshAllClients post-save fail:', eR); }
+          return res.filename || fname;
+        }
+        console.warn('[A2/saveClientToFile] bridge resposta no OK:', res);
+      } catch(errBr) {
+        console.warn('[A2/saveClientToFile] bridge fail:', errBr && errBr.message);
+      }
+    }
+
+    /* PAS 2: fallback FS Access (si Dany te carpeta connectada localment) */
+    if (typeof clientesDir !== 'undefined' && clientesDir && typeof _saveClientToFileViaFS === 'function') {
+      console.log('[A2/saveClientToFile] fallback FS Access');
+      try {
+        return await _saveClientToFileViaFS(data);
+      } catch(eF) {
+        console.error('[A2/saveClientToFile] FS fallback error:', eF);
+      }
+    }
+
+    if (typeof showToast === 'function') {
+      showToast('\u26a0\ufe0f No s\'ha pogut desar - bridge OD caigut i sense carpeta local', 'error');
+    }
+    return null;
+  }
+  window.saveClientToFile = saveClientToFile;
+
+  /* Nova refreshAllClients: bridge llista subcarpeta clients/ + loadFile cadascun */
+  async function refreshAllClients() {
+    /* PAS 1: intentar via bridge (si dins iframe) */
+    if (_isInIframe()) {
+      try {
+        var list = await _odBridgeCall('_opticrm_form_list_folder_files', { folder: 'clients' }, 10000);
+        if (list && list.ok && Array.isArray(list.files)) {
+          var allList = [];
+          for (var i = 0; i < list.files.length; i++) {
+            var f = list.files[i];
+            if (!f || !f.name || !/\.json$/i.test(f.name)) continue;
+            try {
+              var lc = await _odBridgeCall('_opticrm_form_load_client', { filename: 'clients/' + f.name }, 5000);
+              if (lc && lc.ok && lc.client) {
+                lc.client._filename = f.name;
+                lc.client._mtime = f.mtime ? new Date(f.mtime).getTime() : 0;
+                lc.client._source = 'od-bridge';
+                allList.push(lc.client);
+              }
+            } catch(eLoad) { /* skip aquest fitxer */ }
+          }
+          allClients = allList.sort(function(a,b){return (b._mtime||0)-(a._mtime||0);});
+          console.log('[A2/refreshAllClients] bridge OK,', allClients.length, 'clients');
+          return;
+        }
+        console.warn('[A2/refreshAllClients] bridge list no OK:', list);
+      } catch(errBr) {
+        console.warn('[A2/refreshAllClients] bridge fail:', errBr && errBr.message);
+      }
+    }
+
+    /* PAS 2: fallback FS Access */
+    if (typeof clientesDir !== 'undefined' && clientesDir && typeof _refreshAllClientsViaFS === 'function') {
+      console.log('[A2/refreshAllClients] fallback FS Access');
+      try {
+        await _refreshAllClientsViaFS();
+      } catch(eF) { console.error('[A2/refreshAllClients] FS fallback error:', eF); }
+    }
+  }
+  window.refreshAllClients = refreshAllClients;
+
+  /* Disparar refresh inicial despres de carregar el DOM (per a populate de allClients via bridge) */
+  function _initialBridgeRefresh() {
+    /* Esperar 1.5s perque l'extensió tingui temps de carregar OD a app.js */
+    setTimeout(function() {
+      refreshAllClients().catch(function(e){
+        console.warn('[A2] initial refresh fail (no critic):', e && e.message);
+      });
+    }, 1500);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', _initialBridgeRefresh);
+  } else {
+    _initialBridgeRefresh();
+  }
+})();
+
 /* PATCH-CLIENTS-UI-v3 applied */
 
 /* PATCH-CLIENTS-UI-v4 applied */
+
+/* PATCH-OD-BRIDGE-A2 applied */

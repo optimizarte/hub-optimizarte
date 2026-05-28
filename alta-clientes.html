@@ -423,7 +423,8 @@
   <!-- ACTIONS -->
   <div class="card">
     <div class="actions">
-      <button type="button" id="dirBtn" onclick="selectClientesDir()" title="Connectar carpeta clients/ (nomes Dany pot modificar)" style="background:transparent;border:none;cursor:pointer;font-size:22px;padding:6px 10px;line-height:1;opacity:.55;transition:opacity .15s,transform .15s;outline:none" onmouseover="this.style.opacity='1';this.style.transform='scale(1.18)'" onmouseout="this.style.transform='scale(1)';if(!this.classList.contains('connected'))this.style.opacity='.55'"><span class="dir-emoji">&#128193;</span><span id="dirStatus" style="display:none"></span></button>
+      <!-- PATCH-OD-BRIDGE-A2: boto Carpeta amagat (sistema OneDrive bridge automatic). Codi FS Access dorm intacte per recuperar si calgues. -->
+      <button type="button" id="dirBtn" onclick="selectClientesDir()" title="Connectar carpeta clients/ (nomes Dany pot modificar)" style="display:none;background:transparent;border:none;cursor:pointer;font-size:22px;padding:6px 10px;line-height:1;opacity:.55;transition:opacity .15s,transform .15s;outline:none" onmouseover="this.style.opacity='1';this.style.transform='scale(1.18)'" onmouseout="this.style.transform='scale(1)';if(!this.classList.contains('connected'))this.style.opacity='.55'"><span class="dir-emoji">&#128193;</span><span id="dirStatus" style="display:none"></span></button>
       <button type="button" class="btn-sec" onclick="confirmClear()">&#128465;&#65039; Limpiar todo</button>
       <button type="button" class="btn-warn" onclick="saveDraft()">&#128190; Guardar Cliente</button>
       <button type="button" class="btn-report" onclick="generateReport()">&#128196; Generar Informe</button>
@@ -520,3 +521,5 @@
 <!-- PATCH-CLIENTS-UI-v1 applied -->
 
 <!-- PATCH-CLIENTS-UI-v2 applied -->
+
+<!-- PATCH-OD-BRIDGE-A2 applied -->

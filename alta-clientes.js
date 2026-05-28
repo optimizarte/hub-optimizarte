@@ -1575,7 +1575,7 @@ async function initReportesDirFromIDB() {
 }
 
 async function selectClientesDir() {
-  /* PATCH-CLIENTS-UI-v2: lock RACF Dany + bypass iframe via nova pestanya */
+  /* PATCH-CLIENTS-UI-v3: reactivacio handle existent + fallback pestanya nova */
   if (typeof colabRecoge !== 'undefined' && colabRecoge !== 'M441819E') {
     if (typeof showToast === 'function') {
       showToast('\ud83d\udd12 Nomes Dany pot canviar la carpeta de clients', 'warn');
@@ -1588,19 +1588,40 @@ async function selectClientesDir() {
     alert('Tu navegador no soporta acceso a carpetas locales.\nUsa Google Chrome o Microsoft Edge.');
     return;
   }
-  /* Path canonic dels clients OPTICRM (junction NTFS - mateix path a PC1 i PC2) */
+  /* PATCH v3 PAS 1: intentar REACTIVAR handle persistit a IDB amb el gesture del click.
+     Aixo funciona DINS iframe perque no obre cap picker, nomes re-confirma el permis. */
+  try {
+    var existing = await idbGet('clientesDir');
+    if (existing) {
+      var perm = await existing.requestPermission({ mode: 'readwrite' });
+      if (perm === 'granted') {
+        clientesDir = existing;
+        setDirBtn(true, existing.name);
+        await refreshAllClients();
+        if (typeof showToast === 'function') {
+          showToast('\ud83d\udcc2 Carpeta reactivada: '+existing.name, '');
+        }
+        return;
+      }
+    }
+  } catch(e) {
+    console.warn('[v3] Reactivacio handle existent fallida:', e);
+  }
+  /* PATCH v3 PAS 2: handle no existeix o no s'ha pogut reactivar.
+     Cal crear-ne un de nou amb showDirectoryPicker. */
   var CLIENTS_PATH = 'C:\\Users\\primo\\OneDrive - OPTIMIZARTE 3.0 - SCO\\!!IA\\!!!PortalOccident\\!!OPTICRM\\clients';
-  /* Si estem dins un iframe, obrir el portal en nova pestanya (showDirectoryPicker bloquejat en iframes per defecte) */
+  /* 2a) Dins iframe: showDirectoryPicker bloquejat. Pestanya nova. */
   if (window.self !== window.top) {
     try { await navigator.clipboard.writeText(CLIENTS_PATH); } catch(e) {}
     var newWin = window.open(location.href, '_blank');
     if (!newWin) {
       alert('Cal permetre popups en aquesta pagina.\n\nObre el portal Alta Clients en pestanya separada i clica el boto carpeta.\n\nPath a connectar:\n' + CLIENTS_PATH);
     } else if (typeof showToast === 'function') {
-      showToast('\ud83d\udcc4 Path copiat al portapapers. Clica "carpeta" a la nova pestanya', '');
+      showToast('\ud83d\udcc4 Path copiat. Selecciona carpeta a la nova pestanya', '');
     }
     return;
   }
+  /* 2b) Fora iframe (cas de la pestanya nova): picker directament */
   try {
     clientesDir = await window.showDirectoryPicker({ id: 'clientes-dir', mode: 'readwrite' });
     await idbPut('clientesDir', clientesDir);
@@ -1609,7 +1630,6 @@ async function selectClientesDir() {
     if (typeof showToast === 'function') {
       showToast('\ud83d\udcc2 Carpeta connectada: '+clientesDir.name, '');
     }
-    /* Si hem estat oberts des d'un iframe (opener existeix), notificar i auto-tancar */
     if (window.opener && !window.opener.closed) {
       try { window.opener.postMessage({type:'OPTI_CARPETA_CONNECTADA', name: clientesDir.name}, '*'); } catch(e) {}
       setTimeout(function(){ try { window.close(); } catch(e) {} }, 1500);
@@ -1618,11 +1638,18 @@ async function selectClientesDir() {
 }
 
 function setDirBtn(ok, name) {
-  /* PATCH-CLIENTS-UI-v2: emoji dinamic 📁/📂 + opacitat segons estat */
+  /* PATCH-CLIENTS-UI-v3: 3 estats - connectat / needs-reactivation / no-connectat */
   var btn = document.getElementById('dirBtn');
   if (!btn) return;
   btn.classList.toggle('connected', !!ok);
-  btn.title = ok ? ('Carpeta connectada: '+(name||'Conectado')+' (nomes Dany pot canviar)') : 'Connectar carpeta clients/ (nomes Dany pot modificar)';
+  if (ok) {
+    btn.title = 'Carpeta connectada: ' + (name || 'Conectado') + ' (nomes Dany pot canviar)';
+  } else if (name) {
+    /* Handle persistit a IDB pero permis caducat (pe. nova sessio de browser) */
+    btn.title = 'Carpeta detectada (' + name + ') - clica per reactivar';
+  } else {
+    btn.title = 'Connectar carpeta clients/ (nomes Dany pot modificar)';
+  }
   var emojiSpan = btn.querySelector('.dir-emoji');
   if (emojiSpan) {
     emojiSpan.textContent = ok ? '\ud83d\udcc2' : '\ud83d\udcc1';
@@ -1633,15 +1660,21 @@ function setDirBtn(ok, name) {
 }
 
 async function initDirFromIDB() {
+  /* PATCH-CLIENTS-UI-v3: usar queryPermission (sense gesture) al load.
+     Si granted -> usar handle. Si prompt/denied -> marcar visualment com "needs reactivation". */
   if (!window.showDirectoryPicker) return;
   try {
     var h = await idbGet('clientesDir');
     if (!h) return;
-    var perm = await h.requestPermission({ mode: 'readwrite' });
+    var perm = await h.queryPermission({ mode: 'readwrite' });
     if (perm === 'granted') {
       clientesDir = h;
       setDirBtn(true, h.name);
       await refreshAllClients();
+    } else {
+      /* Handle persistit pero permis caducat. UI ho mostra com a "needs reactivation". */
+      setDirBtn(false, h.name);
+      console.log('[v3] Handle a IDB detectat (' + h.name + ') pero permis=' + perm + '. Cal clicar boto per reactivar.');
     }
   } catch(e) { /* silent fail */ }
 }
@@ -3712,3 +3745,5 @@ window.addEventListener('DOMContentLoaded', function() {
 /* PATCH-CLIENTS-UI-v1 applied */
 
 /* PATCH-CLIENTS-UI-v2 applied */
+
+/* PATCH-CLIENTS-UI-v3 applied */

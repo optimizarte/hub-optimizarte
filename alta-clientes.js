@@ -3875,13 +3875,13 @@ window.addEventListener('DOMContentLoaded', function() {
       try {
         var res = await _odBridgeCall('_opticrm_form_save_client', { filename: fname, client: data }, 15000);
         if (res && res.ok) {
-          console.log('[A2/saveClientToFile] bridge OK:', res.filename); try{alert('[OPTICRM] GUARDAT OK\n'+(res.filename||fname));}catch(_e){}
+          console.log('[A2/saveClientToFile] bridge OK:', res.filename);
           try { await refreshAllClients(); } catch(eR) { console.warn('[A2] refreshAllClients post-save fail:', eR); }
           return res.filename || fname;
         }
-        console.warn('[A2/saveClientToFile] bridge resposta no OK:', res); try{alert('[OPTICRM] BRIDGE NO-OK (OD respon pero ok=false)\n'+JSON.stringify(res));}catch(_e){}
+        console.warn('[A2/saveClientToFile] bridge resposta no OK:', res);
       } catch(errBr) {
-        console.warn('[A2/saveClientToFile] bridge fail:', errBr && errBr.message); try{alert('[OPTICRM] BRIDGE FAIL/TIMEOUT (cap resposta en 15s)\n'+(errBr && (errBr.message||errBr)));}catch(_e){}
+        console.warn('[A2/saveClientToFile] bridge fail:', errBr && errBr.message);
       }
     }
 
@@ -3964,5 +3964,3 @@ window.addEventListener('DOMContentLoaded', function() {
 /* PATCH-CLIENTS-UI-v4 applied */
 
 /* PATCH-OD-BRIDGE-A2 applied */
-
-/* PATCH-SAVE-VERDICT-v1 applied */

@@ -3813,7 +3813,7 @@ window.addEventListener('DOMContentLoaded', function() {
       window.addEventListener('message', lst);
       to = setTimeout(function(){ cleanup(); reject(new Error('Bridge timeout ('+(timeoutMs||10000)+'ms)')); }, timeoutMs || 10000);
       try {
-        var msg = Object.assign({ type: type, reqId: reqId }, payload || {});
+        var msg = Object.assign({ _opticrm: true, type: type, reqId: reqId }, payload || {}); /* PATCH-BRIDGE-OPTICRM-FLAG-v1 */
         /* Enviar al parent (extensió CRM). Si no hi ha parent diferent, fallback al top window */
         var target = (window.parent && window.parent !== window) ? window.parent : window.top;
         if (!target) throw new Error('No hi ha window.parent ni window.top');

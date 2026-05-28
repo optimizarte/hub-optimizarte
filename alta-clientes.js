@@ -3729,16 +3729,55 @@ window.addEventListener('DOMContentLoaded', function() {
 
 /* PATCH-CLIENTS-CANON-v1 applied */
 
-/* PATCH-CLIENTS-UI-v2: listener per refresh quan la pestanya externa connecti carpeta */
+/* PATCH-CLIENTS-UI-v4: listener millorat - reactiva handle amb requestPermission post-connexio */
 (function(){
   if (typeof window !== 'undefined' && !window._optiClientsMsgListener) {
     window._optiClientsMsgListener = true;
-    window.addEventListener('message', function(ev) {
-      if (ev && ev.data && ev.data.type === 'OPTI_CARPETA_CONNECTADA') {
-        console.log('[PATCH-CLIENTS-UI-v2] Carpeta connectada via postMessage: ' + (ev.data.name||''));
-        if (typeof initDirFromIDB === 'function') initDirFromIDB();
+    window.addEventListener('message', async function(ev) {
+      if (!ev || !ev.data || ev.data.type !== 'OPTI_CARPETA_CONNECTADA') return;
+      console.log('[PATCH-CLIENTS-UI-v4] Carpeta connectada via postMessage: ' + (ev.data.name||''));
+      try {
+        var h = await idbGet('clientesDir');
+        if (!h) return;
+        /* Intentar requestPermission sense gesture explicit del propi iframe.
+           Chrome a vegades ho admet just despres d'un postMessage same-origin
+           perque el browser conserva una "user activation" recent. */
+        var perm = await h.requestPermission({ mode: 'readwrite' });
+        if (perm === 'granted') {
+          clientesDir = h;
+          setDirBtn(true, h.name);
+          await refreshAllClients();
+          if (typeof showToast === 'function') {
+            showToast('\ud83d\udcc2 Carpeta sincronitzada: '+h.name, '');
+          }
+        } else {
+          /* Browser no ha concedit sense gesture explicit del iframe.
+             Mostrem l'estat "needs reactivation" amb una pista visual i toast persistent. */
+          setDirBtn(false, h.name);
+          if (typeof showToast === 'function') {
+            showToast('\u26a0\ufe0f Clica 📁 a la barra inferior per acabar d\'activar la carpeta', 'warn');
+          }
+          /* Animacio de pulse al boto perque Dany no se la perdi */
+          var btn = document.getElementById('dirBtn');
+          if (btn) {
+            btn.style.animation = 'optiCarpetaPulse 1.2s ease-in-out 4';
+            setTimeout(function(){ try { btn.style.animation = ''; } catch(e){} }, 5500);
+          }
+        }
+      } catch(e) {
+        console.warn('[PATCH-CLIENTS-UI-v4] Reactivacio post-postMessage fallida:', e);
+        if (typeof showToast === 'function') {
+          showToast('\u26a0\ufe0f Clica 📁 per activar la carpeta', 'warn');
+        }
       }
     });
+    /* Injectar @keyframes per l'animacio si no existeix ja */
+    if (!document.getElementById('opti-carpeta-pulse-style')) {
+      var st = document.createElement('style');
+      st.id = 'opti-carpeta-pulse-style';
+      st.textContent = '@keyframes optiCarpetaPulse { 0%,100% { transform: scale(1); opacity: .55; } 50% { transform: scale(1.35); opacity: 1; filter: drop-shadow(0 0 6px #DC0028); } }';
+      document.head.appendChild(st);
+    }
   }
 })();
 
@@ -3747,3 +3786,5 @@ window.addEventListener('DOMContentLoaded', function() {
 /* PATCH-CLIENTS-UI-v2 applied */
 
 /* PATCH-CLIENTS-UI-v3 applied */
+
+/* PATCH-CLIENTS-UI-v4 applied */

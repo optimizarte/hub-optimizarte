@@ -606,7 +606,7 @@ function saveDraft(){
   var d=collectData();
   try{localStorage.setItem('optimizarte_draft',JSON.stringify(d));}catch(e){}
   var btn=event.target; var orig=btn.textContent;
-  if(clientesDir){
+  if(true){ /* PATCH-SAVEDRAFT-OD-v1 */
     saveClientToFile(d).then(function(fname){
       if(fname){
         showToast('\ud83d\udcbe Guardado: '+fname,'');

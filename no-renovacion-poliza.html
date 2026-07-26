@@ -7,175 +7,127 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <style>
     :root {
-      --occ-red:    #DC0028;
-      --occ-dark:   #202020;
-      --occ-gray:   #414141;
-      --occ-gray-2: #BEBEBE;
-      --occ-gray-3: #E7E6E6;
-      --occ-light:  #F5F5F5;
-      --occ-white:  #FFFFFF;
-      --occ-blue:   #0563C1;
-      --occ-radius: 8px;
-      --occ-shadow: 0 2px 12px rgba(0,0,0,0.09);
-      --occ-font:   Arial, Helvetica, sans-serif;
+      --occ-red:#DC0028; --occ-dark:#202020; --occ-gray:#414141;
+      --occ-gray-2:#BEBEBE; --occ-gray-3:#E7E6E6; --occ-light:#F5F5F5;
+      --occ-shadow:0 2px 12px rgba(0,0,0,0.09); --occ-radius:8px;
+      --occ-font:Arial,Helvetica,sans-serif;
     }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:var(--occ-font);background:var(--occ-light);color:var(--occ-dark);min-height:100vh;}
 
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: var(--occ-font); background: var(--occ-light); color: var(--occ-dark); min-height: 100vh; }
+    /* HEADER */
+    .header{background:var(--occ-dark);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;}
+    .header-right{text-align:right;color:rgba(255,255,255,0.8);font-size:13px;}
+    .header-right strong{display:block;font-size:15px;color:#fff;}
 
-    /* ─── HEADER (negro) ─── */
-    .header {
-      background: var(--occ-dark);
-      padding: 14px 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .logo { display: flex; align-items: center; gap: 12px; }
-    .logo-wordmark { color: white; font-size: 22px; font-weight: bold; letter-spacing: 0.3px; }
-    .logo-sub { color: rgba(255,255,255,0.55); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; display: block; line-height: 1; }
-    .header-right { text-align: right; color: rgba(255,255,255,0.8); font-size: 13px; }
-    .header-right strong { display: block; font-size: 15px; color: white; }
+    /* MAIN */
+    .main{max-width:980px;margin:0 auto;padding:36px 24px 60px;}
+    .page-title{text-align:center;margin-bottom:36px;}
+    .law-badge{display:inline-block;background:var(--occ-red);color:#fff;padding:4px 16px;border-radius:20px;font-size:11px;font-weight:bold;letter-spacing:.5px;margin-bottom:14px;}
+    .page-title h1{font-size:30px;color:var(--occ-dark);margin-bottom:8px;}
+    .page-title h1 em{color:var(--occ-red);font-style:normal;}
+    .page-title p{color:var(--occ-gray);font-size:14px;max-width:520px;margin:0 auto;line-height:1.6;}
 
-    /* ─── MAIN ─── */
-    .main { max-width: 940px; margin: 0 auto; padding: 36px 24px 60px; }
+    /* DROP ZONE */
+    .drop-zone{background:#fff;border:2.5px dashed var(--occ-gray-2);border-radius:12px;padding:56px 40px 48px;text-align:center;cursor:pointer;transition:border-color .25s,background .25s,transform .15s;}
+    .drop-zone:hover{border-color:#aaa;}
+    .drop-zone.drag-over{border-color:var(--occ-red);background:#FFF5F6;transform:scale(1.012);box-shadow:0 0 0 4px rgba(220,0,40,.08);}
+    .drop-icon-wrap{margin-bottom:18px;}
+    .drop-zone h2{font-size:20px;color:var(--occ-dark);margin-bottom:8px;}
+    .drop-zone > p{color:var(--occ-gray);font-size:14px;margin-bottom:18px;}
+    .drop-actions{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;}
+    .btn-select{display:inline-block;background:var(--occ-red);color:#fff;border:none;padding:11px 26px;border-radius:var(--occ-radius);font-size:14px;font-family:var(--occ-font);cursor:pointer;transition:background .2s;}
+    .btn-select:hover{background:#B8001E;}
+    .btn-manual{display:inline-block;background:#fff;color:var(--occ-dark);border:1.5px solid var(--occ-gray-3);padding:10px 22px;border-radius:var(--occ-radius);font-size:14px;font-family:var(--occ-font);cursor:pointer;transition:all .2s;box-shadow:var(--occ-shadow);}
+    .btn-manual:hover{border-color:var(--occ-red);color:var(--occ-red);}
+    .drop-hint{margin-top:14px;font-size:11px;color:var(--occ-gray-2);}
+    input[type="file"]{display:none;}
 
-    /* ─── TITLE ─── */
-    .page-title { text-align: center; margin-bottom: 36px; }
-    .law-badge {
-      display: inline-block; background: var(--occ-red); color: white;
-      padding: 4px 16px; border-radius: 20px; font-size: 11px;
-      font-weight: bold; letter-spacing: 0.5px; margin-bottom: 14px;
-    }
-    .page-title h1 { font-size: 30px; color: var(--occ-dark); margin-bottom: 8px; }
-    .page-title h1 em { color: var(--occ-red); font-style: normal; }
-    .page-title p { color: var(--occ-gray); font-size: 14px; max-width: 520px; margin: 0 auto; line-height: 1.6; }
+    /* PROCESSING */
+    .processing{display:none;background:#fff;border-radius:12px;padding:60px;text-align:center;box-shadow:var(--occ-shadow);}
+    .spinner{width:44px;height:44px;border:4px solid var(--occ-gray-3);border-top-color:var(--occ-red);border-radius:50%;animation:spin .9s linear infinite;margin:0 auto 16px;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .processing p{color:var(--occ-gray);font-size:14px;}
 
-    /* ─── DROP ZONE ─── */
-    .drop-zone {
-      background: white; border: 2.5px dashed var(--occ-gray-2); border-radius: 12px;
-      padding: 64px 40px 56px; text-align: center; cursor: pointer;
-      transition: border-color .25s, background .25s, transform .15s;
-    }
-    .drop-zone:hover { border-color: #aaa; }
-    .drop-zone.drag-over {
-      border-color: var(--occ-red); background: #FFF5F6;
-      transform: scale(1.012); box-shadow: 0 0 0 4px rgba(220,0,40,0.08);
-    }
-    .drop-icon-wrap { margin-bottom: 20px; }
-    .drop-zone h2 { font-size: 20px; color: var(--occ-dark); margin-bottom: 8px; }
-    .drop-zone p  { color: var(--occ-gray); font-size: 14px; margin-bottom: 20px; }
-    .btn-select {
-      display: inline-block; background: var(--occ-red); color: white; border: none;
-      padding: 11px 26px; border-radius: var(--occ-radius); font-size: 14px;
-      font-family: var(--occ-font); cursor: pointer; transition: background .2s;
-    }
-    .btn-select:hover { background: #B8001E; }
-    .drop-hint { margin-top: 14px; font-size: 11px; color: var(--occ-gray-2); }
-    input[type="file"] { display: none; }
+    /* DATA PANEL */
+    .data-panel{display:none;}
+    .panel-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+    .panel-file-info{display:flex;align-items:center;gap:10px;}
+    .file-pill{display:flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--occ-gray-3);border-radius:20px;padding:6px 14px;font-size:13px;color:var(--occ-gray);box-shadow:var(--occ-shadow);}
+    .btn-reset{background:#fff;border:1px solid var(--occ-gray-3);color:var(--occ-gray);padding:8px 16px;border-radius:var(--occ-radius);cursor:pointer;font-size:13px;font-family:var(--occ-font);display:flex;align-items:center;gap:6px;transition:all .2s;box-shadow:var(--occ-shadow);}
+    .btn-reset:hover{border-color:var(--occ-red);color:var(--occ-red);}
 
-    /* ─── PROCESSING ─── */
-    .processing { display: none; background: white; border-radius: 12px; padding: 60px; text-align: center; box-shadow: var(--occ-shadow); }
-    .spinner { width: 44px; height: 44px; border: 4px solid var(--occ-gray-3); border-top-color: var(--occ-red); border-radius: 50%; animation: spin .9s linear infinite; margin: 0 auto 16px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .processing p { color: var(--occ-gray); font-size: 14px; }
+    /* BANNER */
+    .banner{display:none;border-radius:var(--occ-radius);padding:13px 18px;margin-bottom:18px;font-size:13px;line-height:1.5;}
+    .banner--ok   {background:#E8F5E9;border:1px solid #A5D6A7;border-left:4px solid #28A745;color:#1B5E20;}
+    .banner--warn {background:#FFF8E1;border:1px solid #FFE082;border-left:4px solid #FFC107;color:#6D4C00;}
+    .banner--error{background:#FFF0F2;border:1px solid #FFCDD2;border-left:4px solid var(--occ-red);color:#7B0015;}
 
-    /* ─── DATA PANEL ─── */
-    .data-panel { display: none; }
-    .panel-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-    .panel-file-info { display: flex; align-items: center; gap: 10px; }
-    .file-pill {
-      display: flex; align-items: center; gap: 7px; background: white;
-      border: 1px solid var(--occ-gray-3); border-radius: 20px; padding: 6px 14px;
-      font-size: 13px; color: var(--occ-gray); box-shadow: var(--occ-shadow);
-    }
-    .btn-reset {
-      background: white; border: 1px solid var(--occ-gray-3); color: var(--occ-gray);
-      padding: 8px 16px; border-radius: var(--occ-radius); cursor: pointer;
-      font-size: 13px; font-family: var(--occ-font); display: flex; align-items: center;
-      gap: 6px; transition: all .2s; box-shadow: var(--occ-shadow);
-    }
-    .btn-reset:hover { border-color: var(--occ-red); color: var(--occ-red); }
+    /* FIELDS GRID — 4 columns */
+    .fields-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
+    .span-2{grid-column:span 2;}
+    .field-card{background:#fff;border-radius:var(--occ-radius);box-shadow:var(--occ-shadow);padding:16px 18px;}
+    .field-card--date{border-top:3px solid var(--occ-red);}
+    .field-card--calc{background:var(--occ-light);box-shadow:none;border:1px solid var(--occ-gray-3);}
+    .field-label{font-size:10px;font-weight:bold;color:var(--occ-gray-2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:7px;}
+    .field-input,.field-select{width:100%;border:1px solid var(--occ-gray-3);border-radius:5px;padding:8px 11px;font-size:14px;font-family:var(--occ-font);color:var(--occ-dark);transition:border-color .2s,box-shadow .2s;background:#fff;}
+    .field-input:focus,.field-select:focus{outline:none;border-color:var(--occ-red);box-shadow:0 0 0 3px rgba(220,0,40,.08);}
+    .field-input::placeholder{color:var(--occ-gray-2);}
+    .field-note{font-size:10.5px;color:var(--occ-gray-2);margin-top:5px;}
+    .date-display-big{font-size:21px;font-weight:700;color:var(--occ-red);letter-spacing:-.3px;margin:4px 0;}
+    .plazo-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-size:12.5px;font-weight:600;margin:4px 0;}
+    .plazo-badge--ok   {background:#E8F5E9;color:#1B5E20;}
+    .plazo-badge--warn {background:#FFF8E1;color:#6D4C00;}
+    .plazo-badge--error{background:#FFF0F2;color:#7B0015;}
 
-    /* ─── BANNER ─── */
-    .banner { display: none; border-radius: var(--occ-radius); padding: 13px 18px; margin-bottom: 18px; font-size: 13px; line-height: 1.5; }
-    .banner--ok    { background:#E8F5E9; border:1px solid #A5D6A7; border-left:4px solid #28A745; color:#1B5E20; }
-    .banner--warn  { background:#FFF8E1; border:1px solid #FFE082; border-left:4px solid #FFC107; color:#6D4C00; }
-    .banner--error { background:#FFF0F2; border:1px solid #FFCDD2; border-left:4px solid var(--occ-red); color:#7B0015; }
+    /* LETTER */
+    .letter-card{background:#fff;border-radius:var(--occ-radius);box-shadow:var(--occ-shadow);margin-bottom:20px;overflow:hidden;}
+    .letter-card-header{background:var(--occ-dark);color:#fff;padding:13px 20px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:bold;}
+    .letter-body-wrap{padding:40px 52px;font-family:Georgia,'Times New Roman',serif;font-size:13.5px;line-height:1.85;color:#202020;}
+    .letter-date-place{text-align:right;margin-bottom:28px;color:var(--occ-gray);font-size:13px;}
+    .letter-recipient{margin-bottom:26px;color:var(--occ-gray);line-height:1.6;}
+    .letter-subject{font-weight:bold;font-family:Arial,sans-serif;margin-bottom:22px;padding-bottom:12px;border-bottom:1.5px solid var(--occ-gray-3);font-size:13px;color:var(--occ-dark);text-transform:uppercase;letter-spacing:.3px;}
+    .letter-body p{margin-bottom:14px;}
+    .letter-sign{margin-top:36px;line-height:1.7;}
+    .letter-sign-spacer{height:52px;border-bottom:1px solid var(--occ-gray-3);margin:8px 0 10px;max-width:260px;}
+    .letter-legal-note{margin-top:28px;padding-top:14px;border-top:1px solid var(--occ-gray-3);font-size:10.5px;color:var(--occ-gray-2);font-family:Arial,sans-serif;line-height:1.6;}
+    [contenteditable]{outline:none;border-bottom:1px dashed #ccc;padding:0 3px;cursor:text;min-width:30px;display:inline-block;}
+    [contenteditable]:focus{border-bottom-color:var(--occ-red);}
 
-    /* ─── FIELDS GRID ─── */
-    .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
-    .field-card { background: white; border-radius: var(--occ-radius); box-shadow: var(--occ-shadow); padding: 16px 18px; }
-    .field-card--full { grid-column: 1 / -1; }
-    .field-card--date { grid-column: 1 / -1; border-top: 3px solid var(--occ-red); }
-    .field-label { font-size: 10px; font-weight: bold; color: var(--occ-gray-2); text-transform: uppercase; letter-spacing: .7px; margin-bottom: 7px; }
-    .field-input {
-      width: 100%; border: 1px solid var(--occ-gray-3); border-radius: 5px;
-      padding: 8px 11px; font-size: 14px; font-family: var(--occ-font); color: var(--occ-dark);
-      transition: border-color .2s, box-shadow .2s; background: white;
-    }
-    .field-input:focus { outline: none; border-color: var(--occ-red); box-shadow: 0 0 0 3px rgba(220,0,40,0.08); }
-    .field-input::placeholder { color: var(--occ-gray-2); }
+    /* ACTIONS */
+    .actions{display:flex;gap:12px;justify-content:flex-end;}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:var(--occ-radius);font-size:14px;font-family:var(--occ-font);cursor:pointer;transition:all .2s;border:none;font-weight:600;}
+    .btn--primary{background:var(--occ-red);color:#fff;}
+    .btn--primary:hover{background:#B8001E;}
+    .btn--secondary{background:#fff;color:var(--occ-dark);border:1px solid var(--occ-gray-3);box-shadow:var(--occ-shadow);font-weight:500;}
+    .btn--secondary:hover{border-color:var(--occ-red);color:var(--occ-red);}
+    .btn--green{background:#28A745!important;color:#fff!important;}
 
-    /* ─── DATE CARD ─── */
-    .date-layout { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
-    .date-block { min-width: 140px; }
-    .date-block .field-label { margin-bottom: 6px; }
-    .date-value-adj { font-size: 26px; font-weight: 700; color: var(--occ-red); letter-spacing: -.5px; }
-    .date-value-limit { font-size: 17px; font-weight: 700; color: var(--occ-dark); }
-    .date-note { font-size: 11px; color: var(--occ-gray-2); margin-top: 3px; }
-    .date-arrow { font-size: 26px; color: var(--occ-gray-3); user-select: none; flex-shrink: 0; }
-    .date-sep { width: 1px; height: 56px; background: var(--occ-gray-3); flex-shrink: 0; }
+    /* FOOTER */
+    .footer{background:var(--occ-gray-3);padding:14px 32px;text-align:center;font-size:11px;color:var(--occ-gray);line-height:1.6;}
 
-    /* ─── LETTER ─── */
-    .letter-card { background: white; border-radius: var(--occ-radius); box-shadow: var(--occ-shadow); margin-bottom: 20px; overflow: hidden; }
-    .letter-card-header {
-      background: var(--occ-dark); color: white; padding: 13px 20px;
-      display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: bold;
-    }
-    .letter-body-wrap { padding: 40px 48px; font-family: Georgia,'Times New Roman',serif; font-size: 13.5px; line-height: 1.85; color: #202020; }
-    .letter-date-place { text-align: right; margin-bottom: 28px; color: var(--occ-gray); font-size: 13px; }
-    .letter-sender   { margin-bottom: 26px; line-height: 1.6; }
-    .letter-recipient{ margin-bottom: 26px; color: var(--occ-gray); line-height: 1.6; }
-    .letter-subject  { font-weight: bold; font-family: Arial,sans-serif; margin-bottom: 22px; padding-bottom: 12px; border-bottom: 1.5px solid var(--occ-gray-3); font-size: 13px; color: var(--occ-dark); text-transform: uppercase; letter-spacing: .3px; }
-    .letter-body p   { margin-bottom: 14px; }
-    .letter-sign     { margin-top: 36px; line-height: 1.7; }
-    .letter-sign-spacer { height: 52px; border-bottom: 1px solid var(--occ-gray-3); margin: 8px 0 10px; max-width: 260px; }
-    .letter-legal-note { margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--occ-gray-3); font-size: 10.5px; color: var(--occ-gray-2); font-family: Arial,sans-serif; line-height: 1.6; }
-    [contenteditable] { outline: none; border-bottom: 1px dashed #ccc; padding: 0 4px; cursor: text; min-width: 80px; display: inline-block; }
-    [contenteditable]:focus { border-bottom-color: var(--occ-red); }
-
-    /* ─── ACTIONS ─── */
-    .actions { display: flex; gap: 12px; justify-content: flex-end; }
-    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: var(--occ-radius); font-size: 14px; font-family: var(--occ-font); cursor: pointer; transition: all .2s; border: none; font-weight: 600; }
-    .btn--primary { background: var(--occ-red); color: white; }
-    .btn--primary:hover { background: #B8001E; }
-    .btn--secondary { background: white; color: var(--occ-dark); border: 1px solid var(--occ-gray-3); box-shadow: var(--occ-shadow); font-weight: 500; }
-    .btn--secondary:hover { border-color: var(--occ-red); color: var(--occ-red); }
-    .btn--green { background: #28A745 !important; color: white !important; }
-
-    /* ─── FOOTER ─── */
-    .footer { background: var(--occ-gray-3); padding: 14px 32px; text-align: center; font-size: 11px; color: var(--occ-gray); line-height: 1.6; }
-
-    /* ─── PRINT ─── */
-    @media print {
+    @media print{
       .header,.page-title,.drop-zone,.processing,.panel-topbar,
-      .fields-grid,.banner,.actions,.footer,.letter-card-header { display: none !important; }
-      body { background: white; font-size: 12pt; }
-      .main { padding: 0; max-width: 100%; }
-      .data-panel { display: block !important; }
-      .letter-card { box-shadow: none; }
-      .letter-body-wrap { padding: 0; }
+      .fields-grid,.banner,.actions,.footer,.letter-card-header{display:none!important;}
+      body{background:#fff;font-size:12pt;}
+      .main{padding:0;max-width:100%;}
+      .data-panel{display:block!important;}
+      .letter-card{box-shadow:none;}
+      .letter-body-wrap{padding:0;}
+    }
+    @media(max-width:720px){
+      .fields-grid{grid-template-columns:1fr 1fr;}
+      .span-2{grid-column:span 2;}
+      .field-card--date{grid-column:span 2;}
     }
   </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header class="header">
   <div style="font-family:system-ui,sans-serif;font-size:15px;font-weight:700;letter-spacing:-.01em;color:#fff">
     Optimizarte
-    <span style="font-family:Arial,sans-serif;font-size:9.5px;font-weight:500;color:#999;margin:0 3px;letter-spacing:0">by</span>
+    <span style="font-family:Arial,sans-serif;font-size:9.5px;font-weight:500;color:#999;margin:0 3px;">by</span>
     <span style="font-weight:700;color:#DC0028">Occident</span>
   </div>
   <div class="header-right">
@@ -186,18 +138,17 @@
 
 <main class="main">
 
-  <!-- Title -->
   <div class="page-title">
     <div class="law-badge">Ley 50/1980 · Art. 22 · Contrato de Seguro</div>
     <h1>Solicitud de <em>No Renovación</em></h1>
-    <p>Arrastra el PDF de la póliza para extraer los datos y generar automáticamente la comunicación formal de no renovación</p>
+    <p>Arrastra el PDF de la póliza para extraer los datos automáticamente, o rellena los campos manualmente</p>
   </div>
 
   <!-- DROP ZONE -->
   <div id="dropZone" class="drop-zone"
        ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
     <div class="drop-icon-wrap">
-      <svg viewBox="0 0 88 88" width="88" height="88" fill="none">
+      <svg viewBox="0 0 88 88" width="80" height="80" fill="none">
         <rect x="14" y="8" width="44" height="56" rx="5" stroke="#BEBEBE" stroke-width="2.5"/>
         <path d="M42 8 L58 8 L58 24 L42 24 Z" fill="#F5F5F5" stroke="#BEBEBE" stroke-width="2.5"/>
         <line x1="22" y1="36" x2="50" y2="36" stroke="#E0E0E0" stroke-width="2" stroke-linecap="round"/>
@@ -209,9 +160,12 @@
       </svg>
     </div>
     <h2>Arrastra aquí la póliza</h2>
-    <p>Suelta el PDF de la póliza para extraer los datos automáticamente</p>
-    <button class="btn-select" onclick="document.getElementById('fileInput').click()">Seleccionar archivo PDF</button>
-    <div class="drop-hint">Si algún campo no se captura correctamente, puedes editarlo manualmente</div>
+    <p>Suelta el PDF para extraer los datos automáticamente</p>
+    <div class="drop-actions">
+      <button class="btn-select" onclick="document.getElementById('fileInput').click()">Seleccionar PDF</button>
+      <button class="btn-manual" onclick="showDataPanel()">Rellenar manualmente</button>
+    </div>
+    <div class="drop-hint">Los campos no capturados correctamente se pueden editar a mano</div>
     <input type="file" id="fileInput" accept=".pdf" onchange="handleFile(this.files[0])">
   </div>
 
@@ -231,9 +185,9 @@
             <path d="M9 2H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V6L9 2z"/>
             <polyline points="9 2 9 6 13 6"/>
           </svg>
-          <span id="fileName">póliza.pdf</span>
+          <span id="fileName">Entrada manual</span>
         </div>
-        <span style="font-size:12px;color:var(--occ-gray-2);">Revisa y completa los campos si es necesario</span>
+        <span style="font-size:12px;color:var(--occ-gray-2);">Revisa y completa los campos</span>
       </div>
       <button class="btn-reset" onclick="resetAll()">
         <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -243,70 +197,83 @@
       </button>
     </div>
 
-    <div id="banner" class="banner"></div>
-
-    <!-- FIELDS -->
+    <!-- FIELDS GRID: 4 columns -->
     <div class="fields-grid">
 
-      <div class="field-card">
+      <!-- ROW 1: Compañía + Tipo tomador -->
+      <div class="field-card span-2">
+        <div class="field-label">Compañía Aseguradora</div>
+        <input class="field-input" id="compania" type="text" placeholder="Ej: MAPFRE, Allianz, AXA, Caser…" oninput="updateLetter()">
+      </div>
+      <div class="field-card span-2">
+        <div class="field-label">Tipo de Tomador</div>
+        <select class="field-select" id="tipoTomador" onchange="onTipoChange()">
+          <option value="fisica">Persona Física</option>
+          <option value="empresa">Empresa</option>
+          <option value="comunidad">Comunidad de Propietarios</option>
+        </select>
+      </div>
+
+      <!-- ROW 2: Nº Póliza + Ramo -->
+      <div class="field-card span-2">
         <div class="field-label">Nº de Póliza</div>
         <input class="field-input" id="numPoliza" type="text" placeholder="Ej: 12345678" oninput="updateLetter()">
       </div>
-
-      <div class="field-card">
+      <div class="field-card span-2">
         <div class="field-label">Ramo / Producto</div>
         <input class="field-input" id="ramo" type="text" placeholder="Ej: Hogar, Salud, Motor, Vida…" oninput="updateLetter()">
       </div>
 
-      <div class="field-card field-card--full">
-        <div class="field-label">Compañía Aseguradora (destinatario de la carta)</div>
-        <input class="field-input" id="compania" type="text" placeholder="Ej: Mapfre, Allianz, AXA, Caser, Helvetia…" oninput="updateLetter()">
+      <!-- ROW 3: Nombre + DNI (labels change per tipo) -->
+      <div class="field-card span-2">
+        <div class="field-label" id="lblTomador">Nombre y Apellidos del Tomador</div>
+        <input class="field-input" id="tomador" type="text" placeholder="Nombre completo" oninput="updateLetter()">
       </div>
-
-      <div class="field-card field-card--full">
-        <div class="field-label">Tomador del Seguro</div>
-        <input class="field-input" id="tomador" type="text" placeholder="Nombre completo del tomador" oninput="updateLetter()">
-      </div>
-
-      <div class="field-card">
-        <div class="field-label">NIF / DNI / CIF</div>
+      <div class="field-card span-2">
+        <div class="field-label" id="lblNif">DNI / NIE del Tomador</div>
         <input class="field-input" id="nif" type="text" placeholder="Ej: 12345678A" oninput="updateLetter()">
       </div>
 
-      <div class="field-card">
-        <div class="field-label">Dirección del Tomador</div>
-        <input class="field-input" id="direccion" type="text" placeholder="Calle, nº, población, CP" oninput="updateLetter()">
+      <!-- ROW 3b: Entidad (empresa / comunidad) — oculto por defecto -->
+      <div class="field-card span-2" id="fcEntNombre" style="display:none">
+        <div class="field-label" id="lblEntNombre">Razón Social de la Empresa</div>
+        <input class="field-input" id="entidadNombre" type="text" placeholder="Nombre de la entidad" oninput="updateLetter()">
+      </div>
+      <div class="field-card span-2" id="fcEntCif" style="display:none">
+        <div class="field-label" id="lblEntCif">CIF de la Empresa</div>
+        <input class="field-input" id="entidadCif" type="text" placeholder="Ej: B12345678" oninput="updateLetter()">
       </div>
 
-      <!-- DATE CARD -->
+      <!-- ROW 4: Fechas — 4 columnas individuales con borde rojo superior -->
       <div class="field-card field-card--date">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
-          <div class="field-label" style="margin-bottom:0;">Fechas de vencimiento y no renovación</div>
-          <span style="font-size:11px;color:var(--occ-gray-2);">Art. 22 — el tomador debe notificar con ≥ 1 mes de antelación</span>
-        </div>
-        <div class="date-layout">
-          <div class="date-block">
-            <div class="field-label">Vencimiento en póliza</div>
-            <input class="field-input" id="vencOrig" type="text" placeholder="DD/MM/AAAA"
-                   oninput="calcDates()" style="max-width:150px;font-size:15px;font-weight:600;">
-            <div class="date-note">Tal como figura en la póliza</div>
-          </div>
-          <div class="date-arrow">→</div>
-          <div class="date-block">
-            <div class="field-label">Fecha de no renovación</div>
-            <div class="date-value-adj" id="dateAdj">—</div>
-            <div class="date-note">Día/mes de póliza · año <span id="spanYear"></span></div>
-          </div>
-          <div class="date-sep"></div>
-          <div class="date-block">
-            <div class="field-label">Plazo límite notificación</div>
-            <div class="date-value-limit" id="dateLimit">—</div>
-            <div class="date-note">1 mes antes del vencimiento</div>
-          </div>
-        </div>
+        <div class="field-label">Vencimiento en Póliza</div>
+        <input class="field-input" id="vencOrig" type="text" placeholder="DD/MM/AAAA"
+               oninput="calcDates()" style="font-size:15px;font-weight:600;">
+        <div class="field-note">Tal como figura en la póliza</div>
+      </div>
+
+      <div class="field-card field-card--date field-card--calc">
+        <div class="field-label">Fecha de No-Renovación</div>
+        <div class="date-display-big" id="dateAdj">—</div>
+        <div class="field-note">Mismo día/mes · año <span id="spanYear"></span></div>
+      </div>
+
+      <div class="field-card field-card--date">
+        <div class="field-label">Fecha de la Carta</div>
+        <input class="field-input" id="fechaCarta" type="text" placeholder="DD/MM/AAAA"
+               oninput="updateLetter()" style="font-size:15px;font-weight:600;">
+        <div class="field-note">Fecha de emisión</div>
+      </div>
+
+      <div class="field-card field-card--date field-card--calc">
+        <div class="field-label">Cálculo de Plazo</div>
+        <div id="plazoBadge" style="margin:4px 0;">—</div>
+        <div class="field-note" id="plazoNote">Art. 22 · ≥ 1 mes de antelación</div>
       </div>
 
     </div><!-- /fields-grid -->
+
+    <div id="banner" class="banner"></div>
 
     <!-- LETTER PREVIEW -->
     <div class="letter-card">
@@ -350,552 +317,382 @@
 </footer>
 
 <script>
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const CURRENT_YEAR=new Date().getFullYear();
+document.getElementById('spanYear').textContent=CURRENT_YEAR;
 
-const CURRENT_YEAR = new Date().getFullYear();
-document.getElementById('spanYear').textContent = CURRENT_YEAR;
+// Init: fecha carta = hoy
+(function(){
+  var d=new Date();
+  document.getElementById('fechaCarta').value=
+    String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
+})();
 
-// ─── DRAG & DROP ───────────────────────────────────────────────
-function onDragOver(e) { e.preventDefault(); document.getElementById('dropZone').classList.add('drag-over'); }
-function onDragLeave()  { document.getElementById('dropZone').classList.remove('drag-over'); }
-function onDrop(e) {
-  e.preventDefault();
-  document.getElementById('dropZone').classList.remove('drag-over');
-  const f = e.dataTransfer.files[0];
-  if (f) handleFile(f);
+// ── Drag & Drop ─────────────────────────────────────────────────
+function onDragOver(e){e.preventDefault();document.getElementById('dropZone').classList.add('drag-over');}
+function onDragLeave(){document.getElementById('dropZone').classList.remove('drag-over');}
+function onDrop(e){
+  e.preventDefault();document.getElementById('dropZone').classList.remove('drag-over');
+  var f=e.dataTransfer.files[0];if(f)handleFile(f);
 }
 
-// ─── FILE HANDLING ─────────────────────────────────────────────
-async function handleFile(file) {
-  if (!file) return;
-  if (!file.name.toLowerCase().endsWith('.pdf')) {
-    alert('Por favor, selecciona un archivo PDF de la póliza.');
-    return;
-  }
+// ── File handling ────────────────────────────────────────────────
+async function handleFile(file){
+  if(!file)return;
+  if(!file.name.toLowerCase().endsWith('.pdf')){alert('Selecciona un archivo PDF.');return;}
   showProcessing();
-  document.getElementById('fileName').textContent = file.name;
-
-  try {
-    const buf = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(buf) }).promise;
-    let page1Lines = [];
-    let allLines   = [];
-    for (let i = 1; i <= Math.min(pdf.numPages, 8); i++) {
-      const page    = await pdf.getPage(i);
-      const content = await page.getTextContent();
-      const lines   = reconstructLines(content.items);
-      if (i === 1) page1Lines = lines;
-      allLines = allLines.concat(lines);
+  document.getElementById('fileName').textContent=file.name;
+  try{
+    var buf=await file.arrayBuffer();
+    var pdf=await pdfjsLib.getDocument({data:new Uint8Array(buf)}).promise;
+    var page1Lines=[],allLines=[];
+    for(var i=1;i<=Math.min(pdf.numPages,8);i++){
+      var page=await pdf.getPage(i);
+      var content=await page.getTextContent();
+      var lines=reconstructLines(content.items);
+      if(i===1)page1Lines=lines;
+      allLines=allLines.concat(lines);
     }
-    const extracted = extractData(allLines, page1Lines);
-    console.log('[NR] Extraído:', extracted); // debug en consola
+    var extracted=extractData(allLines,page1Lines);
+    console.log('[NR] Extraído:',extracted);
     populateFields(extracted);
     showDataPanel();
-  } catch (err) {
-    console.error('PDF error:', err);
-    hideProcessing();
-    showDataPanel();
-  }
+  }catch(err){console.error('PDF error:',err);hideProcessing();showDataPanel();}
 }
 
-// ─── LINE RECONSTRUCTION ───────────────────────────────────────
-// Agrupa ítems PDF por coordenada Y real → reconstruye líneas visuales
-function reconstructLines(items) {
-  const yMap = {};
-  items.forEach(item => {
-    const s = item.str;
-    if (!s || !s.trim()) return;
-    // Agrupar por Y redondeado a 3px para absorber variaciones de baseline
-    const y = Math.round(item.transform[5] / 3) * 3;
-    if (!yMap[y]) yMap[y] = [];
-    yMap[y].push({ x: item.transform[4], text: s });
+function reconstructLines(items){
+  var yMap={};
+  items.forEach(function(item){
+    var s=item.str;if(!s||!s.trim())return;
+    var y=Math.round(item.transform[5]/3)*3;
+    if(!yMap[y])yMap[y]=[];
+    yMap[y].push({x:item.transform[4],text:s});
   });
   return Object.entries(yMap)
-    .sort(([ya], [yb]) => Number(yb) - Number(ya))   // mayor Y = arriba de la página
-    .map(([, grp]) =>
-      grp.sort((a, b) => a.x - b.x)
-         .map(i => i.text)
-         .join('')
-         .replace(/\s+/g, ' ')
-         .trim()
-    )
-    .filter(s => s.length > 1);
+    .sort(function(a,b){return Number(b[0])-Number(a[0]);})
+    .map(function(e){return e[1].sort(function(a,b){return a.x-b.x;}).map(function(i){return i.text;}).join('').replace(/\s+/g,' ').trim();})
+    .filter(function(s){return s.length>1;});
 }
 
-// ─── KNOWN INSURERS ────────────────────────────────────────────
-const KNOWN_INSURERS = [
+// ── Known insurers ───────────────────────────────────────────────
+var KNOWN_INSURERS=[
   'Occident','Seguros Occident','MAPFRE','Allianz','AXA','Zurich','Generali',
-  'Helvetia','HDI','Caser','Mutua Madrileña','Mutua Madrileña','Plus Ultra',
-  'BBVA Seguros','Línea Directa','Pelayo','Fiatc','Reale','Sanitas','Asisa',
+  'Helvetia','HDI','Caser','Mutua Madrileña','Plus Ultra','BBVA Seguros',
+  'Línea Directa','Pelayo','Fiatc','FIATC','Reale','Sanitas','Asisa',
   'SegurCaixa','Adeslas','Nationale-Nederlanden','Nationale Nederlanden',
   'Groupama','DKV','Berkley','Hiscox','Liberty','Lagun Aro','MGS','Agropelayo',
   'VidaCaixa','Mútua de Propietaris','Gesnon','Iris Global','Euromutua',
-  'Fénix Directo','Zurichlife','GCM Seguros','Balumba','Santa Lucía',
-  'FIATC','Previsora General','Aseguradora del Mediterráneo'
+  'Fénix Directo','GCM Seguros','Balumba','Santa Lucía','Previsora General'
 ];
 
-// ─── DATA EXTRACTION ───────────────────────────────────────────
-function extractData(lines, page1Lines) {
-  const fullFlat = lines.join(' ').replace(/\s+/g, ' ');
-  const data     = {};
+// ── Extraction ───────────────────────────────────────────────────
+function extractData(lines,page1Lines){
+  var fullFlat=lines.join(' ').replace(/\s+/g,' ');
+  var data={};
+  var MESES={enero:1,febrero:2,marzo:3,abril:4,mayo:5,junio:6,julio:7,agosto:8,septiembre:9,octubre:10,noviembre:11,diciembre:12};
+  var dateNumRe=/(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})/;
+  var dateWordRe=/(\d{1,2})\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\s+de\s+(\d{4})/i;
+  var nifRe=/\b([A-Z]\d{7}[A-Z0-9]|\d{8}[A-Z])\b/i;
 
-  // Helpers de fecha
-  const MESES = {enero:1,febrero:2,marzo:3,abril:4,mayo:5,junio:6,julio:7,agosto:8,
-                 septiembre:9,octubre:10,noviembre:11,diciembre:12};
-  const dateNumRe  = /(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})/;
-  const dateWordRe = /(\d{1,2})\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\s+de\s+(\d{4})/i;
-  const nifRe      = /\b([A-Z]\d{7}[A-Z0-9]|\d{8}[A-Z])\b/i;
-
-  function parseDate(str) {
-    if (!str) return null;
-    let m = str.match(dateNumRe);
-    if (m) {
-      const d = m[1].padStart(2,'0'), mo = m[2].padStart(2,'0');
-      let y = m[3]; if (y.length === 2) y = (+y < 50 ? '20' : '19') + y;
-      return `${d}/${mo}/${y}`;
-    }
-    m = str.match(dateWordRe);
-    if (m) return `${m[1].padStart(2,'0')}/${String(MESES[m[2].toLowerCase()]).padStart(2,'0')}/${m[3]}`;
+  function parseDate(str){
+    if(!str)return null;
+    var m=str.match(dateNumRe);
+    if(m){var d=m[1].padStart(2,'0'),mo=m[2].padStart(2,'0'),y=m[3];if(y.length===2)y=(+y<50?'20':'19')+y;return d+'/'+mo+'/'+y;}
+    m=str.match(dateWordRe);
+    if(m)return m[1].padStart(2,'0')+'/'+String(MESES[m[2].toLowerCase()]).padStart(2,'0')+'/'+m[3];
     return null;
   }
 
-  // ── 1. COMPAÑÍA — primeras líneas de pág. 1 (zona del logo) ──
-  // Los primeros 20-25 items de texto son la cabecera del documento,
-  // justo donde aparece el nombre junto al logo.
-  const headerLines = (page1Lines || lines).slice(0, 25);
-  const headerFlat  = headerLines.join(' ');
-
-  for (const ins of KNOWN_INSURERS) {
-    const re = new RegExp(
-      ins.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/\s+/g,'[\\s]*'),
-      'i'
-    );
-    if (re.test(headerFlat)) {
-      // Intentar capturar el nombre legal completo (con S.A., SEGUROS, etc.)
-      const fullRe = new RegExp(
-        ins.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/\s+/g,'[\\s,]*') +
-        '[\\w\\s,\\.&]*(?:S\\.?A\\.?|S\\.?L\\.?|SEGUROS?|ASSEGURANCES?)?',
-        'i'
-      );
-      const m = headerFlat.match(fullRe);
-      data.compania = (m ? m[0] : ins).trim().replace(/\s+/g,' ').substring(0,80);
+  // 1. COMPAÑÍA — zona logo p.1
+  var headerLines=(page1Lines||lines).slice(0,25);
+  var headerFlat=headerLines.join(' ');
+  for(var ki=0;ki<KNOWN_INSURERS.length;ki++){
+    var ins=KNOWN_INSURERS[ki];
+    var re=new RegExp(ins.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/\s+/g,'[\\s]*'),'i');
+    if(re.test(headerFlat)){
+      var fullRe=new RegExp(ins.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/\s+/g,'[\\s,]*')+'[\\w\\s,\\.&]*(?:S\\.?A\\.?|S\\.?L\\.?|SEGUROS?|ASSEGURANCES?)?','i');
+      var fm=headerFlat.match(fullRe);
+      data.compania=(fm?fm[0]:ins).trim().replace(/\s+/g,' ').substring(0,80);
       break;
     }
   }
-  // Fallback: "XXXX SEGUROS" o "SEGUROS XXXX" en la cabecera
-  if (!data.compania) {
-    const m = headerFlat.match(/\b([A-ZÁÉÍÓÚÑ][A-Za-záéíóúñÁÉÍÓÚÑ\s\-&]+\s+(?:SEGUROS?|ASSEGURANCES?|MUTUA|ASSURANCES?))\b/);
-    if (m) data.compania = m[1].trim().substring(0,80);
-  }
-  // Último recurso: primera línea no vacía de página 1
-  if (!data.compania && headerLines.length) {
-    data.compania = headerLines[0].substring(0,80);
-  }
+  if(!data.compania){var mm=headerFlat.match(/\b([A-ZÁÉÍÓÚÑ][A-Za-záéíóúñÁÉÍÓÚÑ\s\-&]+\s+(?:SEGUROS?|ASSEGURANCES?|MUTUA))\b/);if(mm)data.compania=mm[1].trim().substring(0,80);}
+  if(!data.compania&&headerLines.length)data.compania=headerLines[0].substring(0,80);
 
-  // ── 2. LOCALIZAR SECCIÓN MEDIADOR (excluir) ───────────────────
-  // Etiquetas típicas de sección de mediador en pólizas españolas
-  const MEDIADOR_RE = /^(?:datos\s+del?\s+)?(?:mediador|agente(?:\s+de\s+seguros?)?|corredor(?:\s+de\s+seguros?)?|agencia\s+de\s+seguros?|n[oº°]\s*(?:agente|mediador)|c[oó]d(?:igo)?\s*(?:agente|mediador))/i;
+  // 2. Excluir sección mediador
+  var MEDIADOR_RE=/^(?:datos\s+del?\s+)?(?:mediador|agente(?:\s+de\s+seguros?)?|corredor(?:\s+de\s+seguros?)?|agencia\s+de\s+seguros?|n[oº°]\s*(?:agente|mediador)|c[oó]d(?:igo)?\s*(?:agente|mediador))/i;
+  var mediadorIdx=lines.length;
+  for(var mi=0;mi<lines.length;mi++){if(MEDIADOR_RE.test(lines[mi].trim())){mediadorIdx=mi;break;}}
 
-  let mediadorIdx = lines.length;
-  for (let i = 0; i < lines.length; i++) {
-    if (MEDIADOR_RE.test(lines[i].trim())) { mediadorIdx = i; break; }
-  }
-
-  // ── 3. LOCALIZAR SECCIÓN TOMADOR / CLIENTE ────────────────────
-  const TOMADOR_SECTION_RE = /^(?:datos\s+del?\s+)?(?:tomador|cliente|contratante|asegurado(?:\s+principal)?)\s*[:\-]?\s*$/i;
-  const NEXT_SECTION_RE    = /^(?:datos\s+del?\s+)?(?:asegurado|beneficiario|mediador|agente|corredor|coberturas?|garantías?|condiciones?|prima|recibo|liquidaci[oó]n|complementarias?|exclusiones?)/i;
-
-  let tomStart = -1, tomEnd = mediadorIdx;
-
-  for (let i = 0; i < lines.length; i++) {
-    if (TOMADOR_SECTION_RE.test(lines[i].trim())) {
-      tomStart = i;
-      for (let j = i + 1; j < lines.length; j++) {
-        if (NEXT_SECTION_RE.test(lines[j].trim())) { tomEnd = Math.min(j, mediadorIdx); break; }
-      }
+  // 3. Sección tomador
+  var TOMADOR_SECTION_RE=/^(?:datos\s+del?\s+)?(?:tomador|cliente|contratante|asegurado(?:\s+principal)?)\s*[:\-]?\s*$/i;
+  var NEXT_SECTION_RE=/^(?:datos\s+del?\s+)?(?:asegurado|beneficiario|mediador|agente|corredor|coberturas?|garantías?|condiciones?|prima|recibo|liquidaci[oó]n)/i;
+  var tomStart=-1,tomEnd=mediadorIdx;
+  for(var ti=0;ti<lines.length;ti++){
+    if(TOMADOR_SECTION_RE.test(lines[ti].trim())){
+      tomStart=ti;
+      for(var tj=ti+1;tj<lines.length;tj++){if(NEXT_SECTION_RE.test(lines[tj].trim())){tomEnd=Math.min(tj,mediadorIdx);break;}}
       break;
     }
   }
+  if(tomStart===-1)tomStart=0;
+  var tomLines=lines.slice(tomStart,tomEnd);
 
-  // Si no hay sección explícita de tomador, usar todo lo que está antes del mediador
-  if (tomStart === -1) tomStart = 0;
-
-  const tomLines = lines.slice(tomStart, tomEnd);
-  const tomFlat  = tomLines.join(' ').replace(/\s+/g,' ');
-
-  console.log('[NR] mediadorIdx:', mediadorIdx, '| tomSection:', tomStart, '-', tomEnd);
-
-  // ── 4. NOMBRE DEL TOMADOR ─────────────────────────────────────
-  let tomFoundAt = -1;
-
-  // a) "Nombre:" o "Nombre y apellidos:" explícito
-  for (let i = 0; i < tomLines.length; i++) {
-    const line = tomLines[i];
-    if (/^nombre(?:\s+y\s+apellidos?)?[:\s]/i.test(line.trim())) {
-      const m = line.match(/nombre(?:\s+y\s+apellidos?)?[:\s]+(.{3,70})/i);
-      if (m && m[1].trim().length > 2) {
-        data.tomador = m[1].trim().replace(/\s*(nif|dni|cif).*/i,'').substring(0,70);
-        tomFoundAt = i; break;
+  // 4. Nombre tomador
+  var tomFoundAt=-1;
+  for(var ni=0;ni<tomLines.length;ni++){
+    var nl=tomLines[ni];
+    if(/^nombre(?:\s+y\s+apellidos?)?[:\s]/i.test(nl.trim())){
+      var nm=nl.match(/nombre(?:\s+y\s+apellidos?)?[:\s]+(.{3,70})/i);
+      if(nm&&nm[1].trim().length>2){data.tomador=nm[1].trim().replace(/\s*(nif|dni|cif).*/i,'').substring(0,70);tomFoundAt=ni;break;}
+    }
+  }
+  if(!data.tomador){
+    for(var ni2=0;ni2<tomLines.length;ni2++){
+      var nl2=tomLines[ni2];
+      if(/tomador|cliente|contratante/i.test(nl2)){
+        var nm2=nl2.match(/(?:tomador|cliente|contratante)(?:\s+del\s+seguro)?[:\s]+(.{3,70})/i);
+        if(nm2&&nm2[1].trim().length>2&&!/^(?:nif|dni|cif)/i.test(nm2[1].trim())){data.tomador=nm2[1].trim().replace(/\s*(nif|dni|cif).*/i,'').substring(0,70);tomFoundAt=ni2;break;}
       }
     }
   }
-
-  // b) Etiqueta "Tomador/Cliente/Contratante:" con valor en la misma línea
-  if (!data.tomador) {
-    for (let i = 0; i < tomLines.length; i++) {
-      const line = tomLines[i];
-      if (/tomador|cliente|contratante/i.test(line)) {
-        const m = line.match(/(?:tomador|cliente|contratante)(?:\s+del\s+seguro)?[:\s]+(.{3,70})/i);
-        if (m && m[1].trim().length > 2 && !/^(?:nif|dni|cif)/i.test(m[1].trim())) {
-          data.tomador = m[1].trim().replace(/\s*(nif|dni|cif).*/i,'').substring(0,70);
-          tomFoundAt = i; break;
-        }
-      }
-    }
-  }
-
-  // c) Primera línea de texto con mayúsculas tras la etiqueta de sección
-  if (!data.tomador) {
-    for (let i = 0; i < tomLines.length; i++) {
-      if (/^(?:datos\s+del?\s+)?(?:tomador|cliente|contratante)/i.test(tomLines[i].trim())) {
-        for (let j = i + 1; j <= Math.min(i + 5, tomLines.length - 1); j++) {
-          const next = tomLines[j].trim();
-          if (
-            next.length > 3 &&
-            /^[A-ZÁÉÍÓÚÑ]/.test(next) &&
-            !nifRe.test(next) &&
-            !dateNumRe.test(next) &&
-            !/^(?:nif|dni|cif|direcc|domicil|c\.?\s*\/|calle|avda|tel|m[oó]vil|ramo|p[oó]liza|prima|efecto|venc|modalidad|firma)/i.test(next)
-          ) {
-            data.tomador = next.substring(0,70);
-            tomFoundAt = j; break;
+  if(!data.tomador){
+    for(var ni3=0;ni3<tomLines.length;ni3++){
+      if(/^(?:datos\s+del?\s+)?(?:tomador|cliente|contratante)/i.test(tomLines[ni3].trim())){
+        for(var nj=ni3+1;nj<=Math.min(ni3+5,tomLines.length-1);nj++){
+          var nt=tomLines[nj].trim();
+          if(nt.length>3&&/^[A-ZÁÉÍÓÚÑ]/.test(nt)&&!nifRe.test(nt)&&!dateNumRe.test(nt)&&!/^(?:nif|dni|cif|direcc|domicil|c\.?\s*\/|calle|avda|tel|m[oó]vil|ramo|p[oó]liza|prima|efecto|venc|modalidad)/i.test(nt)){
+            data.tomador=nt.substring(0,70);tomFoundAt=nj;break;
           }
         }
-        if (data.tomador) break;
+        if(data.tomador)break;
       }
     }
   }
 
-  // ── 5. NIF / DNI / CIF (solo en sección tomador, cerca del nombre) ──
-  // Busca en las ~8 líneas alrededor del nombre encontrado
-  function findNif(searchLines) {
-    for (const line of searchLines) {
-      const m = line.match(/(?:NIF|DNI|CIF|N\.?\s*I\.?\s*F\.?)[:\s.]*([A-Z0-9\-]{8,12})/i)
-             || line.match(nifRe);
-      if (m) return (m[1] || m[0]).replace(/[\s\-]/g,'').toUpperCase();
-    }
-    return null;
+  // 5. NIF
+  function findNif(sl){
+    for(var si=0;si<sl.length;si++){
+      var sm=sl[si].match(/(?:NIF|DNI|CIF|N\.?\s*I\.?\s*F\.?)[:\s.]*([A-Z0-9\-]{8,12})/i)||sl[si].match(nifRe);
+      if(sm)return(sm[1]||sm[0]).replace(/[\s\-]/g,'').toUpperCase();
+    }return null;
   }
+  if(tomFoundAt>=0)data.nif=findNif(tomLines.slice(Math.max(0,tomFoundAt-1),Math.min(tomLines.length,tomFoundAt+9)));
+  if(!data.nif)data.nif=findNif(tomLines);
 
-  if (tomFoundAt >= 0) {
-    const near = tomLines.slice(Math.max(0, tomFoundAt - 1), Math.min(tomLines.length, tomFoundAt + 9));
-    data.nif = findNif(near);
+  // 6. Vencimiento
+  var VENC_RE=/vencimiento|finaliza|fin\s+(?:de\s+)?(?:vigencia|efecto|per[ií]odo|p[oó]liza|contrato)|v[aá]lida?\s+hasta|expirac|fecha\s+fin/i;
+  for(var vi=0;vi<lines.length;vi++){
+    var vl=lines[vi];if(!VENC_RE.test(vl))continue;
+    var inl=vl.match(/(?:vencimiento|finaliza\w*|fin|v[aá]lida?\w*|expirac\w*|fecha\s+fin)[^:]*[:\s]+(\d{1,2}[\s\/\-\.]\d{1,2}[\s\/\-\.]\d{2,4})/i)||
+             vl.match(/(?:vencimiento|finaliza\w*|fin|v[aá]lida?\w*|expirac\w*|fecha\s+fin)[^:]*[:\s]+(\d{1,2}\s+de\s+\w+\s+de\s+\d{4})/i);
+    if(inl&&inl[1]){var pd=parseDate(inl[1]);if(pd){data.vencimiento=pd;break;}}
+    for(var vj=vi+1;vj<=vi+2&&vj<lines.length;vj++){var pd2=parseDate(lines[vj]);if(pd2){data.vencimiento=pd2;break;}}
+    if(data.vencimiento)break;
   }
-  if (!data.nif) data.nif = findNif(tomLines);  // toda la sección tomador
+  if(!data.vencimiento){var vm=fullFlat.match(/\bde[l]?\s+\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}\s+a[l]?\s+(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})/i);if(vm)data.vencimiento=parseDate(vm[1]);}
+  if(!data.vencimiento){var vm2=fullFlat.match(/per[ií]odo[^:]*[:\s]+\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}\s*[-–]\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})/i);if(vm2)data.vencimiento=parseDate(vm2[1]);}
+  if(!data.vencimiento){var vm3=fullFlat.match(/(?:inicio|efecto)[:\s]+\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}\s+(?:fin|vencimiento|hasta)[:\s]+(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})/i);if(vm3)data.vencimiento=parseDate(vm3[1]);}
 
-  // ── 6. VENCIMIENTO / FINALIZACIÓN ─────────────────────────────
-  const VENC_RE = /vencimiento|finaliza|fin\s+(?:de\s+)?(?:vigencia|efecto|per[ií]odo|p[oó]liza|contrato)|v[aá]lida?\s+hasta|expirac|fecha\s+fin/i;
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    if (!VENC_RE.test(line)) continue;
-    // Valor en la misma línea: "Vencimiento: 15/03/2025" o "Vencimiento: 15 de marzo..."
-    const inline = line.match(
-      /(?:vencimiento|finaliza\w*|fin|v[aá]lida?\w*|expirac\w*|fecha\s+fin)[^:]*[:\s]+(\d{1,2}[\s\/\-\.]\d{1,2}[\s\/\-\.]\d{2,4})/i
-    ) || line.match(
-      /(?:vencimiento|finaliza\w*|fin|v[aá]lida?\w*|expirac\w*|fecha\s+fin)[^:]*[:\s]+(\d{1,2}\s+de\s+\w+\s+de\s+\d{4})/i
-    );
-    if (inline?.[1]) { const d = parseDate(inline[1]); if (d) { data.vencimiento = d; break; } }
-    // Valor en la línea siguiente
-    for (let j = i + 1; j <= i + 2 && j < lines.length; j++) {
-      const d = parseDate(lines[j]);
-      if (d) { data.vencimiento = d; break; }
-    }
-    if (data.vencimiento) break;
-  }
-
-  // "Del DD/MM/YYYY al DD/MM/YYYY" → segunda fecha = vencimiento
-  if (!data.vencimiento) {
-    const m = fullFlat.match(/\bde[l]?\s+\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}\s+a[l]?\s+(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})/i);
-    if (m) data.vencimiento = parseDate(m[1]);
-  }
-  // "Período: DD/MM/YYYY - DD/MM/YYYY" → segunda fecha
-  if (!data.vencimiento) {
-    const m = fullFlat.match(/per[ií]odo[^:]*[:\s]+\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}\s*[-–]\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})/i);
-    if (m) data.vencimiento = parseDate(m[1]);
-  }
-  // "Inicio...Fin" en tabla con dos fechas contiguas
-  if (!data.vencimiento) {
-    const m = fullFlat.match(/(?:inicio|efecto)[:\s]+\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}\s+(?:fin|vencimiento|hasta)[:\s]+(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})/i);
-    if (m) data.vencimiento = parseDate(m[1]);
-  }
-
-  // ── 7. RAMO / PRODUCTO ────────────────────────────────────────
-  const RAMO_RE = /^(?:ramo|producto|modalidad|tipo\s+(?:de\s+)?seguro|clase\s+(?:de\s+)?seguro|ramo\s+de\s+seguro)/i;
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    if (RAMO_RE.test(line.trim())) {
-      const sm = line.match(/(?:ramo|producto|modalidad|tipo|clase)[^:]*[:\s]+(.{2,60})/i);
-      if (sm && sm[1].trim().length > 1) {
-        data.ramo = sm[1].replace(/\s*(prima|tomador|efecto|venc|n[uú]mero|p[oó]liza).*/i,'').substring(0,50).trim();
-        break;
-      }
-      if (i+1 < lines.length) {
-        const next = lines[i+1].trim();
-        if (next.length > 1 && next.length < 50 && !/^\d/.test(next)) { data.ramo = next.substring(0,50); break; }
-      }
+  // 7. Ramo
+  var RAMO_RE=/^(?:ramo|producto|modalidad|tipo\s+(?:de\s+)?seguro|clase\s+(?:de\s+)?seguro)/i;
+  for(var ri=0;ri<lines.length;ri++){
+    var rl=lines[ri];
+    if(RAMO_RE.test(rl.trim())){
+      var rsm=rl.match(/(?:ramo|producto|modalidad|tipo|clase)[^:]*[:\s]+(.{2,60})/i);
+      if(rsm&&rsm[1].trim().length>1){data.ramo=rsm[1].replace(/\s*(prima|tomador|efecto|venc|n[uú]mero|p[oó]liza).*/i,'').substring(0,50).trim();break;}
+      if(ri+1<lines.length){var rn=lines[ri+1].trim();if(rn.length>1&&rn.length<50&&!/^\d/.test(rn)){data.ramo=rn.substring(0,50);break;}}
     }
   }
-  if (!data.ramo) {
-    const m = fullFlat.match(/seguro\s+de\s+([A-Za-záéíóúñÁÉÍÓÚÑ\s\-\/]{2,30}?)(?=\s+(?:con|n[uú]mero|tomador|p[oó]liza|,|\.)|$)/i);
-    if (m) data.ramo = m[1].trim().substring(0,50);
+  if(!data.ramo){var rm=fullFlat.match(/seguro\s+de\s+([A-Za-záéíóúñÁÉÍÓÚÑ\s\-\/]{2,30}?)(?=\s+(?:con|n[uú]mero|tomador|p[oó]liza|,|\.)|$)/i);if(rm)data.ramo=rm[1].trim().substring(0,50);}
+
+  // 8. Nº Póliza
+  var POL_RE=/p[oó]liza|n[uú]mero\s+(?:de\s+)?(?:contrato|p[oó]liza)|c[oó]digo\s+(?:contrato|p[oó]liza)|n[oº°]\s*p[oó]liza/i;
+  for(var pi=0;pi<lines.length;pi++){
+    var pl=lines[pi];if(!POL_RE.test(pl))continue;
+    var psm=pl.match(/(?:p[oó]liza|n[uú]mero|c[oó]digo|n[oº°])[^:]*[:\s]+([A-Z0-9][\w\-\/\.]{3,25})/i);
+    if(psm){data.numPoliza=psm[1].trim().split(/\s/)[0];break;}
+    if(pi+1<lines.length){var pn=lines[pi+1].trim();if(/^[A-Z0-9][\w\-\/\.]{3,25}$/.test(pn)){data.numPoliza=pn;break;}}
   }
-
-  // ── 8. Nº PÓLIZA ─────────────────────────────────────────────
-  const POL_RE = /p[oó]liza|n[uú]mero\s+(?:de\s+)?(?:contrato|p[oó]liza)|c[oó]digo\s+(?:contrato|p[oó]liza)|n[oº°]\s*p[oó]liza|referencia\s+p[oó]liza/i;
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    if (!POL_RE.test(line)) continue;
-    const sm = line.match(/(?:p[oó]liza|n[uú]mero|c[oó]digo|n[oº°]|referencia)[^:]*[:\s]+([A-Z0-9][\w\-\/\.]{3,25})/i);
-    if (sm) { data.numPoliza = sm[1].trim().split(/\s/)[0]; break; }
-    if (i+1 < lines.length) {
-      const next = lines[i+1].trim();
-      if (/^[A-Z0-9][\w\-\/\.]{3,25}$/.test(next)) { data.numPoliza = next; break; }
-    }
-  }
-
-  // ── 9. DIRECCIÓN (solo sección tomador) ──────────────────────
-  const DIR_RE = /^(?:direcci[oó]n|domicilio|direcci[oó]n\s+(?:del?\s+)?(?:tomador|cliente|asegurado|titular))/i;
-
-  for (let i = 0; i < tomLines.length; i++) {
-    const line = tomLines[i];
-    if (DIR_RE.test(line.trim())) {
-      const sm = line.match(/(?:direcci[oó]n|domicilio)[^:]*[:\s]+(.{5,100})/i);
-      if (sm) { data.direccion = sm[1].trim().substring(0,100); break; }
-      if (i+1 < tomLines.length) { data.direccion = tomLines[i+1].trim().substring(0,100); break; }
-    }
-    // Línea que empieza con "Calle / Avda / Plaza…"
-    if (!data.direccion && /^(?:c\/|calle|avda?\.?\s|avenida|plaza|paseo|camino|carretera|rambla|travesía)/i.test(line.trim())) {
-      data.direccion = line.trim().substring(0,100);
-    }
-  }
-
   return data;
 }
 
-// ─── POPULATE FIELDS ───────────────────────────────────────────
-function populateFields(d) {
-  if (d.numPoliza) setVal('numPoliza', d.numPoliza);
-  if (d.tomador)   setVal('tomador',   d.tomador);
-  if (d.nif)       setVal('nif',       d.nif);
-  if (d.ramo)      setVal('ramo',      d.ramo);
-  if (d.compania)  setVal('compania',  d.compania);
-  if (d.direccion) setVal('direccion', d.direccion);
-  if (d.vencimiento) { setVal('vencOrig', d.vencimiento); calcDates(); }
+// ── Populate fields ──────────────────────────────────────────────
+function populateFields(d){
+  if(d.numPoliza)sv('numPoliza',d.numPoliza);
+  if(d.tomador)  sv('tomador',  d.tomador);
+  if(d.nif)      sv('nif',      d.nif);
+  if(d.ramo)     sv('ramo',     d.ramo);
+  if(d.compania) sv('compania', d.compania);
+  if(d.vencimiento){sv('vencOrig',d.vencimiento);calcDates();}
   else updateLetter();
 }
-function setVal(id, val) { document.getElementById(id).value = val; }
+function sv(id,val){var el=document.getElementById(id);if(el)el.value=val;}
 
-// ─── DATE CALCULATIONS ─────────────────────────────────────────
-function calcDates() {
-  const raw    = document.getElementById('vencOrig').value.trim();
-  const adjEl  = document.getElementById('dateAdj');
-  const limEl  = document.getElementById('dateLimit');
-  const banner = document.getElementById('banner');
-
-  if (!raw) {
-    adjEl.textContent = limEl.textContent = '—';
-    banner.style.display = 'none';
-    return updateLetter();
+// ── Tipo tomador ─────────────────────────────────────────────────
+function onTipoChange(){
+  var tipo=document.getElementById('tipoTomador').value;
+  var isEnt=tipo!=='fisica';
+  if(tipo==='fisica'){
+    document.getElementById('lblTomador').textContent='Nombre y Apellidos del Tomador';
+    document.getElementById('lblNif').textContent='DNI / NIE del Tomador';
+  }else if(tipo==='empresa'){
+    document.getElementById('lblTomador').textContent='Nombre del Representante Legal';
+    document.getElementById('lblNif').textContent='DNI del Representante';
+    document.getElementById('lblEntNombre').textContent='Razón Social de la Empresa';
+    document.getElementById('lblEntCif').textContent='CIF de la Empresa';
+  }else{
+    document.getElementById('lblTomador').textContent='Nombre del Presidente/a';
+    document.getElementById('lblNif').textContent='DNI del Presidente/a';
+    document.getElementById('lblEntNombre').textContent='Nombre de la Comunidad de Propietarios';
+    document.getElementById('lblEntCif').textContent='NIF de la Comunidad';
   }
-
-  const parts = raw.split('/');
-  if (parts.length < 2 || !parts[0] || !parts[1]) {
-    adjEl.textContent = limEl.textContent = '—';
-    banner.style.display = 'none';
-    return updateLetter();
-  }
-
-  const day   = parseInt(parts[0], 10);
-  const month = parseInt(parts[1], 10) - 1;
-
-  const adjDate = new Date(CURRENT_YEAR, month, day);
-  adjEl.textContent = fmtDate(adjDate);
-
-  const limDate = new Date(CURRENT_YEAR, month - 1, day);
-  limEl.textContent = fmtDate(limDate);
-
-  const today   = new Date(); today.setHours(0,0,0,0);
-  const adj     = new Date(adjDate); adj.setHours(0,0,0,0);
-  const lim     = new Date(limDate); lim.setHours(0,0,0,0);
-  const dToLim  = Math.round((lim - today) / 86400000);
-  const dToAdj  = Math.round((adj - today) / 86400000);
-
-  banner.style.display = 'block';
-  banner.className = 'banner';
-
-  if (today >= adj) {
-    banner.classList.add('banner--error');
-    banner.innerHTML = `<strong>⛔ Vencimiento ya pasado en ${CURRENT_YEAR}.</strong> La fecha ${fmtDate(adjDate)} ya ha transcurrido. Verifica si el período aplicable corresponde a ${CURRENT_YEAR + 1}.`;
-  } else if (today > lim) {
-    banner.classList.add('banner--error');
-    banner.innerHTML = `<strong>⛔ Plazo de notificación superado.</strong> El plazo límite era el ${fmtDate(limDate)}. La póliza puede haberse renovado automáticamente. Consulta con la aseguradora.`;
-  } else if (dToLim <= 14) {
-    banner.classList.add('banner--warn');
-    banner.innerHTML = `<strong>⚠️ Plazo muy próximo.</strong> Quedan solo <strong>${dToLim} día${dToLim !== 1 ? 's' : ''}</strong> para la fecha límite (${fmtDate(limDate)}). Envía la comunicación <strong>hoy mismo</strong> por burofax o correo certificado.`;
-  } else if (dToLim <= 30) {
-    banner.classList.add('banner--warn');
-    banner.innerHTML = `<strong>⚠️ Plazo próximo.</strong> Quedan <strong>${dToLim} días</strong> para el plazo límite (${fmtDate(limDate)}). Envía la comunicación cuanto antes por burofax o correo certificado con acuse de recibo.`;
-  } else {
-    banner.classList.add('banner--ok');
-    banner.innerHTML = `<strong>✅ Plazo correcto.</strong> Quedan <strong>${dToLim} días</strong> para el plazo límite (${fmtDate(limDate)}) y <strong>${dToAdj} días</strong> para el vencimiento. Envía por burofax o correo certificado con acuse de recibo.`;
-  }
+  document.getElementById('fcEntNombre').style.display=isEnt?'':'none';
+  document.getElementById('fcEntCif').style.display   =isEnt?'':'none';
   updateLetter();
 }
 
-function fmtDate(d) {
-  return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
-}
-function fmtDateLong(d) {
-  const M = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-  return `${d.getDate()} de ${M[d.getMonth()]} de ${d.getFullYear()}`;
-}
-
-// ─── LETTER GENERATION ─────────────────────────────────────────
-function updateLetter() {
-  const poliza    = v('numPoliza') || ph('Nº PÓLIZA');
-  const tomador   = v('tomador')   || ph('TOMADOR');
-  const nif       = v('nif')       || ph('NIF/DNI/CIF');
-  const ramo      = v('ramo')      || '____________________';
-  const compania  = v('compania')  || ph('COMPAÑÍA ASEGURADORA');
-  const direccion = v('direccion') || '____________________';
-  const adjTxt    = document.getElementById('dateAdj').textContent;
-  const fechaVenc = adjTxt !== '—' ? adjTxt : ph('FECHA VENCIMIENTO');
-
-  document.getElementById('letterBody').innerHTML = `
-    <p class="letter-date-place">
-      <span contenteditable="true" title="Haz clic para editar la población">Población</span>,
-      a ${fmtDateLong(new Date())}
-    </p>
-
-    <div class="letter-sender">
-      <strong>${tomador}</strong><br>
-      NIF / DNI / CIF: ${nif}<br>
-      ${direccion}
-    </div>
-
-    <div class="letter-recipient">
-      A/A:<br>
-      <strong>${compania}</strong><br>
-      Servicio de Atención al Asegurado / Departamento de Suscripción
-    </div>
-
-    <div class="letter-subject">
-      Asunto: Comunicación de no renovación — Póliza nº ${poliza}
-    </div>
-
-    <div class="letter-body">
-      <p>Muy señores míos:</p>
-
-      <p>
-        Por medio de la presente comunicación, yo, <strong>${tomador}</strong>,
-        con NIF / DNI / CIF nº <strong>${nif}</strong>, en mi condición de
-        Tomador del contrato de seguro de <strong>${ramo}</strong> con número de
-        póliza <strong>${poliza}</strong>, suscrito con <strong>${compania}</strong>,
-        y de conformidad con lo establecido en el <strong>artículo 22 de la Ley
-        50/1980, de 8 de octubre, del Contrato de Seguro</strong>, les comunico
-        formalmente mi <strong>voluntad de no renovar</strong> el citado contrato
-        a su próximo vencimiento.
-      </p>
-
-      <p>
-        La fecha de vencimiento del período en curso es el
-        <strong>${fechaVenc}</strong>. La presente comunicación se realiza con la
-        antelación mínima legalmente exigida de un (1) mes prevista en el citado
-        artículo 22 de la Ley 50/1980 para el tomador del seguro.
-      </p>
-
-      <p>
-        En consecuencia, solicito que el contrato indicado <strong>no sea objeto
-        de renovación automática</strong> al término del período vigente, quedando
-        extinguida la relación contractual en la referida fecha de vencimiento y
-        sin que proceda cargo alguno por período posterior.
-      </p>
-
-      <p>
-        Les ruego acusen recibo de la presente comunicación y me confirmen la no
-        renovación de la póliza por escrito al domicilio o correo electrónico
-        que constan en el contrato.
-      </p>
-
-      <div class="letter-sign">
-        <p>Atentamente,</p>
-        <div class="letter-sign-spacer"></div>
-        <p><strong>${tomador}</strong><br>NIF / DNI / CIF: ${nif}</p>
-      </div>
-
-      <div class="letter-legal-note">
-        Comunicación emitida al amparo del artículo 22 de la Ley 50/1980, de 8 de octubre, del Contrato de Seguro.<br>
-        Se recomienda remitir mediante burofax con certificación de contenido y acuse de recibo, o carta certificada con acuse de recibo,
-        conservando el justificante de envío como prueba fehaciente de la notificación.
-      </div>
-    </div>
-  `;
-}
-
-function v(id)  { return document.getElementById(id).value.trim(); }
-function ph(t)  { return `<span style="color:var(--occ-gray-2);font-style:italic">[${t}]</span>`; }
-
-// ─── COPY ──────────────────────────────────────────────────────
-function copyLetter() {
-  const text = document.getElementById('letterBody').innerText;
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = document.getElementById('btnCopy');
-    btn.classList.add('btn--green');
-    btn.textContent = '✓ Copiado';
-    setTimeout(() => {
-      btn.classList.remove('btn--green');
-      btn.innerHTML = `<svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8">
-        <rect x="7" y="7" width="11" height="11" rx="2"/>
-        <path d="M4 13H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"/>
-      </svg> Copiar texto`;
-    }, 2200);
-  }).catch(() => alert('No se pudo copiar. Selecciona el texto manualmente.'));
-}
-
-// ─── UI STATE ──────────────────────────────────────────────────
-function showProcessing() {
-  document.getElementById('dropZone').style.display   = 'none';
-  document.getElementById('processing').style.display = 'block';
-  document.getElementById('dataPanel').style.display  = 'none';
-}
-function hideProcessing() {
-  document.getElementById('processing').style.display = 'none';
-  document.getElementById('dropZone').style.display   = 'block';
-}
-function showDataPanel() {
-  document.getElementById('processing').style.display = 'none';
-  document.getElementById('dropZone').style.display   = 'none';
-  document.getElementById('dataPanel').style.display  = 'block';
+// ── Date calc ────────────────────────────────────────────────────
+function calcDates(){
+  var raw=document.getElementById('vencOrig').value.trim();
+  var adjEl=document.getElementById('dateAdj');
+  var badgeEl=document.getElementById('plazoBadge');
+  var noteEl=document.getElementById('plazoNote');
+  var banner=document.getElementById('banner');
+  if(!raw||raw.split('/').length<2){adjEl.textContent='—';badgeEl.innerHTML='—';banner.style.display='none';return updateLetter();}
+  var parts=raw.split('/');
+  var day=parseInt(parts[0],10),month=parseInt(parts[1],10)-1;
+  var adjDate=new Date(CURRENT_YEAR,month,day);
+  adjEl.textContent=fmtDate(adjDate);
+  var limDate=new Date(CURRENT_YEAR,month-1,day);
+  var today=new Date();today.setHours(0,0,0,0);
+  var adj=new Date(adjDate);adj.setHours(0,0,0,0);
+  var lim=new Date(limDate);lim.setHours(0,0,0,0);
+  var dToLim=Math.round((lim-today)/86400000);
+  var dToAdj=Math.round((adj-today)/86400000);
+  banner.style.display='block';banner.className='banner';
+  var bCls,bTxt,bnCls,bnHtml;
+  if(today>=adj){
+    bCls='plazo-badge--error';bTxt='&#9940; Vencido';bnCls='banner--error';
+    bnHtml='<strong>&#9940; Vencimiento ya pasado en '+CURRENT_YEAR+'.</strong> La fecha '+fmtDate(adjDate)+' ya ha transcurrido. Verifica si corresponde a '+(CURRENT_YEAR+1)+'.';
+  }else if(today>lim){
+    bCls='plazo-badge--error';bTxt='&#9940; Plazo superado';bnCls='banner--error';
+    bnHtml='<strong>&#9940; Plazo de notificación superado.</strong> El plazo límite era el '+fmtDate(limDate)+'. La póliza puede haberse renovado automáticamente.';
+  }else if(dToLim<=14){
+    bCls='plazo-badge--warn';bTxt='&#9888; '+dToLim+' días';bnCls='banner--warn';
+    bnHtml='<strong>&#9888; Plazo muy próximo.</strong> Quedan solo <strong>'+dToLim+' día'+(dToLim!==1?'s':'')+'</strong> para el límite ('+fmtDate(limDate)+'). Envía hoy mismo por burofax.';
+  }else if(dToLim<=30){
+    bCls='plazo-badge--warn';bTxt='&#9888; '+dToLim+' días';bnCls='banner--warn';
+    bnHtml='<strong>&#9888; Plazo próximo.</strong> Quedan <strong>'+dToLim+' días</strong> para el límite ('+fmtDate(limDate)+'). Envía cuanto antes.';
+  }else{
+    bCls='plazo-badge--ok';bTxt='&#10003; '+dToLim+' días';bnCls='banner--ok';
+    bnHtml='<strong>&#10003; Plazo correcto.</strong> Quedan <strong>'+dToLim+' días</strong> hasta el límite ('+fmtDate(limDate)+') y <strong>'+dToAdj+' días</strong> hasta el vencimiento.';
+  }
+  badgeEl.innerHTML='<span class="plazo-badge '+bCls+'">'+bTxt+'</span>';
+  noteEl.textContent='Límite: '+fmtDate(limDate)+' · ≥ 1 mes antes';
+  banner.classList.add(bnCls);banner.innerHTML=bnHtml;
   updateLetter();
 }
-function resetAll() {
-  ['numPoliza','tomador','nif','ramo','compania','direccion','vencOrig'].forEach(id =>
-    document.getElementById(id).value = ''
-  );
-  document.getElementById('dateAdj').textContent  = '—';
-  document.getElementById('dateLimit').textContent = '—';
-  document.getElementById('banner').style.display = 'none';
-  document.getElementById('fileInput').value = '';
-  document.getElementById('dataPanel').style.display  = 'none';
-  document.getElementById('dropZone').style.display   = 'block';
+
+function fmtDate(d){return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();}
+var ML=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+function fmtDateLong(d){return d.getDate()+' de '+ML[d.getMonth()]+' de '+d.getFullYear();}
+function parseDMY(str){
+  var p=(str||'').split('/');if(p.length<3)return null;
+  var d=parseInt(p[0],10),m=parseInt(p[1],10)-1,y=parseInt(p[2],10);
+  if(isNaN(d)||isNaN(m)||isNaN(y))return null;return new Date(y,m,d);
+}
+function getLetterDate(){var dt=parseDMY(gv('fechaCarta'));return dt?fmtDateLong(dt):fmtDateLong(new Date());}
+
+// ── Letter ───────────────────────────────────────────────────────
+var _localidad='Figueres';
+function updateLetter(){
+  var prevLoc=document.getElementById('letrLocalidad');
+  if(prevLoc)_localidad=prevLoc.textContent.trim()||'Figueres';
+  var tipo=document.getElementById('tipoTomador').value;
+  var poliza =gv('numPoliza')||ph('Nº PÓLIZA');
+  var ramo   =gv('ramo')||'____________________';
+  var comp   =gv('compania')||ph('COMPAÑÍA ASEGURADORA');
+  var tom    =gv('tomador')||ph(tipo==='fisica'?'NOMBRE Y APELLIDOS':tipo==='empresa'?'REPRESENTANTE LEGAL':'PRESIDENTE/A');
+  var nif    =gv('nif')||ph('DNI/NIE');
+  var entNom =gv('entidadNombre')||ph(tipo==='empresa'?'RAZÓN SOCIAL':'NOMBRE COMUNIDAD');
+  var entCif =gv('entidadCif')||ph(tipo==='empresa'?'CIF':'NIF COMUNIDAD');
+  var adjTxt =document.getElementById('dateAdj').textContent;
+  var fechaVenc=adjTxt!=='—'?adjTxt:ph('FECHA VENCIMIENTO');
+
+  var introText,signLines;
+  if(tipo==='fisica'){
+    introText='yo, <strong>'+tom+'</strong>, en mi condición de Tomador/a del contrato de seguro';
+    signLines='<strong>'+tom+'</strong>';
+  }else if(tipo==='empresa'){
+    introText='D./Dña. <strong>'+tom+'</strong>, con DNI nº <strong>'+nif+'</strong>, actuando en nombre y representación de <strong>'+entNom+'</strong>, con CIF nº <strong>'+entCif+'</strong>, en su condición de Tomadora del contrato de seguro';
+    signLines='<strong>'+tom+'</strong><br><span style="font-size:12.5px;color:var(--occ-gray)">En representación de <strong>'+entNom+'</strong></span>';
+  }else{
+    introText='D./Dña. <strong>'+tom+'</strong>, con DNI nº <strong>'+nif+'</strong>, en su condición de Presidente/a de la Comunidad de Propietarios <strong>'+entNom+'</strong>, con NIF nº <strong>'+entCif+'</strong>, Tomadora del contrato de seguro';
+    signLines='<strong>'+tom+'</strong><br><span style="font-size:12.5px;color:var(--occ-gray)">Presidente/a de la C.P. <strong>'+entNom+'</strong></span>';
+  }
+
+  document.getElementById('letterBody').innerHTML=
+    '<p class="letter-date-place"><span contenteditable="true" id="letrLocalidad" spellcheck="false">'+_localidad+'</span>, a '+getLetterDate()+'</p>'+
+    '<div class="letter-recipient">A/A:<br><strong>'+comp+'</strong><br>Servicio de Atención al Asegurado / Departamento de Suscripción</div>'+
+    '<div class="letter-subject">Asunto: Comunicación de no renovación — Póliza nº '+poliza+'</div>'+
+    '<div class="letter-body">'+
+      '<p>Muy señores míos:</p>'+
+      '<p>Por medio de la presente comunicación, '+introText+' de <strong>'+ramo+'</strong> con número de póliza <strong>'+poliza+'</strong>, suscrito con <strong>'+comp+'</strong>, y de conformidad con lo establecido en el <strong>artículo 22 de la Ley 50/1980, de 8 de octubre, del Contrato de Seguro</strong>, les comunico formalmente mi <strong>voluntad de no renovar</strong> el citado contrato a su próximo vencimiento.</p>'+
+      '<p>La fecha de vencimiento del período en curso es el <strong>'+fechaVenc+'</strong>. La presente comunicación se realiza con la antelación mínima legalmente exigida de un (1) mes prevista en el citado artículo 22 de la Ley 50/1980 para el tomador del seguro.</p>'+
+      '<p>En consecuencia, solicito que el contrato indicado <strong>no sea objeto de renovación automática</strong> al término del período vigente, quedando extinguida la relación contractual en la referida fecha de vencimiento y sin que proceda cargo alguno por período posterior.</p>'+
+      '<p>Les ruego acúsen recibo de la presente comunicación y me confirmen la no renovación de la póliza por escrito.</p>'+
+      '<div class="letter-sign"><p>Atentamente,</p><div class="letter-sign-spacer"></div><p>'+signLines+'</p></div>'+
+      '<div class="letter-legal-note">Comunicación emitida al amparo del artículo 22 de la Ley 50/1980, de 8 de octubre, del Contrato de Seguro.<br>Se recomienda remitir mediante burofax con certificación de contenido y acuse de recibo, o carta certificada con acuse de recibo, conservando el justificante de envío como prueba fehaciente de la notificación.</div>'+
+    '</div>';
+
+  var locEl=document.getElementById('letrLocalidad');
+  if(locEl)locEl.addEventListener('input',function(){_localidad=locEl.textContent.trim()||'Figueres';});
 }
 
-// Boot
-updateLetter();
+function gv(id){var el=document.getElementById(id);return el?el.value.trim():'';}
+function ph(t){return '<span style="color:var(--occ-gray-2);font-style:italic">['+t+']</span>';}
+
+// ── Copy ─────────────────────────────────────────────────────────
+function copyLetter(){
+  var text=document.getElementById('letterBody').innerText;
+  navigator.clipboard.writeText(text).then(function(){
+    var btn=document.getElementById('btnCopy');btn.classList.add('btn--green');btn.textContent='✓ Copiado';
+    setTimeout(function(){btn.classList.remove('btn--green');btn.innerHTML='<svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="7" y="7" width="11" height="11" rx="2"/><path d="M4 13H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"/></svg> Copiar texto';},2200);
+  }).catch(function(){alert('No se pudo copiar. Selecciona el texto manualmente.');});
+}
+
+// ── UI state ─────────────────────────────────────────────────────
+function showProcessing(){
+  document.getElementById('dropZone').style.display='none';
+  document.getElementById('processing').style.display='block';
+  document.getElementById('dataPanel').style.display='none';
+}
+function hideProcessing(){
+  document.getElementById('processing').style.display='none';
+  document.getElementById('dropZone').style.display='block';
+}
+function showDataPanel(){
+  document.getElementById('processing').style.display='none';
+  document.getElementById('dropZone').style.display='none';
+  document.getElementById('dataPanel').style.display='block';
+  updateLetter();
+}
+function resetAll(){
+  ['numPoliza','tomador','nif','ramo','compania','entidadNombre','entidadCif','vencOrig'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('tipoTomador').value='fisica';onTipoChange();
+  document.getElementById('dateAdj').textContent='—';
+  document.getElementById('plazoBadge').innerHTML='—';
+  document.getElementById('plazoNote').textContent='Art. 22 · ≥ 1 mes de antelación';
+  document.getElementById('banner').style.display='none';
+  document.getElementById('fileInput').value='';
+  document.getElementById('fileName').textContent='Entrada manual';
+  document.getElementById('dataPanel').style.display='none';
+  document.getElementById('dropZone').style.display='block';
+  var d=new Date();
+  document.getElementById('fechaCarta').value=String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
+  _localidad='Figueres';
+}
 </script>
 </body>
 </html>

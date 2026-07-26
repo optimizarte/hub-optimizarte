@@ -40,12 +40,17 @@
             overflow: hidden;
         }
 
-        /* ── CABECERA NEGRA, SIN LOGO ── */
+        /* ── CABECERA NEGRA ── */
         header {
-            background-color: var(--occ-dark);
+            background-color: #2D2D2D;
             color: var(--occ-white);
-            padding: 20px 32px;
+            padding: 14px 32px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
         }
+        header .hdr-logo { flex-shrink: 0; }
+        header .hdr-text { flex: 1; }
 
         header h1 {
             margin: 0 0 5px;
@@ -272,10 +277,16 @@
 
 <div class="container">
 
-    <!-- CABECERA NEGRA, SIN LOGO -->
     <header>
-        <h1>Generador de Cartas de Cambio de Mediador</h1>
-        <p>Completa los campos para generar la solicitud de asignación a OPTIMIZARTE 3.0 · Código 260963</p>
+        <div class="hdr-logo" style="font-family:system-ui,sans-serif;font-size:15px;font-weight:700;letter-spacing:-.01em;color:#fff">
+          Optimizarte
+          <span style="font-family:Arial,sans-serif;font-size:9.5px;font-weight:500;color:#999;margin:0 3px;letter-spacing:0">by</span>
+          <span style="font-weight:700;color:#DC0028">Occident</span>
+        </div>
+        <div class="hdr-text">
+          <h1>Generador de Cartas de Cambio de Mediador</h1>
+          <p>Completa los campos para generar la solicitud de asignación a OPTIMIZARTE 3.0 · Código 260963</p>
+        </div>
     </header>
 
     <div class="section-bar"></div>

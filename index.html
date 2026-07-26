@@ -769,35 +769,11 @@ button { font-family: var(--font); }
 ═══════════════════════════════════════════════ -->
 <header class="header">
   <a href="#" class="header-logo">
-    <!--
-      Logo OPTIMIZARTE by Occident — recreació SVG fidel
-      Tipografia serif bold caps + "by Occident" cursiva+negreta + anagrama trisquel
-      Tot en blanc, fons transparent.
-    -->
-    <svg class="logo-svg" viewBox="0 0 460 85" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- OPTIMIZARTE€ — serif bold uppercase -->
-      <text x="4" y="38"
-        font-family="Georgia, 'Times New Roman', serif"
-        font-size="40" font-weight="900" fill="white" letter-spacing="-1">OPTIMIZART€</text>
-      <!-- "by" italic -->
-      <text x="42" y="65"
-        font-family="Georgia, 'Times New Roman', serif"
-        font-size="21" font-weight="400" font-style="italic" fill="white">by</text>
-      <!-- "Occident" bold -->
-      <text x="76" y="65"
-        font-family="Georgia, 'Times New Roman', serif"
-        font-size="21" font-weight="700" fill="white">Occident</text>
-      <!-- Anagrama trisquel / Y amb tres braços arrodonits — blanc -->
-      <g transform="translate(427,56) scale(0.52)">
-        <path d="M0,0 C-10,-6 -34,-10 -46,-2 C-60,8 -60,24 -50,32 C-40,40 -24,34 -12,20 Z"
-              fill="white" stroke="white" stroke-width="0.5" stroke-linejoin="round"/>
-        <path d="M0,0 C12,-4 26,-20 24,-38 C22,-54 8,-62 -6,-56 C-20,-50 -20,-34 -12,-20 Z"
-              fill="white" stroke="white" stroke-width="0.5" stroke-linejoin="round"/>
-        <path d="M0,0 C2,12 16,26 34,28 C50,30 62,18 60,4 C58,-10 42,-16 26,-10 Z"
-              fill="white" stroke="white" stroke-width="0.5" stroke-linejoin="round"/>
-        <circle cx="0" cy="0" r="9" fill="white"/>
-      </g>
-    </svg>
+    <div style="font-family:system-ui,sans-serif;font-size:15px;font-weight:700;letter-spacing:-.01em;color:#fff">
+      Optimizarte
+      <span style="font-family:Arial,sans-serif;font-size:9.5px;font-weight:500;color:#999;margin:0 3px;letter-spacing:0">by</span>
+      <span style="font-weight:700;color:#DC0028">Occident</span>
+    </div>
   </a>
 
   <div class="header-divider"></div>
@@ -852,7 +828,7 @@ button { font-family: var(--font); }
         <rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/>
       </svg>
       Formularis
-      <span class="nav-badge gray">2</span>
+      <span class="nav-badge gray">3</span>
     </a>
 
     <a class="nav-item" href="#" onclick="sidebarFilter('instruccions',this);return false;">
@@ -1183,6 +1159,41 @@ button { font-family: var(--font); }
           </div>
           <div class="card-title">Canvi de Mediador</div>
           <div class="card-desc">Generador de cartes de canvi de mediador a OPTIMIZARTE 3.0. Vista pr&#232;via d&#39;impressi&#243; i activitat Gestiona integrades.</div>
+          <div class="card-footer-row">
+            <span class="card-category">Formularis</span>
+            <div class="card-arrow">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </div>
+        </div>
+      </a>
+
+
+      <!-- ★ No Renovació de Pòlissa -->
+      <a class="tool-card"
+         href="no-renovacion-poliza.html"
+         data-category="formularis"
+         data-status="live"
+         data-title="No Renovació de Pòlissa"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="9" y1="13" x2="15" y2="13"/>
+                <line x1="9" y1="17" x2="12" y2="17"/>
+                <line x1="14" y1="15" x2="18" y2="19"/>
+                <line x1="18" y1="15" x2="14" y2="19"/>
+              </svg>
+            </div>
+            <span class="card-status status-live">&#9679; Disponible</span>
+          </div>
+          <div class="card-title">No Renovació de Pòlissa</div>
+          <div class="card-desc">Genera la comunicació formal de no renovació (Art. 22, Llei 50/1980). Arrossega el PDF de la pòlissa per extreure les dades automàticament.</div>
           <div class="card-footer-row">
             <span class="card-category">Formularis</span>
             <div class="card-arrow">

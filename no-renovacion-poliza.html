@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>No Renovación de Póliza — Ley 50/1980 | OPTIMIZARTE by Occident</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <style>
+    :root {
+      --occ-red:    #DC0028;
+      --occ-dark:   #202020;
+      --occ-gray:   #414141;
+      --occ-gray-2: #BEBEBE;
+      --occ-gray-3: #E7E6E6;
+      --occ-light:  #F5F5F5;
+      --occ-white:  #FFFFFF;
+      --occ-blue:   #0563C1;
+      --occ-radius: 8px;
+      --occ-shadow: 0 2px 12px rgba(0,0,0,0.09);
+      --occ-font:   Arial, Helvetica, sans-serif;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--occ-font); background: var(--occ-light); color: var(--occ-dark); min-height: 100vh; }
+
+    /* ─── HEADER (negro) ─── */
+    .header {
+      background: var(--occ-dark);
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo-wordmark { color: white; font-size: 22px; font-weight: bold; letter-spacing: 0.3px; }
+    .logo-sub { color: rgba(255,255,255,0.55); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; display: block; line-height: 1; }
+    .header-right { text-align: right; color: rgba(255,255,255,0.8); font-size: 13px; }
+    .header-right strong { display: block; font-size: 15px; color: white; }
+
+    /* ─── MAIN ─── */
+    .main { max-width: 940px; margin: 0 auto; padding: 36px 24px 60px; }
+
+    /* ─── TITLE ─── */
+    .page-title { text-align: center; margin-bottom: 36px; }
+    .law-badge {
+      display: inline-block; background: var(--occ-red); color: white;
+      padding: 4px 16px; border-radius: 20px; font-size: 11px;
+      font-weight: bold; letter-spacing: 0.5px; margin-bottom: 14px;
+    }
+    .page-title h1 { font-size: 30px; color: var(--occ-dark); margin-bottom: 8px; }
+    .page-title h1 em { color: var(--occ-red); font-style: normal; }
+    .page-title p { color: var(--occ-gray); font-size: 14px; max-width: 520px; margin: 0 auto; line-height: 1.6; }
+
+    /* ─── DROP ZONE ─── */
+    .drop-zone {
+      background: white; border: 2.5px dashed var(--occ-gray-2); border-radius: 12px;
+      padding: 64px 40px 56px; text-align: center; cursor: pointer;
+      transition: border-color .25s, background .25s, transform .15s;
+    }
+    .drop-zone:hover { border-color: #aaa; }
+    .drop-zone.drag-over {
+      border-color: var(--occ-red); background: #FFF5F6;
+      transform: scale(1.012); box-shadow: 0 0 0 4px rgba(220,0,40,0.08);
+    }
+    .drop-icon-wrap { margin-bottom: 20px; }
+    .drop-zone h2 { font-size: 20px; color: var(--occ-dark); margin-bottom: 8px; }
+    .drop-zone p  { color: var(--occ-gray); font-size: 14px; margin-bottom: 20px; }
+    .btn-select {
+      display: inline-block; background: var(--occ-red); color: white; border: none;
+      padding: 11px 26px; border-radius: var(--occ-radius); font-size: 14px;
+      font-family: var(--occ-font); cursor: pointer; transition: background .2s;
+    }
+    .btn-select:hover { background: #B8001E; }
+    .drop-hint { margin-top: 14px; font-size: 11px; color: var(--occ-gray-2); }
+    input[type="file"] { display: none; }
+
+    /* ─── PROCESSING ─── */
+    .processing { display: none; background: white; border-radius: 12px; padding: 60px; text-align: center; box-shadow: var(--occ-shadow); }
+    .spinner { width: 44px; height: 44px; border: 4px solid var(--occ-gray-3); border-top-color: var(--occ-red); border-radius: 50%; animation: spin .9s linear infinite; margin: 0 auto 16px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .processing p { color: var(--occ-gray); font-size: 14px; }
+
+    /* ─── DATA PANEL ─── */
+    .data-panel { display: none; }
+    .panel-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .panel-file-info { display: flex; align-items: center; gap: 10px; }
+    .file-pill {
+      display: flex; align-items: center; gap: 7px; background: white;
+      border: 1px solid var(--occ-gray-3); border-radius: 20px; padding: 6px 14px;
+      font-size: 13px; color: var(--occ-gray); box-shadow: var(--occ-shadow);
+    }
+    .btn-reset {
+      background: white; border: 1px solid var(--occ-gray-3); color: var(--occ-gray);
+      padding: 8px 16px; border-radius: var(--occ-radius); cursor: pointer;
+      font-size: 13px; font-family: var(--occ-font); display: flex; align-items: center;
+      gap: 6px; transition: all .2s; box-shadow: var(--occ-shadow);
+    }
+    .btn-reset:hover { border-color: var(--occ-red); color: var(--occ-red); }
+
+    /* ─── BANNER ─── */
+    .banner { display: none; border-radius: var(--occ-radius); padding: 13px 18px; margin-bottom: 18px; font-size: 13px; line-height: 1.5; }
+    .banner--ok    { background:#E8F5E9; border:1px solid #A5D6A7; border-left:4px solid #28A745; color:#1B5E20; }
+    .banner--warn  { background:#FFF8E1; border:1px solid #FFE082; border-left:4px solid #FFC107; color:#6D4C00; }
+    .banner--error { background:#FFF0F2; border:1px solid #FFCDD2; border-left:4px solid var(--occ-red); color:#7B0015; }
+
+    /* ─── FIELDS GRID ─── */
+    .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .field-card { background: white; border-radius: var(--occ-radius); box-shadow: var(--occ-shadow); padding: 16px 18px; }
+    .field-card--full { grid-column: 1 / -1; }
+    .field-card--date { grid-column: 1 / -1; border-top: 3px solid var(--occ-red); }
+    .field-label { font-size: 10px; font-weight: bold; color: var(--occ-gray-2); text-transform: uppercase; letter-spacing: .7px; margin-bottom: 7px; }
+    .field-input {
+      width: 100%; border: 1px solid var(--occ-gray-3); border-radius: 5px;
+      padding: 8px 11px; font-size: 14px; font-family: var(--occ-font); color: var(--occ-dark);
+      transition: border-color .2s, box-shadow .2s; background: white;
+    }
+    .field-input:focus { outline: none; border-color: var(--occ-red); box-shadow: 0 0 0 3px rgba(220,0,40,0.08); }
+    .field-input::placeholder { color: var(--occ-gray-2); }
+
+    /* ─── DATE CARD ─── */
+    .date-layout { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+    .date-block { min-width: 140px; }
+    .date-block .field-label { margin-bottom: 6px; }
+    .date-value-adj { font-size: 26px; font-weight: 700; color: var(--occ-red); letter-spacing: -.5px; }
+    .date-value-limit { font-size: 17px; font-weight: 700; color: var(--occ-dark); }
+    .date-note { font-size: 11px; color: var(--occ-gray-2); margin-top: 3px; }
+    .date-arrow { font-size: 26px; color: var(--occ-gray-3); user-select: none; flex-shrink: 0; }
+    .date-sep { width: 1px; height: 56px; background: var(--occ-gray-3); flex-shrink: 0; }
+
+    /* ─── LETTER ─── */
+    .letter-card { background: white; border-radius: var(--occ-radius); box-shadow: var(--occ-shadow); margin-bottom: 20px; overflow: hidden; }
+    .letter-card-header {
+      background: var(--occ-dark); color: white; padding: 13px 20px;
+      display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: bold;
+    }
+    .letter-body-wrap { padding: 40px 48px; font-family: Georgia,'Times New Roman',serif; font-size: 13.5px; line-height: 1.85; color: #202020; }
+    .letter-date-place { text-align: right; margin-bottom: 28px; color: var(--occ-gray); font-size: 13px; }
+    .letter-sender   { margin-bottom: 26px; line-height: 1.6; }
+    .letter-recipient{ margin-bottom: 26px; color: var(--occ-gray); line-height: 1.6; }
+    .letter-subject  { font-weight: bold; font-family: Arial,sans-serif; margin-bottom: 22px; padding-bottom: 12px; border-bottom: 1.5px solid var(--occ-gray-3); font-size: 13px; color: var(--occ-dark); text-transform: uppercase; letter-spacing: .3px; }
+    .letter-body p   { margin-bottom: 14px; }
+    .letter-sign     { margin-top: 36px; line-height: 1.7; }
+    .letter-sign-spacer { height: 52px; border-bottom: 1px solid var(--occ-gray-3); margin: 8px 0 10px; max-width: 260px; }
+    .letter-legal-note { margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--occ-gray-3); font-size: 10.5px; color: var(--occ-gray-2); font-family: Arial,sans-serif; line-height: 1.6; }
+    [contenteditable] { outline: none; border-bottom: 1px dashed #ccc; padding: 0 4px; cursor: text; min-width: 80px; display: inline-block; }
+    [contenteditable]:focus { border-bottom-color: var(--occ-red); }
+
+    /* ─── ACTIONS ─── */
+    .actions { display: flex; gap: 12px; justify-content: flex-end; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: var(--occ-radius); font-size: 14px; font-family: var(--occ-font); cursor: pointer; transition: all .2s; border: none; font-weight: 600; }
+    .btn--primary { background: var(--occ-red); color: white; }
+    .btn--primary:hover { background: #B8001E; }
+    .btn--secondary { background: white; color: var(--occ-dark); border: 1px solid var(--occ-gray-3); box-shadow: var(--occ-shadow); font-weight: 500; }
+    .btn--secondary:hover { border-color: var(--occ-red); color: var(--occ-red); }
+    .btn--green { background: #28A745 !important; color: white !important; }
+
+    /* ─── FOOTER ─── */
+    .footer { background: var(--occ-gray-3); padding: 14px 32px; text-align: center; font-size: 11px; color: var(--occ-gray); line-height: 1.6; }
+
+    /* ─── PRINT ─── */
+    @media print {
+      .header,.page-title,.drop-zone,.processing,.panel-topbar,
+      .fields-grid,.banner,.actions,.footer,.letter-card-header { display: none !important; }
+      body { background: white; font-size: 12pt; }
+      .main { padding: 0; max-width: 100%; }
+      .data-panel { display: block !important; }
+      .letter-card { box-shadow: none; }
+      .letter-body-wrap { padding: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div style="font-family:system-ui,sans-serif;font-size:15px;font-weight:700;letter-spacing:-.01em;color:#fff">
+    Optimizarte
+    <span style="font-family:Arial,sans-serif;font-size:9.5px;font-weight:500;color:#999;margin:0 3px;letter-spacing:0">by</span>
+    <span style="font-weight:700;color:#DC0028">Occident</span>
+  </div>
+  <div class="header-right">
+    <strong>No Renovación de Póliza</strong>
+    Artículo 22 — Ley 50/1980
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- Title -->
+  <div class="page-title">
+    <div class="law-badge">Ley 50/1980 · Art. 22 · Contrato de Seguro</div>
+    <h1>Solicitud de <em>No Renovación</em></h1>
+    <p>Arrastra el PDF de la póliza para extraer los datos y generar automáticamente la comunicación formal de no renovación</p>
+  </div>
+
+  <!-- DROP ZONE -->
+  <div id="dropZone" class="drop-zone"
+       ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+    <div class="drop-icon-wrap">
+      <svg viewBox="0 0 88 88" width="88" height="88" fill="none">
+        <rect x="14" y="8" width="44" height="56" rx="5" stroke="#BEBEBE" stroke-width="2.5"/>
+        <path d="M42 8 L58 8 L58 24 L42 24 Z" fill="#F5F5F5" stroke="#BEBEBE" stroke-width="2.5"/>
+        <line x1="22" y1="36" x2="50" y2="36" stroke="#E0E0E0" stroke-width="2" stroke-linecap="round"/>
+        <line x1="22" y1="44" x2="50" y2="44" stroke="#E0E0E0" stroke-width="2" stroke-linecap="round"/>
+        <line x1="22" y1="52" x2="40" y2="52" stroke="#E0E0E0" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="66" cy="62" r="14" fill="#FFF0F3"/>
+        <path d="M66 53 L66 70" stroke="#DC0028" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M59 64 L66 71 L73 64" stroke="#DC0028" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h2>Arrastra aquí la póliza</h2>
+    <p>Suelta el PDF de la póliza para extraer los datos automáticamente</p>
+    <button class="btn-select" onclick="document.getElementById('fileInput').click()">Seleccionar archivo PDF</button>
+    <div class="drop-hint">Si algún campo no se captura correctamente, puedes editarlo manualmente</div>
+    <input type="file" id="fileInput" accept=".pdf" onchange="handleFile(this.files[0])">
+  </div>
+
+  <!-- PROCESSING -->
+  <div id="processing" class="processing">
+    <div class="spinner"></div>
+    <p>Extrayendo datos de la póliza…</p>
+  </div>
+
+  <!-- DATA PANEL -->
+  <div id="dataPanel" class="data-panel">
+
+    <div class="panel-topbar">
+      <div class="panel-file-info">
+        <div class="file-pill">
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="#DC0028" stroke-width="1.5">
+            <path d="M9 2H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V6L9 2z"/>
+            <polyline points="9 2 9 6 13 6"/>
+          </svg>
+          <span id="fileName">póliza.pdf</span>
+        </div>
+        <span style="font-size:12px;color:var(--occ-gray-2);">Revisa y completa los campos si es necesario</span>
+      </div>
+      <button class="btn-reset" onclick="resetAll()">
+        <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M2 8a6 6 0 1 1 1.5 4"/><path d="M2 12V8H6"/>
+        </svg>
+        Nueva póliza
+      </button>
+    </div>
+
+    <div id="banner" class="banner"></div>
+
+    <!-- FIELDS -->
+    <div class="fields-grid">
+
+      <div class="field-card">
+        <div class="field-label">Nº de Póliza</div>
+        <input class="field-input" id="numPoliza" type="text" placeholder="Ej: 12345678" oninput="updateLetter()">
+      </div>
+
+      <div class="field-card">
+        <div class="field-label">Ramo / Producto</div>
+        <input class="field-input" id="ramo" type="text" placeholder="Ej: Hogar, Salud, Motor, Vida…" oninput="updateLetter()">
+      </div>
+
+      <div class="field-card field-card--full">
+        <div class="field-label">Compañía Aseguradora (destinatario de la carta)</div>
+        <input class="field-input" id="compania" type="text" placeholder="Ej: Mapfre, Allianz, AXA, Caser, Helvetia…" oninput="updateLetter()">
+      </div>
+
+      <div class="field-card field-card--full">
+        <div class="field-label">Tomador del Seguro</div>
+        <input class="field-input" id="tomador" type="text" placeholder="Nombre completo del tomador" oninput="updateLetter()">
+      </div>
+
+      <div class="field-card">
+        <div class="field-label">NIF / DNI / CIF</div>
+        <input class="field-input" id="nif" type="text" placeholder="Ej: 12345678A" oninput="updateLetter()">
+      </div>
+
+      <div class="field-card">
+        <div class="field-label">Dirección del Tomador</div>
+        <input class="field-input" id="direccion" type="text" placeholder="Calle, nº, población, CP" oninput="updateLetter()">
+      </div>
+
+      <!-- DATE CARD -->
+      <div class="field-card field-card--date">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+          <div class="field-label" style="margin-bottom:0;">Fechas de vencimiento y no renovación</div>
+          <span style="font-size:11px;color:var(--occ-gray-2);">Art. 22 — el tomador debe notificar con ≥ 1 mes de antelación</span>
+        </div>
+        <div class="date-layout">
+          <div class="date-block">
+            <div class="field-label">Vencimiento en póliza</div>
+            <input class="field-input" id="vencOrig" type="text" placeholder="DD/MM/AAAA"
+                   oninput="calcDates()" style="max-width:150px;font-size:15px;font-weight:600;">
+            <div class="date-note">Tal como figura en la póliza</div>
+          </div>
+          <div class="date-arrow">→</div>
+          <div class="date-block">
+            <div class="field-label">Fecha de no renovación</div>
+            <div class="date-value-adj" id="dateAdj">—</div>
+            <div class="date-note">Día/mes de póliza · año <span id="spanYear"></span></div>
+          </div>
+          <div class="date-sep"></div>
+          <div class="date-block">
+            <div class="field-label">Plazo límite notificación</div>
+            <div class="date-value-limit" id="dateLimit">—</div>
+            <div class="date-note">1 mes antes del vencimiento</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /fields-grid -->
+
+    <!-- LETTER PREVIEW -->
+    <div class="letter-card">
+      <div class="letter-card-header">
+        <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="white" stroke-width="1.7">
+          <path d="M13 2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7L13 2z"/>
+          <polyline points="13 2 13 7 18 7"/>
+          <line x1="7" y1="11" x2="13" y2="11"/>
+          <line x1="7" y1="14" x2="13" y2="14"/>
+        </svg>
+        Comunicación de No Renovación · Vista previa
+      </div>
+      <div class="letter-body-wrap" id="letterBody"></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn--secondary" id="btnCopy" onclick="copyLetter()">
+        <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="7" y="7" width="11" height="11" rx="2"/>
+          <path d="M4 13H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"/>
+        </svg>
+        Copiar texto
+      </button>
+      <button class="btn btn--primary" onclick="window.print()">
+        <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="white" stroke-width="1.8">
+          <polyline points="5 7 5 2 15 2 15 7"/>
+          <path d="M5 14H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/>
+          <rect x="5" y="12" width="10" height="7"/>
+        </svg>
+        Imprimir / Guardar PDF
+      </button>
+    </div>
+
+  </div><!-- /data-panel -->
+</main>
+
+<footer class="footer">
+  <strong>OPTIMIZARTE by Occident</strong> &nbsp;·&nbsp;
+  Comunicación generada al amparo del Art. 22 de la Ley 50/1980, de 8 de octubre, del Contrato de Seguro &nbsp;·&nbsp;
+  Se recomienda envío mediante burofax o carta certificada con acuse de recibo
+</footer>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const CURRENT_YEAR = new Date().getFullYear();
+document.getElementById('spanYear').textContent = CURRENT_YEAR;
+
+// ─── DRAG & DROP ───────────────────────────────────────────────
+function onDragOver(e) { e.preventDefault(); document.getElementById('dropZone').classList.add('drag-over'); }
+function onDragLeave()  { document.getElementById('dropZone').classList.remove('drag-over'); }
+function onDrop(e) {
+  e.preventDefault();
+  document.getElementById('dropZone').classList.remove('drag-over');
+  const f = e.dataTransfer.files[0];
+  if (f) handleFile(f);
+}
+
+// ─── FILE HANDLING ─────────────────────────────────────────────
+async function handleFile(file) {
+  if (!file) return;
+  if (!file.name.toLowerCase().endsWith('.pdf')) {
+    alert('Por favor, selecciona un archivo PDF de la póliza.');
+    return;
+  }
+  showProcessing();
+  document.getElementById('fileName').textContent = file.name;
+
+  try {
+    const buf = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(buf) }).promise;
+    let page1Lines = [];
+    let allLines   = [];
+    for (let i = 1; i <= Math.min(pdf.numPages, 8); i++) {
+      const page    = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      const lines   = reconstructLines(content.items);
+      if (i === 1) page1Lines = lines;
+      allLines = allLines.concat(lines);
+    }
+    const extracted = extractData(allLines, page1Lines);
+    console.log('[NR] Extraído:', extracted); // debug en consola
+    populateFields(extracted);
+    showDataPanel();
+  } catch (err) {
+    console.error('PDF error:', err);
+    hideProcessing();
+    showDataPanel();
+  }
+}
+
+// ─── LINE RECONSTRUCTION ───────────────────────────────────────
+// Agrupa ítems PDF por coordenada Y real → reconstruye líneas visuales
+function reconstructLines(items) {
+  const yMap = {};
+  items.forEach(item => {
+    const s = item.str;
+    if (!s || !s.trim()) return;
+    // Agrupar por Y redondeado a 3px para absorber variaciones de baseline
+    const y = Math.round(item.transform[5] / 3) * 3;
+    if (!yMap[y]) yMap[y] = [];
+    yMap[y].push({ x: item.transform[4], text: s });
+  });
+  return Object.entries(yMap)
+    .sort(([ya], [yb]) => Number(yb) - Number(ya))   // mayor Y = arriba de la página
+    .map(([, grp]) =>
+      grp.sort((a, b) => a.x - b.x)
+         .map(i => i.text)
+         .join('')
+         .replace(/\s+/g, ' ')
+         .trim()
+    )
+    .filter(s => s.length > 1);
+}
+
+// ─── KNOWN INSURERS ────────────────────────────────────────────
+const KNOWN_INSURERS = [
+  'Occident','Seguros Occident','MAPFRE','Allianz','AXA','Zurich','Generali',
+  'Helvetia','HDI','Caser','Mutua Madrileña','Mutua Madrileña','Plus Ultra',
+  'BBVA Seguros','Línea Directa','Pelayo','Fiatc','Reale','Sanitas','Asisa',
+  'SegurCaixa','Adeslas','Nationale-Nederlanden','Nationale Nederlanden',
+  'Groupama','DKV','Berkley','Hiscox','Liberty','Lagun Aro','MGS','Agropelayo',
+  'VidaCaixa','Mútua de Propietaris','Gesnon','Iris Global','Euromutua',
+  'Fénix Directo','Zurichlife','GCM Seguros','Balumba','Santa Lucía',
+  'FIATC','Previsora General','Aseguradora del Mediterráneo'
+];
+
+// ─── DATA EXTRACTION ───────────────────────────────────────────
+function extractData(lines, page1Lines) {
+  const fullFlat = lines.join(' ').replace(/\s+/g, ' ');
+  const data     = {};
+
+  // Helpers de fecha
+  const MESES = {enero:1,febrero:2,marzo:3,abril:4,mayo:5,junio:6,julio:7,agosto:8,
+                 septiembre:9,octubre:10,noviembre:11,diciembre:12};
+  const dateNumRe  = /(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})/;
+  const dateWordRe = /(\d{1,2})\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\s+de\s+(\d{4})/i;
+  const nifRe      = /\b([A-Z]\d{7}[A-Z0-9]|\d{8}[A-Z])\b/i;
+
+  function parseDate(str) {
+    if (!str) return null;
+    let m = str.match(dateNumRe);
+    if (m) {
+      const d = m[1].padStart(2,'0'), mo = m[2].padStart(2,'0');
+      let y = m[3]; if (y.length === 2) y = (+y < 50 ? '20' : '19') + y;
+      return `${d}/${mo}/${y}`;
+    }
+    m = str.match(dateWordRe);
+    if (m) return `${m[1].padStart(2,'0')}/${String(MESES[m[2].toLowerCase()]).padStart(2,'0')}/${m[3]}`;
+    return null;
+  }
+
+  // ── 1. COMPAÑÍA — primeras líneas de pág. 1 (zona del logo) ──
+  // Los primeros 20-25 items de texto son la cabecera del documento,
+  // justo donde aparece el nombre junto al logo.
+  const headerLines = (page1Lines || lines).slice(0, 25);
+  const headerFlat  = headerLines.join(' ');
+
+  for (const ins of KNOWN_INSURERS) {
+    const re = new RegExp(
+      ins.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/\s+/g,'[\\s]*'),
+      'i'
+    );
+    if (re.test(headerFlat)) {
+      // Intentar capturar el nombre legal completo (con S.A., SEGUROS, etc.)
+      const fullRe = new RegExp(
+        ins.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/\s+/g,'[\\s,]*') +
+        '[\\w\\s,\\.&]*(?:S\\.?A\\.?|S\\.?L\\.?|SEGUROS?|ASSEGURANCES?)?',
+        'i'
+      );
+      const m = headerFlat.match(fullRe);
+      data.compania = (m ? m[0] : ins).trim().replace(/\s+/g,' ').substring(0,80);
+      break;
+    }
+  }
+  // Fallback: "XXXX SEGUROS" o "SEGUROS XXXX" en la cabecera
+  if (!data.compania) {
+    const m = headerFlat.match(/\b([A-ZÁÉÍÓÚÑ][A-Za-záéíóúñÁÉÍÓÚÑ\s\-&]+\s+(?:SEGUROS?|ASSEGURANCES?|MUTUA|ASSURANCES?))\b/);
+    if (m) data.compania = m[1].trim().substring(0,80);
+  }
+  // Último recurso: primera línea no vacía de página 1
+  if (!data.compania && headerLines.length) {
+    data.compania = headerLines[0].substring(0,80);
+  }
+
+  // ── 2. LOCALIZAR SECCIÓN MEDIADOR (excluir) ───────────────────
+  // Etiquetas típicas de sección de mediador en pólizas españolas
+  const MEDIADOR_RE = /^(?:datos\s+del?\s+)?(?:mediador|agente(?:\s+de\s+seguros?)?|corredor(?:\s+de\s+seguros?)?|agencia\s+de\s+seguros?|n[oº°]\s*(?:agente|mediador)|c[oó]d(?:igo)?\s*(?:agente|mediador))/i;
+
+  let mediadorIdx = lines.length;
+  for (let i = 0; i < lines.length; i++) {
+    if (MEDIADOR_RE.test(lines[i].trim())) { mediadorIdx = i; break; }
+  }
+
+  // ── 3. LOCALIZAR SECCIÓN TOMADOR / CLIENTE ────────────────────
+  const TOMADOR_SECTION_RE = /^(?:datos\s+del?\s+)?(?:tomador|cliente|contratante|asegurado(?:\s+principal)?)\s*[:\-]?\s*$/i;
+  const NEXT_SECTION_RE    = /^(?:datos\s+del?\s+)?(?:asegurado|beneficiario|mediador|agente|corredor|coberturas?|garantías?|condiciones?|prima|recibo|liquidaci[oó]n|complementarias?|exclusiones?)/i;
+
+  let tomStart = -1, tomEnd = mediadorIdx;
+
+  for (let i = 0; i < lines.length; i++) {
+    if (TOMADOR_SECTION_RE.test(lines[i].trim())) {
+      tomStart = i;
+      for (let j = i + 1; j < lines.length; j++) {
+        if (NEXT_SECTION_RE.test(lines[j].trim())) { tomEnd = Math.min(j, mediadorIdx); break; }
+      }
+      break;
+    }
+  }
+
+  // Si no hay sección explícita de tomador, usar todo lo que está antes del mediador
+  if (tomStart === -1) tomStart = 0;
+
+  const tomLines = lines.slice(tomStart, tomEnd);
+  const tomFlat  = tomLines.join(' ').replace(/\s+/g,' ');
+
+  console.log('[NR] mediadorIdx:', mediadorIdx, '| tomSection:', tomStart, '-', tomEnd);
+
+  // ── 4. NOMBRE DEL TOMADOR ─────────────────────────────────────
+  let tomFoundAt = -1;
+
+  // a) "Nombre:" o "Nombre y apellidos:" explícito
+  for (let i = 0; i < tomLines.length; i++) {
+    const line = tomLines[i];
+    if (/^nombre(?:\s+y\s+apellidos?)?[:\s]/i.test(line.trim())) {
+      const m = line.match(/nombre(?:\s+y\s+apellidos?)?[:\s]+(.{3,70})/i);
+      if (m && m[1].trim().length > 2) {
+        data.tomador = m[1].trim().replace(/\s*(nif|dni|cif).*/i,'').substring(0,70);
+        tomFoundAt = i; break;
+      }
+    }
+  }
+
+  // b) Etiqueta "Tomador/Cliente/Contratante:" con valor en la misma línea
+  if (!data.tomador) {
+    for (let i = 0; i < tomLines.length; i++) {
+      const line = tomLines[i];
+      if (/tomador|cliente|contratante/i.test(line)) {
+        const m = line.match(/(?:tomador|cliente|contratante)(?:\s+del\s+seguro)?[:\s]+(.{3,70})/i);
+        if (m && m[1].trim().length > 2 && !/^(?:nif|dni|cif)/i.test(m[1].trim())) {
+          data.tomador = m[1].trim().replace(/\s*(nif|dni|cif).*/i,'').substring(0,70);
+          tomFoundAt = i; break;
+        }
+      }
+    }
+  }
+
+  // c) Primera línea de texto con mayúsculas tras la etiqueta de sección
+  if (!data.tomador) {
+    for (let i = 0; i < tomLines.length; i++) {
+      if (/^(?:datos\s+del?\s+)?(?:tomador|cliente|contratante)/i.test(tomLines[i].trim())) {
+        for (let j = i + 1; j <= Math.min(i + 5, tomLines.length - 1); j++) {
+          const next = tomLines[j].trim();
+          if (
+            next.length > 3 &&
+            /^[A-ZÁÉÍÓÚÑ]/.test(next) &&
+            !nifRe.test(next) &&
+            !dateNumRe.test(next) &&
+            !/^(?:nif|dni|cif|direcc|domicil|c\.?\s*\/|calle|avda|tel|m[oó]vil|ramo|p[oó]liza|prima|efecto|venc|modalidad|firma)/i.test(next)
+          ) {
+            data.tomador = next.substring(0,70);
+            tomFoundAt = j; break;
+          }
+        }
+        if (data.tomador) break;
+      }
+    }
+  }
+
+  // ── 5. NIF / DNI / CIF (solo en sección tomador, cerca del nombre) ──
+  // Busca en las ~8 líneas alrededor del nombre encontrado
+  function findNif(searchLines) {
+    for (const line of searchLines) {
+      const m = line.match(/(?:NIF|DNI|CIF|N\.?\s*I\.?\s*F\.?)[:\s.]*([A-Z0-9\-]{8,12})/i)
+             || line.match(nifRe);
+      if (m) return (m[1] || m[0]).replace(/[\s\-]/g,'').toUpperCase();
+    }
+    return null;
+  }
+
+  if (tomFoundAt >= 0) {
+    const near = tomLines.slice(Math.max(0, tomFoundAt - 1), Math.min(tomLines.length, tomFoundAt + 9));
+    data.nif = findNif(near);
+  }
+  if (!data.nif) data.nif = findNif(tomLines);  // toda la sección tomador
+
+  // ── 6. VENCIMIENTO / FINALIZACIÓN ─────────────────────────────
+  const VENC_RE = /vencimiento|finaliza|fin\s+(?:de\s+)?(?:vigencia|efecto|per[ií]odo|p[oó]liza|contrato)|v[aá]lida?\s+hasta|expirac|fecha\s+fin/i;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (!VENC_RE.test(line)) continue;
+    // Valor en la misma línea: "Vencimiento: 15/03/2025" o "Vencimiento: 15 de marzo..."
+    const inline = line.match(
+      /(?:vencimiento|finaliza\w*|fin|v[aá]lida?\w*|expirac\w*|fecha\s+fin)[^:]*[:\s]+(\d{1,2}[\s\/\-\.]\d{1,2}[\s\/\-\.]\d{2,4})/i
+    ) || line.match(
+      /(?:vencimiento|finaliza\w*|fin|v[aá]lida?\w*|expirac\w*|fecha\s+fin)[^:]*[:\s]+(\d{1,2}\s+de\s+\w+\s+de\s+\d{4})/i
+    );
+    if (inline?.[1]) { const d = parseDate(inline[1]); if (d) { data.vencimiento = d; break; } }
+    // Valor en la línea siguiente
+    for (let j = i + 1; j <= i + 2 && j < lines.length; j++) {
+      const d = parseDate(lines[j]);
+      if (d) { data.vencimiento = d; break; }
+    }
+    if (data.vencimiento) break;
+  }
+
+  // "Del DD/MM/YYYY al DD/MM/YYYY" → segunda fecha = vencimiento
+  if (!data.vencimiento) {
+    const m = fullFlat.match(/\bde[l]?\s+\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}\s+a[l]?\s+(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})/i);
+    if (m) data.vencimiento = parseDate(m[1]);
+  }
+  // "Período: DD/MM/YYYY - DD/MM/YYYY" → segunda fecha
+  if (!data.vencimiento) {
+    const m = fullFlat.match(/per[ií]odo[^:]*[:\s]+\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}\s*[-–]\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})/i);
+    if (m) data.vencimiento = parseDate(m[1]);
+  }
+  // "Inicio...Fin" en tabla con dos fechas contiguas
+  if (!data.vencimiento) {
+    const m = fullFlat.match(/(?:inicio|efecto)[:\s]+\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}\s+(?:fin|vencimiento|hasta)[:\s]+(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})/i);
+    if (m) data.vencimiento = parseDate(m[1]);
+  }
+
+  // ── 7. RAMO / PRODUCTO ────────────────────────────────────────
+  const RAMO_RE = /^(?:ramo|producto|modalidad|tipo\s+(?:de\s+)?seguro|clase\s+(?:de\s+)?seguro|ramo\s+de\s+seguro)/i;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (RAMO_RE.test(line.trim())) {
+      const sm = line.match(/(?:ramo|producto|modalidad|tipo|clase)[^:]*[:\s]+(.{2,60})/i);
+      if (sm && sm[1].trim().length > 1) {
+        data.ramo = sm[1].replace(/\s*(prima|tomador|efecto|venc|n[uú]mero|p[oó]liza).*/i,'').substring(0,50).trim();
+        break;
+      }
+      if (i+1 < lines.length) {
+        const next = lines[i+1].trim();
+        if (next.length > 1 && next.length < 50 && !/^\d/.test(next)) { data.ramo = next.substring(0,50); break; }
+      }
+    }
+  }
+  if (!data.ramo) {
+    const m = fullFlat.match(/seguro\s+de\s+([A-Za-záéíóúñÁÉÍÓÚÑ\s\-\/]{2,30}?)(?=\s+(?:con|n[uú]mero|tomador|p[oó]liza|,|\.)|$)/i);
+    if (m) data.ramo = m[1].trim().substring(0,50);
+  }
+
+  // ── 8. Nº PÓLIZA ─────────────────────────────────────────────
+  const POL_RE = /p[oó]liza|n[uú]mero\s+(?:de\s+)?(?:contrato|p[oó]liza)|c[oó]digo\s+(?:contrato|p[oó]liza)|n[oº°]\s*p[oó]liza|referencia\s+p[oó]liza/i;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (!POL_RE.test(line)) continue;
+    const sm = line.match(/(?:p[oó]liza|n[uú]mero|c[oó]digo|n[oº°]|referencia)[^:]*[:\s]+([A-Z0-9][\w\-\/\.]{3,25})/i);
+    if (sm) { data.numPoliza = sm[1].trim().split(/\s/)[0]; break; }
+    if (i+1 < lines.length) {
+      const next = lines[i+1].trim();
+      if (/^[A-Z0-9][\w\-\/\.]{3,25}$/.test(next)) { data.numPoliza = next; break; }
+    }
+  }
+
+  // ── 9. DIRECCIÓN (solo sección tomador) ──────────────────────
+  const DIR_RE = /^(?:direcci[oó]n|domicilio|direcci[oó]n\s+(?:del?\s+)?(?:tomador|cliente|asegurado|titular))/i;
+
+  for (let i = 0; i < tomLines.length; i++) {
+    const line = tomLines[i];
+    if (DIR_RE.test(line.trim())) {
+      const sm = line.match(/(?:direcci[oó]n|domicilio)[^:]*[:\s]+(.{5,100})/i);
+      if (sm) { data.direccion = sm[1].trim().substring(0,100); break; }
+      if (i+1 < tomLines.length) { data.direccion = tomLines[i+1].trim().substring(0,100); break; }
+    }
+    // Línea que empieza con "Calle / Avda / Plaza…"
+    if (!data.direccion && /^(?:c\/|calle|avda?\.?\s|avenida|plaza|paseo|camino|carretera|rambla|travesía)/i.test(line.trim())) {
+      data.direccion = line.trim().substring(0,100);
+    }
+  }
+
+  return data;
+}
+
+// ─── POPULATE FIELDS ───────────────────────────────────────────
+function populateFields(d) {
+  if (d.numPoliza) setVal('numPoliza', d.numPoliza);
+  if (d.tomador)   setVal('tomador',   d.tomador);
+  if (d.nif)       setVal('nif',       d.nif);
+  if (d.ramo)      setVal('ramo',      d.ramo);
+  if (d.compania)  setVal('compania',  d.compania);
+  if (d.direccion) setVal('direccion', d.direccion);
+  if (d.vencimiento) { setVal('vencOrig', d.vencimiento); calcDates(); }
+  else updateLetter();
+}
+function setVal(id, val) { document.getElementById(id).value = val; }
+
+// ─── DATE CALCULATIONS ─────────────────────────────────────────
+function calcDates() {
+  const raw    = document.getElementById('vencOrig').value.trim();
+  const adjEl  = document.getElementById('dateAdj');
+  const limEl  = document.getElementById('dateLimit');
+  const banner = document.getElementById('banner');
+
+  if (!raw) {
+    adjEl.textContent = limEl.textContent = '—';
+    banner.style.display = 'none';
+    return updateLetter();
+  }
+
+  const parts = raw.split('/');
+  if (parts.length < 2 || !parts[0] || !parts[1]) {
+    adjEl.textContent = limEl.textContent = '—';
+    banner.style.display = 'none';
+    return updateLetter();
+  }
+
+  const day   = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1;
+
+  const adjDate = new Date(CURRENT_YEAR, month, day);
+  adjEl.textContent = fmtDate(adjDate);
+
+  const limDate = new Date(CURRENT_YEAR, month - 1, day);
+  limEl.textContent = fmtDate(limDate);
+
+  const today   = new Date(); today.setHours(0,0,0,0);
+  const adj     = new Date(adjDate); adj.setHours(0,0,0,0);
+  const lim     = new Date(limDate); lim.setHours(0,0,0,0);
+  const dToLim  = Math.round((lim - today) / 86400000);
+  const dToAdj  = Math.round((adj - today) / 86400000);
+
+  banner.style.display = 'block';
+  banner.className = 'banner';
+
+  if (today >= adj) {
+    banner.classList.add('banner--error');
+    banner.innerHTML = `<strong>⛔ Vencimiento ya pasado en ${CURRENT_YEAR}.</strong> La fecha ${fmtDate(adjDate)} ya ha transcurrido. Verifica si el período aplicable corresponde a ${CURRENT_YEAR + 1}.`;
+  } else if (today > lim) {
+    banner.classList.add('banner--error');
+    banner.innerHTML = `<strong>⛔ Plazo de notificación superado.</strong> El plazo límite era el ${fmtDate(limDate)}. La póliza puede haberse renovado automáticamente. Consulta con la aseguradora.`;
+  } else if (dToLim <= 14) {
+    banner.classList.add('banner--warn');
+    banner.innerHTML = `<strong>⚠️ Plazo muy próximo.</strong> Quedan solo <strong>${dToLim} día${dToLim !== 1 ? 's' : ''}</strong> para la fecha límite (${fmtDate(limDate)}). Envía la comunicación <strong>hoy mismo</strong> por burofax o correo certificado.`;
+  } else if (dToLim <= 30) {
+    banner.classList.add('banner--warn');
+    banner.innerHTML = `<strong>⚠️ Plazo próximo.</strong> Quedan <strong>${dToLim} días</strong> para el plazo límite (${fmtDate(limDate)}). Envía la comunicación cuanto antes por burofax o correo certificado con acuse de recibo.`;
+  } else {
+    banner.classList.add('banner--ok');
+    banner.innerHTML = `<strong>✅ Plazo correcto.</strong> Quedan <strong>${dToLim} días</strong> para el plazo límite (${fmtDate(limDate)}) y <strong>${dToAdj} días</strong> para el vencimiento. Envía por burofax o correo certificado con acuse de recibo.`;
+  }
+  updateLetter();
+}
+
+function fmtDate(d) {
+  return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+}
+function fmtDateLong(d) {
+  const M = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  return `${d.getDate()} de ${M[d.getMonth()]} de ${d.getFullYear()}`;
+}
+
+// ─── LETTER GENERATION ─────────────────────────────────────────
+function updateLetter() {
+  const poliza    = v('numPoliza') || ph('Nº PÓLIZA');
+  const tomador   = v('tomador')   || ph('TOMADOR');
+  const nif       = v('nif')       || ph('NIF/DNI/CIF');
+  const ramo      = v('ramo')      || '____________________';
+  const compania  = v('compania')  || ph('COMPAÑÍA ASEGURADORA');
+  const direccion = v('direccion') || '____________________';
+  const adjTxt    = document.getElementById('dateAdj').textContent;
+  const fechaVenc = adjTxt !== '—' ? adjTxt : ph('FECHA VENCIMIENTO');
+
+  document.getElementById('letterBody').innerHTML = `
+    <p class="letter-date-place">
+      <span contenteditable="true" title="Haz clic para editar la población">Población</span>,
+      a ${fmtDateLong(new Date())}
+    </p>
+
+    <div class="letter-sender">
+      <strong>${tomador}</strong><br>
+      NIF / DNI / CIF: ${nif}<br>
+      ${direccion}
+    </div>
+
+    <div class="letter-recipient">
+      A/A:<br>
+      <strong>${compania}</strong><br>
+      Servicio de Atención al Asegurado / Departamento de Suscripción
+    </div>
+
+    <div class="letter-subject">
+      Asunto: Comunicación de no renovación — Póliza nº ${poliza}
+    </div>
+
+    <div class="letter-body">
+      <p>Muy señores míos:</p>
+
+      <p>
+        Por medio de la presente comunicación, yo, <strong>${tomador}</strong>,
+        con NIF / DNI / CIF nº <strong>${nif}</strong>, en mi condición de
+        Tomador del contrato de seguro de <strong>${ramo}</strong> con número de
+        póliza <strong>${poliza}</strong>, suscrito con <strong>${compania}</strong>,
+        y de conformidad con lo establecido en el <strong>artículo 22 de la Ley
+        50/1980, de 8 de octubre, del Contrato de Seguro</strong>, les comunico
+        formalmente mi <strong>voluntad de no renovar</strong> el citado contrato
+        a su próximo vencimiento.
+      </p>
+
+      <p>
+        La fecha de vencimiento del período en curso es el
+        <strong>${fechaVenc}</strong>. La presente comunicación se realiza con la
+        antelación mínima legalmente exigida de un (1) mes prevista en el citado
+        artículo 22 de la Ley 50/1980 para el tomador del seguro.
+      </p>
+
+      <p>
+        En consecuencia, solicito que el contrato indicado <strong>no sea objeto
+        de renovación automática</strong> al término del período vigente, quedando
+        extinguida la relación contractual en la referida fecha de vencimiento y
+        sin que proceda cargo alguno por período posterior.
+      </p>
+
+      <p>
+        Les ruego acusen recibo de la presente comunicación y me confirmen la no
+        renovación de la póliza por escrito al domicilio o correo electrónico
+        que constan en el contrato.
+      </p>
+
+      <div class="letter-sign">
+        <p>Atentamente,</p>
+        <div class="letter-sign-spacer"></div>
+        <p><strong>${tomador}</strong><br>NIF / DNI / CIF: ${nif}</p>
+      </div>
+
+      <div class="letter-legal-note">
+        Comunicación emitida al amparo del artículo 22 de la Ley 50/1980, de 8 de octubre, del Contrato de Seguro.<br>
+        Se recomienda remitir mediante burofax con certificación de contenido y acuse de recibo, o carta certificada con acuse de recibo,
+        conservando el justificante de envío como prueba fehaciente de la notificación.
+      </div>
+    </div>
+  `;
+}
+
+function v(id)  { return document.getElementById(id).value.trim(); }
+function ph(t)  { return `<span style="color:var(--occ-gray-2);font-style:italic">[${t}]</span>`; }
+
+// ─── COPY ──────────────────────────────────────────────────────
+function copyLetter() {
+  const text = document.getElementById('letterBody').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('btnCopy');
+    btn.classList.add('btn--green');
+    btn.textContent = '✓ Copiado';
+    setTimeout(() => {
+      btn.classList.remove('btn--green');
+      btn.innerHTML = `<svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8">
+        <rect x="7" y="7" width="11" height="11" rx="2"/>
+        <path d="M4 13H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"/>
+      </svg> Copiar texto`;
+    }, 2200);
+  }).catch(() => alert('No se pudo copiar. Selecciona el texto manualmente.'));
+}
+
+// ─── UI STATE ──────────────────────────────────────────────────
+function showProcessing() {
+  document.getElementById('dropZone').style.display   = 'none';
+  document.getElementById('processing').style.display = 'block';
+  document.getElementById('dataPanel').style.display  = 'none';
+}
+function hideProcessing() {
+  document.getElementById('processing').style.display = 'none';
+  document.getElementById('dropZone').style.display   = 'block';
+}
+function showDataPanel() {
+  document.getElementById('processing').style.display = 'none';
+  document.getElementById('dropZone').style.display   = 'none';
+  document.getElementById('dataPanel').style.display  = 'block';
+  updateLetter();
+}
+function resetAll() {
+  ['numPoliza','tomador','nif','ramo','compania','direccion','vencOrig'].forEach(id =>
+    document.getElementById(id).value = ''
+  );
+  document.getElementById('dateAdj').textContent  = '—';
+  document.getElementById('dateLimit').textContent = '—';
+  document.getElementById('banner').style.display = 'none';
+  document.getElementById('fileInput').value = '';
+  document.getElementById('dataPanel').style.display  = 'none';
+  document.getElementById('dropZone').style.display   = 'block';
+}
+
+// Boot
+updateLetter();
+</script>
+</body>
+</html>

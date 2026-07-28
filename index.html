@@ -819,7 +819,7 @@ button { font-family: var(--font); }
         <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
       </svg>
       Totes les eines
-      <span class="nav-badge" id="badge-all">7</span>
+      <span class="nav-badge" id="badge-all">8</span>
     </a>
 
     <a class="nav-item" href="#" onclick="sidebarFilter('formularis',this);return false;">
@@ -828,7 +828,7 @@ button { font-family: var(--font); }
         <rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/>
       </svg>
       Formularis
-      <span class="nav-badge gray">3</span>
+      <span class="nav-badge gray">4</span>
     </a>
 
     <a class="nav-item" href="#" onclick="sidebarFilter('instruccions',this);return false;">
@@ -1194,6 +1194,38 @@ button { font-family: var(--font); }
           </div>
           <div class="card-title">No Renovació de Pòlissa</div>
           <div class="card-desc">Genera la comunicació formal de no renovació (Art. 22, Llei 50/1980). Arrossega el PDF de la pòlissa per extreure les dades automàticament.</div>
+          <div class="card-footer-row">
+            <span class="card-category">Formularis</span>
+            <div class="card-arrow">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </div>
+        </div>
+      </a>
+
+
+      <!-- ★ Rehabilitació de Pòlissa -->
+      <a class="tool-card"
+         href="rehabilitacion-poliza.html"
+         data-category="formularis"
+         data-status="live"
+         data-title="Rehabilitació de Pòlissa"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+                <rect x="9" y="3" width="6" height="4" rx="1"/>
+                <path d="M12 12v5M9.5 14.5l2.5-2.5 2.5 2.5"/>
+              </svg>
+            </div>
+            <span class="card-status status-live">&#9679; Disponible</span>
+          </div>
+          <div class="card-title">Rehabilitació de Pòlissa</div>
+          <div class="card-desc">Sol·licitud de rehabilitació i certificat d'inexistència de sinistres. Per a persona física, empresa i comunitat de propietaris.</div>
           <div class="card-footer-row">
             <span class="card-category">Formularis</span>
             <div class="card-arrow">

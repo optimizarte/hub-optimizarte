@@ -72,7 +72,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 .file-list{overflow-y:auto;max-height:460px;}
 .file-item{display:flex;align-items:center;gap:9px;padding:9px 16px;border-bottom:1px solid #f5f5f5;cursor:pointer;transition:background .12s;}
 .file-item:hover{background:#f9f9f9;}
-.fi-icon{width:32px;height:32px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:700;}
+.fi-icon{width:32px;height:32px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .fi-info{flex:1;min-width:0;}
 .fi-name{font-size:12px;font-weight:600;color:var(--dark);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .fi-meta{font-size:10.5px;color:var(--gray-2);margin-top:1px;}
@@ -98,7 +98,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 .modal-title{font-size:13px;font-weight:600;color:#fff;flex:1;}
 .modal-close{background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:18px;padding:2px 6px;border-radius:4px;}
 .modal-close:hover{background:rgba(255,255,255,.15);color:#fff;}
-.modal iframe{flex:1;border:none;width:100%;height:100%;}
 .modal-img{flex:1;display:flex;align-items:center;justify-content:center;background:#1a1a1a;overflow:auto;padding:16px;}
 .modal-img img{max-width:100%;max-height:100%;object-fit:contain;border-radius:4px;}
 .toast{position:fixed;bottom:24px;right:24px;background:var(--dark);color:#fff;padding:12px 18px;border-radius:8px;font-size:13px;font-weight:500;z-index:999;display:none;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,.3);}
@@ -133,7 +132,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
     <span>Utilitza <strong>Chrome</strong> o <strong>Edge</strong> per desar fitxers directament a la carpeta local.</span>
   </div>
 
-  <!-- DAFO -->
+  <!-- ===== DAFO ===== -->
   <div class="tab-panel" id="panel-dafo">
     <div class="sec-bar">
       <div class="sec-title">&#128203; Hist&#242;rics de DAFOs</div>
@@ -189,7 +188,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
     </div>
   </div>
 
-  <!-- TANCAMENTS -->
+  <!-- ===== TANCAMENTS ===== -->
   <div class="tab-panel" id="panel-tanc">
     <div class="sec-bar">
       <div class="sec-title">&#128196; Hist&#242;rics de Tancaments Mensuals</div>
@@ -245,7 +244,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
     </div>
   </div>
 
-  <!-- FITXES MEDIADOR -->
+  <!-- ===== FITXES MEDIADOR ===== -->
   <div class="tab-panel" id="panel-fitxa">
     <div class="sec-bar">
       <div class="sec-title">&#128101; Hist&#242;rics de Fitxes Mediador</div>
@@ -301,7 +300,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
     </div>
   </div>
 
-</div><!-- /wrap -->
+</div>
 
 <div class="modal-overlay" id="previewModal">
   <div class="modal">
@@ -309,7 +308,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
       <div class="modal-title" id="previewTitle">Previsualitzar</div>
       <button class="modal-close" onclick="closePreview()">&#10005;</button>
     </div>
-    <!-- Contenidor dinàmic: iframe per HTML/PDF, img per imatges -->
     <div id="previewBody" style="flex:1;display:flex;overflow:hidden;"></div>
   </div>
 </div>
@@ -326,40 +324,35 @@ const MCA    = {'01':'Gener','02':'Febrer','03':'Març','04':'Abril','05':'Maig'
 const MES    = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 const MCA_L  = ['gener','febrer','març','abril','maig','juny','juliol','agost','setembre','octubre','novembre','desembre'];
 
-// Extensions permeses
 const ALLOWED_EXT = ['.html','.htm','.jpg','.jpeg','.png','.bmp','.pdf','.psd'];
 function isAllowed(name){ var lo=name.toLowerCase(); return ALLOWED_EXT.some(function(e){return lo.endsWith(e);}); }
 function extOf(name){ var lo=name.toLowerCase(); for(var e of ALLOWED_EXT){if(lo.endsWith(e))return e.replace('.','');} return ''; }
-// Icona/color per tipus de fitxer
 function fileIcon(name,col){
   var e=extOf(name);
-  var icons={
-    html:'<svg width="16" height="16" fill="none" stroke="'+col+'" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
-    htm: '<svg width="16" height="16" fill="none" stroke="'+col+'" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
-    pdf: '<svg width="16" height="16" fill="none" stroke="#b91c1c" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>',
-    jpg: '<svg width="16" height="16" fill="none" stroke="#0891b2" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>',
-    jpeg:'<svg width="16" height="16" fill="none" stroke="#0891b2" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>',
-    png: '<svg width="16" height="16" fill="none" stroke="#0891b2" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>',
-    bmp: '<svg width="16" height="16" fill="none" stroke="#0891b2" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>',
-    psd: '<svg width="16" height="16" fill="none" stroke="#7c3aed" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h1a2 2 0 0 1 0 4H9v-4z"/><path d="M14 9h2a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1h-1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h2"/></svg>'
-  };
-  return icons[e] || icons['html'];
+  var svgDoc='<svg width="16" height="16" fill="none" stroke="'+col+'" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
+  var svgImg='<svg width="16" height="16" fill="none" stroke="#0891b2" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
+  var svgPdf='<svg width="16" height="16" fill="none" stroke="#b91c1c" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>';
+  var svgPsd='<svg width="16" height="16" fill="none" stroke="#7c3aed" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h1a2 2 0 0 1 0 4H9v-4z"/><path d="M14 9h2a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1h-1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h2"/></svg>';
+  if(e==='pdf') return svgPdf;
+  if(e==='psd') return svgPsd;
+  if(['jpg','jpeg','png','bmp'].indexOf(e)>=0) return svgImg;
+  return svgDoc;
 }
 function fileBg(name){
   var e=extOf(name);
   if(e==='pdf') return '#fee2e2';
   if(['jpg','jpeg','png','bmp'].indexOf(e)>=0) return '#e0f2fe';
   if(e==='psd') return '#ede9fe';
-  return null; // usa color de secció
+  return null;
 }
 
 let handles       = {dafo:null, tanc:null, fitxa:null};
 let storedHandles = {dafo:null, tanc:null, fitxa:null};
 let files         = {dafo:[], tanc:[], fitxa:[]};
 let previewUrl    = null;
+const IS_IFRAME   = (window.self !== window.top);
 
-const IS_IFRAME = (window.self !== window.top);
-
+// ── Month selects ──
 SECS.forEach(function(s){
   var sel=document.getElementById('ms-'+s);
   sel.innerHTML='<option value="">Tots els mesos</option>'+
@@ -369,23 +362,48 @@ SECS.forEach(function(s){
 if(!('showDirectoryPicker' in window)) document.getElementById('apiWarn').style.display='flex';
 if(IS_IFRAME) document.getElementById('iframeBanner').style.display='flex';
 
-// Init IDB
+// ── IndexedDB: UNA BASE DE DADES INDEPENDENT PER CADA SECCIÓ ──
+// HistDB_dafo / HistDB_tanc / HistDB_fitxa  →  clau única 'handle'
+function openDB(s){
+  return new Promise(function(res,rej){
+    var r=indexedDB.open('HistDB_'+s, 1);
+    r.onupgradeneeded=function(e){ e.target.result.createObjectStore('d'); };
+    r.onsuccess=function(e){ res(e.target.result); };
+    r.onerror=rej;
+  });
+}
+function dbGet(db){
+  return new Promise(function(res,rej){
+    var r=db.transaction('d','readonly').objectStore('d').get('handle');
+    r.onsuccess=function(e){res(e.target.result);}; r.onerror=rej;
+  });
+}
+function dbSet(db,h){
+  return new Promise(function(res,rej){
+    var r=db.transaction('d','readwrite').objectStore('d').put(h,'handle');
+    r.onsuccess=function(){res();}; r.onerror=rej;
+  });
+}
+
+// ── Init: restaura cada secció des de la seva pròpia BD ──
 (async function init(){
-  try {
-    var db=await openDB();
-    for(var s of SECS){
-      var h=await dbGet(db,'dir-'+s);
+  for(var i=0; i<SECS.length; i++){
+    var s=SECS[i];
+    try {
+      var db=await openDB(s);
+      var h=await dbGet(db);
       if(!h) continue;
       storedHandles[s]=h;
       var perm=await h.queryPermission({mode:'readwrite'});
       if(perm==='granted'){ handles[s]=h; updFolderUI(s,h.name,'granted'); await refreshList(s); }
       else { updFolderUI(s,h.name,'prompt'); }
-    }
-    var hash=location.hash.replace('#','');
-    if(hash){ var el=document.getElementById('panel-'+hash); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
-  } catch(e){ console.warn('Init IDB:',e); }
+    } catch(e){ console.warn('Init ['+s+']:', e); }
+  }
+  var hash=location.hash.replace('#','');
+  if(hash){ var el=document.getElementById('panel-'+hash); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
 })();
 
+// ── UI ──
 function updFolderUI(s,name,state){
   var fp=document.getElementById('fp-'+s);
   var fb=document.getElementById('fb-'+s);
@@ -417,22 +435,45 @@ async function reconnect(s){
 
 async function pickFolder(s){
   if(!('showDirectoryPicker' in window)){toast('Usa Chrome o Edge','err');return;}
-  if(IS_IFRAME){toast("Obre en nova pestanya per seleccionar carpetes",'warn');return;}
+  if(IS_IFRAME){toast('Obre en nova pestanya per seleccionar carpetes','warn');return;}
   try {
     var h=await window.showDirectoryPicker({mode:'readwrite'});
     handles[s]=h; storedHandles[s]=h;
-    var db=await openDB(); await dbSet(db,'dir-'+s,h);
+    var db=await openDB(s);   // BD exclusiva d'aquesta secció
+    await dbSet(db,h);
     updFolderUI(s,h.name,'granted'); await refreshList(s);
-    toast('Carpeta: '+h.name,'ok');
+    toast('Carpeta DAFO: '+h.name,'ok');  // missatge genèric substituït avall
   } catch(e){
-    if(e.name==='SecurityError'){toast("Obre en nova pestanya per seleccionar carpetes",'warn');}
+    if(e.name==='SecurityError'){toast('Obre en nova pestanya per seleccionar carpetes','warn');}
+    else if(e.name!=='AbortError'){toast('Error: '+e.message,'err');}
+  }
+}
+
+// Sobreescrivim el toast de pickFolder per mostrar el nom de secció correcte
+var _origPickFolder=pickFolder;
+async function pickFolder(s){
+  if(!('showDirectoryPicker' in window)){toast('Usa Chrome o Edge','err');return;}
+  if(IS_IFRAME){toast('Obre en nova pestanya per seleccionar carpetes','warn');return;}
+  var LBLS={dafo:'DAFOs',tanc:'Tancaments',fitxa:'Fitxes Mediador'};
+  try {
+    var h=await window.showDirectoryPicker({mode:'readwrite'});
+    handles[s]=h; storedHandles[s]=h;
+    var db=await openDB(s);
+    await dbSet(db,h);
+    updFolderUI(s,h.name,'granted'); await refreshList(s);
+    toast((LBLS[s]||s)+': '+h.name,'ok');
+  } catch(e){
+    if(e.name==='SecurityError'){toast('Obre en nova pestanya per seleccionar carpetes','warn');}
     else if(e.name!=='AbortError'){toast('Error: '+e.message,'err');}
   }
 }
 
 async function saveFile(s,file){
   if(!handles[s]&&storedHandles[s]){
-    try{var p=await storedHandles[s].requestPermission({mode:'readwrite'});if(p==='granted'){handles[s]=storedHandles[s];updFolderUI(s,storedHandles[s].name,'granted');}}catch(e){}
+    try{
+      var p2=await storedHandles[s].requestPermission({mode:'readwrite'});
+      if(p2==='granted'){handles[s]=storedHandles[s];updFolderUI(s,storedHandles[s].name,'granted');}
+    }catch(e2){}
   }
   var h=handles[s];
   if(!h){toast('Primer selecciona o reconnecta una carpeta','err');return false;}
@@ -440,8 +481,7 @@ async function saveFile(s,file){
   if(p!=='granted'){toast('Permís denegat','err');return false;}
   try {
     var fh=await h.getFileHandle(file.name,{create:true});
-    var w=await fh.createWritable();
-    await w.write(file); await w.close();
+    var w=await fh.createWritable(); await w.write(file); await w.close();
     document.getElementById('ls-'+s).style.display='block';
     document.getElementById('lsn-'+s).textContent=file.name;
     document.getElementById('lsm-'+s).textContent=fmtB(file.size)+' · '+new Date().toLocaleString('ca-ES');
@@ -449,15 +489,11 @@ async function saveFile(s,file){
     if(fm.mm&&fm.mm===pm.mm){
       localStorage.setItem('hist_'+s+'_prev',JSON.stringify({name:file.name,ts:Date.now(),mm:fm.mm,yyyy:fm.yyyy||pm.yyyy}));
     }
-    toast('Desat: '+file.name,'ok');
-    await refreshList(s); return true;
+    toast('Desat: '+file.name,'ok'); await refreshList(s); return true;
   } catch(e){toast('Error: '+e.message,'err');return false;}
 }
 
-function getPrevM(){
-  var d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);
-  return{mm:String(d.getMonth()+1).padStart(2,'0'),yyyy:String(d.getFullYear())};
-}
+function getPrevM(){var d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);return{mm:String(d.getMonth()+1).padStart(2,'0'),yyyy:String(d.getFullYear())};}
 
 function onDragOver(e,s){e.preventDefault();document.getElementById('dz-'+s).classList.add('drag-over');}
 function onDragLeave(s){document.getElementById('dz-'+s).classList.remove('drag-over');}
@@ -467,10 +503,7 @@ async function onDrop(e,s){
   if(!fs.length){toast('Format no permès','err');return;}
   for(var f of fs) await saveFile(s,f);
 }
-async function onFileInput(e,s){
-  for(var f of [...e.target.files]) await saveFile(s,f);
-  e.target.value='';
-}
+async function onFileInput(e,s){for(var f of [...e.target.files]) await saveFile(s,f);e.target.value='';}
 
 async function refreshList(s){
   var h=handles[s];if(!h)return;
@@ -483,8 +516,7 @@ async function refreshList(s){
         files[s].push({name:name,handle:fh,size:f.size,lastMod:f.lastModified,mm:dm.mm,yyyy:dm.yyyy});
       }
     }
-    files[s].sort(function(a,b){return b.lastMod-a.lastMod;});
-    filterFiles(s);
+    files[s].sort(function(a,b){return b.lastMod-a.lastMod;}); filterFiles(s);
   } catch(e){toast('Error llegint carpeta','err');}
 }
 
@@ -502,10 +534,7 @@ function detectM(name){
 function filterFiles(s){
   var q=document.getElementById('si-'+s).value.toLowerCase();
   var mo=document.getElementById('ms-'+s).value;
-  var filtered=files[s].filter(function(f){
-    return(!q||f.name.toLowerCase().indexOf(q)>=0)&&(!mo||f.mm===mo);
-  });
-  renderList(s,filtered);
+  renderList(s,files[s].filter(function(f){return(!q||f.name.toLowerCase().indexOf(q)>=0)&&(!mo||f.mm===mo);}));
 }
 
 function renderList(s,list){
@@ -520,10 +549,8 @@ function renderList(s,list){
     var ext=extOf(f.name).toUpperCase();
     return '<div class="file-item" onclick="openFile(\''+s+'\',\''+escA(f.name)+'\')">'
       +'<div class="fi-icon" style="background:'+bg+';">'+fileIcon(f.name,col)+'</div>'
-      +'<div class="fi-info">'
-        +'<div class="fi-name">'+escH(f.name)+'</div>'
-        +'<div class="fi-meta">'+ext+' &middot; '+fmtB(f.size)+' &middot; '+new Date(f.lastMod).toLocaleDateString('ca-ES')+'</div>'
-      +'</div>'
+      +'<div class="fi-info"><div class="fi-name">'+escH(f.name)+'</div>'
+      +'<div class="fi-meta">'+ext+' &middot; '+fmtB(f.size)+' &middot; '+new Date(f.lastMod).toLocaleDateString('ca-ES')+'</div></div>'
       +(f.mm?'<span class="fi-badge '+bc+'">'+(MCA[f.mm]||f.mm)+(f.yyyy?' '+f.yyyy:'')+'</span>':'')
       +'<div class="fi-actions" onclick="event.stopPropagation()">'
         +'<button class="icon-btn ib-open" title="Obrir" onclick="openFile(\''+s+'\',\''+escA(f.name)+'\')"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>'
@@ -536,49 +563,37 @@ async function openFile(s,name){
   var entry=files[s].find(function(f){return f.name===name;});if(!entry)return;
   try {
     var f=await entry.handle.getFile();
-    if(previewUrl){URL.revokeObjectURL(previewUrl);}
+    if(previewUrl) URL.revokeObjectURL(previewUrl);
     previewUrl=URL.createObjectURL(f);
     document.getElementById('previewTitle').textContent=name;
     var body=document.getElementById('previewBody');
     var e=extOf(name);
-    var imgExts=['jpg','jpeg','png','bmp'];
-    if(imgExts.indexOf(e)>=0){
+    if(['jpg','jpeg','png','bmp'].indexOf(e)>=0){
       body.innerHTML='<div class="modal-img"><img src="'+previewUrl+'" alt="'+escH(name)+'"></div>';
+    } else if(e==='psd'){
+      body.innerHTML='<div style="flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:#888;font-size:13px;padding:24px;text-align:center;">'
+        +'<svg width="48" height="48" fill="none" stroke="#bbb" stroke-width="1.4" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h1a2 2 0 0 1 0 4H9v-4z"/><path d="M14 9h2a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1h-1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h2"/></svg>'
+        +'<strong>'+escH(name)+'</strong><span>Els fitxers PSD no es poden previsualitzar al navegador.</span></div>';
     } else {
-      // HTML, PDF (navegador renderitza) o PSD (binari, mostrarem missatge)
-      if(e==='psd'){
-        body.innerHTML='<div style="flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:#888;font-size:13px;padding:24px;text-align:center;">'
-          +'<svg width="48" height="48" fill="none" stroke="#bbb" stroke-width="1.4" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h1a2 2 0 0 1 0 4H9v-4z"/><path d="M14 9h2a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1h-1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h2"/></svg>'
-          +'<strong>'+escH(name)+'</strong>'
-          +'<span>Els fitxers PSD no es poden previsualitzar al navegador.</span></div>';
-      } else {
-        body.innerHTML='<iframe src="'+previewUrl+'" style="flex:1;border:none;width:100%;height:100%;" sandbox="allow-scripts allow-same-origin"></iframe>';
-      }
+      body.innerHTML='<iframe src="'+previewUrl+'" style="flex:1;border:none;width:100%;height:100%;" sandbox="allow-scripts allow-same-origin"></iframe>';
     }
     document.getElementById('previewModal').classList.add('open');
   } catch(e){toast('Error obrint','err');}
 }
-
 function closePreview(){
   document.getElementById('previewModal').classList.remove('open');
   document.getElementById('previewBody').innerHTML='';
   if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl=null;}
 }
-
 async function delFile(s,name){
   if(!confirm('Eliminar "'+name+'"?'))return;
   try{await handles[s].removeEntry(name);toast('Eliminat','ok');await refreshList(s);}
   catch(e){toast('Error eliminant','err');}
 }
 
-function openDB(){return new Promise(function(res,rej){var r=indexedDB.open('HistDB',1);r.onupgradeneeded=function(e){e.target.result.createObjectStore('s');};r.onsuccess=function(e){res(e.target.result);};r.onerror=rej;});}
-function dbGet(db,k){return new Promise(function(res,rej){var r=db.transaction('s','readonly').objectStore('s').get(k);r.onsuccess=function(e){res(e.target.result);};r.onerror=rej;});}
-function dbSet(db,k,v){return new Promise(function(res,rej){var r=db.transaction('s','readwrite').objectStore('s').put(v,k);r.onsuccess=function(){res();};r.onerror=rej;});}
-
 function escH(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function escA(v){return String(v||'').replace(/'/g,"\\'");}
 function fmtB(b){if(b<1024)return b+'B';if(b<1048576)return (b/1024).toFixed(1)+'KB';return (b/1048576).toFixed(1)+'MB';}
-
 var _tt;
 function toast(msg,type){
   var t=document.getElementById('toast');

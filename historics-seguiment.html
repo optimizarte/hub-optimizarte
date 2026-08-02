@@ -17,28 +17,20 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;padding:0 0 60px;}
-
-/* Header */
 .hdr{background:#2D2D2D;height:70px;padding:0 32px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 10px rgba(0,0,0,.35);}
 .hdr-r{text-align:right;}
 .hdr-title{font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;color:#fff;}
 .hdr-sub{font-size:11px;color:rgba(255,255,255,.65);margin-top:2px;}
-
-/* Iframe banner */
 .iframe-banner{background:var(--amber-bg);border-bottom:2px solid var(--amber-border);padding:11px 24px;display:none;align-items:center;gap:12px;flex-wrap:wrap;}
 .iframe-banner svg{color:var(--amber);flex-shrink:0;}
 .iframe-banner p{font-size:12.5px;color:#78350f;flex:1;min-width:200px;}
 .iframe-banner .ib-btn{background:var(--amber-border);color:#fff;border:none;padding:8px 16px;border-radius:6px;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;}
 .iframe-banner .ib-btn:hover{background:#d97706;}
-
-/* Layout */
 .wrap{max-width:1280px;margin:0 auto;padding:24px;}
 .tab-panel{display:block;margin-bottom:24px;}
 .tab-panel+.tab-panel{border-top:2px solid var(--gray-4);padding-top:24px;}
 .sec-bar{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
 .sec-title{font-family:'Poppins',sans-serif;font-size:18px;font-weight:700;color:var(--dark);flex:1;margin-right:4px;}
-
-/* Buttons */
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:6px;font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;border:none;white-space:nowrap;transition:all .18s;}
 .btn svg{width:13px;height:13px;flex-shrink:0;}
 .btn-blue{background:var(--blue);color:#fff;}.btn-blue:hover{background:var(--blue-d);}
@@ -46,8 +38,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 .btn-purple{background:var(--purple);color:#fff;}.btn-purple:hover{background:var(--purple-d);}
 .btn-gray{background:#fff;color:var(--gray);border:1.5px solid var(--border);}.btn-gray:hover{border-color:#999;}
 .btn-amber{background:var(--amber-bg);color:var(--amber);border:1.5px solid var(--amber-border);}.btn-amber:hover{background:#fde68a;}
-
-/* Folder bar */
 .folder-bar{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:10px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 .folder-path{font-size:12px;color:var(--gray);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .folder-path strong{color:var(--dark);font-weight:600;}
@@ -55,12 +45,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 .badge-ok{background:var(--green-bg);color:var(--green);}
 .badge-ko{background:var(--gray-4);color:var(--gray-2);}
 .badge-warn{background:var(--amber-bg);color:var(--amber);}
-
-/* Grid */
 .section-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
 @media(max-width:800px){.section-grid{grid-template-columns:1fr;}}
-
-/* Drop zone */
 .drop-zone{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);border:2px dashed var(--gray-3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:36px 24px;cursor:pointer;transition:all .2s;text-align:center;min-height:240px;}
 .dz-blue:hover,.dz-blue.drag-over{border-color:var(--blue);background:var(--blue-bg);}
 .dz-green:hover,.dz-green.drag-over{border-color:var(--green);background:var(--green-bg);}
@@ -71,12 +57,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 .dz-purple:hover svg,.dz-purple.drag-over svg{color:var(--purple)!important;}
 .drop-title{font-size:14px;font-weight:600;color:var(--dark);}
 .drop-sub{font-size:12px;color:var(--gray-2);}
+.drop-ext{font-size:10.5px;color:var(--gray-3);margin-top:-4px;letter-spacing:.2px;}
 .drop-lbl{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;border:1.5px solid;}
 .dl-blue{background:var(--blue-bg);color:var(--blue);border-color:var(--blue);}.dl-blue:hover{background:var(--blue);color:#fff;}
 .dl-green{background:var(--green-bg);color:var(--green);border-color:var(--green);}.dl-green:hover{background:var(--green);color:#fff;}
 .dl-purple{background:var(--purple-bg);color:var(--purple);border-color:var(--purple);}.dl-purple:hover{background:var(--purple);color:#fff;}
-
-/* File panel */
 .file-panel{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden;}
 .panel-hdr{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .panel-hdr-title{font-size:12px;font-weight:700;color:var(--dark);flex:1;}
@@ -87,7 +72,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 .file-list{overflow-y:auto;max-height:460px;}
 .file-item{display:flex;align-items:center;gap:9px;padding:9px 16px;border-bottom:1px solid #f5f5f5;cursor:pointer;transition:background .12s;}
 .file-item:hover{background:#f9f9f9;}
-.fi-icon{width:32px;height:32px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.fi-icon{width:32px;height:32px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:700;}
 .fi-info{flex:1;min-width:0;}
 .fi-name{font-size:12px;font-weight:600;color:var(--dark);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .fi-meta{font-size:10.5px;color:var(--gray-2);margin-top:1px;}
@@ -105,11 +90,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 .ls-label{font-size:10.5px;font-weight:700;color:var(--gray-2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px;}
 .ls-name{font-size:12.5px;font-weight:600;color:var(--dark);}
 .ls-meta{font-size:11px;color:var(--gray-2);margin-top:2px;}
-
-/* API warning */
 .api-warn{background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:var(--radius);padding:10px 14px;font-size:12px;color:var(--amber);margin-bottom:16px;display:none;align-items:center;gap:8px;}
-
-/* Modal */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:800;align-items:center;justify-content:center;}
 .modal-overlay.open{display:flex;}
 .modal{background:#fff;border-radius:10px;width:96vw;height:92vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3);}
@@ -118,23 +99,20 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 .modal-close{background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:18px;padding:2px 6px;border-radius:4px;}
 .modal-close:hover{background:rgba(255,255,255,.15);color:#fff;}
 .modal iframe{flex:1;border:none;width:100%;height:100%;}
-
-/* Toast */
+.modal-img{flex:1;display:flex;align-items:center;justify-content:center;background:#1a1a1a;overflow:auto;padding:16px;}
+.modal-img img{max-width:100%;max-height:100%;object-fit:contain;border-radius:4px;}
 .toast{position:fixed;bottom:24px;right:24px;background:var(--dark);color:#fff;padding:12px 18px;border-radius:8px;font-size:13px;font-weight:500;z-index:999;display:none;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,.3);}
 .toast.show{display:flex;animation:sup .2s ease;}
-.toast.t-ok{background:var(--green);}
-.toast.t-err{background:#b91c1c;}
-.toast.t-warn{background:#d97706;}
+.toast.t-ok{background:var(--green);}.toast.t-err{background:#b91c1c;}.toast.t-warn{background:#d97706;}
 @keyframes sup{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
 </style>
 </head>
 <body>
 
-<!-- Banner iframe: visible quan s'obre dins d'un frame -->
 <div class="iframe-banner" id="iframeBanner">
   <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-  <p>Aquesta eina s’obre dins d’un marc (iframe). Per poder seleccionar o canviar carpetes, obre-la en nova pestanya.</p>
-  <button class="ib-btn" onclick="window.open(window.location.href,'_blank')">Obre en nova pestanya →</button>
+  <p>Aquesta eina s'obre dins d'un marc (iframe). Per poder seleccionar o canviar carpetes, obre-la en nova pestanya.</p>
+  <button class="ib-btn" onclick="window.open(window.location.href,'_blank')">Obre en nova pestanya &#8594;</button>
 </div>
 
 <header class="hdr">
@@ -144,8 +122,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
     <span style="font-weight:700;color:#DC0028">Occident</span>
   </div>
   <div class="hdr-r">
-    <div class="hdr-title">Històrics Seguiment</div>
-    <div class="hdr-sub">Agència 17167 &middot; Mediador Occident</div>
+    <div class="hdr-title">Hist&#242;rics Seguiment</div>
+    <div class="hdr-sub">Ag&#232;ncia 17167 &middot; Mediador Occident</div>
   </div>
 </header>
 
@@ -155,10 +133,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
     <span>Utilitza <strong>Chrome</strong> o <strong>Edge</strong> per desar fitxers directament a la carpeta local.</span>
   </div>
 
-  <!-- ========= DAFO ========= -->
+  <!-- DAFO -->
   <div class="tab-panel" id="panel-dafo">
     <div class="sec-bar">
-      <div class="sec-title">&#128203; Històrics de DAFOs</div>
+      <div class="sec-title">&#128203; Hist&#242;rics de DAFOs</div>
       <button class="btn btn-amber" id="reconn-dafo" onclick="reconnect('dafo')" style="display:none">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>Reconnectar
       </button>
@@ -181,15 +159,16 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
              ondragover="onDragOver(event,'dafo')" ondragleave="onDragLeave('dafo')" ondrop="onDrop(event,'dafo')"
              onclick="document.getElementById('fi-dafo').click()">
           <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
-          <div class="drop-title">Arrossega un fitxer HTML</div>
+          <div class="drop-title">Arrossega fitxers aquí</div>
           <div class="drop-sub">o fes clic per seleccionar</div>
+          <div class="drop-ext">HTML · JPG · PNG · BMP · PDF · PSD</div>
           <label class="drop-lbl dl-blue" onclick="event.stopPropagation();document.getElementById('fi-dafo').click()">
             <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Seleccionar fitxer
           </label>
         </div>
-        <input type="file" id="fi-dafo" accept=".html" multiple style="display:none" onchange="onFileInput(event,'dafo')">
+        <input type="file" id="fi-dafo" accept=".html,.htm,.jpg,.jpeg,.png,.bmp,.pdf,.psd" multiple style="display:none" onchange="onFileInput(event,'dafo')">
         <div id="ls-dafo" style="display:none;" class="last-saved">
-          <div class="ls-label">&#128190; Últim desat</div>
+          <div class="ls-label">&#128190; &#218;ltim desat</div>
           <div class="ls-name" id="lsn-dafo"></div>
           <div class="ls-meta" id="lsm-dafo"></div>
         </div>
@@ -210,10 +189,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
     </div>
   </div>
 
-  <!-- ========= TANCAMENTS ========= -->
+  <!-- TANCAMENTS -->
   <div class="tab-panel" id="panel-tanc">
     <div class="sec-bar">
-      <div class="sec-title">&#128196; Històrics de Tancaments Mensuals</div>
+      <div class="sec-title">&#128196; Hist&#242;rics de Tancaments Mensuals</div>
       <button class="btn btn-amber" id="reconn-tanc" onclick="reconnect('tanc')" style="display:none">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>Reconnectar
       </button>
@@ -236,15 +215,16 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
              ondragover="onDragOver(event,'tanc')" ondragleave="onDragLeave('tanc')" ondrop="onDrop(event,'tanc')"
              onclick="document.getElementById('fi-tanc').click()">
           <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
-          <div class="drop-title">Arrossega un fitxer HTML</div>
+          <div class="drop-title">Arrossega fitxers aquí</div>
           <div class="drop-sub">o fes clic per seleccionar</div>
+          <div class="drop-ext">HTML · JPG · PNG · BMP · PDF · PSD</div>
           <label class="drop-lbl dl-green" onclick="event.stopPropagation();document.getElementById('fi-tanc').click()">
             <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Seleccionar fitxer
           </label>
         </div>
-        <input type="file" id="fi-tanc" accept=".html" multiple style="display:none" onchange="onFileInput(event,'tanc')">
+        <input type="file" id="fi-tanc" accept=".html,.htm,.jpg,.jpeg,.png,.bmp,.pdf,.psd" multiple style="display:none" onchange="onFileInput(event,'tanc')">
         <div id="ls-tanc" style="display:none;" class="last-saved">
-          <div class="ls-label">&#128190; Últim desat</div>
+          <div class="ls-label">&#128190; &#218;ltim desat</div>
           <div class="ls-name" id="lsn-tanc"></div>
           <div class="ls-meta" id="lsm-tanc"></div>
         </div>
@@ -265,10 +245,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
     </div>
   </div>
 
-  <!-- ========= FITXES MEDIADOR ========= -->
+  <!-- FITXES MEDIADOR -->
   <div class="tab-panel" id="panel-fitxa">
     <div class="sec-bar">
-      <div class="sec-title">&#128101; Històrics de Fitxes Mediador</div>
+      <div class="sec-title">&#128101; Hist&#242;rics de Fitxes Mediador</div>
       <button class="btn btn-amber" id="reconn-fitxa" onclick="reconnect('fitxa')" style="display:none">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>Reconnectar
       </button>
@@ -291,15 +271,16 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
              ondragover="onDragOver(event,'fitxa')" ondragleave="onDragLeave('fitxa')" ondrop="onDrop(event,'fitxa')"
              onclick="document.getElementById('fi-fitxa').click()">
           <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
-          <div class="drop-title">Arrossega un fitxer HTML</div>
+          <div class="drop-title">Arrossega fitxers aquí</div>
           <div class="drop-sub">o fes clic per seleccionar</div>
+          <div class="drop-ext">HTML · JPG · PNG · BMP · PDF · PSD</div>
           <label class="drop-lbl dl-purple" onclick="event.stopPropagation();document.getElementById('fi-fitxa').click()">
             <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Seleccionar fitxer
           </label>
         </div>
-        <input type="file" id="fi-fitxa" accept=".html" multiple style="display:none" onchange="onFileInput(event,'fitxa')">
+        <input type="file" id="fi-fitxa" accept=".html,.htm,.jpg,.jpeg,.png,.bmp,.pdf,.psd" multiple style="display:none" onchange="onFileInput(event,'fitxa')">
         <div id="ls-fitxa" style="display:none;" class="last-saved">
-          <div class="ls-label">&#128190; Últim desat</div>
+          <div class="ls-label">&#128190; &#218;ltim desat</div>
           <div class="ls-name" id="lsn-fitxa"></div>
           <div class="ls-meta" id="lsm-fitxa"></div>
         </div>
@@ -328,7 +309,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
       <div class="modal-title" id="previewTitle">Previsualitzar</div>
       <button class="modal-close" onclick="closePreview()">&#10005;</button>
     </div>
-    <iframe id="previewFrame" sandbox="allow-scripts allow-same-origin"></iframe>
+    <!-- Contenidor dinàmic: iframe per HTML/PDF, img per imatges -->
+    <div id="previewBody" style="flex:1;display:flex;overflow:hidden;"></div>
   </div>
 </div>
 <div class="toast" id="toast"><span id="toastMsg"></span></div>
@@ -344,174 +326,145 @@ const MCA    = {'01':'Gener','02':'Febrer','03':'Març','04':'Abril','05':'Maig'
 const MES    = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 const MCA_L  = ['gener','febrer','març','abril','maig','juny','juliol','agost','setembre','octubre','novembre','desembre'];
 
-// Handles actius (permiss concedits) i handles guardats a IDB (poden necessitar requestPermission)
+// Extensions permeses
+const ALLOWED_EXT = ['.html','.htm','.jpg','.jpeg','.png','.bmp','.pdf','.psd'];
+function isAllowed(name){ var lo=name.toLowerCase(); return ALLOWED_EXT.some(function(e){return lo.endsWith(e);}); }
+function extOf(name){ var lo=name.toLowerCase(); for(var e of ALLOWED_EXT){if(lo.endsWith(e))return e.replace('.','');} return ''; }
+// Icona/color per tipus de fitxer
+function fileIcon(name,col){
+  var e=extOf(name);
+  var icons={
+    html:'<svg width="16" height="16" fill="none" stroke="'+col+'" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
+    htm: '<svg width="16" height="16" fill="none" stroke="'+col+'" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
+    pdf: '<svg width="16" height="16" fill="none" stroke="#b91c1c" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>',
+    jpg: '<svg width="16" height="16" fill="none" stroke="#0891b2" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>',
+    jpeg:'<svg width="16" height="16" fill="none" stroke="#0891b2" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>',
+    png: '<svg width="16" height="16" fill="none" stroke="#0891b2" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>',
+    bmp: '<svg width="16" height="16" fill="none" stroke="#0891b2" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>',
+    psd: '<svg width="16" height="16" fill="none" stroke="#7c3aed" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h1a2 2 0 0 1 0 4H9v-4z"/><path d="M14 9h2a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1h-1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h2"/></svg>'
+  };
+  return icons[e] || icons['html'];
+}
+function fileBg(name){
+  var e=extOf(name);
+  if(e==='pdf') return '#fee2e2';
+  if(['jpg','jpeg','png','bmp'].indexOf(e)>=0) return '#e0f2fe';
+  if(e==='psd') return '#ede9fe';
+  return null; // usa color de secció
+}
+
 let handles       = {dafo:null, tanc:null, fitxa:null};
 let storedHandles = {dafo:null, tanc:null, fitxa:null};
 let files         = {dafo:[], tanc:[], fitxa:[]};
+let previewUrl    = null;
 
 const IS_IFRAME = (window.self !== window.top);
 
-// Init: month selects
 SECS.forEach(function(s){
-  var sel = document.getElementById('ms-'+s);
-  sel.innerHTML = '<option value="">Tots els mesos</option>' +
-    Object.keys(MCA).map(function(v){ return '<option value="'+v+'">'+MCA[v]+'</option>'; }).join('');
+  var sel=document.getElementById('ms-'+s);
+  sel.innerHTML='<option value="">Tots els mesos</option>'+
+    Object.keys(MCA).map(function(v){return '<option value="'+v+'">'+MCA[v]+'</option>';}).join('');
 });
 
-// Aviso si el navegador no suporta File System Access API
 if(!('showDirectoryPicker' in window)) document.getElementById('apiWarn').style.display='flex';
-
-// Banner iframe
 if(IS_IFRAME) document.getElementById('iframeBanner').style.display='flex';
 
-// ──────────────────────────────────────────────
-//  INIT: restaurar carpetes des de IndexedDB
-// ──────────────────────────────────────────────
+// Init IDB
 (async function init(){
   try {
-    var db = await openDB();
+    var db=await openDB();
     for(var s of SECS){
-      var h = await dbGet(db, 'dir-'+s);
+      var h=await dbGet(db,'dir-'+s);
       if(!h) continue;
-      storedHandles[s] = h;
-      // Comprova permis sense gest d'usuari
-      var perm = await h.queryPermission({mode:'readwrite'});
-      if(perm === 'granted'){
-        handles[s] = h;
-        updFolderUI(s, h.name, 'granted');
-        await refreshList(s);
-      } else {
-        // Mostra nom carpeta + boto Reconnectar (cal gest d'usuari per requestPermission)
-        updFolderUI(s, h.name, 'prompt');
-      }
+      storedHandles[s]=h;
+      var perm=await h.queryPermission({mode:'readwrite'});
+      if(perm==='granted'){ handles[s]=h; updFolderUI(s,h.name,'granted'); await refreshList(s); }
+      else { updFolderUI(s,h.name,'prompt'); }
     }
-    // Scroll a seccio si hi ha hash a la URL
-    var hash = location.hash.replace('#','');
+    var hash=location.hash.replace('#','');
     if(hash){ var el=document.getElementById('panel-'+hash); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
-  } catch(e){ console.warn('Init IDB error:', e); }
+  } catch(e){ console.warn('Init IDB:',e); }
 })();
 
-// ──────────────────────────────────────────────
-//  UI: actualitza estat carpeta
-//  state: 'granted' | 'prompt' | 'none'
-// ──────────────────────────────────────────────
-function updFolderUI(s, name, state){
-  var fp       = document.getElementById('fp-'+s);
-  var fb       = document.getElementById('fb-'+s);
-  var pickLbl  = document.getElementById('pickLbl-'+s);
-  var reconnBtn= document.getElementById('reconn-'+s);
-
-  if(state === 'granted'){
-    fp.innerHTML = '<strong>'+escH(name)+'</strong>';
+function updFolderUI(s,name,state){
+  var fp=document.getElementById('fp-'+s);
+  var fb=document.getElementById('fb-'+s);
+  var lbl=document.getElementById('pickLbl-'+s);
+  var rb=document.getElementById('reconn-'+s);
+  if(state==='granted'){
+    fp.innerHTML='<strong>'+escH(name)+'</strong>';
     fb.textContent='● Connectat'; fb.className='badge badge-ok';
-    reconnBtn.style.display='none';
-    pickLbl.textContent='Canviar carpeta';
-  } else if(state === 'prompt'){
-    fp.innerHTML = '<strong>'+escH(name)+'</strong>&nbsp;<span style="color:var(--amber);font-size:10.5px;">— cal reconnectar</span>';
+    rb.style.display='none'; lbl.textContent='Canviar carpeta';
+  } else if(state==='prompt'){
+    fp.innerHTML='<strong>'+escH(name)+'</strong>&nbsp;<span style="color:var(--amber);font-size:10.5px;">— cal reconnectar</span>';
     fb.textContent='● Cal permís'; fb.className='badge badge-warn';
-    reconnBtn.style.display='inline-flex';
-    pickLbl.textContent='Canviar carpeta';
+    rb.style.display='inline-flex'; lbl.textContent='Canviar carpeta';
   } else {
     fp.innerHTML='<em>Cap carpeta seleccionada</em>';
     fb.textContent='● Desconnectat'; fb.className='badge badge-ko';
-    reconnBtn.style.display='none';
-    pickLbl.textContent='Seleccionar carpeta';
+    rb.style.display='none'; lbl.textContent='Seleccionar carpeta';
   }
 }
 
-// ──────────────────────────────────────────────
-//  RECONNECTAR: requestPermission amb gest d'usuari
-//  (no cal tornar a triar la carpeta)
-// ──────────────────────────────────────────────
 async function reconnect(s){
-  var h = storedHandles[s];
-  if(!h){ pickFolder(s); return; }
+  var h=storedHandles[s]; if(!h){pickFolder(s);return;}
   try {
-    var perm = await h.requestPermission({mode:'readwrite'});
-    if(perm === 'granted'){
-      handles[s] = h;
-      updFolderUI(s, h.name, 'granted');
-      await refreshList(s);
-      toast('Reconnectat: '+h.name, 'ok');
-    } else {
-      toast('Permís denegat. Tria una altra carpeta.', 'err');
-    }
-  } catch(e){ toast('Error: '+e.message, 'err'); }
+    var perm=await h.requestPermission({mode:'readwrite'});
+    if(perm==='granted'){ handles[s]=h; updFolderUI(s,h.name,'granted'); await refreshList(s); toast('Reconnectat: '+h.name,'ok'); }
+    else { toast('Permís denegat. Tria una altra carpeta.','err'); }
+  } catch(e){ toast('Error: '+e.message,'err'); }
 }
 
-// ──────────────────────────────────────────────
-//  SELECCIONAR CARPETA (primera vegada o canvi)
-// ──────────────────────────────────────────────
 async function pickFolder(s){
-  if(!('showDirectoryPicker' in window)){ toast('Usa Chrome o Edge', 'err'); return; }
-  if(IS_IFRAME){
-    toast('Obre en nova pestanya per seleccionar carpetes', 'warn');
-    return;
-  }
+  if(!('showDirectoryPicker' in window)){toast('Usa Chrome o Edge','err');return;}
+  if(IS_IFRAME){toast("Obre en nova pestanya per seleccionar carpetes",'warn');return;}
   try {
-    var h = await window.showDirectoryPicker({mode:'readwrite'});
-    handles[s]       = h;
-    storedHandles[s] = h;
-    var db = await openDB();
-    await dbSet(db, 'dir-'+s, h);
-    updFolderUI(s, h.name, 'granted');
-    await refreshList(s);
-    toast('Carpeta: '+h.name, 'ok');
+    var h=await window.showDirectoryPicker({mode:'readwrite'});
+    handles[s]=h; storedHandles[s]=h;
+    var db=await openDB(); await dbSet(db,'dir-'+s,h);
+    updFolderUI(s,h.name,'granted'); await refreshList(s);
+    toast('Carpeta: '+h.name,'ok');
   } catch(e){
-    if(e.name === 'SecurityError'){
-      toast('Obre en nova pestanya per seleccionar carpetes', 'warn');
-    } else if(e.name !== 'AbortError'){
-      toast('Error: '+e.message, 'err');
-    }
+    if(e.name==='SecurityError'){toast("Obre en nova pestanya per seleccionar carpetes",'warn');}
+    else if(e.name!=='AbortError'){toast('Error: '+e.message,'err');}
   }
 }
 
-// ──────────────────────────────────────────────
-//  DESAR FITXER A CARPETA
-// ──────────────────────────────────────────────
-async function saveFile(s, file){
-  // Si no tenim handle actiu pero tenim el guardat, intentem reconnectar silenciosament
-  if(!handles[s] && storedHandles[s]){
-    try {
-      var perm = await storedHandles[s].requestPermission({mode:'readwrite'});
-      if(perm === 'granted'){ handles[s]=storedHandles[s]; updFolderUI(s, storedHandles[s].name, 'granted'); }
-    } catch(e){}
+async function saveFile(s,file){
+  if(!handles[s]&&storedHandles[s]){
+    try{var p=await storedHandles[s].requestPermission({mode:'readwrite'});if(p==='granted'){handles[s]=storedHandles[s];updFolderUI(s,storedHandles[s].name,'granted');}}catch(e){}
   }
-  var h = handles[s];
-  if(!h){ toast('Primer selecciona o reconnecta una carpeta', 'err'); return false; }
-  var p = await h.requestPermission({mode:'readwrite'});
-  if(p !== 'granted'){ toast('Permís denegat', 'err'); return false; }
+  var h=handles[s];
+  if(!h){toast('Primer selecciona o reconnecta una carpeta','err');return false;}
+  var p=await h.requestPermission({mode:'readwrite'});
+  if(p!=='granted'){toast('Permís denegat','err');return false;}
   try {
-    var fh = await h.getFileHandle(file.name, {create:true});
-    var w  = await fh.createWritable();
+    var fh=await h.getFileHandle(file.name,{create:true});
+    var w=await fh.createWritable();
     await w.write(file); await w.close();
     document.getElementById('ls-'+s).style.display='block';
     document.getElementById('lsn-'+s).textContent=file.name;
     document.getElementById('lsm-'+s).textContent=fmtB(file.size)+' · '+new Date().toLocaleString('ca-ES');
-    var fm=detectM(file.name), pm=getPrevM();
-    if(fm.mm && fm.mm===pm.mm){
-      localStorage.setItem('hist_'+s+'_prev', JSON.stringify({name:file.name,ts:Date.now(),mm:fm.mm,yyyy:fm.yyyy||pm.yyyy}));
+    var fm=detectM(file.name),pm=getPrevM();
+    if(fm.mm&&fm.mm===pm.mm){
+      localStorage.setItem('hist_'+s+'_prev',JSON.stringify({name:file.name,ts:Date.now(),mm:fm.mm,yyyy:fm.yyyy||pm.yyyy}));
     }
-    toast('Desat: '+file.name, 'ok');
-    await refreshList(s);
-    return true;
-  } catch(e){ toast('Error: '+e.message,'err'); return false; }
+    toast('Desat: '+file.name,'ok');
+    await refreshList(s); return true;
+  } catch(e){toast('Error: '+e.message,'err');return false;}
 }
 
 function getPrevM(){
-  var d=new Date(); d.setDate(1); d.setMonth(d.getMonth()-1);
-  return{mm:String(d.getMonth()+1).padStart(2,'0'), yyyy:String(d.getFullYear())};
+  var d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);
+  return{mm:String(d.getMonth()+1).padStart(2,'0'),yyyy:String(d.getFullYear())};
 }
 
-// ──────────────────────────────────────────────
-//  DRAG & DROP / FILE INPUT
-// ──────────────────────────────────────────────
-function onDragOver(e,s){ e.preventDefault(); document.getElementById('dz-'+s).classList.add('drag-over'); }
-function onDragLeave(s){ document.getElementById('dz-'+s).classList.remove('drag-over'); }
+function onDragOver(e,s){e.preventDefault();document.getElementById('dz-'+s).classList.add('drag-over');}
+function onDragLeave(s){document.getElementById('dz-'+s).classList.remove('drag-over');}
 async function onDrop(e,s){
-  e.preventDefault(); document.getElementById('dz-'+s).classList.remove('drag-over');
-  var fs=[...e.dataTransfer.files].filter(function(f){return f.name.endsWith('.html');});
-  if(!fs.length){toast('Només .html','err');return;}
+  e.preventDefault();document.getElementById('dz-'+s).classList.remove('drag-over');
+  var fs=[...e.dataTransfer.files].filter(function(f){return isAllowed(f.name);});
+  if(!fs.length){toast('Format no permès','err');return;}
   for(var f of fs) await saveFile(s,f);
 }
 async function onFileInput(e,s){
@@ -519,15 +472,12 @@ async function onFileInput(e,s){
   e.target.value='';
 }
 
-// ──────────────────────────────────────────────
-//  LLISTAR, FILTRAR I RENDERITZAR FITXERS
-// ──────────────────────────────────────────────
 async function refreshList(s){
-  var h=handles[s]; if(!h) return;
+  var h=handles[s];if(!h)return;
   files[s]=[];
   try {
     for await(var [name,fh] of h.entries()){
-      if(fh.kind==='file' && name.endsWith('.html')){
+      if(fh.kind==='file'&&isAllowed(name)){
         var f=await fh.getFile();
         var dm=detectM(name);
         files[s].push({name:name,handle:fh,size:f.size,lastMod:f.lastModified,mm:dm.mm,yyyy:dm.yyyy});
@@ -540,12 +490,12 @@ async function refreshList(s){
 
 function detectM(name){
   var lo=name.toLowerCase().replace(/[_\-.]/g,' ');
-  var m, mm=null, yyyy=null;
-  m=lo.match(/\b(20\d\d)\s*(0[1-9]|1[0-2])\b/); if(m){yyyy=m[1];mm=m[2];return{mm,yyyy};}
-  m=lo.match(/\b(0[1-9]|1[0-2])\s*(20\d\d)\b/); if(m){mm=m[1];yyyy=m[2];return{mm,yyyy};}
+  var m,mm=null,yyyy=null;
+  m=lo.match(/\b(20\d\d)\s*(0[1-9]|1[0-2])\b/);if(m){yyyy=m[1];mm=m[2];return{mm,yyyy};}
+  m=lo.match(/\b(0[1-9]|1[0-2])\s*(20\d\d)\b/);if(m){mm=m[1];yyyy=m[2];return{mm,yyyy};}
   for(var i=0;i<MCA_L.length;i++){if(lo.indexOf(MCA_L[i])>=0){mm=String(i+1).padStart(2,'0');break;}}
-  if(!mm) for(var j=0;j<MES.length;j++){if(lo.indexOf(MES[j])>=0){mm=String(j+1).padStart(2,'0');break;}}
-  var ym=lo.match(/\b(20\d\d)\b/); if(ym) yyyy=ym[1];
+  if(!mm)for(var j=0;j<MES.length;j++){if(lo.indexOf(MES[j])>=0){mm=String(j+1).padStart(2,'0');break;}}
+  var ym=lo.match(/\b(20\d\d)\b/);if(ym)yyyy=ym[1];
   return{mm,yyyy};
 }
 
@@ -560,15 +510,20 @@ function filterFiles(s){
 
 function renderList(s,list){
   var el=document.getElementById('fl-'+s);
-  var bc=BADGE[s], col=COLORS[s];
+  var bc=BADGE[s],col=COLORS[s];
   if(!list.length){
     el.innerHTML='<div class="empty-state"><svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>'+(files[s].length?'Cap resultat':'Cap fitxer')+'</div>';
     return;
   }
   el.innerHTML=list.map(function(f){
+    var bg=fileBg(f.name)||(col+'20');
+    var ext=extOf(f.name).toUpperCase();
     return '<div class="file-item" onclick="openFile(\''+s+'\',\''+escA(f.name)+'\')">'
-      +'<div class="fi-icon" style="background:'+col+'20;"><svg width="16" height="16" fill="none" stroke="'+col+'" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>'
-      +'<div class="fi-info"><div class="fi-name">'+escH(f.name)+'</div><div class="fi-meta">'+fmtB(f.size)+' · '+new Date(f.lastMod).toLocaleDateString('ca-ES')+'</div></div>'
+      +'<div class="fi-icon" style="background:'+bg+';">'+fileIcon(f.name,col)+'</div>'
+      +'<div class="fi-info">'
+        +'<div class="fi-name">'+escH(f.name)+'</div>'
+        +'<div class="fi-meta">'+ext+' &middot; '+fmtB(f.size)+' &middot; '+new Date(f.lastMod).toLocaleDateString('ca-ES')+'</div>'
+      +'</div>'
       +(f.mm?'<span class="fi-badge '+bc+'">'+(MCA[f.mm]||f.mm)+(f.yyyy?' '+f.yyyy:'')+'</span>':'')
       +'<div class="fi-actions" onclick="event.stopPropagation()">'
         +'<button class="icon-btn ib-open" title="Obrir" onclick="openFile(\''+s+'\',\''+escA(f.name)+'\')"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>'
@@ -577,47 +532,49 @@ function renderList(s,list){
   }).join('');
 }
 
-// ──────────────────────────────────────────────
-//  OBRIR FITXER EN MODAL
-// ──────────────────────────────────────────────
 async function openFile(s,name){
-  var entry=files[s].find(function(f){return f.name===name;}); if(!entry) return;
+  var entry=files[s].find(function(f){return f.name===name;});if(!entry)return;
   try {
     var f=await entry.handle.getFile();
-    var url=URL.createObjectURL(f);
+    if(previewUrl){URL.revokeObjectURL(previewUrl);}
+    previewUrl=URL.createObjectURL(f);
     document.getElementById('previewTitle').textContent=name;
-    document.getElementById('previewFrame').src=url;
+    var body=document.getElementById('previewBody');
+    var e=extOf(name);
+    var imgExts=['jpg','jpeg','png','bmp'];
+    if(imgExts.indexOf(e)>=0){
+      body.innerHTML='<div class="modal-img"><img src="'+previewUrl+'" alt="'+escH(name)+'"></div>';
+    } else {
+      // HTML, PDF (navegador renderitza) o PSD (binari, mostrarem missatge)
+      if(e==='psd'){
+        body.innerHTML='<div style="flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:#888;font-size:13px;padding:24px;text-align:center;">'
+          +'<svg width="48" height="48" fill="none" stroke="#bbb" stroke-width="1.4" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h1a2 2 0 0 1 0 4H9v-4z"/><path d="M14 9h2a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1h-1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h2"/></svg>'
+          +'<strong>'+escH(name)+'</strong>'
+          +'<span>Els fitxers PSD no es poden previsualitzar al navegador.</span></div>';
+      } else {
+        body.innerHTML='<iframe src="'+previewUrl+'" style="flex:1;border:none;width:100%;height:100%;" sandbox="allow-scripts allow-same-origin"></iframe>';
+      }
+    }
     document.getElementById('previewModal').classList.add('open');
   } catch(e){toast('Error obrint','err');}
 }
+
 function closePreview(){
   document.getElementById('previewModal').classList.remove('open');
-  var fr=document.getElementById('previewFrame');
-  URL.revokeObjectURL(fr.src); fr.src='';
+  document.getElementById('previewBody').innerHTML='';
+  if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl=null;}
 }
+
 async function delFile(s,name){
-  if(!confirm('Eliminar "'+name+'"?')) return;
-  try {await handles[s].removeEntry(name); toast('Eliminat','ok'); await refreshList(s);}
+  if(!confirm('Eliminar "'+name+'"?'))return;
+  try{await handles[s].removeEntry(name);toast('Eliminat','ok');await refreshList(s);}
   catch(e){toast('Error eliminant','err');}
 }
 
-// ──────────────────────────────────────────────
-//  INDEXEDDB
-// ──────────────────────────────────────────────
-function openDB(){
-  return new Promise(function(res,rej){
-    var r=indexedDB.open('HistDB',1);
-    r.onupgradeneeded=function(e){e.target.result.createObjectStore('s');};
-    r.onsuccess=function(e){res(e.target.result);};
-    r.onerror=rej;
-  });
-}
+function openDB(){return new Promise(function(res,rej){var r=indexedDB.open('HistDB',1);r.onupgradeneeded=function(e){e.target.result.createObjectStore('s');};r.onsuccess=function(e){res(e.target.result);};r.onerror=rej;});}
 function dbGet(db,k){return new Promise(function(res,rej){var r=db.transaction('s','readonly').objectStore('s').get(k);r.onsuccess=function(e){res(e.target.result);};r.onerror=rej;});}
 function dbSet(db,k,v){return new Promise(function(res,rej){var r=db.transaction('s','readwrite').objectStore('s').put(v,k);r.onsuccess=function(){res();};r.onerror=rej;});}
 
-// ──────────────────────────────────────────────
-//  UTILITATS
-// ──────────────────────────────────────────────
 function escH(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function escA(v){return String(v||'').replace(/'/g,"\\'");}
 function fmtB(b){if(b<1024)return b+'B';if(b<1048576)return (b/1024).toFixed(1)+'KB';return (b/1048576).toFixed(1)+'MB';}
@@ -627,7 +584,7 @@ function toast(msg,type){
   var t=document.getElementById('toast');
   document.getElementById('toastMsg').textContent=msg;
   t.className='toast show t-'+(type||'ok');
-  clearTimeout(_tt); _tt=setTimeout(function(){t.classList.remove('show');},3200);
+  clearTimeout(_tt);_tt=setTimeout(function(){t.classList.remove('show');},3200);
 }
 document.getElementById('previewModal').addEventListener('click',function(e){if(e.target===this)closePreview();});
 </script>

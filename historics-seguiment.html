@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --red:#DC0028;--red-d:#b8001e;--red-l:#fff0f2;
+  --red:#DC0028;--red-l:#fff0f2;
   --dark:#202020;--gray:#555;--gray-2:#888;--gray-3:#bbb;--gray-4:#e5e5e5;
   --green:#166534;--green-bg:#dcfce7;--green-d:#14532d;
   --blue:#1d4ed8;--blue-bg:#dbeafe;--blue-d:#1e3a8a;
@@ -17,20 +17,24 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;padding:0 0 60px;}
+
 .hdr{background:#2D2D2D;height:70px;padding:0 32px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 10px rgba(0,0,0,.35);}
 .hdr-r{text-align:right;}
 .hdr-title{font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;color:#fff;}
 .hdr-sub{font-size:11px;color:rgba(255,255,255,.65);margin-top:2px;}
+
 .iframe-banner{background:var(--amber-bg);border-bottom:2px solid var(--amber-border);padding:11px 24px;display:none;align-items:center;gap:12px;flex-wrap:wrap;}
 .iframe-banner svg{color:var(--amber);flex-shrink:0;}
 .iframe-banner p{font-size:12.5px;color:#78350f;flex:1;min-width:200px;}
-.iframe-banner .ib-btn{background:var(--amber-border);color:#fff;border:none;padding:8px 16px;border-radius:6px;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;}
-.iframe-banner .ib-btn:hover{background:#d97706;}
+.ib-btn{background:var(--amber-border);color:#fff;border:none;padding:8px 16px;border-radius:6px;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.ib-btn:hover{background:#d97706;}
+
 .wrap{max-width:1280px;margin:0 auto;padding:24px;}
-.tab-panel{display:block;margin-bottom:24px;}
+.tab-panel{margin-bottom:24px;}
 .tab-panel+.tab-panel{border-top:2px solid var(--gray-4);padding-top:24px;}
 .sec-bar{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
-.sec-title{font-family:'Poppins',sans-serif;font-size:18px;font-weight:700;color:var(--dark);flex:1;margin-right:4px;}
+.sec-title{font-family:'Poppins',sans-serif;font-size:18px;font-weight:700;color:var(--dark);flex:1;}
+
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:6px;font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;border:none;white-space:nowrap;transition:all .18s;}
 .btn svg{width:13px;height:13px;flex-shrink:0;}
 .btn-blue{background:var(--blue);color:#fff;}.btn-blue:hover{background:var(--blue-d);}
@@ -38,15 +42,18 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 .btn-purple{background:var(--purple);color:#fff;}.btn-purple:hover{background:var(--purple-d);}
 .btn-gray{background:#fff;color:var(--gray);border:1.5px solid var(--border);}.btn-gray:hover{border-color:#999;}
 .btn-amber{background:var(--amber-bg);color:var(--amber);border:1.5px solid var(--amber-border);}.btn-amber:hover{background:#fde68a;}
+
 .folder-bar{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:10px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 .folder-path{font-size:12px;color:var(--gray);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .folder-path strong{color:var(--dark);font-weight:600;}
-.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
 .badge-ok{background:var(--green-bg);color:var(--green);}
 .badge-ko{background:var(--gray-4);color:var(--gray-2);}
 .badge-warn{background:var(--amber-bg);color:var(--amber);}
+
 .section-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
 @media(max-width:800px){.section-grid{grid-template-columns:1fr;}}
+
 .drop-zone{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);border:2px dashed var(--gray-3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:36px 24px;cursor:pointer;transition:all .2s;text-align:center;min-height:240px;}
 .dz-blue:hover,.dz-blue.drag-over{border-color:var(--blue);background:var(--blue-bg);}
 .dz-green:hover,.dz-green.drag-over{border-color:var(--green);background:var(--green-bg);}
@@ -57,11 +64,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 .dz-purple:hover svg,.dz-purple.drag-over svg{color:var(--purple)!important;}
 .drop-title{font-size:14px;font-weight:600;color:var(--dark);}
 .drop-sub{font-size:12px;color:var(--gray-2);}
-.drop-ext{font-size:10.5px;color:var(--gray-3);margin-top:-4px;letter-spacing:.2px;}
+.drop-ext{font-size:10px;color:var(--gray-3);letter-spacing:.2px;line-height:1.7;}
 .drop-lbl{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;border:1.5px solid;}
 .dl-blue{background:var(--blue-bg);color:var(--blue);border-color:var(--blue);}.dl-blue:hover{background:var(--blue);color:#fff;}
 .dl-green{background:var(--green-bg);color:var(--green);border-color:var(--green);}.dl-green:hover{background:var(--green);color:#fff;}
 .dl-purple{background:var(--purple-bg);color:var(--purple);border-color:var(--purple);}.dl-purple:hover{background:var(--purple);color:#fff;}
+
 .file-panel{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden;}
 .panel-hdr{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .panel-hdr-title{font-size:12px;font-weight:700;color:var(--dark);flex:1;}
@@ -90,7 +98,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 .ls-label{font-size:10.5px;font-weight:700;color:var(--gray-2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px;}
 .ls-name{font-size:12.5px;font-weight:600;color:var(--dark);}
 .ls-meta{font-size:11px;color:var(--gray-2);margin-top:2px;}
+
 .api-warn{background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:var(--radius);padding:10px 14px;font-size:12px;color:var(--amber);margin-bottom:16px;display:none;align-items:center;gap:8px;}
+
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:800;align-items:center;justify-content:center;}
 .modal-overlay.open{display:flex;}
 .modal{background:#fff;border-radius:10px;width:96vw;height:92vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3);}
@@ -100,6 +110,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 .modal-close:hover{background:rgba(255,255,255,.15);color:#fff;}
 .modal-img{flex:1;display:flex;align-items:center;justify-content:center;background:#1a1a1a;overflow:auto;padding:16px;}
 .modal-img img{max-width:100%;max-height:100%;object-fit:contain;border-radius:4px;}
+.modal-nopreview{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;color:#888;font-size:13px;padding:32px;text-align:center;}
+.nopreview-dl{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;margin-top:4px;}
+.nopreview-dl:hover{background:var(--blue-d);}
+
 .toast{position:fixed;bottom:24px;right:24px;background:var(--dark);color:#fff;padding:12px 18px;border-radius:8px;font-size:13px;font-weight:500;z-index:999;display:none;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,.3);}
 .toast.show{display:flex;animation:sup .2s ease;}
 .toast.t-ok{background:var(--green);}.toast.t-err{background:#b91c1c;}.toast.t-warn{background:#d97706;}
@@ -117,7 +131,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 <header class="hdr">
   <div style="font-family:system-ui,sans-serif;font-size:15px;font-weight:700;letter-spacing:-.01em;color:#fff">
     Optimizarte
-    <span style="font-family:Arial,sans-serif;font-size:9.5px;font-weight:500;color:#999;margin:0 3px;letter-spacing:0">by</span>
+    <span style="font-family:Arial,sans-serif;font-size:9.5px;font-weight:500;color:#999;margin:0 3px">by</span>
     <span style="font-weight:700;color:#DC0028">Occident</span>
   </div>
   <div class="hdr-r">
@@ -148,7 +162,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
       </button>
     </div>
     <div class="folder-bar">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" style="color:var(--gray-3);flex-shrink:0;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" style="color:var(--gray-3);flex-shrink:0"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
       <div class="folder-path" id="fp-dafo"><em>Cap carpeta seleccionada</em></div>
       <span class="badge badge-ko" id="fb-dafo">&#9679; Desconnectat</span>
     </div>
@@ -160,13 +174,16 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
           <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
           <div class="drop-title">Arrossega fitxers aquí</div>
           <div class="drop-sub">o fes clic per seleccionar</div>
-          <div class="drop-ext">HTML · JPG · PNG · BMP · PDF · PSD</div>
+          <div class="drop-ext">
+            HTML &middot; JPG &middot; PNG &middot; BMP &middot; PDF &middot; PSD<br>
+            Word &middot; Excel &middot; PowerPoint
+          </div>
           <label class="drop-lbl dl-blue" onclick="event.stopPropagation();document.getElementById('fi-dafo').click()">
             <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Seleccionar fitxer
           </label>
         </div>
-        <input type="file" id="fi-dafo" accept=".html,.htm,.jpg,.jpeg,.png,.bmp,.pdf,.psd" multiple style="display:none" onchange="onFileInput(event,'dafo')">
-        <div id="ls-dafo" style="display:none;" class="last-saved">
+        <input type="file" id="fi-dafo" accept=".html,.htm,.jpg,.jpeg,.png,.bmp,.pdf,.psd,.doc,.docx,.docm,.dotx,.dotm,.xls,.xlsx,.xlsm,.xlsb,.xltx,.xltm,.csv,.ppt,.pptx,.pptm,.potx,.potm,.ppsx,.ppsm" multiple style="display:none" onchange="onFileInput(event,'dafo')">
+        <div id="ls-dafo" class="last-saved" style="display:none">
           <div class="ls-label">&#128190; &#218;ltim desat</div>
           <div class="ls-name" id="lsn-dafo"></div>
           <div class="ls-meta" id="lsm-dafo"></div>
@@ -179,7 +196,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             <input class="search-inp" type="text" placeholder="Cercar..." id="si-dafo" oninput="filterFiles('dafo')">
           </div>
-          <select class="month-sel" id="ms-dafo" onchange="filterFiles('dafo')" style="border-color:#1d4ed8;"></select>
+          <select class="month-sel" id="ms-dafo" onchange="filterFiles('dafo')" style="border-color:#1d4ed8"></select>
         </div>
         <div class="file-list" id="fl-dafo">
           <div class="empty-state"><svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Selecciona una carpeta</div>
@@ -204,7 +221,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
       </button>
     </div>
     <div class="folder-bar">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" style="color:var(--gray-3);flex-shrink:0;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" style="color:var(--gray-3);flex-shrink:0"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
       <div class="folder-path" id="fp-tanc"><em>Cap carpeta seleccionada</em></div>
       <span class="badge badge-ko" id="fb-tanc">&#9679; Desconnectat</span>
     </div>
@@ -216,13 +233,16 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
           <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
           <div class="drop-title">Arrossega fitxers aquí</div>
           <div class="drop-sub">o fes clic per seleccionar</div>
-          <div class="drop-ext">HTML · JPG · PNG · BMP · PDF · PSD</div>
+          <div class="drop-ext">
+            HTML &middot; JPG &middot; PNG &middot; BMP &middot; PDF &middot; PSD<br>
+            Word &middot; Excel &middot; PowerPoint
+          </div>
           <label class="drop-lbl dl-green" onclick="event.stopPropagation();document.getElementById('fi-tanc').click()">
             <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Seleccionar fitxer
           </label>
         </div>
-        <input type="file" id="fi-tanc" accept=".html,.htm,.jpg,.jpeg,.png,.bmp,.pdf,.psd" multiple style="display:none" onchange="onFileInput(event,'tanc')">
-        <div id="ls-tanc" style="display:none;" class="last-saved">
+        <input type="file" id="fi-tanc" accept=".html,.htm,.jpg,.jpeg,.png,.bmp,.pdf,.psd,.doc,.docx,.docm,.dotx,.dotm,.xls,.xlsx,.xlsm,.xlsb,.xltx,.xltm,.csv,.ppt,.pptx,.pptm,.potx,.potm,.ppsx,.ppsm" multiple style="display:none" onchange="onFileInput(event,'tanc')">
+        <div id="ls-tanc" class="last-saved" style="display:none">
           <div class="ls-label">&#128190; &#218;ltim desat</div>
           <div class="ls-name" id="lsn-tanc"></div>
           <div class="ls-meta" id="lsm-tanc"></div>
@@ -235,7 +255,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             <input class="search-inp" type="text" placeholder="Cercar..." id="si-tanc" oninput="filterFiles('tanc')">
           </div>
-          <select class="month-sel" id="ms-tanc" onchange="filterFiles('tanc')" style="border-color:#166534;"></select>
+          <select class="month-sel" id="ms-tanc" onchange="filterFiles('tanc')" style="border-color:#166534"></select>
         </div>
         <div class="file-list" id="fl-tanc">
           <div class="empty-state"><svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Selecciona una carpeta</div>
@@ -260,7 +280,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
       </button>
     </div>
     <div class="folder-bar">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" style="color:var(--gray-3);flex-shrink:0;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" style="color:var(--gray-3);flex-shrink:0"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
       <div class="folder-path" id="fp-fitxa"><em>Cap carpeta seleccionada</em></div>
       <span class="badge badge-ko" id="fb-fitxa">&#9679; Desconnectat</span>
     </div>
@@ -272,13 +292,16 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
           <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
           <div class="drop-title">Arrossega fitxers aquí</div>
           <div class="drop-sub">o fes clic per seleccionar</div>
-          <div class="drop-ext">HTML · JPG · PNG · BMP · PDF · PSD</div>
+          <div class="drop-ext">
+            HTML &middot; JPG &middot; PNG &middot; BMP &middot; PDF &middot; PSD<br>
+            Word &middot; Excel &middot; PowerPoint
+          </div>
           <label class="drop-lbl dl-purple" onclick="event.stopPropagation();document.getElementById('fi-fitxa').click()">
             <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Seleccionar fitxer
           </label>
         </div>
-        <input type="file" id="fi-fitxa" accept=".html,.htm,.jpg,.jpeg,.png,.bmp,.pdf,.psd" multiple style="display:none" onchange="onFileInput(event,'fitxa')">
-        <div id="ls-fitxa" style="display:none;" class="last-saved">
+        <input type="file" id="fi-fitxa" accept=".html,.htm,.jpg,.jpeg,.png,.bmp,.pdf,.psd,.doc,.docx,.docm,.dotx,.dotm,.xls,.xlsx,.xlsm,.xlsb,.xltx,.xltm,.csv,.ppt,.pptx,.pptm,.potx,.potm,.ppsx,.ppsm" multiple style="display:none" onchange="onFileInput(event,'fitxa')">
+        <div id="ls-fitxa" class="last-saved" style="display:none">
           <div class="ls-label">&#128190; &#218;ltim desat</div>
           <div class="ls-name" id="lsn-fitxa"></div>
           <div class="ls-meta" id="lsm-fitxa"></div>
@@ -291,7 +314,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             <input class="search-inp" type="text" placeholder="Cercar..." id="si-fitxa" oninput="filterFiles('fitxa')">
           </div>
-          <select class="month-sel" id="ms-fitxa" onchange="filterFiles('fitxa')" style="border-color:#6b21a8;"></select>
+          <select class="month-sel" id="ms-fitxa" onchange="filterFiles('fitxa')" style="border-color:#6b21a8"></select>
         </div>
         <div class="file-list" id="fl-fitxa">
           <div class="empty-state"><svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Selecciona una carpeta</div>
@@ -317,6 +340,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 'use strict';
 
 const SECS   = ['dafo','tanc','fitxa'];
+const LBLS   = {dafo:'DAFOs', tanc:'Tancaments', fitxa:'Fitxes Mediador'};
 const COLORS = {dafo:'#1d4ed8', tanc:'#166534', fitxa:'#6b21a8'};
 const BADGE  = {dafo:'fb-blue', tanc:'fb-green', fitxa:'fb-purple'};
 const MCA    = {'01':'Gener','02':'Febrer','03':'Març','04':'Abril','05':'Maig','06':'Juny',
@@ -324,35 +348,69 @@ const MCA    = {'01':'Gener','02':'Febrer','03':'Març','04':'Abril','05':'Maig'
 const MES    = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 const MCA_L  = ['gener','febrer','març','abril','maig','juny','juliol','agost','setembre','octubre','novembre','desembre'];
 
-const ALLOWED_EXT = ['.html','.htm','.jpg','.jpeg','.png','.bmp','.pdf','.psd'];
-function isAllowed(name){ var lo=name.toLowerCase(); return ALLOWED_EXT.some(function(e){return lo.endsWith(e);}); }
-function extOf(name){ var lo=name.toLowerCase(); for(var e of ALLOWED_EXT){if(lo.endsWith(e))return e.replace('.','');} return ''; }
+// ─── Extensions acceptades ───────────────────────────────────────
+const EXT_IMG   = ['jpg','jpeg','png','bmp'];
+const EXT_WEB   = ['html','htm','pdf'];
+const EXT_WORD  = ['doc','docx','docm','dotx','dotm'];
+const EXT_EXCEL = ['xls','xlsx','xlsm','xlsb','xltx','xltm','csv'];
+const EXT_PPT   = ['ppt','pptx','pptm','potx','potm','ppsx','ppsm'];
+const EXT_OTHER = ['psd'];
+const ALL_EXT   = EXT_IMG.concat(EXT_WEB).concat(EXT_WORD).concat(EXT_EXCEL).concat(EXT_PPT).concat(EXT_OTHER);
+
+function isAllowed(name){
+  var lo=name.toLowerCase().split('.').pop();
+  return ALL_EXT.indexOf(lo)>=0;
+}
+function extOf(name){
+  return name.toLowerCase().split('.').pop();
+}
+
+// ─── Icona i color de fons per extensió ─────────────────────────
 function fileIcon(name,col){
   var e=extOf(name);
-  var svgDoc='<svg width="16" height="16" fill="none" stroke="'+col+'" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
-  var svgImg='<svg width="16" height="16" fill="none" stroke="#0891b2" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
-  var svgPdf='<svg width="16" height="16" fill="none" stroke="#b91c1c" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>';
-  var svgPsd='<svg width="16" height="16" fill="none" stroke="#7c3aed" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h1a2 2 0 0 1 0 4H9v-4z"/><path d="M14 9h2a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1h-1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h2"/></svg>';
-  if(e==='pdf') return svgPdf;
-  if(e==='psd') return svgPsd;
-  if(['jpg','jpeg','png','bmp'].indexOf(e)>=0) return svgImg;
-  return svgDoc;
+  if(EXT_IMG.indexOf(e)>=0)
+    return '<svg width="16" height="16" fill="none" stroke="#0891b2" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
+  if(e==='pdf')
+    return '<svg width="16" height="16" fill="none" stroke="#b91c1c" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>';
+  if(EXT_WORD.indexOf(e)>=0)
+    return '<svg width="16" height="16" fill="none" stroke="#1d4ed8" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13l2 6 2-5 2 5 2-6"/></svg>';
+  if(EXT_EXCEL.indexOf(e)>=0)
+    return '<svg width="16" height="16" fill="none" stroke="#166534" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="10" y1="9" x2="10" y2="21"/></svg>';
+  if(EXT_PPT.indexOf(e)>=0)
+    return '<svg width="16" height="16" fill="none" stroke="#c2410c" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><rect x="8" y="12" width="5" height="4" rx="1"/></svg>';
+  if(e==='psd')
+    return '<svg width="16" height="16" fill="none" stroke="#7c3aed" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h1a2 2 0 0 1 0 4H9v-4z"/><path d="M14 9h2a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1h-1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h2"/></svg>';
+  // html/htm
+  return '<svg width="16" height="16" fill="none" stroke="'+col+'" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
 }
 function fileBg(name){
   var e=extOf(name);
-  if(e==='pdf') return '#fee2e2';
-  if(['jpg','jpeg','png','bmp'].indexOf(e)>=0) return '#e0f2fe';
-  if(e==='psd') return '#ede9fe';
+  if(EXT_IMG.indexOf(e)>=0)   return '#e0f2fe';
+  if(e==='pdf')               return '#fee2e2';
+  if(EXT_WORD.indexOf(e)>=0)  return '#dbeafe';
+  if(EXT_EXCEL.indexOf(e)>=0) return '#dcfce7';
+  if(EXT_PPT.indexOf(e)>=0)   return '#ffedd5';
+  if(e==='psd')               return '#ede9fe';
+  return null;
+}
+// Nom de l'aplicació per al modal "no previsualitzable"
+function appName(e){
+  if(EXT_WORD.indexOf(e)>=0)  return 'Microsoft Word';
+  if(EXT_EXCEL.indexOf(e)>=0) return 'Microsoft Excel';
+  if(EXT_PPT.indexOf(e)>=0)   return 'Microsoft PowerPoint';
+  if(e==='psd')               return 'Adobe Photoshop';
   return null;
 }
 
-let handles       = {dafo:null, tanc:null, fitxa:null};
-let storedHandles = {dafo:null, tanc:null, fitxa:null};
-let files         = {dafo:[], tanc:[], fitxa:[]};
-let previewUrl    = null;
-const IS_IFRAME   = (window.self !== window.top);
+// State
+var handles       = {dafo:null, tanc:null, fitxa:null};
+var storedHandles = {dafo:null, tanc:null, fitxa:null};
+var files         = {dafo:[], tanc:[], fitxa:[]};
+var previewUrl    = null;
+var previewFile   = null;
+var IS_IFRAME     = (window.self !== window.top);
 
-// ── Month selects ──
+// Month selects init
 SECS.forEach(function(s){
   var sel=document.getElementById('ms-'+s);
   sel.innerHTML='<option value="">Tots els mesos</option>'+
@@ -362,48 +420,61 @@ SECS.forEach(function(s){
 if(!('showDirectoryPicker' in window)) document.getElementById('apiWarn').style.display='flex';
 if(IS_IFRAME) document.getElementById('iframeBanner').style.display='flex';
 
-// ── IndexedDB: UNA BASE DE DADES INDEPENDENT PER CADA SECCIÓ ──
-// HistDB_dafo / HistDB_tanc / HistDB_fitxa  →  clau única 'handle'
+// ─────────────────────────────────────────────────────────────────
+//  INDEXEDDB — BASE DE DADES INDEPENDENT PER CADA SECCIÓ
+//  HistDB_dafo / HistDB_tanc / HistDB_fitxa
+// ─────────────────────────────────────────────────────────────────
 function openDB(s){
   return new Promise(function(res,rej){
-    var r=indexedDB.open('HistDB_'+s, 1);
-    r.onupgradeneeded=function(e){ e.target.result.createObjectStore('d'); };
-    r.onsuccess=function(e){ res(e.target.result); };
-    r.onerror=rej;
+    var req=indexedDB.open('HistDB_'+s,1);
+    req.onupgradeneeded=function(ev){ev.target.result.createObjectStore('d');};
+    req.onsuccess=function(ev){res(ev.target.result);};
+    req.onerror=rej;
   });
 }
 function dbGet(db){
   return new Promise(function(res,rej){
-    var r=db.transaction('d','readonly').objectStore('d').get('handle');
-    r.onsuccess=function(e){res(e.target.result);}; r.onerror=rej;
+    var req=db.transaction('d','readonly').objectStore('d').get('handle');
+    req.onsuccess=function(ev){res(ev.target.result);};
+    req.onerror=rej;
   });
 }
 function dbSet(db,h){
   return new Promise(function(res,rej){
-    var r=db.transaction('d','readwrite').objectStore('d').put(h,'handle');
-    r.onsuccess=function(){res();}; r.onerror=rej;
+    var req=db.transaction('d','readwrite').objectStore('d').put(h,'handle');
+    req.onsuccess=function(){res();};
+    req.onerror=rej;
   });
 }
 
-// ── Init: restaura cada secció des de la seva pròpia BD ──
+// ─────────────────────────────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────────────────────────────
 (async function init(){
-  for(var i=0; i<SECS.length; i++){
+  for(var i=0;i<SECS.length;i++){
     var s=SECS[i];
-    try {
+    try{
       var db=await openDB(s);
       var h=await dbGet(db);
       if(!h) continue;
       storedHandles[s]=h;
       var perm=await h.queryPermission({mode:'readwrite'});
-      if(perm==='granted'){ handles[s]=h; updFolderUI(s,h.name,'granted'); await refreshList(s); }
-      else { updFolderUI(s,h.name,'prompt'); }
-    } catch(e){ console.warn('Init ['+s+']:', e); }
+      if(perm==='granted'){
+        handles[s]=h;
+        updFolderUI(s,h.name,'granted');
+        await refreshList(s);
+      } else {
+        updFolderUI(s,h.name,'prompt');
+      }
+    }catch(err){console.warn('[init]['+s+']',err);}
   }
   var hash=location.hash.replace('#','');
-  if(hash){ var el=document.getElementById('panel-'+hash); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+  if(hash){var el=document.getElementById('panel-'+hash);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 })();
 
-// ── UI ──
+// ─────────────────────────────────────────────────────────────────
+//  UI
+// ─────────────────────────────────────────────────────────────────
 function updFolderUI(s,name,state){
   var fp=document.getElementById('fp-'+s);
   var fb=document.getElementById('fb-'+s);
@@ -424,52 +495,43 @@ function updFolderUI(s,name,state){
   }
 }
 
+// ─────────────────────────────────────────────────────────────────
+//  RECONNECTAR
+// ─────────────────────────────────────────────────────────────────
 async function reconnect(s){
   var h=storedHandles[s]; if(!h){pickFolder(s);return;}
-  try {
+  try{
     var perm=await h.requestPermission({mode:'readwrite'});
-    if(perm==='granted'){ handles[s]=h; updFolderUI(s,h.name,'granted'); await refreshList(s); toast('Reconnectat: '+h.name,'ok'); }
-    else { toast('Permís denegat. Tria una altra carpeta.','err'); }
-  } catch(e){ toast('Error: '+e.message,'err'); }
+    if(perm==='granted'){
+      handles[s]=h; updFolderUI(s,h.name,'granted'); await refreshList(s);
+      toast('Reconnectat: '+h.name,'ok');
+    } else { toast('Permís denegat — tria una altra carpeta','err'); }
+  }catch(err){toast('Error: '+err.message,'err');}
 }
 
+// ─────────────────────────────────────────────────────────────────
+//  SELECCIONAR CARPETA
+// ─────────────────────────────────────────────────────────────────
 async function pickFolder(s){
   if(!('showDirectoryPicker' in window)){toast('Usa Chrome o Edge','err');return;}
   if(IS_IFRAME){toast('Obre en nova pestanya per seleccionar carpetes','warn');return;}
-  try {
+  try{
     var h=await window.showDirectoryPicker({mode:'readwrite'});
     handles[s]=h; storedHandles[s]=h;
-    var db=await openDB(s);   // BD exclusiva d'aquesta secció
-    await dbSet(db,h);
+    var db=await openDB(s); await dbSet(db,h);
     updFolderUI(s,h.name,'granted'); await refreshList(s);
-    toast('Carpeta DAFO: '+h.name,'ok');  // missatge genèric substituït avall
-  } catch(e){
-    if(e.name==='SecurityError'){toast('Obre en nova pestanya per seleccionar carpetes','warn');}
-    else if(e.name!=='AbortError'){toast('Error: '+e.message,'err');}
+    toast(LBLS[s]+': '+h.name,'ok');
+  }catch(err){
+    if(err.name==='SecurityError'){toast('Obre en nova pestanya per seleccionar carpetes','warn');}
+    else if(err.name!=='AbortError'){toast('Error: '+err.message,'err');}
   }
 }
 
-// Sobreescrivim el toast de pickFolder per mostrar el nom de secció correcte
-var _origPickFolder=pickFolder;
-async function pickFolder(s){
-  if(!('showDirectoryPicker' in window)){toast('Usa Chrome o Edge','err');return;}
-  if(IS_IFRAME){toast('Obre en nova pestanya per seleccionar carpetes','warn');return;}
-  var LBLS={dafo:'DAFOs',tanc:'Tancaments',fitxa:'Fitxes Mediador'};
-  try {
-    var h=await window.showDirectoryPicker({mode:'readwrite'});
-    handles[s]=h; storedHandles[s]=h;
-    var db=await openDB(s);
-    await dbSet(db,h);
-    updFolderUI(s,h.name,'granted'); await refreshList(s);
-    toast((LBLS[s]||s)+': '+h.name,'ok');
-  } catch(e){
-    if(e.name==='SecurityError'){toast('Obre en nova pestanya per seleccionar carpetes','warn');}
-    else if(e.name!=='AbortError'){toast('Error: '+e.message,'err');}
-  }
-}
-
+// ─────────────────────────────────────────────────────────────────
+//  DESAR FITXER
+// ─────────────────────────────────────────────────────────────────
 async function saveFile(s,file){
-  if(!handles[s]&&storedHandles[s]){
+  if(!handles[s] && storedHandles[s]){
     try{
       var p2=await storedHandles[s].requestPermission({mode:'readwrite'});
       if(p2==='granted'){handles[s]=storedHandles[s];updFolderUI(s,storedHandles[s].name,'granted');}
@@ -477,24 +539,24 @@ async function saveFile(s,file){
   }
   var h=handles[s];
   if(!h){toast('Primer selecciona o reconnecta una carpeta','err');return false;}
-  var p=await h.requestPermission({mode:'readwrite'});
-  if(p!=='granted'){toast('Permís denegat','err');return false;}
-  try {
+  var perm=await h.requestPermission({mode:'readwrite'});
+  if(perm!=='granted'){toast('Permís denegat','err');return false;}
+  try{
     var fh=await h.getFileHandle(file.name,{create:true});
-    var w=await fh.createWritable(); await w.write(file); await w.close();
+    var w=await fh.createWritable();
+    await w.write(file); await w.close();
     document.getElementById('ls-'+s).style.display='block';
     document.getElementById('lsn-'+s).textContent=file.name;
     document.getElementById('lsm-'+s).textContent=fmtB(file.size)+' · '+new Date().toLocaleString('ca-ES');
-    var fm=detectM(file.name),pm=getPrevM();
-    if(fm.mm&&fm.mm===pm.mm){
-      localStorage.setItem('hist_'+s+'_prev',JSON.stringify({name:file.name,ts:Date.now(),mm:fm.mm,yyyy:fm.yyyy||pm.yyyy}));
-    }
-    toast('Desat: '+file.name,'ok'); await refreshList(s); return true;
-  } catch(e){toast('Error: '+e.message,'err');return false;}
+    toast('Desat: '+file.name,'ok');
+    await refreshList(s);
+    return true;
+  }catch(err){toast('Error: '+err.message,'err');return false;}
 }
 
-function getPrevM(){var d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);return{mm:String(d.getMonth()+1).padStart(2,'0'),yyyy:String(d.getFullYear())};}
-
+// ─────────────────────────────────────────────────────────────────
+//  DRAG & DROP / FILE INPUT
+// ─────────────────────────────────────────────────────────────────
 function onDragOver(e,s){e.preventDefault();document.getElementById('dz-'+s).classList.add('drag-over');}
 function onDragLeave(s){document.getElementById('dz-'+s).classList.remove('drag-over');}
 async function onDrop(e,s){
@@ -503,21 +565,28 @@ async function onDrop(e,s){
   if(!fs.length){toast('Format no permès','err');return;}
   for(var f of fs) await saveFile(s,f);
 }
-async function onFileInput(e,s){for(var f of [...e.target.files]) await saveFile(s,f);e.target.value='';}
+async function onFileInput(e,s){
+  for(var f of [...e.target.files]) await saveFile(s,f);
+  e.target.value='';
+}
 
+// ─────────────────────────────────────────────────────────────────
+//  LLISTAR I FILTRAR
+// ─────────────────────────────────────────────────────────────────
 async function refreshList(s){
-  var h=handles[s];if(!h)return;
+  var h=handles[s]; if(!h) return;
   files[s]=[];
-  try {
+  try{
     for await(var [name,fh] of h.entries()){
-      if(fh.kind==='file'&&isAllowed(name)){
+      if(fh.kind==='file' && isAllowed(name)){
         var f=await fh.getFile();
         var dm=detectM(name);
         files[s].push({name:name,handle:fh,size:f.size,lastMod:f.lastModified,mm:dm.mm,yyyy:dm.yyyy});
       }
     }
-    files[s].sort(function(a,b){return b.lastMod-a.lastMod;}); filterFiles(s);
-  } catch(e){toast('Error llegint carpeta','err');}
+    files[s].sort(function(a,b){return b.lastMod-a.lastMod;});
+    filterFiles(s);
+  }catch(err){toast('Error llegint carpeta','err');}
 }
 
 function detectM(name){
@@ -526,15 +595,17 @@ function detectM(name){
   m=lo.match(/\b(20\d\d)\s*(0[1-9]|1[0-2])\b/);if(m){yyyy=m[1];mm=m[2];return{mm,yyyy};}
   m=lo.match(/\b(0[1-9]|1[0-2])\s*(20\d\d)\b/);if(m){mm=m[1];yyyy=m[2];return{mm,yyyy};}
   for(var i=0;i<MCA_L.length;i++){if(lo.indexOf(MCA_L[i])>=0){mm=String(i+1).padStart(2,'0');break;}}
-  if(!mm)for(var j=0;j<MES.length;j++){if(lo.indexOf(MES[j])>=0){mm=String(j+1).padStart(2,'0');break;}}
-  var ym=lo.match(/\b(20\d\d)\b/);if(ym)yyyy=ym[1];
+  if(!mm) for(var j=0;j<MES.length;j++){if(lo.indexOf(MES[j])>=0){mm=String(j+1).padStart(2,'0');break;}}
+  var ym=lo.match(/\b(20\d\d)\b/);if(ym) yyyy=ym[1];
   return{mm,yyyy};
 }
 
 function filterFiles(s){
   var q=document.getElementById('si-'+s).value.toLowerCase();
   var mo=document.getElementById('ms-'+s).value;
-  renderList(s,files[s].filter(function(f){return(!q||f.name.toLowerCase().indexOf(q)>=0)&&(!mo||f.mm===mo);}));
+  renderList(s,files[s].filter(function(f){
+    return(!q||f.name.toLowerCase().indexOf(q)>=0)&&(!mo||f.mm===mo);
+  }));
 }
 
 function renderList(s,list){
@@ -548,9 +619,11 @@ function renderList(s,list){
     var bg=fileBg(f.name)||(col+'20');
     var ext=extOf(f.name).toUpperCase();
     return '<div class="file-item" onclick="openFile(\''+s+'\',\''+escA(f.name)+'\')">'
-      +'<div class="fi-icon" style="background:'+bg+';">'+fileIcon(f.name,col)+'</div>'
-      +'<div class="fi-info"><div class="fi-name">'+escH(f.name)+'</div>'
-      +'<div class="fi-meta">'+ext+' &middot; '+fmtB(f.size)+' &middot; '+new Date(f.lastMod).toLocaleDateString('ca-ES')+'</div></div>'
+      +'<div class="fi-icon" style="background:'+bg+'">'+fileIcon(f.name,col)+'</div>'
+      +'<div class="fi-info">'
+        +'<div class="fi-name">'+escH(f.name)+'</div>'
+        +'<div class="fi-meta">'+ext+' · '+fmtB(f.size)+' · '+new Date(f.lastMod).toLocaleDateString('ca-ES')+'</div>'
+      +'</div>'
       +(f.mm?'<span class="fi-badge '+bc+'">'+(MCA[f.mm]||f.mm)+(f.yyyy?' '+f.yyyy:'')+'</span>':'')
       +'<div class="fi-actions" onclick="event.stopPropagation()">'
         +'<button class="icon-btn ib-open" title="Obrir" onclick="openFile(\''+s+'\',\''+escA(f.name)+'\')"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>'
@@ -559,41 +632,59 @@ function renderList(s,list){
   }).join('');
 }
 
+// ─────────────────────────────────────────────────────────────────
+//  PREVISUALITZAR
+// ─────────────────────────────────────────────────────────────────
 async function openFile(s,name){
-  var entry=files[s].find(function(f){return f.name===name;});if(!entry)return;
-  try {
+  var entry=files[s].find(function(f){return f.name===name;});if(!entry) return;
+  try{
     var f=await entry.handle.getFile();
     if(previewUrl) URL.revokeObjectURL(previewUrl);
     previewUrl=URL.createObjectURL(f);
+    previewFile=f;
     document.getElementById('previewTitle').textContent=name;
     var body=document.getElementById('previewBody');
     var e=extOf(name);
-    if(['jpg','jpeg','png','bmp'].indexOf(e)>=0){
+    var app=appName(e);
+    if(EXT_IMG.indexOf(e)>=0){
       body.innerHTML='<div class="modal-img"><img src="'+previewUrl+'" alt="'+escH(name)+'"></div>';
-    } else if(e==='psd'){
-      body.innerHTML='<div style="flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:#888;font-size:13px;padding:24px;text-align:center;">'
-        +'<svg width="48" height="48" fill="none" stroke="#bbb" stroke-width="1.4" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h1a2 2 0 0 1 0 4H9v-4z"/><path d="M14 9h2a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1h-1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h2"/></svg>'
-        +'<strong>'+escH(name)+'</strong><span>Els fitxers PSD no es poden previsualitzar al navegador.</span></div>';
+    } else if(app){
+      // Office o PSD: no previsualitzable, oferim baixada
+      var ic=fileIcon(name,'#666');
+      body.innerHTML='<div class="modal-nopreview">'
+        +ic
+        +'<strong>'+escH(name)+'</strong>'
+        +'<span>Els fitxers <strong>'+app+'</strong> no es poden previsualitzar al navegador.</span>'
+        +'<a class="nopreview-dl" href="'+previewUrl+'" download="'+escH(name)+'">'
+          +'<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>'
+          +'Baixar fitxer</a>'
+        +'</div>';
     } else {
-      body.innerHTML='<iframe src="'+previewUrl+'" style="flex:1;border:none;width:100%;height:100%;" sandbox="allow-scripts allow-same-origin"></iframe>';
+      // html, htm, pdf
+      body.innerHTML='<iframe src="'+previewUrl+'" style="flex:1;border:none;width:100%;height:100%" sandbox="allow-scripts allow-same-origin"></iframe>';
     }
     document.getElementById('previewModal').classList.add('open');
-  } catch(e){toast('Error obrint','err');}
+  }catch(err){toast('Error obrint','err');}
 }
 function closePreview(){
   document.getElementById('previewModal').classList.remove('open');
   document.getElementById('previewBody').innerHTML='';
   if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl=null;}
+  previewFile=null;
 }
 async function delFile(s,name){
-  if(!confirm('Eliminar "'+name+'"?'))return;
+  if(!confirm('Eliminar "'+name+'"?')) return;
   try{await handles[s].removeEntry(name);toast('Eliminat','ok');await refreshList(s);}
-  catch(e){toast('Error eliminant','err');}
+  catch(err){toast('Error eliminant','err');}
 }
 
+// ─────────────────────────────────────────────────────────────────
+//  UTILITATS
+// ─────────────────────────────────────────────────────────────────
 function escH(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function escA(v){return String(v||'').replace(/'/g,"\\'");}
 function fmtB(b){if(b<1024)return b+'B';if(b<1048576)return (b/1024).toFixed(1)+'KB';return (b/1048576).toFixed(1)+'MB';}
+
 var _tt;
 function toast(msg,type){
   var t=document.getElementById('toast');

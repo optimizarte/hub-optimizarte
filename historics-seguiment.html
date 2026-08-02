@@ -50,11 +50,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 .badge-ko{background:var(--gray-4);color:var(--gray-2);}
 .badge-warn{background:var(--amber-bg);color:var(--amber);}
 
-/* 3 columnes: drop | AI | llista */
 .section-grid{display:grid;grid-template-columns:0.75fr 1fr 1.25fr;gap:16px;align-items:start;}
 @media(max-width:900px){.section-grid{grid-template-columns:1fr;}}
 
-/* Drop zone — compact (50%) */
 .drop-zone{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);border:2px dashed var(--gray-3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:18px 14px;cursor:pointer;transition:all .2s;text-align:center;min-height:120px;}
 .dz-blue:hover,.dz-blue.drag-over{border-color:var(--blue);background:var(--blue-bg);}
 .dz-green:hover,.dz-green.drag-over{border-color:var(--green);background:var(--green-bg);}
@@ -64,8 +62,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 .dz-green:hover svg,.dz-green.drag-over svg{color:var(--green)!important;}
 .dz-purple:hover svg,.dz-purple.drag-over svg{color:var(--purple)!important;}
 .drop-title{font-size:12.5px;font-weight:600;color:var(--dark);}
-.drop-sub{font-size:11px;color:var(--gray-2);}
-.drop-ext{font-size:9.5px;color:var(--gray-3);letter-spacing:.1px;line-height:1.6;}
+.drop-ext{font-size:9.5px;color:var(--gray-3);line-height:1.6;}
 .drop-lbl{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:5px;font-size:11.5px;font-weight:600;cursor:pointer;transition:all .15s;border:1.5px solid;}
 .dl-blue{background:var(--blue-bg);color:var(--blue);border-color:var(--blue);}.dl-blue:hover{background:var(--blue);color:#fff;}
 .dl-green{background:var(--green-bg);color:var(--green);border-color:var(--green);}.dl-green:hover{background:var(--green);color:#fff;}
@@ -76,9 +73,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 .ls-name{font-size:12px;font-weight:600;color:var(--dark);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .ls-meta{font-size:10.5px;color:var(--gray-2);margin-top:2px;}
 
-/* AI Analysis Card */
 .ai-card{position:relative;border-radius:var(--radius);padding:28px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;cursor:pointer;text-align:center;min-height:200px;overflow:hidden;transition:transform .22s,box-shadow .22s;user-select:none;}
-.ai-card::before{content:'';position:absolute;inset:0;opacity:.08;background:radial-gradient(circle at 30% 30%, #fff, transparent 60%);}
+.ai-card::before{content:'';position:absolute;inset:0;opacity:.08;background:radial-gradient(circle at 30% 30%,#fff,transparent 60%);}
 .ai-card::after{content:'';position:absolute;inset:-1px;border-radius:calc(var(--radius)+1px);border:1.5px solid rgba(255,255,255,.18);pointer-events:none;}
 .ai-card:hover{transform:translateY(-3px);}
 .ai-card-dafo{background:linear-gradient(140deg,#1e3a8a 0%,#1d4ed8 55%,#7c3aed 100%);box-shadow:0 6px 28px rgba(29,78,216,.45);}
@@ -94,7 +90,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 .ai-cta{background:rgba(255,255,255,.22);border:1.5px solid rgba(255,255,255,.4);color:#fff;font-size:12px;font-weight:700;padding:7px 18px;border-radius:6px;transition:background .15s;}
 .ai-card:hover .ai-cta{background:rgba(255,255,255,.32);}
 
-/* File panel */
 .file-panel{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden;}
 .panel-hdr{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .panel-hdr-title{font-size:12px;font-weight:700;color:var(--dark);flex:1;}
@@ -122,7 +117,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 
 .api-warn{background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:var(--radius);padding:10px 14px;font-size:12px;color:var(--amber);margin-bottom:16px;display:none;align-items:center;gap:8px;}
 
-/* Preview modal */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:800;align-items:center;justify-content:center;}
 .modal-overlay.open{display:flex;}
 .modal{background:#fff;border-radius:10px;width:96vw;height:92vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3);}
@@ -136,29 +130,21 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 .nopreview-dl{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;margin-top:4px;}
 .nopreview-dl:hover{background:var(--blue-d);}
 
-/* Analysis modal */
 .amodal{background:#fff;border-radius:12px;width:96vw;max-width:680px;max-height:88vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.35);}
 .amodal-hdr{padding:16px 20px;display:flex;align-items:center;gap:10px;}
 .amodal-hdr-title{font-family:'Poppins',sans-serif;font-size:15px;font-weight:700;color:#fff;flex:1;}
 .amodal-body{padding:24px;overflow-y:auto;flex:1;}
 .period-title{font-size:13px;font-weight:600;color:var(--dark);margin-bottom:14px;}
-.period-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.period-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
 .period-opt{border:2px solid var(--border);border-radius:8px;padding:14px 16px;cursor:pointer;transition:all .15s;background:#fff;}
-.period-opt:hover{border-color:currentColor;}
 .period-opt.po-full{grid-column:1/-1;}
 .po-icon{font-size:22px;margin-bottom:6px;}
 .po-label{font-size:12.5px;font-weight:700;color:var(--dark);}
 .po-sub{font-size:11px;color:var(--gray-2);margin-top:2px;}
-/* Period option color variants set via JS */
-.period-opt:hover .po-label{color:inherit;}
-
-/* Month/year picker row */
 .picker-row{display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap;}
 .picker-row label{font-size:12px;font-weight:600;color:var(--dark);}
 .picker-sel{padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:12px;font-family:'Inter',sans-serif;outline:none;background:#fff;cursor:pointer;}
 .picker-btn{padding:7px 16px;border-radius:6px;font-size:12px;font-weight:700;border:none;cursor:pointer;color:#fff;}
-
-/* Analysis result */
 .aresult-label{font-size:11px;font-weight:700;color:var(--gray-2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;}
 .aresult-files{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
 .aresult-file{background:var(--gray-4);border-radius:5px;padding:4px 10px;font-size:11px;color:var(--dark);}
@@ -201,7 +187,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
     <span>Utilitza <strong>Chrome</strong> o <strong>Edge</strong> per desar fitxers directament a la carpeta local.</span>
   </div>
 
-  <!-- ===== DAFO ===== -->
+  <!-- DAFO -->
   <div class="tab-panel" id="panel-dafo">
     <div class="sec-bar">
       <div class="sec-title">&#128203; Hist&#242;rics de DAFOs</div>
@@ -212,7 +198,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
         <span id="pickLbl-dafo">Seleccionar carpeta</span>
       </button>
-      <button class="btn btn-gray" onclick="refreshList('dafo')">
+      <button class="btn btn-gray" onclick="recarregar('dafo')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>Recarregar
       </button>
     </div>
@@ -222,11 +208,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
       <span class="badge badge-ko" id="fb-dafo">&#9679; Desconnectat</span>
     </div>
     <div class="section-grid">
-      <!-- Col 1: drop + last saved -->
       <div>
-        <div class="drop-zone dz-blue" id="dz-dafo"
-             ondragover="onDragOver(event,'dafo')" ondragleave="onDragLeave('dafo')" ondrop="onDrop(event,'dafo')"
-             onclick="document.getElementById('fi-dafo').click()">
+        <div class="drop-zone dz-blue" id="dz-dafo" ondragover="onDragOver(event,'dafo')" ondragleave="onDragLeave('dafo')" ondrop="onDrop(event,'dafo')" onclick="document.getElementById('fi-dafo').click()">
           <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
           <div class="drop-title">Arrossega fitxers</div>
           <div class="drop-ext">HTML · JPG · PNG · BMP · PDF · PSD<br>Word · Excel · PowerPoint</div>
@@ -241,7 +224,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
           <div class="ls-meta" id="lsm-dafo"></div>
         </div>
       </div>
-      <!-- Col 2: AI card -->
       <div class="ai-card ai-card-dafo" onclick="openAnalysis('dafo')">
         <span class="ai-badge">&#10024; SEGUIMENT IA</span>
         <div class="ai-icon">&#129302;</div>
@@ -249,7 +231,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
         <div class="ai-sub">Genera un informe de seguiment automàtic a partir dels fitxers desats</div>
         <div class="ai-cta">Iniciar anàlisi &#8594;</div>
       </div>
-      <!-- Col 3: file panel -->
       <div class="file-panel">
         <div class="panel-hdr">
           <div class="panel-hdr-title">Fitxers desats</div>
@@ -259,14 +240,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
           </div>
           <select class="month-sel" id="ms-dafo" onchange="filterFiles('dafo')" style="border-color:#1d4ed8"></select>
         </div>
-        <div class="file-list" id="fl-dafo">
-          <div class="empty-state"><svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Selecciona una carpeta</div>
-        </div>
+        <div class="file-list" id="fl-dafo"><div class="empty-state"><svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Selecciona una carpeta</div></div>
       </div>
     </div>
   </div>
 
-  <!-- ===== TANCAMENTS ===== -->
+  <!-- TANCAMENTS -->
   <div class="tab-panel" id="panel-tanc">
     <div class="sec-bar">
       <div class="sec-title">&#128196; Hist&#242;rics de Tancaments Mensuals</div>
@@ -277,7 +256,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
         <span id="pickLbl-tanc">Seleccionar carpeta</span>
       </button>
-      <button class="btn btn-gray" onclick="refreshList('tanc')">
+      <button class="btn btn-gray" onclick="recarregar('tanc')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>Recarregar
       </button>
     </div>
@@ -288,9 +267,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
     </div>
     <div class="section-grid">
       <div>
-        <div class="drop-zone dz-green" id="dz-tanc"
-             ondragover="onDragOver(event,'tanc')" ondragleave="onDragLeave('tanc')" ondrop="onDrop(event,'tanc')"
-             onclick="document.getElementById('fi-tanc').click()">
+        <div class="drop-zone dz-green" id="dz-tanc" ondragover="onDragOver(event,'tanc')" ondragleave="onDragLeave('tanc')" ondrop="onDrop(event,'tanc')" onclick="document.getElementById('fi-tanc').click()">
           <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
           <div class="drop-title">Arrossega fitxers</div>
           <div class="drop-ext">HTML · JPG · PNG · BMP · PDF · PSD<br>Word · Excel · PowerPoint</div>
@@ -321,14 +298,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
           </div>
           <select class="month-sel" id="ms-tanc" onchange="filterFiles('tanc')" style="border-color:#166534"></select>
         </div>
-        <div class="file-list" id="fl-tanc">
-          <div class="empty-state"><svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Selecciona una carpeta</div>
-        </div>
+        <div class="file-list" id="fl-tanc"><div class="empty-state"><svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Selecciona una carpeta</div></div>
       </div>
     </div>
   </div>
 
-  <!-- ===== FITXES MEDIADOR ===== -->
+  <!-- FITXES -->
   <div class="tab-panel" id="panel-fitxa">
     <div class="sec-bar">
       <div class="sec-title">&#128101; Hist&#242;rics de Fitxes Mediador</div>
@@ -339,7 +314,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
         <span id="pickLbl-fitxa">Seleccionar carpeta</span>
       </button>
-      <button class="btn btn-gray" onclick="refreshList('fitxa')">
+      <button class="btn btn-gray" onclick="recarregar('fitxa')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>Recarregar
       </button>
     </div>
@@ -350,9 +325,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
     </div>
     <div class="section-grid">
       <div>
-        <div class="drop-zone dz-purple" id="dz-fitxa"
-             ondragover="onDragOver(event,'fitxa')" ondragleave="onDragLeave('fitxa')" ondrop="onDrop(event,'fitxa')"
-             onclick="document.getElementById('fi-fitxa').click()">
+        <div class="drop-zone dz-purple" id="dz-fitxa" ondragover="onDragOver(event,'fitxa')" ondragleave="onDragLeave('fitxa')" ondrop="onDrop(event,'fitxa')" onclick="document.getElementById('fi-fitxa').click()">
           <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
           <div class="drop-title">Arrossega fitxers</div>
           <div class="drop-ext">HTML · JPG · PNG · BMP · PDF · PSD<br>Word · Excel · PowerPoint</div>
@@ -383,14 +356,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
           </div>
           <select class="month-sel" id="ms-fitxa" onchange="filterFiles('fitxa')" style="border-color:#6b21a8"></select>
         </div>
-        <div class="file-list" id="fl-fitxa">
-          <div class="empty-state"><svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Selecciona una carpeta</div>
-        </div>
+        <div class="file-list" id="fl-fitxa"><div class="empty-state"><svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Selecciona una carpeta</div></div>
       </div>
     </div>
   </div>
-
-</div><!-- /wrap -->
+</div>
 
 <!-- Preview modal -->
 <div class="modal-overlay" id="previewModal">
@@ -405,13 +375,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 
 <!-- Analysis modal -->
 <div class="modal-overlay" id="analysisModal">
-  <div class="amodal" id="amodalInner">
+  <div class="amodal">
     <div class="amodal-hdr" id="amodalHdr">
       <div class="amodal-hdr-title" id="amodalTitle">&#10024; Seguiment IA</div>
       <button class="modal-close" onclick="closeAnalysis()">&#10005;</button>
     </div>
-    <div class="amodal-body" id="amodalBody">
-      <!-- Step 1: period -->
+    <div class="amodal-body">
       <div id="aStepPeriod">
         <div class="period-title">Quins fitxers vols analitzar?</div>
         <div class="period-grid" id="periodGrid">
@@ -448,7 +417,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
           <button class="picker-btn" id="pickerRunBtn" onclick="runAnalysis()">Analitzar</button>
         </div>
       </div>
-      <!-- Step 2: result -->
       <div id="aStepResult" style="display:none">
         <div class="aresult-label">Fitxers analitzats</div>
         <div class="aresult-files" id="aResultFiles"></div>
@@ -456,8 +424,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
         <div class="aresult-prompt" id="aResultPrompt"></div>
         <div class="aresult-actions">
           <button class="abtn abtn-copy" onclick="copyPrompt()">
-            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            Copiar prompt
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copiar prompt
           </button>
           <button class="abtn abtn-back" onclick="showPeriodStep()">&#8592; Canviar període</button>
         </div>
@@ -473,27 +440,23 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-h
 'use strict';
 
 const SECS   = ['dafo','tanc','fitxa'];
-const LBLS   = {dafo:'DAFOs', tanc:'Tancaments Mensuals', fitxa:'Fitxes Mediador'};
-const COLORS = {dafo:'#1d4ed8', tanc:'#166534', fitxa:'#6b21a8'};
-const BADGE  = {dafo:'fb-blue', tanc:'fb-green', fitxa:'fb-purple'};
+const LBLS   = {dafo:'DAFOs',tanc:'Tancaments Mensuals',fitxa:'Fitxes Mediador'};
+const COLORS = {dafo:'#1d4ed8',tanc:'#166534',fitxa:'#6b21a8'};
+const BADGE  = {dafo:'fb-blue',tanc:'fb-green',fitxa:'fb-purple'};
 const MCA    = {'01':'Gener','02':'Febrer','03':'Març','04':'Abril','05':'Maig','06':'Juny',
                 '07':'Juliol','08':'Agost','09':'Setembre','10':'Octubre','11':'Novembre','12':'Desembre'};
 const MES    = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 const MCA_L  = ['gener','febrer','març','abril','maig','juny','juliol','agost','setembre','octubre','novembre','desembre'];
-const POCOLOR= {dafo:'#1d4ed8', tanc:'#166534', fitxa:'#6b21a8'};
 
-// Extensions
 const EXT_IMG   = ['jpg','jpeg','png','bmp'];
 const EXT_WEB   = ['html','htm','pdf'];
 const EXT_WORD  = ['doc','docx','docm','dotx','dotm'];
 const EXT_EXCEL = ['xls','xlsx','xlsm','xlsb','xltx','xltm','csv'];
 const EXT_PPT   = ['ppt','pptx','pptm','potx','potm','ppsx','ppsm'];
-const EXT_OTHER = ['psd'];
-const ALL_EXT   = EXT_IMG.concat(EXT_WEB,EXT_WORD,EXT_EXCEL,EXT_PPT,EXT_OTHER);
+const ALL_EXT   = EXT_IMG.concat(EXT_WEB,EXT_WORD,EXT_EXCEL,EXT_PPT,['psd']);
 
-function isAllowed(name){ return ALL_EXT.indexOf(name.toLowerCase().split('.').pop())>=0; }
-function extOf(name){ return name.toLowerCase().split('.').pop(); }
-
+function isAllowed(name){return ALL_EXT.indexOf(name.toLowerCase().split('.').pop())>=0;}
+function extOf(name){return name.toLowerCase().split('.').pop();}
 function fileIcon(name,col){
   var e=extOf(name);
   if(EXT_IMG.indexOf(e)>=0) return '<svg width="15" height="15" fill="none" stroke="#0891b2" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
@@ -506,42 +469,37 @@ function fileIcon(name,col){
 }
 function fileBg(name){
   var e=extOf(name);
-  if(EXT_IMG.indexOf(e)>=0)   return '#e0f2fe';
-  if(e==='pdf')               return '#fee2e2';
-  if(EXT_WORD.indexOf(e)>=0)  return '#dbeafe';
+  if(EXT_IMG.indexOf(e)>=0) return '#e0f2fe';
+  if(e==='pdf') return '#fee2e2';
+  if(EXT_WORD.indexOf(e)>=0) return '#dbeafe';
   if(EXT_EXCEL.indexOf(e)>=0) return '#dcfce7';
-  if(EXT_PPT.indexOf(e)>=0)   return '#ffedd5';
-  if(e==='psd')               return '#ede9fe';
+  if(EXT_PPT.indexOf(e)>=0) return '#ffedd5';
+  if(e==='psd') return '#ede9fe';
   return null;
 }
 function appName(e){
-  if(EXT_WORD.indexOf(e)>=0)  return 'Microsoft Word';
+  if(EXT_WORD.indexOf(e)>=0) return 'Microsoft Word';
   if(EXT_EXCEL.indexOf(e)>=0) return 'Microsoft Excel';
-  if(EXT_PPT.indexOf(e)>=0)   return 'Microsoft PowerPoint';
-  if(e==='psd')               return 'Adobe Photoshop';
+  if(EXT_PPT.indexOf(e)>=0) return 'Microsoft PowerPoint';
+  if(e==='psd') return 'Adobe Photoshop';
   return null;
 }
 
-// State
+// State — cada secció té el seu propi handle, completament independent
 var handles       = {dafo:null,tanc:null,fitxa:null};
 var storedHandles = {dafo:null,tanc:null,fitxa:null};
 var files         = {dafo:[],tanc:[],fitxa:[]};
 var previewUrl    = null;
 var IS_IFRAME     = (window.self !== window.top);
+var curAnalysisSec= null;
+var curPeriodType = null;
+var curPromptText = '';
 
-// Analysis state
-var curAnalysisSec  = null;
-var curPeriodType   = null;
-var curPromptText   = '';
-
-// Month selects init
 SECS.forEach(function(s){
   var sel=document.getElementById('ms-'+s);
   sel.innerHTML='<option value="">Tots els mesos</option>'+
     Object.keys(MCA).map(function(v){return '<option value="'+v+'">'+MCA[v]+'</option>';}).join('');
 });
-
-// Picker month/year init
 (function(){
   var pm=document.getElementById('pickerMonth');
   pm.innerHTML=Object.keys(MCA).map(function(v){return '<option value="'+v+'">'+MCA[v]+'</option>';}).join('');
@@ -553,7 +511,8 @@ SECS.forEach(function(s){
 if(!('showDirectoryPicker' in window)) document.getElementById('apiWarn').style.display='flex';
 if(IS_IFRAME) document.getElementById('iframeBanner').style.display='flex';
 
-// ─── IDB ─────────────────────────────────────────────────────────
+// ─── IDB — base de dades INDEPENDENT per secció ─────────────────
+// HistDB_dafo / HistDB_tanc / HistDB_fitxa — cap codi les barreja
 function openDB(s){
   return new Promise(function(res,rej){
     var req=indexedDB.open('HistDB_'+s,1);
@@ -580,24 +539,29 @@ function dbSet(db,h){
   for(var i=0;i<SECS.length;i++){
     var s=SECS[i];
     try{
-      var db=await openDB(s);
-      var h=await dbGet(db);
+      var db=await openDB(s);          // BD exclusiva: HistDB_dafo / HistDB_tanc / HistDB_fitxa
+      var h=await dbGet(db);           // clau 'handle' dins d'aquesta BD
       if(!h) continue;
       storedHandles[s]=h;
       var perm=await h.queryPermission({mode:'readwrite'});
       if(perm==='granted'){
-        handles[s]=h;updFolderUI(s,h.name,'granted');await refreshList(s);
-      } else { updFolderUI(s,h.name,'prompt'); }
+        handles[s]=h;
+        updFolderUI(s,h.name,'granted');
+        await refreshList(s);
+      } else {
+        // Permís caducat entre sessions — mostra nom però demana reconnexió
+        updFolderUI(s,h.name,'prompt');
+      }
     }catch(err){console.warn('[init]['+s+']',err);}
   }
-  var hash=location.hash.replace('#','');
-  if(hash){var el=document.getElementById('panel-'+hash);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 })();
 
 // ─── UI ──────────────────────────────────────────────────────────
 function updFolderUI(s,name,state){
-  var fp=document.getElementById('fp-'+s),fb=document.getElementById('fb-'+s);
-  var lbl=document.getElementById('pickLbl-'+s),rb=document.getElementById('reconn-'+s);
+  var fp=document.getElementById('fp-'+s);
+  var fb=document.getElementById('fb-'+s);
+  var lbl=document.getElementById('pickLbl-'+s);
+  var rb=document.getElementById('reconn-'+s);
   if(state==='granted'){
     fp.innerHTML='<strong>'+escH(name)+'</strong>';
     fb.textContent='● Connectat';fb.className='badge badge-ok';
@@ -613,32 +577,75 @@ function updFolderUI(s,name,state){
   }
 }
 
+// ─── RECONNECTAR (botó explícit) ─────────────────────────────────
 async function reconnect(s){
   var h=storedHandles[s];if(!h){pickFolder(s);return;}
   try{
     var perm=await h.requestPermission({mode:'readwrite'});
-    if(perm==='granted'){handles[s]=h;updFolderUI(s,h.name,'granted');await refreshList(s);toast('Reconnectat: '+h.name,'ok');}
-    else{toast('Permís denegat — tria una altra carpeta','err');}
+    if(perm==='granted'){
+      handles[s]=h;updFolderUI(s,h.name,'granted');
+      await refreshList(s);
+      toast('Reconnectat: '+h.name,'ok');
+    } else {
+      toast('Permís denegat — tria una altra carpeta','err');
+    }
   }catch(err){toast('Error: '+err.message,'err');}
 }
 
+// ─── SELECCIONAR / CANVIAR CARPETA ───────────────────────────────
+// Cada secció guarda a la SEVA BD independent. Mai toca les altres.
 async function pickFolder(s){
   if(!('showDirectoryPicker' in window)){toast('Usa Chrome o Edge','err');return;}
   if(IS_IFRAME){toast('Obre en nova pestanya per seleccionar carpetes','warn');return;}
   try{
     var h=await window.showDirectoryPicker({mode:'readwrite'});
-    handles[s]=h;storedHandles[s]=h;
-    var db=await openDB(s);await dbSet(db,h);
-    updFolderUI(s,h.name,'granted');await refreshList(s);toast(LBLS[s]+': '+h.name,'ok');
+    // Actualitza NOMÉS la secció s — les altres queden intactes
+    handles[s]=h;
+    storedHandles[s]=h;
+    var db=await openDB(s);  // HistDB_dafo, HistDB_tanc o HistDB_fitxa
+    await dbSet(db,h);       // guarda a la BD exclusiva d'aquesta secció
+    updFolderUI(s,h.name,'granted');
+    await refreshList(s);    // recarrega NOMÉS la llista d'aquesta secció
+    toast(LBLS[s]+': '+h.name,'ok');
   }catch(err){
     if(err.name==='SecurityError'){toast('Obre en nova pestanya per seleccionar carpetes','warn');}
     else if(err.name!=='AbortError'){toast('Error: '+err.message,'err');}
   }
 }
 
+// ─── RECARREGAR (botó) ───────────────────────────────────────────
+// FIX: si handles[s] és null però storedHandles[s] existeix,
+// sol·licita permís ara (botó = gest d'usuari = requestPermission permès)
+async function recarregar(s){
+  if(!handles[s] && storedHandles[s]){
+    try{
+      var perm=await storedHandles[s].requestPermission({mode:'readwrite'});
+      if(perm==='granted'){
+        handles[s]=storedHandles[s];
+        updFolderUI(s,storedHandles[s].name,'granted');
+        toast('Reconnectat i recarregat: '+storedHandles[s].name,'ok');
+      } else {
+        toast('Cal reconèixer la carpeta — clica "Reconnectar"','warn');
+        return;
+      }
+    }catch(err){
+      toast('Error de connexió — clica "Reconnectar"','warn');
+      return;
+    }
+  }
+  if(!handles[s]){
+    toast('Selecciona primer una carpeta','warn');
+    return;
+  }
+  await refreshList(s);
+  toast('Recarregat: '+handles[s].name,'ok');
+}
+
+// ─── DESAR FITXER ────────────────────────────────────────────────
 async function saveFile(s,file){
   if(!handles[s] && storedHandles[s]){
-    try{var p2=await storedHandles[s].requestPermission({mode:'readwrite'});
+    try{
+      var p2=await storedHandles[s].requestPermission({mode:'readwrite'});
       if(p2==='granted'){handles[s]=storedHandles[s];updFolderUI(s,storedHandles[s].name,'granted');}
     }catch(e2){}
   }
@@ -652,7 +659,7 @@ async function saveFile(s,file){
     document.getElementById('lsn-'+s).textContent=file.name;
     document.getElementById('lsm-'+s).textContent=fmtB(file.size)+' · '+new Date().toLocaleString('ca-ES');
     toast('Desat: '+file.name,'ok');await refreshList(s);return true;
-  }catch(err){toast('Error: '+err.message,'err');return false;}
+  }catch(err){toast('Error desant: '+err.message,'err');return false;}
 }
 
 function onDragOver(e,s){e.preventDefault();document.getElementById('dz-'+s).classList.add('drag-over');}
@@ -665,6 +672,7 @@ async function onDrop(e,s){
 }
 async function onFileInput(e,s){for(var f of [...e.target.files]) await saveFile(s,f);e.target.value='';}
 
+// ─── LLISTAR I FILTRAR ───────────────────────────────────────────
 async function refreshList(s){
   var h=handles[s];if(!h) return;
   files[s]=[];
@@ -678,7 +686,7 @@ async function refreshList(s){
     }
     files[s].sort(function(a,b){return b.lastMod-a.lastMod;});
     filterFiles(s);
-  }catch(err){toast('Error llegint carpeta','err');}
+  }catch(err){toast('Error llegint carpeta: '+err.message,'err');}
 }
 
 function detectM(name){
@@ -718,8 +726,8 @@ function renderList(s,list){
       +'</div>'
       +(f.mm?'<span class="fi-badge '+bc+'">'+(MCA[f.mm]||f.mm)+(f.yyyy?' '+f.yyyy:'')+'</span>':'')
       +'<div class="fi-actions" onclick="event.stopPropagation()">'
-        +'<button class="icon-btn ib-open" title="Obrir" onclick="openFile(\''+s+'\',\''+escA(f.name)+'\')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>'
-        +'<button class="icon-btn" title="Eliminar" onclick="delFile(\''+s+'\',\''+escA(f.name)+'\')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>'
+        +'<button class="icon-btn ib-open" onclick="openFile(\''+s+'\',\''+escA(f.name)+'\')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>'
+        +'<button class="icon-btn" onclick="delFile(\''+s+'\',\''+escA(f.name)+'\')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>'
       +'</div></div>';
   }).join('');
 }
@@ -746,7 +754,7 @@ async function openFile(s,name){
       body.innerHTML='<iframe src="'+previewUrl+'" style="flex:1;border:none;width:100%;height:100%" sandbox="allow-scripts allow-same-origin"></iframe>';
     }
     document.getElementById('previewModal').classList.add('open');
-  }catch(err){toast('Error obrint','err');}
+  }catch(err){toast('Error obrint fitxer','err');}
 }
 function closePreview(){
   document.getElementById('previewModal').classList.remove('open');
@@ -759,53 +767,45 @@ async function delFile(s,name){
   catch(err){toast('Error eliminant','err');}
 }
 
-// ─── ANALYSIS MODAL ──────────────────────────────────────────────
-var PROMPTS = {
-  dafo: 'Ets un analista estratègic d\'una agència d\'assegurances Occident.\n\n'
-    + 'A continuació tens un o diversos informes DAFO de l\'agència. Analitza\'ls i genera:\n\n'
-    + '1. RESUM EXECUTIU (3-4 línies)\n'
-    + '2. FORTALESES PRINCIPALS — quines es mantenen, quines milloren\n'
-    + '3. DEBILITATS PRIORITÀRIES — les més urgents d\'adreçar\n'
-    + '4. OPORTUNITATS DE MERCAT — identifica les més accionables\n'
-    + '5. AMENACES CRÍTIQUES — les que requereixen pla de contingència\n'
-    + '6. TENDÈNCIES DETECTADES — evolució entre períodes si hi ha més d\'un informe\n'
-    + '7. RECOMANACIONS CONCRETES — 3 accions prioritàries amb termini\n\n'
-    + 'Respon en català. Sigues directe i orientat a l\'acció.\n\n'
-    + '---\n[CONTINGUT DELS FITXERS]\n',
-  tanc: 'Ets un analista de vendes d\'una agència d\'assegurances Occident (mediador 17167).\n\n'
-    + 'A continuació tens un o diversos tancaments mensuals de producció. Analitza\'ls i genera:\n\n'
-    + '1. RESUM DE PRODUCCIÓ — total pòlisses, VC i comparativa entre períodes\n'
-    + '2. RAMOS DESTACATS — els que superen/no assoleixen objectius\n'
-    + '3. EVOLUCIÓ MENSUAL — tendència ascendent/descendent per ramo\n'
-    + '4. KPIs CLAU — ràtio de renovació, nova producció, cartera activa\n'
-    + '5. PUNTS D\'ATENCIÓ — desviacions significatives o anomalies\n'
-    + '6. RECOMANACIONS — 3 accions concretes per millorar el proper mes\n\n'
-    + 'Respon en català. Format clar i executiu.\n\n'
-    + '---\n[CONTINGUT DELS FITXERS]\n',
-  fitxa: 'Ets un analista de cartera d\'una agència d\'assegurances Occident.\n\n'
-    + 'A continuació tens una o diverses fitxes de mediador. Analitza\'ls i genera:\n\n'
-    + '1. RESUM DEL MEDIADOR — perfil, cartera i evolució\n'
-    + '2. PRODUCCIÓ — ramos principals, tendència i fidelitat\n'
-    + '3. OPORTUNITATS DE CREIXEMENT — ramos amb potencial no explotat\n'
-    + '4. RISCOS DE CARTERA — pòlisses amb risc de baixa o impagament\n'
-    + '5. ACCIONS RECOMANADES — 3 accions concretes per fidelitzar i créixer\n\n'
-    + 'Respon en català. Orientat a la gestió del mediador.\n\n'
-    + '---\n[CONTINGUT DELS FITXERS]\n'
+// ─── ANALYSIS ────────────────────────────────────────────────────
+var PROMPTS={
+  dafo:'Ets un analista estratègic d\'una agència d\'assegurances Occident.\n\n'
+    +'Analitza els informes DAFO adjunts i genera:\n\n'
+    +'1. RESUM EXECUTIU (3-4 línies)\n'
+    +'2. FORTALESES PRINCIPALS — quines es mantenen o milloren\n'
+    +'3. DEBILITATS PRIORITÀRIES — les més urgents d\'adreçar\n'
+    +'4. OPORTUNITATS DE MERCAT — les més accionables\n'
+    +'5. AMENACES CRÍTIQUES — les que requereixen pla de contingència\n'
+    +'6. TENDÈNCIES DETECTADES — evolució entre períodes (si hi ha més d\'un informe)\n'
+    +'7. RECOMANACIONS CONCRETES — 3 accions prioritàries amb termini\n\n'
+    +'Respon en català. Sigues directe i orientat a l\'acció.\n\n---\n[CONTINGUT DELS FITXERS]\n',
+  tanc:'Ets un analista de vendes d\'una agència d\'assegurances Occident (mediador 17167).\n\n'
+    +'Analitza els tancaments mensuals adjunts i genera:\n\n'
+    +'1. RESUM DE PRODUCCIÓ — total pòlisses, VC i comparativa entre períodes\n'
+    +'2. RAMOS DESTACATS — els que superen o no assoleixen objectius\n'
+    +'3. EVOLUCIÓ MENSUAL — tendència per ramo\n'
+    +'4. KPIs CLAU — ràtio renovació, nova producció, cartera activa\n'
+    +'5. PUNTS D\'ATENCIÓ — desviacions significatives\n'
+    +'6. RECOMANACIONS — 3 accions per millorar el proper mes\n\n'
+    +'Respon en català. Format executiu.\n\n---\n[CONTINGUT DELS FITXERS]\n',
+  fitxa:'Ets un analista de cartera d\'una agència d\'assegurances Occident.\n\n'
+    +'Analitza les fitxes de mediador adjuntes i genera:\n\n'
+    +'1. RESUM DEL MEDIADOR — perfil, cartera i evolució\n'
+    +'2. PRODUCCIÓ — ramos principals, tendència i fidelitat\n'
+    +'3. OPORTUNITATS DE CREIXEMENT — ramos amb potencial no explotat\n'
+    +'4. RISCOS DE CARTERA — pòlisses amb risc de baixa o impagament\n'
+    +'5. ACCIONS RECOMANADES — 3 accions concretes\n\n'
+    +'Respon en català. Orientat a la gestió del mediador.\n\n---\n[CONTINGUT DELS FITXERS]\n'
 };
 
 function openAnalysis(s){
-  curAnalysisSec=s;
-  curPeriodType=null;
-  var col=POCOLOR[s]||'#1d4ed8';
-  // Header gradient matching section
+  curAnalysisSec=s;curPeriodType=null;
   var gMap={dafo:'linear-gradient(135deg,#1e3a8a,#1d4ed8)',tanc:'linear-gradient(135deg,#14532d,#166534)',fitxa:'linear-gradient(135deg,#3b0764,#6b21a8)'};
-  document.getElementById('amodalHdr').style.background=gMap[s]||gMap.dafo;
+  document.getElementById('amodalHdr').style.background=gMap[s];
   document.getElementById('amodalTitle').textContent='✨ Seguiment IA — '+LBLS[s];
-  // Color period options border on hover via CSS variable
-  document.getElementById('periodGrid').style.setProperty('--poc',col);
+  var col=COLORS[s];
   ['po-last','po-month','po-year','po-12m','po-all'].forEach(function(id){
-    var el=document.getElementById(id);
-    el.style.color=col;
+    var el=document.getElementById(id);el.style.color=col;
     el.onmouseenter=function(){el.style.borderColor=col;el.style.background=col+'10';};
     el.onmouseleave=function(){el.style.borderColor='var(--border)';el.style.background='#fff';};
   });
@@ -813,10 +813,7 @@ function openAnalysis(s){
   showPeriodStep();
   document.getElementById('analysisModal').classList.add('open');
 }
-function closeAnalysis(){
-  document.getElementById('analysisModal').classList.remove('open');
-  curAnalysisSec=null;
-}
+function closeAnalysis(){document.getElementById('analysisModal').classList.remove('open');}
 function showPeriodStep(){
   document.getElementById('aStepPeriod').style.display='block';
   document.getElementById('aStepResult').style.display='none';
@@ -826,87 +823,59 @@ function showPeriodStep(){
 function selectPeriod(type){
   curPeriodType=type;
   var pr=document.getElementById('pickerRow');
-  var pl=document.getElementById('pickerLabel');
   if(type==='month'){
-    pl.textContent='Mes i any:';
+    document.getElementById('pickerLabel').textContent='Mes i any:';
     document.getElementById('pickerMonth').style.display='';
     document.getElementById('pickerYear').style.display='';
     pr.style.display='flex';
   } else if(type==='year'){
-    pl.textContent='Any:';
+    document.getElementById('pickerLabel').textContent='Any:';
     document.getElementById('pickerMonth').style.display='none';
     document.getElementById('pickerYear').style.display='';
     pr.style.display='flex';
   } else {
-    pr.style.display='none';
-    runAnalysis();
+    pr.style.display='none';runAnalysis();
   }
 }
 
 function runAnalysis(){
   var s=curAnalysisSec;
-  if(!files[s]||!files[s].length){toast('No hi ha fitxers indexats a la carpeta','err');return;}
-  var now=new Date();
-  var cutoff12m=new Date(now);cutoff12m.setFullYear(cutoff12m.getFullYear()-1);
-
-  var selFiles=[];
-  if(curPeriodType==='last'){
-    selFiles=[files[s][0]]; // sorted by lastMod desc
-  } else if(curPeriodType==='month'){
+  if(!files[s]||!files[s].length){toast('No hi ha fitxers indexats — recarrega primer','warn');return;}
+  var now=new Date(),cutoff=new Date(now);cutoff.setFullYear(cutoff.getFullYear()-1);
+  var sel=[];
+  if(curPeriodType==='last'){sel=[files[s][0]];}
+  else if(curPeriodType==='month'){
     var mm=document.getElementById('pickerMonth').value;
     var yy=document.getElementById('pickerYear').value;
-    selFiles=files[s].filter(function(f){return f.mm===mm&&(!f.yyyy||f.yyyy===yy);});
-    if(!selFiles.length) selFiles=files[s].filter(function(f){return f.mm===mm;});
+    sel=files[s].filter(function(f){return f.mm===mm&&(!f.yyyy||f.yyyy===yy);});
+    if(!sel.length) sel=files[s].filter(function(f){return f.mm===mm;});
   } else if(curPeriodType==='year'){
     var yy2=document.getElementById('pickerYear').value;
-    selFiles=files[s].filter(function(f){return f.yyyy===yy2||new Date(f.lastMod).getFullYear()===parseInt(yy2);});
+    sel=files[s].filter(function(f){return f.yyyy===yy2||new Date(f.lastMod).getFullYear()===parseInt(yy2);});
   } else if(curPeriodType==='12m'){
-    selFiles=files[s].filter(function(f){return f.lastMod>=cutoff12m.getTime();});
-  } else { // all
-    selFiles=files[s].slice();
-  }
+    sel=files[s].filter(function(f){return f.lastMod>=cutoff.getTime();});
+  } else {sel=files[s].slice();}
 
-  if(!selFiles.length){toast('Cap fitxer per al període seleccionat','warn');return;}
-
-  var basePrompt=PROMPTS[s]||PROMPTS.dafo;
-  var fileLines=selFiles.map(function(f,i){
-    var ext=extOf(f.name);
-    var canRead=(EXT_WEB.concat(EXT_EXCEL,['csv']).indexOf(ext)>=0);
-    return (i+1)+'. '+f.name+' ('+ext.toUpperCase()+', '+fmtB(f.size)+', '+new Date(f.lastMod).toLocaleDateString('ca-ES')+')'
-      +(canRead?'\n   → Contingut llegible (pegar el text aquí)':'\n   → Fitxer binari (adjuntar directament a la xat)');
+  if(!sel.length){toast('Cap fitxer per al període seleccionat','warn');return;}
+  var base=PROMPTS[s]||PROMPTS.dafo;
+  var lines=sel.map(function(f,i){
+    var e=extOf(f.name);
+    var llegible=(EXT_WEB.concat(EXT_EXCEL,['csv']).indexOf(e)>=0);
+    return (i+1)+'. '+f.name+' ('+e.toUpperCase()+', '+fmtB(f.size)+', '+new Date(f.lastMod).toLocaleDateString('ca-ES')+')'
+      +(llegible?'\n   → Copia el contingut i enganxa\'l aquí':'\n   → Adjunta el fitxer directament a la conversa');
   }).join('\n\n');
-
-  curPromptText=basePrompt+'\n'+fileLines+'\n\n---\n'
-    +'NOTA: Substitueix "[CONTINGUT DELS FITXERS]" pel contingut real dels fitxers o adjunta\'ls directament a la conversa.';
-
-  // Render files
-  document.getElementById('aResultFiles').innerHTML=selFiles.map(function(f){
-    return '<span class="aresult-file">'+escH(f.name)+'</span>';
-  }).join('');
-
+  curPromptText=base+'\n'+lines+'\n\n---\nSubstitueix "[CONTINGUT DELS FITXERS]" pel contingut o adjunta els fitxers a la conversa.';
+  document.getElementById('aResultFiles').innerHTML=sel.map(function(f){return '<span class="aresult-file">'+escH(f.name)+'</span>';}).join('');
   document.getElementById('aResultPrompt').textContent=curPromptText;
-
-  var note='';
-  if(selFiles.length===1&&appName(extOf(selFiles[0].name))){
-    note='Consell: obre el fitxer, selecciona tot el contingut (Ctrl+A), copia\'l i enganxa\'l al prompt.';
-  } else {
-    note='Copia aquest prompt i enganxa\'l a Claude o ChatGPT, adjuntant els fitxers indicats.';
-  }
-  document.getElementById('aResultNote').textContent=note;
-
+  document.getElementById('aResultNote').textContent='Copia aquest prompt i enganxa\'l a Claude o ChatGPT adjuntant els fitxers indicats.';
   document.getElementById('aStepPeriod').style.display='none';
   document.getElementById('aStepResult').style.display='block';
 }
 
 function copyPrompt(){
-  navigator.clipboard.writeText(curPromptText).then(function(){
-    toast('Prompt copiat al porta-retalls','ok');
-  }).catch(function(){
-    toast('No s\'ha pogut copiar — selecciona\'l manualment','warn');
-  });
+  navigator.clipboard.writeText(curPromptText).then(function(){toast('Prompt copiat','ok');}).catch(function(){toast('No s\'ha pogut copiar — selecciona\'l manualment','warn');});
 }
 
-// ─── UTILS ───────────────────────────────────────────────────────
 function escH(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function escA(v){return String(v||'').replace(/'/g,"\\'");}
 function fmtB(b){if(b<1024)return b+'B';if(b<1048576)return (b/1024).toFixed(1)+'KB';return (b/1048576).toFixed(1)+'MB';}
@@ -916,7 +885,7 @@ function toast(msg,type){
   var t=document.getElementById('toast');
   document.getElementById('toastMsg').textContent=msg;
   t.className='toast show t-'+(type||'ok');
-  clearTimeout(_tt);_tt=setTimeout(function(){t.classList.remove('show');},3200);
+  clearTimeout(_tt);_tt=setTimeout(function(){t.classList.remove('show');},3400);
 }
 document.getElementById('previewModal').addEventListener('click',function(e){if(e.target===this)closePreview();});
 document.getElementById('analysisModal').addEventListener('click',function(e){if(e.target===this)closeAnalysis();});

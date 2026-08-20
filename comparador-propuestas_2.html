@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comparador de Propuestas — OPTIMIZARTE 3.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+/* ═══ TOKENS ═══ */
+:root{
+  --red:#DC0028; --red-d:#b8001e; --red-l:#fff0f2;
+  --dark:#202020; --gray:#414141; --gray-2:#6b6b6b;
+  --gray-3:#BEBEBE; --gray-4:#E7E6E6; --border:#E0E0E0;
+  --white:#fff; --bg:#F2F2F2;
+  --radius:8px; --shadow:0 2px 12px rgba(0,0,0,.10);
+  --sidebar:340px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;font-family:'Open Sans',Arial,sans-serif;background:var(--bg);color:var(--dark);}
+
+/* ═══ APP SHELL ═══ */
+.app{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+
+/* ═══ HEADER ═══ */
+.hdr{background:var(--red);height:62px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:0 3px 10px rgba(180,0,30,.3);}
+.logo-text{display:flex;flex-direction:column;line-height:1;}
+.logo-main{font-family:'Poppins',serif;font-size:22px;font-weight:800;color:#fff;letter-spacing:-.5px;}
+.logo-sub{display:flex;align-items:baseline;gap:4px;margin-top:2px;}
+.logo-by{font-size:10px;font-style:italic;color:rgba(255,255,255,.75);}
+.logo-occ{font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:#fff;}
+.hdr-r{text-align:right;}
+.hdr-title{font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;color:#fff;}
+.hdr-sub{font-size:10px;color:rgba(255,255,255,.65);margin-top:2px;}
+
+/* ═══ MAIN ═══ */
+.main-wrap{display:flex;flex:1;overflow:hidden;}
+
+/* ═══ SIDEBAR ═══ */
+.sidebar{width:var(--sidebar);background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;}
+.sb-section{padding:18px 20px;border-bottom:1px solid var(--gray-4);}
+.sb-section:last-child{border-bottom:none;margin-top:auto;}
+
+.sec-label{display:inline-flex;align-items:center;gap:6px;background:var(--red);color:#fff;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:3px;margin-bottom:14px;}
+
+/* ═══ DROP ZONE ═══ */
+.drop-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:26px 16px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg);}
+.drop-zone:hover,.drop-zone.over{border-color:var(--red);background:var(--red-l);}
+.drop-zone.over{transform:scale(1.01);}
+.drop-icon{margin-bottom:10px;color:var(--gray-3);}
+.drop-text{font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;color:var(--dark);margin-bottom:3px;}
+.drop-hint{font-family:'Inter',sans-serif;font-size:10.5px;color:var(--gray-2);}
+.drop-formats{display:flex;gap:5px;justify-content:center;margin-top:8px;}
+.fmt-badge{background:var(--gray-4);color:var(--gray);font-family:'Inter',sans-serif;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:3px;letter-spacing:.05em;}
+
+/* ═══ FILE LIST ═══ */
+.files-list{display:flex;flex-direction:column;gap:6px;margin-top:12px;}
+.file-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;}
+.file-pill{flex:1;min-width:0;}
+.file-name{font-family:'Inter',sans-serif;font-size:11.5px;font-weight:600;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.file-status{font-size:10px;color:var(--gray-2);margin-top:2px;font-family:'Inter',sans-serif;}
+.file-status.ok{color:#2E7D32;}
+.file-status.err{color:var(--red);}
+.file-remove{background:none;border:none;cursor:pointer;color:var(--gray-3);padding:2px;border-radius:3px;display:flex;align-items:center;transition:color .15s;flex-shrink:0;}
+.file-remove:hover{color:var(--red);}
+.file-num{width:20px;height:20px;border-radius:50%;background:var(--red);color:#fff;font-family:'Poppins',sans-serif;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+/* ═══ SELECTORS ═══ */
+.sel-group{margin-bottom:14px;}
+.sel-label{display:block;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);margin-bottom:7px;}
+
+.toggle-row{display:flex;border:1.5px solid var(--border);border-radius:6px;overflow:hidden;}
+.toggle-btn{flex:1;padding:8px 6px;border:none;background:var(--white);font-family:'Inter',sans-serif;font-size:11.5px;font-weight:600;cursor:pointer;color:var(--gray-2);border-right:1px solid var(--border);transition:all .18s;text-align:center;line-height:1.3;}
+.toggle-btn:last-child{border-right:none;}
+.toggle-btn.on{background:var(--dark);color:#fff;}
+.toggle-btn:hover:not(.on){background:var(--bg);}
+
+.output-opts{display:flex;flex-direction:column;gap:6px;}
+.out-opt{display:flex;align-items:center;gap:9px;padding:9px 11px;border:1.5px solid var(--border);border-radius:6px;cursor:pointer;transition:all .15s;user-select:none;}
+.out-opt:hover{border-color:var(--red);background:var(--red-l);}
+.out-opt.on{border-color:var(--red);background:var(--red-l);}
+.out-opt input{accent-color:var(--red);width:15px;height:15px;flex-shrink:0;cursor:pointer;}
+.out-info{flex:1;min-width:0;}
+.out-name{font-family:'Inter',sans-serif;font-size:12px;font-weight:700;color:var(--dark);}
+.out-desc{font-family:'Inter',sans-serif;font-size:10px;color:var(--gray-2);margin-top:1px;}
+.out-icon{font-size:16px;flex-shrink:0;}
+
+/* ═══ ACTION BUTTONS ═══ */
+.btn-main{width:100%;padding:12px;background:var(--red);color:#fff;border:none;border-radius:var(--radius);font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.03em;text-transform:uppercase;transition:background .18s,transform .1s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-main:hover{background:var(--red-d);}
+.btn-main:active{transform:scale(.98);}
+.btn-main:disabled{opacity:.4;cursor:not-allowed;}
+.btn-main svg{flex-shrink:0;}
+
+.btn-dark{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;background:var(--dark);color:#fff;border:none;border-radius:6px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:background .15s;}
+.btn-dark:hover{background:#333;}
+.btn-outline{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:var(--white);color:var(--gray);border:1.5px solid var(--border);border-radius:6px;font-family:'Inter',sans-serif;font-size:11.5px;font-weight:600;cursor:pointer;transition:all .15s;}
+.btn-outline:hover{border-color:var(--dark);color:var(--dark);}
+.btn-red{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;background:var(--red);color:#fff;border:none;border-radius:6px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:background .15s;}
+.btn-red:hover{background:var(--red-d);}
+
+/* ═══ CONTENT AREA ═══ */
+.content{flex:1;overflow-y:auto;padding:24px 28px;display:flex;flex-direction:column;gap:20px;}
+
+/* ═══ WELCOME ═══ */
+.welcome{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;gap:16px;color:var(--gray-2);}
+.welcome-icon{opacity:.25;margin-bottom:8px;}
+.welcome h2{font-family:'Poppins',sans-serif;font-size:1.25rem;color:var(--dark);font-weight:700;}
+.welcome p{font-family:'Inter',sans-serif;font-size:13px;line-height:1.6;max-width:440px;}
+.welcome-steps{display:flex;gap:14px;margin-top:8px;flex-wrap:wrap;justify-content:center;}
+.step-chip{background:var(--white);border:1.5px solid var(--border);border-radius:8px;padding:10px 16px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:var(--dark);display:flex;align-items:center;gap:7px;}
+.step-chip .step-n{width:20px;height:20px;border-radius:50%;background:var(--red);color:#fff;font-size:10px;font-weight:700;font-family:'Poppins',sans-serif;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+/* ═══ PROMPT PANEL ═══ */
+.panel{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+.panel-hdr{background:var(--dark);padding:11px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.panel-hdr h3{font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em;display:flex;align-items:center;gap:7px;}
+.panel-hdr-actions{display:flex;gap:8px;}
+.panel-body{padding:0;}
+
+.prompt-ta{width:100%;min-height:200px;max-height:350px;padding:16px;font-family:'Courier New',monospace;font-size:11.5px;line-height:1.65;border:none;outline:none;resize:vertical;color:var(--dark);background:#FAFAFA;}
+.resp-ta{width:100%;min-height:180px;padding:16px;font-family:'Inter',sans-serif;font-size:12.5px;line-height:1.65;border:none;outline:none;resize:vertical;color:var(--dark);}
+
+.panel-footer{padding:12px 16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--white);}
+.hint{font-family:'Inter',sans-serif;font-size:10.5px;color:var(--gray-2);}
+.copied-flash{font-family:'Inter',sans-serif;font-size:10.5px;color:#2E7D32;font-weight:700;display:none;}
+
+.step-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;background:rgba(220,0,40,.05);border-bottom:1px solid rgba(220,0,40,.12);}
+.step-bar-icon{width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font-family:'Poppins',sans-serif;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step-bar-text{font-family:'Inter',sans-serif;font-size:12px;color:var(--red);font-weight:700;}
+.step-bar-hint{font-family:'Inter',sans-serif;font-size:10.5px;color:var(--gray-2);margin-top:1px;}
+
+/* ═══ WORKFLOW GUIDE ═══ */
+.wf-guide{display:flex;align-items:stretch;gap:0;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
+.wf-step{flex:1;padding:14px 12px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px;position:relative;}
+.wf-step.wf-ai{background:linear-gradient(135deg,#f0f4ff,#e8f0fe);border-left:1.5px solid #c7d7fc;border-right:1.5px solid #c7d7fc;}
+.wf-step.wf-done{background:rgba(46,125,50,.06);border-left:1.5px solid rgba(46,125,50,.2);}
+.wf-num{width:30px;height:30px;border-radius:50%;background:var(--dark);color:#fff;font-family:'Poppins',sans-serif;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.wf-step.wf-ai .wf-num{background:linear-gradient(135deg,#4e6cf5,#2a4bbf);font-size:16px;background:none;}
+.wf-step.wf-done .wf-num{background:#2E7D32;}
+.wf-step-label{font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:var(--dark);line-height:1.25;text-align:center;}
+.wf-step.wf-ai .wf-step-label{color:#1a3568;}
+.wf-step-hint{font-family:'Inter',sans-serif;font-size:9.5px;color:var(--gray-2);line-height:1.3;text-align:center;}
+.wf-arrow{display:flex;align-items:center;justify-content:center;padding:0 6px;background:var(--bg);color:var(--gray-3);font-size:18px;font-weight:300;flex-shrink:0;}
+.wf-ai-links{display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;justify-content:center;}
+.wf-ai-link{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;text-decoration:none;transition:opacity .15s;}
+.wf-ai-link.claude{background:#4e6cf5;color:#fff;}
+.wf-ai-link.gpt{background:#10a37f;color:#fff;}
+.wf-ai-link:hover{opacity:.85;}
+
+/* ═══ STEP 2 PANEL (response) ═══ */
+.step2-panel{border:2px solid var(--red)!important;box-shadow:0 0 0 4px rgba(220,0,40,.10),var(--shadow)!important;animation:pulse-border 2s ease-in-out 3;}
+@keyframes pulse-border{0%,100%{box-shadow:0 0 0 4px rgba(220,0,40,.10),var(--shadow);}50%{box-shadow:0 0 0 8px rgba(220,0,40,.18),var(--shadow);}}
+.step2-panel .panel-hdr{background:var(--red)!important;}
+.step2-label{display:flex;align-items:center;gap:10px;padding:12px 16px 0;}
+.step2-arrow{text-align:center;padding:6px 0;font-size:26px;color:var(--red);line-height:1;animation:bounce-down 1.2s ease-in-out infinite;}
+@keyframes bounce-down{0%,100%{transform:translateY(0);}50%{transform:translateY(5px);}}
+.resp-ta{width:100%;min-height:200px;padding:16px;font-family:'Inter',sans-serif;font-size:12.5px;line-height:1.65;border:none;outline:none;resize:vertical;color:var(--dark);}
+.resp-ta:focus{background:#fffef0;}
+.warn-box{display:none;margin:0 16px 12px;padding:10px 14px;background:#fff3cd;border:1.5px solid #ffc107;border-radius:6px;font-family:'Inter',sans-serif;font-size:11.5px;color:#7a5c00;line-height:1.4;}
+.warn-box strong{display:block;margin-bottom:2px;}
+
+/* ═══ CLAUDE LINK (legacy) ═══ */
+.ai-shortcut{display:none;}
+.ai-shortcut-icon{font-size:22px;flex-shrink:0;}
+.ai-shortcut-text{flex:1;}
+.ai-shortcut-title{font-family:'Inter',sans-serif;font-size:12px;font-weight:700;color:#1a3568;}
+.ai-shortcut-hint{font-family:'Inter',sans-serif;font-size:10px;color:#4a5e8a;margin-top:1px;}
+.ai-shortcut a{text-decoration:none;}
+
+/* ═══ RESULTS ═══ */
+.results-wrap{display:flex;flex-direction:column;gap:0;}
+.tabs-bar{display:flex;gap:0;border-bottom:2px solid var(--border);overflow-x:auto;}
+.tab-btn{padding:10px 16px;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;font-family:'Inter',sans-serif;font-size:11.5px;font-weight:700;color:var(--gray-2);cursor:pointer;transition:all .18s;text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.tab-btn.on{color:var(--red);border-bottom-color:var(--red);}
+.tab-btn:hover:not(.on){color:var(--dark);}
+.tab-content{background:var(--white);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);min-height:350px;}
+.tab-pane{display:none;padding:24px;}
+.tab-pane.on{display:block;}
+
+/* ═══ MARKDOWN ═══ */
+.md h1{font-family:'Poppins',sans-serif;font-size:1.3rem;font-weight:700;color:var(--dark);margin-bottom:14px;padding-bottom:8px;border-bottom:3px solid var(--red);}
+.md h2{font-family:'Poppins',sans-serif;font-size:1.05rem;font-weight:700;color:var(--dark);margin:20px 0 10px;padding:8px 14px;background:var(--bg);border-left:4px solid var(--red);border-radius:0 5px 5px 0;}
+.md h3{font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:700;color:var(--gray);margin:14px 0 7px;}
+.md p{font-family:'Inter',sans-serif;font-size:13px;line-height:1.7;margin-bottom:12px;color:var(--dark);}
+.md ul,.md ol{padding-left:20px;margin:8px 0 14px;}
+.md li{font-family:'Inter',sans-serif;font-size:12.5px;line-height:1.6;margin-bottom:5px;color:var(--dark);}
+.md strong{color:var(--dark);}
+.md em{color:var(--gray);}
+.md blockquote{border-left:4px solid var(--red);padding:10px 16px;background:var(--red-l);margin:12px 0;border-radius:0 5px 5px 0;font-style:italic;}
+.md blockquote p{color:var(--red-d);margin-bottom:0;}
+.md table{width:100%;border-collapse:collapse;margin:16px 0;font-size:12px;font-family:'Inter',sans-serif;}
+.md table th{background:var(--dark);color:#fff;padding:9px 12px;text-align:left;font-size:10.5px;letter-spacing:.04em;font-weight:700;text-transform:uppercase;}
+.md table td{padding:8px 12px;border-bottom:1px solid var(--border);}
+.md table tr:nth-child(even){background:var(--bg);}
+.md table tr.highlight td{background:rgba(220,0,40,.06);font-weight:700;}
+.md hr{border:none;border-top:2px solid var(--border);margin:20px 0;}
+.md code{background:var(--gray-4);padding:2px 6px;border-radius:3px;font-size:.9em;font-family:'Courier New',monospace;}
+
+/* ═══ ARGUMENTOS CARDS ═══ */
+.arg-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:14px;}
+.arg-card-hdr{background:var(--dark);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:8px;}
+.arg-card-hdr h4{font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
+.arg-card-body{padding:14px;}
+.arg-item{display:flex;align-items:flex-start;gap:9px;padding:8px 0;border-bottom:1px solid var(--gray-4);font-family:'Inter',sans-serif;font-size:12.5px;color:var(--dark);line-height:1.5;}
+.arg-item:last-child{border-bottom:none;}
+.arg-bullet{width:18px;height:18px;border-radius:50%;background:var(--red);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+
+/* ═══ MAIL ═══ */
+.mail-wrap{border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.mail-top{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 16px;}
+.mail-field{display:flex;gap:10px;align-items:baseline;font-family:'Inter',sans-serif;font-size:12px;margin-bottom:5px;}
+.mail-field:last-child{margin-bottom:0;}
+.mail-field-label{font-weight:700;color:var(--gray-2);min-width:60px;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;}
+.mail-field-val{color:var(--dark);font-weight:600;}
+.mail-body{padding:20px;background:var(--white);font-family:'Inter',sans-serif;font-size:13px;line-height:1.75;color:var(--dark);}
+.mail-actions{padding:12px 16px;background:var(--bg);border-top:1px solid var(--border);display:flex;gap:8px;}
+
+/* ═══ SLIDER ═══ */
+.slider-wrap{position:relative;}
+.slide{display:none;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
+.slide.on{display:block;}
+.slide-hdr{background:var(--dark);padding:28px 32px;}
+.slide-hdr-red{height:4px;background:linear-gradient(90deg,var(--red),var(--red-d));}
+.slide-hdr h2{font-family:'Poppins',sans-serif;font-size:1.4rem;font-weight:800;color:#fff;margin-bottom:6px;}
+.slide-hdr p{font-family:'Inter',sans-serif;font-size:11px;color:rgba(255,255,255,.55);}
+.slide-body{background:var(--white);padding:26px 32px;min-height:300px;}
+.slide-foot{background:var(--bg);border-top:1px solid var(--border);padding:10px 32px;display:flex;justify-content:space-between;align-items:center;}
+.slide-foot-brand{font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:var(--red);}
+.slide-foot-pg{font-family:'Inter',sans-serif;font-size:11px;color:var(--gray-2);}
+.slide-nav{display:flex;align-items:center;gap:10px;margin-top:14px;justify-content:center;}
+.slide-nav-btn{padding:8px 20px;background:var(--dark);color:#fff;border:none;border-radius:5px;cursor:pointer;font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;transition:background .15s;display:flex;align-items:center;gap:6px;}
+.slide-nav-btn:hover{background:#333;}
+.slide-nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+.slide-counter{font-family:'Inter',sans-serif;font-size:11px;color:var(--gray-2);}
+.slide-dots{display:flex;gap:5px;align-items:center;}
+.slide-dot{width:7px;height:7px;border-radius:50%;background:var(--gray-4);cursor:pointer;transition:background .15s;}
+.slide-dot.on{background:var(--red);width:20px;border-radius:4px;}
+
+/* ═══ RECOMENDACION BADGE ═══ */
+.rec-banner{background:linear-gradient(135deg,var(--dark),#3a3a3a);border-radius:var(--radius);padding:20px 24px;display:flex;align-items:center;gap:16px;margin-bottom:16px;}
+.rec-star{font-size:28px;}
+.rec-text h3{font-family:'Poppins',sans-serif;font-size:1rem;font-weight:700;color:#fff;margin-bottom:3px;}
+.rec-text p{font-family:'Inter',sans-serif;font-size:12px;color:rgba(255,255,255,.7);line-height:1.5;}
+.rec-badge{margin-left:auto;background:var(--red);color:#fff;font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px;white-space:nowrap;flex-shrink:0;}
+
+/* ═══ PDF ACTIONS ═══ */
+.pdf-actions{display:flex;gap:10px;justify-content:center;padding:20px;flex-wrap:wrap;}
+.pdf-hint{font-family:'Inter',sans-serif;font-size:11px;color:var(--gray-2);text-align:center;padding-bottom:8px;}
+
+/* ═══ FOOTER ═══ */
+.foot{background:var(--dark);color:rgba(255,255,255,.4);font-family:'Inter',sans-serif;font-size:10px;padding:9px 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+
+/* ═══ SPINNER ═══ */
+@keyframes spin{to{transform:rotate(360deg);}}
+.spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;}
+
+/* ═══ PRINT ═══ */
+@media print{
+  .sidebar,.hdr,.foot,.tabs-bar,.panel,.pdf-actions,.panel-footer,.step-bar,.ai-shortcut,.slide-nav,.no-print{display:none!important;}
+  .content{padding:0!important;}
+  .tab-pane{display:block!important;}
+  body{overflow:auto;}
+}
+
+/* ═══ SCROLLBAR ═══ */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-thumb{background:var(--gray-4);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--gray-3);}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ══ HEADER ══ -->
+<header class="hdr">
+  <div class="logo-text">
+    <span class="logo-main">OPTIMIZART€</span>
+    <div class="logo-sub"><span class="logo-by">by</span><span class="logo-occ">Occident</span></div>
+  </div>
+  <div class="hdr-r">
+    <div class="hdr-title">Comparador de Propuestas de Seguro</div>
+    <div class="hdr-sub">Análisis experto · Mediador 260963</div>
+  </div>
+</header>
+
+<!-- ══ MAIN ══ -->
+<div class="main-wrap">
+
+  <!-- ════ SIDEBAR ════ -->
+  <aside class="sidebar">
+
+    <!-- PROPUESTAS -->
+    <div class="sb-section">
+      <div class="sec-label">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Propuestas
+      </div>
+
+      <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+        <div class="drop-icon">
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+        </div>
+        <div class="drop-text">Arrastra las propuestas aquí</div>
+        <div class="drop-hint">o haz clic para seleccionar archivos</div>
+        <div class="drop-formats">
+          <span class="fmt-badge">PDF</span>
+          <span class="fmt-badge">TXT</span>
+        </div>
+      </div>
+      <input type="file" id="fileInput" multiple accept=".pdf,.txt" style="display:none" onchange="handleFiles(this.files)">
+
+      <div class="files-list" id="filesList"></div>
+    </div>
+
+    <!-- CONFIGURACIÓN -->
+    <div class="sb-section">
+      <div class="sec-label">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        Configuración
+      </div>
+
+      <!-- Comparativa -->
+      <div class="sel-group">
+        <span class="sel-label">Tipo de Comparativa</span>
+        <div class="toggle-row">
+          <button class="toggle-btn on" id="tSimple" onclick="setToggle('depth','simple',this)">
+            📋 Simple
+          </button>
+          <button class="toggle-btn" id="tDetallada" onclick="setToggle('depth','detallada',this)">
+            🔍 Detallada
+          </button>
+        </div>
+      </div>
+
+      <!-- Idioma -->
+      <div class="sel-group">
+        <span class="sel-label">Idioma</span>
+        <div class="toggle-row">
+          <button class="toggle-btn on" id="tEs" onclick="setToggle('lang','es',this)">🇪🇸 Castellano</button>
+          <button class="toggle-btn" id="tCa" onclick="setToggle('lang','ca',this)">🟡🔴 Català</button>
+        </div>
+      </div>
+
+      <!-- Tono -->
+      <div class="sel-group">
+        <span class="sel-label">Tono</span>
+        <div class="toggle-row">
+          <button class="toggle-btn on" id="tFormal" onclick="setToggle('tone','formal',this)">🎩 Formal (usted)</button>
+          <button class="toggle-btn" id="tCercano" onclick="setToggle('tone','cercano',this)">👋 Cercano (tuteo)</button>
+        </div>
+      </div>
+
+      <!-- Salidas -->
+      <div class="sel-group" style="margin-bottom:0;">
+        <span class="sel-label">Generar outputs</span>
+        <div class="output-opts">
+          <label class="out-opt on" onclick="toggleOutput(this,'argumentos')">
+            <input type="checkbox" checked>
+            <span class="out-icon">💼</span>
+            <div class="out-info">
+              <div class="out-name">Argumentos de venta</div>
+              <div class="out-desc">Para el mediador</div>
+            </div>
+          </label>
+          <label class="out-opt on" onclick="toggleOutput(this,'comparativa')">
+            <input type="checkbox" checked>
+            <span class="out-icon">📊</span>
+            <div class="out-info">
+              <div class="out-name">Comparativa</div>
+              <div class="out-desc">Para el cliente</div>
+            </div>
+          </label>
+          <label class="out-opt" onclick="toggleOutput(this,'mail')">
+            <input type="checkbox">
+            <span class="out-icon">📧</span>
+            <div class="out-info">
+              <div class="out-name">Mail al cliente</div>
+              <div class="out-desc">Email listo para enviar</div>
+            </div>
+          </label>
+          <label class="out-opt" onclick="toggleOutput(this,'slider')">
+            <input type="checkbox">
+            <span class="out-icon">🖥️</span>
+            <div class="out-info">
+              <div class="out-name">Slider</div>
+              <div class="out-desc">Presentación visual</div>
+            </div>
+          </label>
+          <label class="out-opt" onclick="toggleOutput(this,'pdf')">
+            <input type="checkbox">
+            <span class="out-icon">📄</span>
+            <div class="out-info">
+              <div class="out-name">PDF / Impresión</div>
+              <div class="out-desc">Versión imprimible</div>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- GENERAR -->
+    <div class="sb-section">
+      <button class="btn-main" id="btnGenerate" onclick="generatePrompt()" disabled>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Generar Prompt IA
+      </button>
+      <p style="font-family:'Inter',sans-serif;font-size:10px;color:var(--gray-2);text-align:center;margin-top:8px;line-height:1.4;">Carga al menos una propuesta para activar</p>
+    </div>
+
+  </aside><!-- /sidebar -->
+
+  <!-- ════ CONTENT ════ -->
+  <main class="content" id="contentArea">
+    <!-- Welcome state -->
+    <div class="welcome" id="welcomeState">
+      <div class="welcome-icon">
+        <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+      </div>
+      <h2>Comparador Experto de Seguros</h2>
+      <p>Carga las propuestas de seguro, configura las opciones y genera un análisis profesional listo para presentar al cliente.</p>
+      <div class="welcome-steps">
+        <div class="step-chip"><span class="step-n">1</span> Arrastra los PDFs</div>
+        <div class="step-chip"><span class="step-n">2</span> Configura opciones</div>
+        <div class="step-chip"><span class="step-n">3</span> Genera el prompt</div>
+        <div class="step-chip"><span class="step-n">4</span> Pega la respuesta IA</div>
+        <div class="step-chip"><span class="step-n">5</span> Presenta al cliente</div>
+      </div>
+    </div>
+  </main>
+
+</div><!-- /main-wrap -->
+
+<!-- ══ FOOTER ══ -->
+<footer class="foot">
+  <span>OPTIMIZARTE 3.0 · Herramienta de análisis de propuestas · Código mediador: 260963</span>
+  <span id="footDate"></span>
+</footer>
+
+</div><!-- /app -->
+
+<script>
+'use strict';
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+/* ══ STATE ══ */
+const st = {
+  files: [],           // {id, file, name, text, status}
+  depth: 'simple',
+  lang:  'es',
+  tone:  'formal',
+  outputs: new Set(['argumentos','comparativa']),
+  prompt: '',
+  resultHTML: {},      // {tab: html}
+  activeTab: '',
+  slideIdx: 0,
+  slideTotal: 0
+};
+let fileUid = 0;
+
+/* ══ DATE ══ */
+document.getElementById('footDate').textContent =
+  new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'long',year:'numeric'});
+
+/* ══ DRAG & DROP ══ */
+const dz = document.getElementById('dropZone');
+['dragenter','dragover'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.add('over'); }));
+['dragleave','drop'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove('over'); }));
+dz.addEventListener('drop', e => handleFiles(e.dataTransfer.files));
+
+/* ══ FILE HANDLING ══ */
+function handleFiles(fileList) {
+  Array.from(fileList).forEach(f => {
+    const ext = f.name.split('.').pop().toLowerCase();
+    if (!['pdf','txt'].includes(ext)) { alert(`"${f.name}" no es un formato admitido (PDF o TXT).`); return; }
+    const id = ++fileUid;
+    const item = { id, file: f, name: f.name, text: '', status: 'loading' };
+    st.files.push(item);
+    renderFiles();
+    extractText(item);
+  });
+}
+
+async function extractText(item) {
+  try {
+    const ext = item.name.split('.').pop().toLowerCase();
+    if (ext === 'txt') {
+      item.text = await item.file.text();
+    } else {
+      const ab = await item.file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: ab }).promise;
+      let txt = '';
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        txt += content.items.map(x => x.str).join(' ') + '\n';
+      }
+      item.text = txt;
+    }
+    item.status = 'ok';
+  } catch(e) {
+    item.status = 'err';
+    item.text = '';
+  }
+  renderFiles();
+  updateGenerateBtn();
+}
+
+function removeFile(id) {
+  st.files = st.files.filter(f => f.id !== id);
+  renderFiles();
+  updateGenerateBtn();
+  if (!st.files.length) showWelcome();
+}
+
+function renderFiles() {
+  const el = document.getElementById('filesList');
+  if (!st.files.length) { el.innerHTML = ''; return; }
+  el.innerHTML = st.files.map((f, i) => `
+    <div class="file-item">
+      <div class="file-num">${i+1}</div>
+      <div class="file-pill">
+        <div class="file-name" title="${esc(f.name)}">${esc(f.name)}</div>
+        <div class="file-status ${f.status === 'ok' ? 'ok' : f.status === 'err' ? 'err' : ''}">
+          ${f.status === 'loading' ? '⏳ Extrayendo texto…' : f.status === 'ok' ? `✓ Listo · ${approxWords(f.text)} palabras` : '✕ Error al leer el archivo'}
+        </div>
+      </div>
+      <button class="file-remove" onclick="removeFile(${f.id})" title="Eliminar">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  `).join('');
+}
+
+function approxWords(txt) {
+  return txt.trim().split(/\s+/).filter(Boolean).length;
+}
+
+function updateGenerateBtn() {
+  const btn = document.getElementById('btnGenerate');
+  const ready = st.files.some(f => f.status === 'ok');
+  btn.disabled = !ready;
+}
+
+/* ══ TOGGLES ══ */
+function setToggle(prop, val, btn) {
+  st[prop] = val;
+  const group = btn.closest('.toggle-row');
+  group.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+function toggleOutput(label, key) {
+  const cb = label.querySelector('input');
+  // Click already toggled checkbox before this fires — sync state
+  if (cb.checked) {
+    st.outputs.add(key);
+    label.classList.add('on');
+  } else {
+    st.outputs.delete(key);
+    label.classList.remove('on');
+  }
+}
+
+/* ══ PROMPT GENERATION ══ */
+function generatePrompt() {
+  const ready = st.files.filter(f => f.status === 'ok');
+  if (!ready.length) return;
+
+  const isCA   = st.lang === 'ca';
+  const isFormal = st.tone === 'formal';
+  const isDetailed = st.depth === 'detallada';
+  const outputs = [...st.outputs];
+
+  // Build system role
+  const role = isCA
+    ? 'Actua com un expert mediador i assessor d\'assegurances, actuari i perit.'
+    : 'Actúa como un experto mediador y asesor de seguros, actuario y perito.';
+
+  const toneNote = isCA
+    ? (isFormal ? 'Utilitza un to formal i respectuós (vostè).' : 'Utilitza un to proper i directe (tu).')
+    : (isFormal ? 'Utiliza un tono formal y respetuoso (usted).' : 'Utiliza un tono cercano y directo (tú).');
+
+  const depthNote = isCA
+    ? (isDetailed ? 'Fes una comparativa DETALLADA: inclou totes les cobertures, exclusions, franquícies, limits i condicions especials.' : 'Fes una comparativa SIMPLE: resumeix les cobertures principals i les diferències clau.')
+    : (isDetailed ? 'Realiza una comparativa DETALLADA: incluye todas las coberturas, exclusiones, franquicias, límites y condiciones especiales.' : 'Realiza una comparativa SIMPLE: resume las coberturas principales y las diferencias clave.');
+
+  // Proposals text
+  let propText = '';
+  ready.forEach((f, i) => {
+    const label = isCA ? `PROPOSTA ${i+1}` : `PROPUESTA ${i+1}`;
+    const maxChars = 8000;
+    const txt = f.text.length > maxChars
+      ? f.text.slice(0, maxChars) + '\n[... texto truncado por longitud ...]'
+      : f.text;
+    propText += `\n\n${'═'.repeat(60)}\n${label}: ${f.name}\n${'═'.repeat(60)}\n${txt}\n`;
+  });
+
+  // Output instructions
+  const outSections = [];
+  if (outputs.includes('argumentos')) {
+    outSections.push(isCA
+      ? `### ARGUMENTS DE VENDA [per al mediador]
+Proporciona entre 5 i 8 arguments de venda persuasius i professionals per a cadascuna de les propostes. Indica clarament per a quin perfil de client és ideal cada proposta.
+Format: usa el marcador [ARGUMENTS_VENDA] per a aquesta secció.`
+      : `### ARGUMENTOS DE VENTA [para el mediador]
+Proporciona entre 5 y 8 argumentos de venta persuasivos y profesionales para cada propuesta. Indica claramente para qué perfil de cliente es ideal cada propuesta.
+Formato: usa el marcador [ARGUMENTOS_VENTA] para esta sección.`);
+  }
+  if (outputs.includes('comparativa')) {
+    outSections.push(isCA
+      ? `### COMPARATIVA ${isDetailed ? 'DETALLADA' : 'SIMPLE'} [per al client]
+Crea una taula comparativa clara i visual. ${isDetailed ? 'Inclou totes les cobertures, exclusions, franquícies i condicions especials.' : 'Focalitza en les cobertures principals i el preu.'}
+Al final, dona una recomanació de compra argumentada.
+Format: usa el marcador [COMPARATIVA] per a aquesta secció.`
+      : `### COMPARATIVA ${isDetailed ? 'DETALLADA' : 'SIMPLE'} [para el cliente]
+Crea una tabla comparativa clara y visual. ${isDetailed ? 'Incluye todas las coberturas, exclusiones, franquicias y condiciones especiales.' : 'Focaliza en las coberturas principales y el precio.'}
+Al final, da una recomendación de compra argumentada.
+Formato: usa el marcador [COMPARATIVA] para esta sección.`);
+  }
+  if (outputs.includes('mail')) {
+    outSections.push(isCA
+      ? `### MAIL PER AL CLIENT
+Redacta un email professional per enviar al client amb la comparativa i la recomanació.
+Estructura: Assumpte / Cos del missatge.
+Format: usa el marcador [MAIL] per a aquesta secció i [ASSUMPTE] per a l'assumpte.`
+      : `### MAIL PARA EL CLIENTE
+Redacta un email profesional para enviar al cliente con la comparativa y la recomendación.
+Estructura: Asunto / Cuerpo del mensaje.
+Formato: usa el marcador [MAIL] para esta sección y [ASUNTO] para el asunto.`);
+  }
+  if (outputs.includes('slider')) {
+    outSections.push(isCA
+      ? `### SLIDER / PRESENTACIÓ
+Prepara el contingut per a 5-7 diapositives. Cada diapositiva ha de tenir un títol curt i un contingut concís.
+Format: usa el marcador [SLIDER] per a la secció i [SLIDE] per a separar cada diapositiva, amb el format:
+[SLIDE]
+Títol: [títol de la diapositiva]
+Contingut: [contingut de la diapositiva]
+[/SLIDE]`
+      : `### SLIDER / PRESENTACIÓN
+Prepara el contenido para 5-7 diapositivas. Cada diapositiva debe tener un título corto y contenido conciso.
+Formato: usa el marcador [SLIDER] para la sección y [SLIDE] para separar cada diapositiva, con el formato:
+[SLIDE]
+Título: [título de la diapositiva]
+Contenido: [contenido de la diapositiva]
+[/SLIDE]`);
+  }
+
+  const finalNote = isCA
+    ? '\n\nRespon en català. Usa els marcadors de secció indicats per separar clarament cada part.'
+    : '\n\nResponde en castellano. Usa los marcadores de sección indicados para separar claramente cada parte.';
+
+  st.prompt = `${role}
+${toneNote}
+${depthNote}
+
+${isCA ? 'Analitza les propostes adjuntes i fes una comparativa exhaustiva de les diferències de cobertura i abast de cadascuna.' : 'Analiza las propuestas adjuntas y haz una comparativa exhaustiva de las diferencias de cobertura y alcance de cada una.'}
+
+${isCA ? '## PROPOSTES A ANALITZAR' : '## PROPUESTAS A ANALIZAR'}
+${propText}
+
+${isCA ? '## SECCIONS REQUERIDES' : '## SECCIONES REQUERIDAS'}
+${outSections.join('\n\n')}
+${finalNote}`;
+
+  st.files.filter(f => f.status === 'ok');
+  showPromptPhase();
+}
+
+/* ══ UI PHASES ══ */
+function showWelcome() {
+  const area = document.getElementById('contentArea');
+  area.innerHTML = `
+    <div class="welcome" id="welcomeState">
+      <div class="welcome-icon">
+        <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+      </div>
+      <h2>Comparador Experto de Seguros</h2>
+      <p>Carga las propuestas de seguro, configura las opciones y genera un análisis profesional listo para presentar al cliente.</p>
+      <div class="welcome-steps">
+        <div class="step-chip"><span class="step-n">1</span> Arrastra los PDFs</div>
+        <div class="step-chip"><span class="step-n">2</span> Configura opciones</div>
+        <div class="step-chip"><span class="step-n">3</span> Genera el prompt</div>
+        <div class="step-chip"><span class="step-n">4</span> Pega la respuesta IA</div>
+        <div class="step-chip"><span class="step-n">5</span> Presenta al cliente</div>
+      </div>
+    </div>`;
+}
+
+function showPromptPhase() {
+  const area = document.getElementById('contentArea');
+  const isCA = st.lang === 'ca';
+  const nFiles = st.files.filter(f=>f.status==='ok').length;
+
+  area.innerHTML = `
+    <!-- ══ WORKFLOW GUIDE ══ -->
+    <div class="wf-guide no-print">
+      <div class="wf-step">
+        <div class="wf-num" id="wfN1">1</div>
+        <div class="wf-step-label">${isCA ? 'Copia el prompt' : 'Copia el prompt'}</div>
+        <div class="wf-step-hint">${isCA ? 'Botó "Copiar" ↓' : 'Botón "Copiar" ↓'}</div>
+      </div>
+      <div class="wf-arrow">→</div>
+      <div class="wf-step wf-ai">
+        <div class="wf-num" style="font-size:18px;background:none;width:32px;height:32px;">🤖</div>
+        <div class="wf-step-label" style="color:#1a3568;">${isCA ? 'Enganxa-ho a la IA' : 'Pégalo en la IA'}</div>
+        <div class="wf-ai-links">
+          <a href="https://claude.ai" target="_blank" class="wf-ai-link claude">Claude.ai</a>
+          <a href="https://chatgpt.com" target="_blank" class="wf-ai-link gpt">ChatGPT</a>
+        </div>
+        <div class="wf-step-hint" style="margin-top:3px;">${isCA ? 'Enganxa → Envia → Copia la resposta' : 'Pega → Envía → Copia la respuesta'}</div>
+      </div>
+      <div class="wf-arrow">→</div>
+      <div class="wf-step">
+        <div class="wf-num" id="wfN2">2</div>
+        <div class="wf-step-label">${isCA ? 'Enganxa la resposta aquí' : 'Pega la respuesta aquí'}</div>
+        <div class="wf-step-hint">${isCA ? 'Camp vermell ↓ · Clic "Generar"' : 'Campo rojo ↓ · Clic "Generar"'}</div>
+      </div>
+    </div>
+
+    <!-- ══ STEP 1: PROMPT ══ -->
+    <div class="panel" id="step1Panel">
+      <div class="panel-hdr">
+        <h3>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          ${isCA ? 'PAS 1 — Copia aquest prompt' : 'PASO 1 — Copia este prompt'}
+        </h3>
+        <div class="panel-hdr-actions">
+          <button class="btn-outline no-print" style="padding:5px 12px;font-size:11px;color:#fff;border-color:rgba(255,255,255,.3);" onclick="regenerate()">↺ ${isCA ? 'Regenerar' : 'Regenerar'}</button>
+        </div>
+      </div>
+      <div class="step-bar">
+        <div class="step-bar-icon">1</div>
+        <div>
+          <div class="step-bar-text">${isCA ? 'Fes clic a "Copiar prompt" i enganxa\'l a Claude.ai o ChatGPT' : 'Haz clic en "Copiar prompt" y pégalo en Claude.ai o ChatGPT'}</div>
+          <div class="step-bar-hint">${isCA ? `Inclou el text de ${nFiles} proposta(es) i les instruccions de format · ${approxWords(st.prompt)} paraules` : `Incluye el texto de ${nFiles} propuesta(s) y las instrucciones de formato · ${approxWords(st.prompt)} palabras`}</div>
+        </div>
+      </div>
+      <textarea class="prompt-ta" id="promptTA" readonly>${esc(st.prompt)}</textarea>
+      <div class="panel-footer">
+        <button class="btn-dark no-print" id="btnCopy" onclick="copyPromptAndFocus()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          ${isCA ? 'Copiar prompt' : 'Copiar prompt'}
+        </button>
+        <a href="https://claude.ai" target="_blank" class="btn-outline no-print" style="font-size:11px;padding:7px 12px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Claude.ai ↗
+        </a>
+        <a href="https://chatgpt.com" target="_blank" class="btn-outline no-print" style="font-size:11px;padding:7px 12px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          ChatGPT ↗
+        </a>
+        <span class="copied-flash" id="copiedFlash" style="font-size:12px;font-weight:800;">✓ ${isCA ? 'Copiat! Ara obre la IA →' : '¡Copiado! Ahora abre la IA →'}</span>
+      </div>
+    </div>
+
+    <!-- ══ CONNECTOR ARROW ══ -->
+    <div class="step2-arrow no-print" id="connArrow" style="opacity:.5;">↓</div>
+
+    <!-- ══ STEP 2: PASTE RESPONSE ══ -->
+    <div class="panel step2-panel" id="step2Panel">
+      <div class="panel-hdr">
+        <h3>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+          ${isCA ? 'PAS 2 — Enganxa aquí la RESPOSTA de la IA' : 'PASO 2 — Pega aquí la RESPUESTA de la IA'}
+        </h3>
+      </div>
+      <div class="step-bar" style="background:rgba(220,0,40,.08);border-color:rgba(220,0,40,.2);">
+        <div class="step-bar-icon">2</div>
+        <div>
+          <div class="step-bar-text">${isCA ? '⬆ Obre Claude.ai o ChatGPT · Enganxa el prompt · Envia · Copia la resposta · Enganxa-la aquí' : '⬆ Abre Claude.ai o ChatGPT · Pega el prompt · Envía · Copia la respuesta · Pégala aquí'}</div>
+          <div class="step-bar-hint" style="color:var(--red);">${isCA ? '⚠ Enganxa la RESPOSTA de la IA, NO el prompt que has copiat' : '⚠ Pega la RESPUESTA de la IA, NO el prompt que has copiado'}</div>
+        </div>
+      </div>
+      <div class="warn-box" id="warnBox">
+        <strong>⚠ ${isCA ? 'Sembla que has enganxat el prompt en lloc de la resposta.' : 'Parece que has pegado el prompt en lugar de la respuesta.'}</strong>
+        ${isCA ? 'La resposta de la IA ha de contenir l\'anàlisi de les propostes, no les instruccions.' : 'La respuesta de la IA debe contener el análisis de las propuestas, no las instrucciones.'}
+      </div>
+      <textarea class="resp-ta" id="respTA"
+        style="min-height:220px;"
+        placeholder="${isCA
+          ? '✏ Enganxa aquí la resposta completa de Claude.ai o ChatGPT…\n\nEx: "ARGUMENTOS DE VENTA\n## Proposta 1 - Helvetia\n- Avantatge 1: …\n\nCOMPARATIVA\n| Cobertura | Helvetia | Occident |\n…"'
+          : '✏ Pega aquí la respuesta completa de Claude.ai o ChatGPT…\n\nEj: "ARGUMENTOS DE VENTA\n## Propuesta 1 - Helvetia\n- Ventaja 1: …\n\nCOMPARATIVA\n| Cobertura | Helvetia | Occident |\n…"'}"
+        oninput="checkPastedContent(this.value)"></textarea>
+      <div class="panel-footer">
+        <button class="btn-red no-print" id="btnProcess" onclick="processResponse()" style="font-size:13px;padding:11px 20px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          ${isCA ? 'Generar resultats' : 'Generar resultados'}
+        </button>
+        <span class="hint">${isCA ? 'Els resultats s\'organitzaran automàticament per pestanyes' : 'Los resultados se organizarán automáticamente por pestañas'}</span>
+      </div>
+    </div>
+  `;
+}
+
+function regenerate() {
+  generatePrompt();
+}
+
+/* ══ COPY PROMPT ══ */
+async function copyPrompt() {
+  try {
+    await navigator.clipboard.writeText(st.prompt);
+    const f = document.getElementById('copiedFlash');
+    if (f) { f.style.display='inline'; setTimeout(() => f.style.display='none', 3000); }
+  } catch(e) {
+    const ta = document.getElementById('promptTA');
+    if (ta) { ta.select(); document.execCommand('copy'); }
+  }
+}
+
+async function copyPromptAndFocus() {
+  await copyPrompt();
+  // Mark Step 1 as done
+  const n1 = document.getElementById('wfN1');
+  if (n1) { n1.textContent='✓'; n1.style.background='#2E7D32'; }
+  // Highlight Step 2 number
+  const n2 = document.getElementById('wfN2');
+  if (n2) { n2.style.background='var(--red)'; n2.style.transform='scale(1.2)'; n2.style.transition='transform .3s'; }
+  // Animate connector arrow
+  const arr = document.getElementById('connArrow');
+  if (arr) { arr.style.opacity='1'; arr.style.color='var(--red)'; }
+  // Scroll to and focus Step 2
+  const step2 = document.getElementById('step2Panel');
+  if (step2) {
+    step2.scrollIntoView({ behavior:'smooth', block:'start' });
+    setTimeout(() => {
+      const ta = document.getElementById('respTA');
+      if (ta) ta.focus();
+    }, 600);
+  }
+}
+
+/* ══ PASTE VALIDATION ══ */
+function checkPastedContent(val) {
+  const warnBox = document.getElementById('warnBox');
+  if (!warnBox) return;
+  // Detect if user pasted the prompt itself (it contains the marker instructions)
+  const looksLikePrompt = val.includes('usa el marcador') || val.includes('usa el marcadore') ||
+    val.includes('usa el marcador') || val.includes('Actúa como un experto') ||
+    val.includes('Actua com un expert') || val.includes('SECCIONES REQUERIDAS') ||
+    val.includes('SECCIONS REQUERIDES') || val.includes('PROPUESTAS A ANALIZAR') ||
+    val.includes('PROPOSTES A ANALITZAR');
+  warnBox.style.display = (val.length > 100 && looksLikePrompt) ? 'block' : 'none';
+}
+
+/* ══ PROCESS RESPONSE ══ */
+function processResponse() {
+  const resp = (document.getElementById('respTA')?.value || '').trim();
+  if (!resp) {
+    const msg = st.lang === 'ca'
+      ? '⚠ Enganxa la resposta de la IA al camp vermell (Pas 2) primer.'
+      : '⚠ Pega la respuesta de la IA en el campo rojo (Paso 2) primero.';
+    alert(msg);
+    document.getElementById('respTA')?.focus();
+    return;
+  }
+  // Warn if it looks like the prompt was pasted instead of the response
+  const looksLikePrompt = resp.includes('usa el marcador') || resp.includes('Actúa como un experto') ||
+    resp.includes('Actua com un expert') || resp.includes('SECCIONES REQUERIDAS') ||
+    resp.includes('SECCIONS REQUERIDES') || resp.includes('PROPUESTAS A ANALIZAR') ||
+    resp.includes('PROPOSTES A ANALITZAR');
+  if (looksLikePrompt) {
+    const msg = st.lang === 'ca'
+      ? '⚠ Sembla que has enganxat el PROMPT en lloc de la RESPOSTA de la IA.\n\nCal:\n1. Copiar el prompt (Pas 1)\n2. Anar a Claude.ai o ChatGPT\n3. Enganxar el prompt i enviar\n4. Copiar la RESPOSTA de la IA\n5. Enganxar la resposta aquí (Pas 2)\n\nVols continuar igualment?'
+      : '⚠ Parece que has pegado el PROMPT en lugar de la RESPUESTA de la IA.\n\nPasos:\n1. Copiar el prompt (Paso 1)\n2. Ir a Claude.ai o ChatGPT\n3. Pegar el prompt y enviar\n4. Copiar la RESPUESTA de la IA\n5. Pegar la respuesta aquí (Paso 2)\n\n¿Continuar igualmente?';
+    if (!confirm(msg)) return;
+  }
+
+  st.resultHTML = {};
+  const outputs = [...st.outputs];
+
+  if (outputs.includes('argumentos')) {
+    const section = extractSection(resp, ['ARGUMENTOS_VENTA','ARGUMENTS_VENDA','ARGUMENTOS DE VENTA','ARGUMENTS DE VENDA'], resp);
+    st.resultHTML.argumentos = renderArgumentos(section);
+  }
+  if (outputs.includes('comparativa')) {
+    const section = extractSection(resp, ['COMPARATIVA'], resp);
+    st.resultHTML.comparativa = renderComparativa(section);
+  }
+  if (outputs.includes('mail')) {
+    const section = extractSection(resp, ['MAIL'], resp);
+    st.resultHTML.mail = renderMail(section);
+  }
+  if (outputs.includes('slider')) {
+    const section = extractSection(resp, ['SLIDER'], resp);
+    st.resultHTML.slider = renderSlider(section);
+  }
+  if (outputs.includes('pdf')) {
+    st.resultHTML.pdf = renderPDF(resp);
+  }
+
+  showResults();
+}
+
+function extractSection(text, markers, fallback) {
+  for (const m of markers) {
+    const re = new RegExp(`\\[${m}\\]([\\s\\S]*?)(?:\\[\\/${m}\\]|$)`, 'i');
+    const match = text.match(re);
+    if (match) return match[1].trim();
+    // Also try ### heading style
+    const re2 = new RegExp(`###?\\s*${m}[\\s\\S]*?([\\s\\S]*?)(?=###|$)`, 'i');
+    const m2 = text.match(re2);
+    if (m2) return m2[1].trim();
+  }
+  return fallback;
+}
+
+/* ══ RENDER SECTIONS ══ */
+function renderArgumentos(text) {
+  return `
+    <div class="rec-banner">
+      <div class="rec-star">💼</div>
+      <div class="rec-text">
+        <h3>${st.lang === 'ca' ? 'Arguments de Venda' : 'Argumentos de Venta'}</h3>
+        <p>${st.lang === 'ca' ? 'Material exclusiu per al mediador — no mostrar directament al client' : 'Material exclusivo para el mediador — no mostrar directamente al cliente'}</p>
+      </div>
+    </div>
+    <div class="md">${mdToHTML(text)}</div>
+  `;
+}
+
+function renderComparativa(text) {
+  return `
+    <div class="md">${mdToHTML(text)}</div>
+  `;
+}
+
+function renderMail(text) {
+  const isCA = st.lang === 'ca';
+  // Try to extract subject and body
+  let subject = '';
+  let body = text;
+  const subjMatch = text.match(/\[(?:ASUNTO|ASSUMPTE)\]\s*(.*?)(?:\n|$)/i) ||
+                    text.match(/(?:Asunto|Assumpte|Asunto:)\s*(.*?)(?:\n|$)/i);
+  if (subjMatch) {
+    subject = subjMatch[1].trim();
+    body = text.replace(subjMatch[0], '').trim();
+  }
+
+  return `
+    <div class="mail-wrap">
+      <div class="mail-top">
+        <div class="mail-field">
+          <span class="mail-field-label">${isCA ? 'De' : 'De'}</span>
+          <span class="mail-field-val">OPTIMIZARTE 3.0 &lt;mediador@optimizarte.com&gt;</span>
+        </div>
+        <div class="mail-field">
+          <span class="mail-field-label">${isCA ? 'Per a' : 'Para'}</span>
+          <span class="mail-field-val">${isCA ? 'Client' : 'Cliente'} &lt;cliente@email.com&gt;</span>
+        </div>
+        ${subject ? `<div class="mail-field">
+          <span class="mail-field-label">${isCA ? 'Assumpte' : 'Asunto'}</span>
+          <span class="mail-field-val">${esc(subject)}</span>
+        </div>` : ''}
+      </div>
+      <div class="mail-body md">${mdToHTML(body)}</div>
+      <div class="mail-actions">
+        <button class="btn-dark no-print" onclick="copyMailText()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          ${isCA ? 'Copiar text' : 'Copiar texto'}
+        </button>
+        <span class="hint">${isCA ? 'Copia i enganxa al teu client de correu' : 'Copia y pega en tu cliente de correo'}</span>
+      </div>
+    </div>
+  `;
+}
+
+function copyMailText() {
+  const body = document.querySelector('.mail-body');
+  if (body) {
+    const text = body.innerText;
+    navigator.clipboard.writeText(text).catch(() => {});
+  }
+}
+
+function renderSlider(text) {
+  // Parse slides
+  const slideRE = /\[SLIDE\]([\s\S]*?)\[\/SLIDE\]/gi;
+  const slides = [];
+  let m;
+  while ((m = slideRE.exec(text)) !== null) slides.push(m[1].trim());
+
+  if (!slides.length) {
+    // Try to split by ### headings
+    const parts = text.split(/(?=###)/);
+    parts.forEach(p => p.trim() && slides.push(p.trim()));
+  }
+  if (!slides.length) slides.push(text);
+
+  st.slideTotal = slides.length;
+  st.slideIdx = 0;
+
+  const slidesHTML = slides.map((s, i) => {
+    // Try to extract title
+    const titleMatch = s.match(/(?:Título|Titol|T[íi]tulo):\s*(.*?)(?:\n|$)/i) ||
+                       s.match(/^###?\s*(.*?)(?:\n|$)/m);
+    const title = titleMatch ? titleMatch[1].trim() : `${st.lang === 'ca' ? 'Diapositiva' : 'Diapositiva'} ${i+1}`;
+    const content = s.replace(titleMatch ? titleMatch[0] : '', '').trim();
+    return `
+      <div class="slide ${i===0?'on':''}" id="slide-${i}">
+        <div class="slide-hdr">
+          <div class="slide-hdr-red"></div>
+          <h2>${esc(title)}</h2>
+          <p>OPTIMIZARTE 3.0 · Análisis de Propuestas</p>
+        </div>
+        <div class="slide-body md">${mdToHTML(content)}</div>
+        <div class="slide-foot">
+          <span class="slide-foot-brand">OPTIMIZART€ by Occident</span>
+          <span class="slide-foot-pg">${i+1} / ${slides.length}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  const dotsHTML = slides.map((_, i) =>
+    `<div class="slide-dot ${i===0?'on':''}" onclick="goSlide(${i})" id="dot-${i}"></div>`
+  ).join('');
+
+  return `
+    <div class="slider-wrap">
+      ${slidesHTML}
+      <div class="slide-nav no-print">
+        <button class="slide-nav-btn" id="btnPrev" onclick="prevSlide()" disabled>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          ${st.lang === 'ca' ? 'Anterior' : 'Anterior'}
+        </button>
+        <div class="slide-dots">${dotsHTML}</div>
+        <button class="slide-nav-btn" id="btnNext" onclick="nextSlide()" ${slides.length<=1?'disabled':''}>
+          ${st.lang === 'ca' ? 'Següent' : 'Siguiente'}
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function renderPDF(text) {
+  const isCA = st.lang === 'ca';
+  return `
+    <div class="pdf-hint">${isCA ? 'Usa el botó d\'impressió del teu navegador per guardar com a PDF (Ctrl+P)' : 'Usa el botón de impresión de tu navegador para guardar como PDF (Ctrl+P)'}</div>
+    <div class="pdf-actions no-print">
+      <button class="btn-red" onclick="window.print()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        ${isCA ? 'Imprimir / Guardar PDF' : 'Imprimir / Guardar PDF'}
+      </button>
+    </div>
+    <div class="md" style="padding:0 8px;">${mdToHTML(text)}</div>
+  `;
+}
+
+/* ══ SHOW RESULTS ══ */
+function showResults() {
+  const area = document.getElementById('contentArea');
+  const isCA = st.lang === 'ca';
+  const outputs = [...st.outputs];
+
+  const tabConfig = {
+    argumentos: { label: isCA ? '💼 Arguments' : '💼 Argumentos', icon: '💼' },
+    comparativa: { label: isCA ? '📊 Comparativa' : '📊 Comparativa', icon: '📊' },
+    mail:        { label: isCA ? '📧 Mail' : '📧 Mail', icon: '📧' },
+    slider:      { label: isCA ? '🖥️ Slider' : '🖥️ Slider', icon: '🖥️' },
+    pdf:         { label: isCA ? '📄 PDF' : '📄 PDF', icon: '📄' }
+  };
+
+  const activeTabs = outputs.filter(o => st.resultHTML[o]);
+  if (!activeTabs.length) return;
+  st.activeTab = activeTabs[0];
+
+  const tabsHTML = activeTabs.map(o =>
+    `<button class="tab-btn ${o===st.activeTab?'on':''}" id="tab-${o}" onclick="switchTab('${o}')">${tabConfig[o].label}</button>`
+  ).join('');
+
+  const panesHTML = activeTabs.map(o =>
+    `<div class="tab-pane ${o===st.activeTab?'on':''}" id="pane-${o}">${st.resultHTML[o]}</div>`
+  ).join('');
+
+  const successBanner = `
+    <div class="no-print" style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:linear-gradient(135deg,#e8f5e9,#f1f8e9);border:1.5px solid #a5d6a7;border-radius:var(--radius);">
+      <div style="font-size:22px;flex-shrink:0;">✅</div>
+      <div style="flex:1;">
+        <div style="font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:#2E7D32;">${isCA ? 'Anàlisi generada correctament' : 'Análisis generado correctamente'}</div>
+        <div style="font-family:'Inter',sans-serif;font-size:10.5px;color:#4a7c59;margin-top:2px;">${isCA ? `${activeTabs.length} sortida(es) disponible(s) · Explora les pestanyes` : `${activeTabs.length} salida(s) disponible(s) · Explora las pestañas`}</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0;">
+        <button class="btn-outline" style="font-size:10.5px;padding:6px 12px;" onclick="showPromptPhase()">
+          ← ${isCA ? 'Noves opcions' : 'Nuevas opciones'}
+        </button>
+        <button class="btn-dark" style="font-size:10.5px;padding:6px 12px;" onclick="copyPrompt()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          ${isCA ? 'Copiar prompt' : 'Copiar prompt'}
+        </button>
+      </div>
+    </div>
+  `;
+
+  area.innerHTML = `
+    ${successBanner}
+    <div class="results-wrap">
+      <div class="tabs-bar">${tabsHTML}</div>
+      <div class="tab-content">${panesHTML}</div>
+    </div>
+  `;
+}
+
+function switchTab(tab) {
+  st.activeTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('on', b.id === `tab-${tab}`));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('on', p.id === `pane-${tab}`));
+}
+
+/* ══ SLIDE NAV ══ */
+function goSlide(idx) {
+  const prev = st.slideIdx;
+  st.slideIdx = idx;
+  document.getElementById(`slide-${prev}`)?.classList.remove('on');
+  document.getElementById(`slide-${idx}`)?.classList.add('on');
+  document.getElementById(`dot-${prev}`)?.classList.remove('on');
+  document.getElementById(`dot-${idx}`)?.classList.add('on');
+  document.getElementById('btnPrev').disabled = idx === 0;
+  document.getElementById('btnNext').disabled = idx >= st.slideTotal - 1;
+}
+function prevSlide() { if (st.slideIdx > 0) goSlide(st.slideIdx - 1); }
+function nextSlide() { if (st.slideIdx < st.slideTotal - 1) goSlide(st.slideIdx + 1); }
+
+/* ══ SIMPLE MARKDOWN → HTML ══ */
+function mdToHTML(md) {
+  if (!md) return '';
+  let h = md
+    // Escape HTML first
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    // Tables
+    .replace(/\|(.+)\|\n\|[-| :]+\|\n((?:\|.+\|\n?)*)/gm, (_,head,body) => {
+      const ths = head.split('|').map(c=>c.trim()).filter(Boolean);
+      const rows = body.trim().split('\n').map(r => {
+        const cells = r.split('|').map(c=>c.trim()).filter(Boolean);
+        return '<tr>' + cells.map(c=>`<td>${c}</td>`).join('') + '</tr>';
+      });
+      return `<table><thead><tr>${ths.map(t=>`<th>${t}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`;
+    })
+    // Headings
+    .replace(/^#### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^# (.+)$/gm,'<h1>$1</h1>')
+    // Bold + italic
+    .replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/__(.+?)__/g,'<strong>$1</strong>')
+    .replace(/_(.+?)_/g,'<em>$1</em>')
+    // Horizontal rule
+    .replace(/^---+$/gm,'<hr>')
+    // Blockquote
+    .replace(/^&gt; (.+)$/gm,'<blockquote><p>$1</p></blockquote>')
+    // Unordered lists
+    .replace(/^[\*\-] (.+)$/gm,'<li>$1</li>')
+    // Ordered lists
+    .replace(/^\d+\. (.+)$/gm,'<li>$1</li>')
+    // Wrap consecutive <li> in <ul>
+    .replace(/(<li>.*<\/li>\n?)+/g, m => `<ul>${m}</ul>`)
+    // Code inline
+    .replace(/`([^`]+)`/g,'<code>$1</code>')
+    // Paragraphs (double newline)
+    .replace(/\n\n+/g,'</p><p>')
+    // Line breaks
+    .replace(/\n/g,'<br>');
+
+  // Wrap in paragraph if starts with text
+  if (!h.startsWith('<')) h = '<p>' + h + '</p>';
+  // Clean up empty tags
+  h = h.replace(/<p><\/p>/g,'').replace(/<p>(<h[1-6]>)/g,'$1').replace(/(<\/h[1-6]>)<\/p>/g,'$1');
+  return h;
+}
+
+/* ══ UTILS ══ */
+function esc(v) {
+  if (v == null) return '';
+  return String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+</body>
+</html>

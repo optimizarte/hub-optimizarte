@@ -23,12 +23,12 @@ html,body{height:100%;font-family:'Open Sans',Arial,sans-serif;background:var(--
 .app{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
 
 /* ═══ HEADER ═══ */
-.hdr{background:var(--red);height:62px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:0 3px 10px rgba(180,0,30,.3);}
+.hdr{background:#1e1e1e;height:62px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:0 3px 12px rgba(0,0,0,.35);}
 .logo-text{display:flex;flex-direction:column;line-height:1;}
 .logo-main{font-family:'Poppins',serif;font-size:22px;font-weight:800;color:#fff;letter-spacing:-.5px;}
 .logo-sub{display:flex;align-items:baseline;gap:4px;margin-top:2px;}
 .logo-by{font-size:10px;font-style:italic;color:rgba(255,255,255,.75);}
-.logo-occ{font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:#fff;}
+.logo-occ{font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:var(--red);}
 .hdr-r{text-align:right;}
 .hdr-title{font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;color:#fff;}
 .hdr-sub{font-size:10px;color:rgba(255,255,255,.65);margin-top:2px;}
@@ -148,6 +148,17 @@ html,body{height:100%;font-family:'Open Sans',Arial,sans-serif;background:var(--
 .wf-ai-link.gpt{background:#10a37f;color:#fff;}
 .wf-ai-link:hover{opacity:.85;}
 
+/* ═══ AI SELECTOR ═══ */
+.ai-launch-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.ai-sel-wrap{display:flex;border:1.5px solid var(--border);border-radius:6px;overflow:hidden;flex-shrink:0;}
+.ai-sel-btn{padding:7px 14px;border:none;background:var(--white);font-family:'Inter',sans-serif;font-size:11.5px;font-weight:700;cursor:pointer;color:var(--gray-2);border-right:1px solid var(--border);transition:all .15s;display:flex;align-items:center;gap:5px;white-space:nowrap;}
+.ai-sel-btn:last-child{border-right:none;}
+.ai-sel-btn.on{background:var(--dark);color:#fff;}
+.ai-sel-btn:hover:not(.on){background:var(--bg);color:var(--dark);}
+.btn-launch{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:linear-gradient(135deg,#3a5bd9,#2a47b0);color:#fff;border:none;border-radius:6px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:filter .15s;white-space:nowrap;flex-shrink:0;}
+.btn-launch:hover{filter:brightness(1.12);}
+.popup-note{font-family:'Inter',sans-serif;font-size:9.5px;color:var(--gray-2);display:flex;align-items:center;gap:4px;}
+
 /* ═══ STEP 2 PANEL (response) ═══ */
 .step2-panel{border:2px solid var(--red)!important;box-shadow:0 0 0 4px rgba(220,0,40,.10),var(--shadow)!important;animation:pulse-border 2s ease-in-out 3;}
 @keyframes pulse-border{0%,100%{box-shadow:0 0 0 4px rgba(220,0,40,.10),var(--shadow);}50%{box-shadow:0 0 0 8px rgba(220,0,40,.18),var(--shadow);}}
@@ -262,6 +273,14 @@ html,body{height:100%;font-family:'Open Sans',Arial,sans-serif;background:var(--
   .tab-pane{display:block!important;}
   body{overflow:auto;}
 }
+
+/* ═══ AI LAUNCHER BLOCK ═══ */
+.ai-launcher-block{background:linear-gradient(135deg,#2a3fa8,#1a2d7c);border-radius:var(--radius);box-shadow:0 4px 20px rgba(42,63,168,.40);overflow:hidden;}
+.ai-launcher-inner{display:flex;align-items:center;gap:14px;padding:16px 20px;flex-wrap:wrap;}
+.ai-launcher-icon{font-size:30px;flex-shrink:0;filter:drop-shadow(0 2px 5px rgba(0,0,0,.30));line-height:1;}
+.ai-launcher-text{flex:1;min-width:140px;}
+.ai-launcher-title{font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;color:#fff;line-height:1.2;}
+.ai-launcher-hint{font-family:'Inter',sans-serif;font-size:10.5px;color:rgba(255,255,255,.72);margin-top:3px;line-height:1.35;}
 
 /* ═══ SCROLLBAR ═══ */
 ::-webkit-scrollbar{width:5px;height:5px;}
@@ -464,7 +483,8 @@ const st = {
   resultHTML: {},      // {tab: html}
   activeTab: '',
   slideIdx: 0,
-  slideTotal: 0
+  slideTotal: 0,
+  aiChoice: 'claude'   // 'claude' | 'gemini'
 };
 let fileUid = 0;
 
@@ -710,28 +730,24 @@ function showPromptPhase() {
   const nFiles = st.files.filter(f=>f.status==='ok').length;
 
   area.innerHTML = `
-    <!-- ══ WORKFLOW GUIDE ══ -->
+    <!-- ══ WORKFLOW GUIDE (mini stepper) ══ -->
     <div class="wf-guide no-print">
       <div class="wf-step">
         <div class="wf-num" id="wfN1">1</div>
         <div class="wf-step-label">${isCA ? 'Copia el prompt' : 'Copia el prompt'}</div>
-        <div class="wf-step-hint">${isCA ? 'Botó "Copiar" ↓' : 'Botón "Copiar" ↓'}</div>
+        <div class="wf-step-hint">${isCA ? 'Botó al header ↓' : 'Botón en header ↓'}</div>
       </div>
       <div class="wf-arrow">→</div>
       <div class="wf-step wf-ai">
-        <div class="wf-num" style="font-size:18px;background:none;width:32px;height:32px;">🤖</div>
-        <div class="wf-step-label" style="color:#1a3568;">${isCA ? 'Enganxa-ho a la IA' : 'Pégalo en la IA'}</div>
-        <div class="wf-ai-links">
-          <a href="https://claude.ai" target="_blank" class="wf-ai-link claude">Claude.ai</a>
-          <a href="https://chatgpt.com" target="_blank" class="wf-ai-link gpt">ChatGPT</a>
-        </div>
-        <div class="wf-step-hint" style="margin-top:3px;">${isCA ? 'Enganxa → Envia → Copia la resposta' : 'Pega → Envía → Copia la respuesta'}</div>
+        <div style="font-size:20px;line-height:1;">🤖</div>
+        <div class="wf-step-label" style="color:#1a3568;">${isCA ? 'Obre la IA i enganxa' : 'Abre la IA y pega'}</div>
+        <div class="wf-step-hint">${isCA ? 'Botó blau central ↓' : 'Botón azul central ↓'}</div>
       </div>
       <div class="wf-arrow">→</div>
       <div class="wf-step">
         <div class="wf-num" id="wfN2">2</div>
-        <div class="wf-step-label">${isCA ? 'Enganxa la resposta aquí' : 'Pega la respuesta aquí'}</div>
-        <div class="wf-step-hint">${isCA ? 'Camp vermell ↓ · Clic "Generar"' : 'Campo rojo ↓ · Clic "Generar"'}</div>
+        <div class="wf-step-label">${isCA ? 'Enganxa la resposta' : 'Pega la respuesta'}</div>
+        <div class="wf-step-hint">${isCA ? 'Botó "Generar" al header ↓' : 'Botón "Generar" en header ↓'}</div>
       </div>
     </div>
 
@@ -742,70 +758,78 @@ function showPromptPhase() {
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
           ${isCA ? 'PAS 1 — Copia aquest prompt' : 'PASO 1 — Copia este prompt'}
         </h3>
-        <div class="panel-hdr-actions">
-          <button class="btn-outline no-print" style="padding:5px 12px;font-size:11px;color:#fff;border-color:rgba(255,255,255,.3);" onclick="regenerate()">↺ ${isCA ? 'Regenerar' : 'Regenerar'}</button>
+        <div class="panel-hdr-actions" style="display:flex;gap:6px;align-items:center;">
+          <button class="btn-outline no-print" style="padding:5px 11px;font-size:11px;color:#fff;border-color:rgba(255,255,255,.4);background:transparent;" onclick="regenerate()">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+            ${isCA ? 'Regenerar' : 'Regenerar'}
+          </button>
+          <button class="btn-outline no-print" id="btnCopy" style="padding:5px 11px;font-size:11px;color:#fff;border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.12);" onclick="copyPromptHdr()">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            ${isCA ? 'Copiar' : 'Copiar'}
+          </button>
+          <span class="copied-flash" id="copiedFlash">✓ ${isCA ? 'Copiat!' : '¡Copiado!'}</span>
         </div>
       </div>
       <div class="step-bar">
         <div class="step-bar-icon">1</div>
         <div>
-          <div class="step-bar-text">${isCA ? 'Fes clic a "Copiar prompt" i enganxa\'l a Claude.ai o ChatGPT' : 'Haz clic en "Copiar prompt" y pégalo en Claude.ai o ChatGPT'}</div>
-          <div class="step-bar-hint">${isCA ? `Inclou el text de ${nFiles} proposta(es) i les instruccions de format · ${approxWords(st.prompt)} paraules` : `Incluye el texto de ${nFiles} propuesta(s) y las instrucciones de formato · ${approxWords(st.prompt)} palabras`}</div>
+          <div class="step-bar-text">${isCA ? 'Copia el prompt amb el botó del header i obre la IA amb el botó blau de sota' : 'Copia el prompt con el botón del header y abre la IA con el botón azul de abajo'}</div>
+          <div class="step-bar-hint">${isCA ? `${nFiles} proposta(es) · ${approxWords(st.prompt)} paraules incloses` : `${nFiles} propuesta(s) · ${approxWords(st.prompt)} palabras incluidas`}</div>
         </div>
       </div>
-      <textarea class="prompt-ta" id="promptTA" readonly>${esc(st.prompt)}</textarea>
-      <div class="panel-footer">
-        <button class="btn-dark no-print" id="btnCopy" onclick="copyPromptAndFocus()">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          ${isCA ? 'Copiar prompt' : 'Copiar prompt'}
-        </button>
-        <a href="https://claude.ai" target="_blank" class="btn-outline no-print" style="font-size:11px;padding:7px 12px;">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          Claude.ai ↗
-        </a>
-        <a href="https://chatgpt.com" target="_blank" class="btn-outline no-print" style="font-size:11px;padding:7px 12px;">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          ChatGPT ↗
-        </a>
-        <span class="copied-flash" id="copiedFlash" style="font-size:12px;font-weight:800;">✓ ${isCA ? 'Copiat! Ara obre la IA →' : '¡Copiado! Ahora abre la IA →'}</span>
-      </div>
+      <textarea class="prompt-ta" id="promptTA" readonly style="min-height:160px;max-height:260px;">${esc(st.prompt)}</textarea>
     </div>
 
-    <!-- ══ CONNECTOR ARROW ══ -->
-    <div class="step2-arrow no-print" id="connArrow" style="opacity:.5;">↓</div>
+    <!-- ══ AI LAUNCHER (bloc central prominent) ══ -->
+    <div class="ai-launcher-block no-print" id="aiLauncher">
+      <div class="ai-launcher-inner">
+        <div class="ai-launcher-icon">🤖</div>
+        <div class="ai-launcher-text">
+          <div class="ai-launcher-title">${isCA ? 'Obre la IA en finestra lateral' : 'Abre la IA en ventana lateral'}</div>
+          <div class="ai-launcher-hint">${isCA ? 'La conversa es manté oberta mentre treballes a l\'app' : 'La conversación se mantiene abierta mientras trabajas en la app'}</div>
+        </div>
+        <div class="ai-sel-wrap">
+          <button class="ai-sel-btn ${st.aiChoice==='claude'?'on':''}" data-ai="claude" onclick="setAI('claude')">Claude.ai</button>
+          <button class="ai-sel-btn ${st.aiChoice==='gemini'?'on':''}" data-ai="gemini" onclick="setAI('gemini')">Gemini</button>
+        </div>
+        <button class="btn-launch" onclick="openAIPanel()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          ${isCA ? 'Obrir finestra lateral' : 'Abrir ventana lateral'}
+        </button>
+      </div>
+    </div>
 
     <!-- ══ STEP 2: PASTE RESPONSE ══ -->
     <div class="panel step2-panel" id="step2Panel">
       <div class="panel-hdr">
         <h3>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
-          ${isCA ? 'PAS 2 — Enganxa aquí la RESPOSTA de la IA' : 'PASO 2 — Pega aquí la RESPUESTA de la IA'}
+          ${isCA ? 'PAS 2 — Enganxa la RESPOSTA de la IA' : 'PASO 2 — Pega la RESPUESTA de la IA'}
         </h3>
+        <div class="panel-hdr-actions" style="display:flex;gap:6px;align-items:center;">
+          <button class="btn-outline no-print" style="padding:5px 11px;font-size:11px;color:#fff;border-color:rgba(255,255,255,.4);background:transparent;" onclick="clearResponse()">
+            ✕ ${isCA ? 'Netejar' : 'Limpiar'}
+          </button>
+          <button class="btn-outline no-print" id="btnGenerate" style="padding:5px 13px;font-size:11px;font-weight:800;color:#fff;border-color:rgba(255,255,255,.7);background:rgba(255,255,255,.2);" onclick="processResponse()">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            ${isCA ? 'Generar resultats' : 'Generar resultados'}
+          </button>
+        </div>
       </div>
       <div class="step-bar" style="background:rgba(220,0,40,.08);border-color:rgba(220,0,40,.2);">
         <div class="step-bar-icon">2</div>
         <div>
-          <div class="step-bar-text">${isCA ? '⬆ Obre Claude.ai o ChatGPT · Enganxa el prompt · Envia · Copia la resposta · Enganxa-la aquí' : '⬆ Abre Claude.ai o ChatGPT · Pega el prompt · Envía · Copia la respuesta · Pégala aquí'}</div>
-          <div class="step-bar-hint" style="color:var(--red);">${isCA ? '⚠ Enganxa la RESPOSTA de la IA, NO el prompt que has copiat' : '⚠ Pega la RESPUESTA de la IA, NO el prompt que has copiado'}</div>
+          <div class="step-bar-text">${isCA ? 'Copia la resposta completa de la IA i enganxa-la aquí. Clic "Generar resultats" al header' : 'Copia la respuesta completa de la IA y pégala aquí. Clic "Generar resultados" en el header'}</div>
+          <div class="step-bar-hint" style="color:var(--red);">${isCA ? '⚠ Enganxa la RESPOSTA de la IA — NO el prompt que has copiat' : '⚠ Pega la RESPUESTA de la IA — NO el prompt que has copiado'}</div>
         </div>
       </div>
       <div class="warn-box" id="warnBox">
-        <strong>⚠ ${isCA ? 'Sembla que has enganxat el prompt en lloc de la resposta.' : 'Parece que has pegado el prompt en lugar de la respuesta.'}</strong>
-        ${isCA ? 'La resposta de la IA ha de contenir l\'anàlisi de les propostes, no les instruccions.' : 'La respuesta de la IA debe contener el análisis de las propuestas, no las instrucciones.'}
+        <strong>⚠ ${isCA ? 'Sembla que has enganxat el PROMPT en lloc de la RESPOSTA.' : 'Parece que has pegado el PROMPT en lugar de la RESPUESTA.'}</strong>
+        ${isCA ? 'Enganxa la resposta que t\'ha donat la IA, no les instruccions.' : 'Pega la respuesta que te dio la IA, no las instrucciones.'}
       </div>
-      <textarea class="resp-ta" id="respTA"
-        style="min-height:220px;"
-        placeholder="${isCA
-          ? '✏ Enganxa aquí la resposta completa de Claude.ai o ChatGPT…\n\nEx: "ARGUMENTOS DE VENTA\n## Proposta 1 - Helvetia\n- Avantatge 1: …\n\nCOMPARATIVA\n| Cobertura | Helvetia | Occident |\n…"'
-          : '✏ Pega aquí la respuesta completa de Claude.ai o ChatGPT…\n\nEj: "ARGUMENTOS DE VENTA\n## Propuesta 1 - Helvetia\n- Ventaja 1: …\n\nCOMPARATIVA\n| Cobertura | Helvetia | Occident |\n…"'}"
+      <textarea class="resp-ta" id="respTA" style="min-height:200px;"
+        placeholder="${isCA ? '✏ Enganxa aquí la resposta completa de Claude.ai o Gemini…' : '✏ Pega aquí la respuesta completa de Claude.ai o Gemini…'}"
         oninput="checkPastedContent(this.value)"></textarea>
-      <div class="panel-footer">
-        <button class="btn-red no-print" id="btnProcess" onclick="processResponse()" style="font-size:13px;padding:11px 20px;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          ${isCA ? 'Generar resultats' : 'Generar resultados'}
-        </button>
-        <span class="hint">${isCA ? 'Els resultats s\'organitzaran automàticament per pestanyes' : 'Los resultados se organizarán automáticamente por pestañas'}</span>
-      </div>
     </div>
   `;
 }
@@ -846,6 +870,59 @@ async function copyPromptAndFocus() {
       if (ta) ta.focus();
     }, 600);
   }
+}
+
+/* ══ AI SELECTOR & LAUNCH ══ */
+function setAI(choice) {
+  st.aiChoice = choice;
+  document.querySelectorAll('.ai-sel-btn').forEach(b => {
+    b.classList.toggle('on', b.dataset.ai === choice);
+  });
+}
+
+function openAIPanel() {
+  // Copy prompt first
+  copyPrompt();
+  const urls = {
+    claude:  'https://claude.ai/new',
+    gemini:  'https://gemini.google.com/app'
+  };
+  const url = urls[st.aiChoice] || urls.claude;
+  // Size: 45% of screen width, full height, positioned to the right
+  const popW = Math.min(820, Math.round(screen.availWidth * 0.45));
+  const popH = screen.availHeight;
+  const popL = Math.round(screen.availLeft + screen.availWidth - popW);
+  const popT = screen.availTop || 0;
+  const opts = `width=${popW},height=${popH},left=${popL},top=${popT},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=yes`;
+  const win = window.open(url, 'ai-side-panel', opts);
+  if (!win || win.closed) {
+    // Popup blocked — fallback: open in new tab
+    const isCA = st.lang === 'ca';
+    if (confirm(isCA
+      ? '⚠ El navegador ha bloquejat la finestra emergent.\n\nPermetre finestres emergents per a aquest lloc o clic "Acceptar" per obrir en pestanya nova.'
+      : '⚠ El navegador ha bloqueado la ventana emergente.\n\nPermite ventanas emergentes para este sitio o haz clic "Aceptar" para abrir en pestaña nueva.')) {
+      window.open(url, '_blank');
+    }
+  } else {
+    // Show step 2 after a short delay so user sees the popup opened
+    setTimeout(() => {
+      const step2 = document.getElementById('step2Panel');
+      if (step2) step2.scrollIntoView({ behavior:'smooth', block:'start' });
+    }, 800);
+  }
+}
+
+/* ══ HEADER BUTTON HELPERS ══ */
+async function copyPromptHdr() {
+  // Reuse the full copyPromptAndFocus logic (marks step 1 done, scrolls to step 2)
+  await copyPromptAndFocus();
+}
+
+function clearResponse() {
+  const ta = document.getElementById('respTA');
+  if (ta) { ta.value = ''; ta.focus(); }
+  const wb = document.getElementById('warnBox');
+  if (wb) wb.style.display = 'none';
 }
 
 /* ══ PASTE VALIDATION ══ */

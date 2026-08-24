@@ -367,6 +367,7 @@ var ROW_PILL={
     'row-ade-25':'pill-ade','row-ade-50':'pill-ade','row-ade-75':'pill-ade'
 };
 var ADE_ROWS=['row-ade-25','row-ade-50','row-ade-75'];
+var ADE_PCT={'row-ade-25':25,'row-ade-50':50,'row-ade-75':75};
 
 /* ══ Título ════════════════════════════════════════ */
 function syncTitle(val){ document.getElementById('main-title').textContent=val; }
@@ -389,7 +390,29 @@ function refreshPill(pillId){
     pill.style.display=any?'':'none';
 }
 
-/* ══ Adelanto exclusivo ════════════════════════════ */
+/* ══ Adelanto exclusivo + càlcul automàtic ══════════ */
+function parseCapital(text){
+    // Parse "100.000 €" (de-DE) → 100000
+    var digits=text.replace(/\./g,'').replace(/[^\d]/g,'');
+    return digits.length ? parseInt(digits,10) : 0;
+}
+
+function calcularAdelanto(rowId){
+    var pct=ADE_PCT[rowId]; if(!pct) return;
+    var srcRow=document.querySelector('[data-row-id="row-fall-enf"]'); if(!srcRow) return;
+    var srcCells=srcRow.querySelectorAll('td.editable-cell');
+    var adeRow=document.querySelector('[data-row-id="'+rowId+'"]'); if(!adeRow) return;
+    var adeCells=adeRow.querySelectorAll('td.editable-cell');
+    srcCells.forEach(function(sc,i){
+        if(!adeCells[i]) return;
+        var val=parseCapital(sc.textContent.trim());
+        var calc=Math.round(val*pct/100);
+        adeCells[i].textContent=calc.toLocaleString('de-DE')+' €';
+        adeCells[i].style.fontSize='';
+        adeCells[i].style.fontWeight='';
+    });
+}
+
 function selectAdelanto(rowId,checked){
     if(checked){
         ADE_ROWS.forEach(function(rid){
@@ -397,6 +420,7 @@ function selectAdelanto(rowId,checked){
             var r=document.querySelector('[data-row-id="'+rid+'"]'); if(r) r.style.display='none';
             var t=document.querySelector('[data-ade-id="'+rid+'"]'); if(t) t.checked=false;
         });
+        calcularAdelanto(rowId);
     }
     toggleDataRow(rowId,checked);
 }

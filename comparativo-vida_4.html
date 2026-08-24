@@ -1,0 +1,497 @@
+<title>Comparativo Vida</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&display=swap">
+<style>
+:root {
+    --occ-red:#DC0028; --bg:#F0F0F0; --surface:#FFFFFF; --text:#202020; --text-2:#414141;
+    --border:#E0E0E0; --cell-bg:#F5F5F5; --monthly-bg:#E7E6E6; --th-bg:#D4D4D4;
+    --focus-hl:#fffbea; --focus-txt:#202020; --sb-bg:#F8F8F8;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#111;--surface:#1e1e1e;--text:#EFEFEF;--text-2:#BEBEBE;--border:#333;
+    --cell-bg:#2c2c2c;--monthly-bg:#252525;--th-bg:#2a2a2a;--focus-hl:#3a3000;--focus-txt:#EFEFEF;--sb-bg:#181818;
+}}
+:root[data-theme="dark"]{
+    --bg:#111;--surface:#1e1e1e;--text:#EFEFEF;--text-2:#BEBEBE;--border:#333;
+    --cell-bg:#2c2c2c;--monthly-bg:#252525;--th-bg:#2a2a2a;--focus-hl:#3a3000;--focus-txt:#EFEFEF;--sb-bg:#181818;
+}
+*,*::before,*::after{box-sizing:border-box;}
+html,body{height:100%;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);overflow:hidden;}
+body{display:flex;flex-direction:column;}
+
+/* TOP BAR */
+.topbar{height:52px;background:#1e1e1e;display:flex;align-items:center;justify-content:space-between;padding:0 20px;flex-shrink:0;z-index:10;}
+.brand{display:flex;align-items:baseline;gap:3px;}
+.brand-opt{font-family:'Poppins',Arial,sans-serif;font-weight:800;font-size:.9rem;color:#fff;}
+.brand-by{font-size:.6rem;color:rgba(255,255,255,.35);margin:0 3px;font-style:italic;}
+.brand-occ{font-family:'Poppins',Arial,sans-serif;font-weight:800;font-size:.9rem;color:#DC0028;}
+.topbar-right{text-align:right;}
+.topbar-title{font-family:'Poppins',Arial,sans-serif;font-size:.76rem;font-weight:700;color:#fff;}
+.topbar-sub{font-size:.58rem;color:rgba(255,255,255,.4);margin-top:1px;}
+
+/* LAYOUT */
+.app-layout{display:flex;flex:1;min-height:0;}
+
+/* SIDEBAR */
+.sidebar{width:300px;flex-shrink:0;background:var(--sb-bg);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.sb-scroll{flex:1;overflow-y:auto;}
+.sb-section{padding:11px 14px 9px;border-bottom:1px solid var(--border);}
+
+/* §1 header row */
+.sb-section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.sb-section-header .sb-pill{margin-bottom:0;}
+.lang-toggle{display:flex;align-items:center;background:var(--th-bg);border-radius:4px;padding:2px;gap:1px;}
+.lang-btn{background:none;border:none;cursor:pointer;font-size:9px;font-weight:700;letter-spacing:.07em;font-family:'Poppins',Arial,sans-serif;color:var(--text-2);padding:3px 8px;border-radius:3px;transition:background .15s,color .15s;line-height:1;}
+.lang-btn.active{background:var(--occ-red);color:#fff;}
+.lang-sep{font-size:9px;color:var(--text-2);padding:0 1px;}
+
+.sb-pill{display:inline-block;background:var(--occ-red);color:#fff;padding:3px 9px;border-radius:4px;font-size:.53rem;font-weight:700;letter-spacing:.10em;text-transform:uppercase;margin-bottom:8px;white-space:nowrap;}
+.sb-title-input{width:100%;padding:7px 8px;border:1.5px solid var(--border);border-radius:5px;font-size:11.5px;font-weight:700;line-height:1.4;background:var(--surface);color:var(--text);font-family:Arial,sans-serif;resize:none;transition:border-color .2s;overflow:hidden;margin-bottom:6px;}
+.sb-title-input:focus{outline:none;border-color:var(--occ-red);}
+.sb-subtitle-input{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:5px;font-size:10px;font-weight:400;line-height:1.4;background:var(--surface);color:var(--text-2);font-family:Arial,sans-serif;resize:none;transition:border-color .2s;overflow:hidden;}
+.sb-subtitle-input:focus{outline:none;border-color:var(--occ-red);}
+
+.sb-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:4px 0;gap:8px;}
+.sb-toggle-label{font-size:10px;color:var(--text-2);line-height:1.3;white-space:nowrap;flex:1;overflow:hidden;text-overflow:ellipsis;}
+
+.sw{position:relative;width:34px;height:19px;flex-shrink:0;cursor:pointer;}
+.sw input{display:none;}
+.sw .track{position:absolute;inset:0;background:var(--border);border-radius:10px;transition:background .18s;}
+.sw input:checked+.track{background:var(--occ-red);}
+.sw .thumb{position:absolute;width:13px;height:13px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .18s;pointer-events:none;z-index:1;}
+.sw input:checked~.thumb{transform:translateX(15px);}
+
+.sb-actions{padding:11px 14px;display:flex;flex-direction:column;gap:6px;background:var(--sb-bg);border-top:1px solid var(--border);flex-shrink:0;}
+.sb-btn{width:100%;padding:8px 10px;font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;border-radius:5px;cursor:pointer;font-family:'Poppins',Arial,sans-serif;transition:background .18s,color .18s;text-align:center;}
+.sb-btn-print{background:#2a2a2a;color:rgba(255,255,255,.8);border:none;}
+.sb-btn-print:hover{background:#444;}
+.sb-btn-add{background:var(--occ-red);color:#fff;border:none;}
+.sb-btn-add:hover{background:#b8001f;}
+.sb-btn-del{background:transparent;color:var(--occ-red);border:1.5px solid var(--occ-red);}
+.sb-btn-del:hover{background:var(--occ-red);color:#fff;}
+
+/* MAIN */
+.main{flex:1;min-width:0;overflow:auto;padding:18px;background:var(--bg);display:flex;flex-direction:column;}
+.doc-card{background:var(--surface);border-radius:8px;box-shadow:0 2px 14px rgba(0,0,0,.10);border-top:4px solid var(--occ-red);overflow:hidden;flex:1;display:flex;flex-direction:column;min-height:0;}
+.title-block{padding:14px 18px 12px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.main-title{font-family:Arial,sans-serif;font-size:26px;font-weight:700;color:var(--text);margin:0 0 3px 0;line-height:1.25;}
+.main-title:empty::before{content:"Introducir título";color:var(--border);font-style:italic;}
+.main-subtitle{font-family:Arial,sans-serif;font-size:13px;font-weight:400;color:var(--text-2);margin:0;line-height:1.3;min-height:13px;}
+.main-subtitle:empty::before{content:"Introducir subtítulo";color:var(--border);font-style:italic;}
+.table-wrapper{overflow:auto;flex:1;}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;table-layout:auto;}
+th,td{padding:9px 14px;border-bottom:1px solid var(--border);text-align:center;vertical-align:middle;}
+th:first-child,td:first-child{width:1px;text-align:left;white-space:nowrap;border-right:1px solid var(--border);color:var(--text-2);font-size:19px;}
+thead th{background:var(--th-bg);font-family:'Poppins',Arial,sans-serif;font-weight:700;font-size:15px;color:var(--text);padding:12px 14px;outline:none;min-width:140px;}
+thead th:not(:first-child){border-left:2px solid var(--surface);}
+.pill-row td{background:var(--surface);border-bottom:none;padding:14px 14px 4px;}
+.sec-pill{display:inline-block;background:var(--occ-red);color:#fff;padding:3px 11px;border-radius:4px;font-size:.64rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;}
+.editable-cell{background:var(--cell-bg);font-weight:700;font-size:21px;color:var(--text);outline:none;border-left:2px solid var(--surface);transition:background .2s;cursor:text;}
+.editable-cell:focus{background:var(--focus-hl);color:var(--focus-txt);}
+.row-label{display:flex;align-items:center;gap:10px;}
+.row-num{min-width:20px;color:var(--border);font-size:13px;flex-shrink:0;}
+
+/* TFOOT */
+tfoot tr.prima-anual-row td{background:var(--surface);border-top:2px solid var(--border);border-bottom:none;padding-top:16px;}
+tfoot tr.prima-anual-row td:first-child{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);text-align:right;padding-right:14px;}
+tfoot tr.prima-mensual-row td{background:var(--surface);border-bottom:none;padding-bottom:18px;}
+.anual-input-container{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.anual-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);}
+.anual-input{width:130px;padding:7px 8px;border:1.5px solid var(--border);border-radius:5px;text-align:center;font-weight:700;font-size:14px;background:var(--surface);color:var(--text);font-variant-numeric:tabular-nums;transition:border-color .2s;}
+.anual-input:focus{outline:none;border-color:var(--occ-red);}
+.monthly-box{background:var(--monthly-bg);border-radius:6px;padding:11px 14px;display:inline-block;min-width:130px;text-align:center;}
+.monthly-box .label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px;outline:none;}
+.monthly-box .amount{font-size:20px;font-weight:700;color:var(--occ-red);font-variant-numeric:tabular-nums;}
+
+@media print{
+    html,body{height:auto;overflow:visible;}
+    .topbar,.sidebar,.footer-bar{display:none !important;}
+    .app-layout{display:block;}
+    .main{overflow:visible;padding:0;}
+    .doc-card{box-shadow:none;border-radius:0;border-top:3px solid #DC0028;overflow:visible;flex:none;}
+    .table-wrapper{overflow:visible;}
+    .editable-cell{background:#F5F5F5 !important;color:#202020 !important;}
+    .main-title:empty::before,.main-subtitle:empty::before{display:none;}
+}
+.footer-bar{background:#1e1e1e;color:rgba(255,255,255,.38);font-size:.57rem;text-align:center;padding:8px;letter-spacing:.04em;flex-shrink:0;}
+</style>
+
+<nav class="topbar">
+    <div class="brand">
+        <span class="brand-opt">Optimizarte</span>
+        <span class="brand-by">by</span>
+        <span class="brand-occ">Occident</span>
+    </div>
+    <div class="topbar-right">
+        <div class="topbar-title" data-i18n="topbarTitle">Comparativo Seguro de Vida</div>
+        <div class="topbar-sub"   data-i18n="topbarSub">Cotizador standalone · Edición libre</div>
+    </div>
+</nav>
+
+<div class="app-layout">
+<aside class="sidebar">
+  <div class="sb-scroll">
+
+    <!-- §1 Título + toggle idioma -->
+    <div class="sb-section">
+      <div class="sb-section-header">
+        <div class="sb-pill" data-i18n="pill1">§1 · Título</div>
+        <div class="lang-toggle">
+          <button class="lang-btn active" data-lang="es" onclick="setLang('es')">ESP</button>
+          <span class="lang-sep">·</span>
+          <button class="lang-btn" data-lang="ca" onclick="setLang('ca')">CAT</button>
+        </div>
+      </div>
+      <textarea class="sb-title-input" id="sb-title" rows="2"
+        placeholder="Introducir título" data-i18n-ph="phTitle"
+        oninput="syncTitle(this.value)"></textarea>
+      <textarea class="sb-subtitle-input" id="sb-subtitle" rows="1"
+        placeholder="Introducir subtítulo" data-i18n-ph="phSubtitle"
+        oninput="syncSubtitle(this.value)"></textarea>
+    </div>
+
+    <!-- §2 Coberturas Fallecimiento -->
+    <div class="sb-section">
+      <div class="sb-pill" data-i18n="pill2">§2 · Coberturas Fallecimiento</div>
+      <div class="sb-toggle-row"><span class="sb-toggle-label" data-i18n="lblFallEnf">Fallecimiento por Enfermedad</span><label class="sw"><input type="checkbox" checked onchange="toggleDataRow('row-fall-enf',this.checked)"><div class="track"></div><div class="thumb"></div></label></div>
+      <div class="sb-toggle-row"><span class="sb-toggle-label" data-i18n="lblFallAcc">Fallecimiento por Accidente</span><label class="sw"><input type="checkbox" checked onchange="toggleDataRow('row-fall-acc',this.checked)"><div class="track"></div><div class="thumb"></div></label></div>
+      <div class="sb-toggle-row"><span class="sb-toggle-label" data-i18n="lblFallCirc">Fallecimiento por Accidente de Circulación</span><label class="sw"><input type="checkbox" checked onchange="toggleDataRow('row-fall-circ',this.checked)"><div class="track"></div><div class="thumb"></div></label></div>
+      <div class="sb-toggle-row"><span class="sb-toggle-label" data-i18n="lblFallConj">Fallecimiento Conjunto Cónyuges</span><label class="sw"><input type="checkbox" checked onchange="toggleDataRow('row-fall-conj',this.checked)"><div class="track"></div><div class="thumb"></div></label></div>
+    </div>
+
+    <!-- §3 Coberturas Invalidez -->
+    <div class="sb-section">
+      <div class="sb-pill" data-i18n="pill3">§3 · Coberturas Invalidez</div>
+      <div class="sb-toggle-row"><span class="sb-toggle-label" data-i18n="lblInvEnf">Invalidez por Enfermedad</span><label class="sw"><input type="checkbox" checked onchange="toggleDataRow('row-inv-enf',this.checked)"><div class="track"></div><div class="thumb"></div></label></div>
+      <div class="sb-toggle-row"><span class="sb-toggle-label" data-i18n="lblInvAcc">Invalidez por Accidente</span><label class="sw"><input type="checkbox" checked onchange="toggleDataRow('row-inv-acc',this.checked)"><div class="track"></div><div class="thumb"></div></label></div>
+      <div class="sb-toggle-row"><span class="sb-toggle-label" data-i18n="lblInvCirc">Invalidez por Accidente de Circulación</span><label class="sw"><input type="checkbox" checked onchange="toggleDataRow('row-inv-circ',this.checked)"><div class="track"></div><div class="thumb"></div></label></div>
+    </div>
+
+    <!-- §4 Adelanto Enfermedades Graves -->
+    <div class="sb-section">
+      <div class="sb-pill" data-i18n="pill4">§4 · Adelanto Enfermedades Graves</div>
+      <div class="sb-toggle-row"><span class="sb-toggle-label" data-i18n="lblAde25">Adelanto Enfermedades Graves 25%</span><label class="sw"><input type="checkbox" data-ade-id="row-ade-25" onchange="selectAdelanto('row-ade-25',this.checked)"><div class="track"></div><div class="thumb"></div></label></div>
+      <div class="sb-toggle-row"><span class="sb-toggle-label" data-i18n="lblAde50">Adelanto Enfermedades Graves 50%</span><label class="sw"><input type="checkbox" data-ade-id="row-ade-50" onchange="selectAdelanto('row-ade-50',this.checked)"><div class="track"></div><div class="thumb"></div></label></div>
+      <div class="sb-toggle-row"><span class="sb-toggle-label" data-i18n="lblAde75">Adelanto Enfermedades Graves 75%</span><label class="sw"><input type="checkbox" data-ade-id="row-ade-75" onchange="selectAdelanto('row-ade-75',this.checked)"><div class="track"></div><div class="thumb"></div></label></div>
+    </div>
+
+    <!-- §5 Prima Anual -->
+    <div class="sb-section">
+      <div class="sb-pill" data-i18n="pill5">§5 · Prima Anual</div>
+      <div class="sb-toggle-row"><span class="sb-toggle-label" data-i18n="lblPrimaAnual">Mostrar Prima Anual</span><label class="sw"><input type="checkbox" onchange="togglePrimaAnual(this.checked)"><div class="track"></div><div class="thumb"></div></label></div>
+    </div>
+
+  </div><!-- /sb-scroll -->
+
+  <div class="sb-actions">
+    <button class="sb-btn sb-btn-print" data-i18n="btnPrint" onclick="imprimirDoc()">🖨&#160; Imprimir</button>
+    <button class="sb-btn sb-btn-add"   data-i18n="btnAdd"   onclick="agregarColumna()">＋ Agregar Opción</button>
+    <button class="sb-btn sb-btn-del"   data-i18n="btnDel"   onclick="eliminarColumna()">－ Eliminar Opción</button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="doc-card">
+    <div class="title-block">
+      <div class="main-title" id="main-title"></div>
+      <div class="main-subtitle" id="main-subtitle"></div>
+    </div>
+    <div class="table-wrapper">
+      <table id="cotizador-table">
+        <thead>
+          <tr id="header-row">
+            <th></th>
+            <th contenteditable="true" data-col-num="1">Opción 1</th>
+            <th contenteditable="true" data-col-num="2">Opción 2</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="pill-row" id="pill-fall"><td colspan="3"><span class="sec-pill" data-i18n="secFall">Fallecimiento</span></td></tr>
+          <tr data-row-id="row-fall-enf">
+            <td><div class="row-label"><span class="row-num">1</span><span data-i18n="rowFallEnf">Fallecimiento por Enfermedad</span></div></td>
+            <td class="editable-cell" contenteditable="true" onblur="onCellBlur(this)">0 €</td>
+            <td class="editable-cell" contenteditable="true" onblur="onCellBlur(this)">0 €</td>
+          </tr>
+          <tr data-row-id="row-fall-acc">
+            <td><div class="row-label"><span class="row-num">2</span><span data-i18n="rowFallAcc">Fallecimiento por Accidente</span></div></td>
+            <td class="editable-cell" contenteditable="true" onblur="onCellBlur(this)">0 €</td>
+            <td class="editable-cell" contenteditable="true" onblur="onCellBlur(this)">0 €</td>
+          </tr>
+          <tr data-row-id="row-fall-circ">
+            <td><div class="row-label"><span class="row-num">3</span><span data-i18n="rowFallCirc">Fallecimiento por Accidente de Circulación</span></div></td>
+            <td class="editable-cell" contenteditable="true" onblur="onCellBlur(this)">0 €</td>
+            <td class="editable-cell" contenteditable="true" onblur="onCellBlur(this)">0 €</td>
+          </tr>
+          <tr data-row-id="row-fall-conj">
+            <td><div class="row-label"><span class="row-num">4</span><span data-i18n="rowFallConj">Fallecimiento Conjunto Cónyuges</span></div></td>
+            <td class="editable-cell" contenteditable="true" onblur="onCellBlur(this)">0 €</td>
+            <td class="editable-cell" contenteditable="true" onblur="onCellBlur(this)">0 €</td>
+          </tr>
+
+          <tr class="pill-row" id="pill-inv"><td colspan="3"><span class="sec-pill" data-i18n="secInv">Invalidez</span></td></tr>
+          <tr data-row-id="row-inv-enf">
+            <td><div class="row-label"><span class="row-num">5</span><span data-i18n="rowInvEnf">Invalidez por Enfermedad</span></div></td>
+            <td class="editable-cell" contenteditable="true" onblur="onCellBlur(this)">0 €</td>
+            <td class="editable-cell" contenteditable="true" onblur="onCellBlur(this)">0 €</td>
+          </tr>
+          <tr data-row-id="row-inv-acc">
+            <td><div class="row-label"><span class="row-num">6</span><span data-i18n="rowInvAcc">Invalidez por Accidente</span></div></td>
+            <td class="editable-cell" contenteditable="true" onblur="onCellBlur(this)">0 €</td>
+            <td class="editable-cell" contenteditable="true" onblur="onCellBlur(this)">0 €</td>
+          </tr>
+          <tr data-row-id="row-inv-circ">
+            <td><div class="row-label"><span class="row-num">7</span><span data-i18n="rowInvCirc">Invalidez por Accidente de Circulación</span></div></td>
+            <td class="editable-cell" contenteditable="true" onblur="onCellBlur(this)">0 €</td>
+            <td class="editable-cell" contenteditable="true" onblur="onCellBlur(this)">0 €</td>
+          </tr>
+
+          <tr class="pill-row" id="pill-ade" style="display:none"><td colspan="3"><span class="sec-pill" data-i18n="secAde">Adelanto Enfermedades Graves</span></td></tr>
+          <tr data-row-id="row-ade-25" style="display:none">
+            <td><div class="row-label"><span class="row-num">8</span><span data-i18n="rowAde25">Adelanto Enfermedades Graves 25%</span></div></td>
+            <td class="editable-cell" contenteditable="true" onblur="onCellBlur(this)">0 €</td>
+            <td class="editable-cell" contenteditable="true" onblur="onCellBlur(this)">0 €</td>
+          </tr>
+          <tr data-row-id="row-ade-50" style="display:none">
+            <td><div class="row-label"><span class="row-num">9</span><span data-i18n="rowAde50">Adelanto Enfermedades Graves 50%</span></div></td>
+            <td class="editable-cell" contenteditable="true" onblur="onCellBlur(this)">0 €</td>
+            <td class="editable-cell" contenteditable="true" onblur="onCellBlur(this)">0 €</td>
+          </tr>
+          <tr data-row-id="row-ade-75" style="display:none">
+            <td><div class="row-label"><span class="row-num">10</span><span data-i18n="rowAde75">Adelanto Enfermedades Graves 75%</span></div></td>
+            <td class="editable-cell" contenteditable="true" onblur="onCellBlur(this)">0 €</td>
+            <td class="editable-cell" contenteditable="true" onblur="onCellBlur(this)">0 €</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="prima-anual-row" id="anual-row" style="display:none">
+            <td data-i18n="primaAnualLabel">Prima Anual</td>
+            <td><div class="anual-input-container"><span class="anual-label" data-i18n="anualLabelText">Prima Anual (€)</span><input type="number" class="anual-input" placeholder="0,00" oninput="calcularMensual(this)"></div></td>
+            <td><div class="anual-input-container"><span class="anual-label" data-i18n="anualLabelText">Prima Anual (€)</span><input type="number" class="anual-input" placeholder="0,00" oninput="calcularMensual(this)"></div></td>
+          </tr>
+          <tr class="prima-mensual-row" id="mensual-row">
+            <td></td>
+            <td><div class="monthly-box"><span class="label" contenteditable="true" data-i18n="mensualLabel">Recibo Mensual</span><div class="amount">0,00 €</div></div></td>
+            <td><div class="monthly-box"><span class="label" contenteditable="true" data-i18n="mensualLabel">Recibo Mensual</span><div class="amount">0,00 €</div></div></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+</div><!-- /app-layout -->
+
+<footer class="footer-bar"><span data-i18n="footerText">OPTIMIZARTE 3.0 · Herramienta de uso interno · Documento generado localmente, sin envío de datos</span></footer>
+
+<script>
+/* ══ i18n ══════════════════════════════════════════ */
+var LANG = {
+  es: {
+    topbarTitle:'Comparativo Seguro de Vida', topbarSub:'Cotizador standalone · Edición libre',
+    pill1:'§1 · Título', pill2:'§2 · Coberturas Fallecimiento', pill3:'§3 · Coberturas Invalidez',
+    pill4:'§4 · Adelanto Enfermedades Graves', pill5:'§5 · Prima Anual',
+    lblFallEnf:'Fallecimiento por Enfermedad', lblFallAcc:'Fallecimiento por Accidente',
+    lblFallCirc:'Fallecimiento por Accidente de Circulación', lblFallConj:'Fallecimiento Conjunto Cónyuges',
+    lblInvEnf:'Invalidez por Enfermedad', lblInvAcc:'Invalidez por Accidente',
+    lblInvCirc:'Invalidez por Accidente de Circulación',
+    lblAde25:'Adelanto Enfermedades Graves 25%', lblAde50:'Adelanto Enfermedades Graves 50%', lblAde75:'Adelanto Enfermedades Graves 75%',
+    lblPrimaAnual:'Mostrar Prima Anual',
+    phTitle:'Introducir título', phSubtitle:'Introducir subtítulo',
+    btnPrint:'🖨  Imprimir', btnAdd:'＋ Agregar Opción', btnDel:'－ Eliminar Opción',
+    secFall:'Fallecimiento', secInv:'Invalidez', secAde:'Adelanto Enfermedades Graves',
+    rowFallEnf:'Fallecimiento por Enfermedad', rowFallAcc:'Fallecimiento por Accidente',
+    rowFallCirc:'Fallecimiento por Accidente de Circulación', rowFallConj:'Fallecimiento Conjunto Cónyuges',
+    rowInvEnf:'Invalidez por Enfermedad', rowInvAcc:'Invalidez por Accidente',
+    rowInvCirc:'Invalidez por Accidente de Circulación',
+    rowAde25:'Adelanto Enfermedades Graves 25%', rowAde50:'Adelanto Enfermedades Graves 50%', rowAde75:'Adelanto Enfermedades Graves 75%',
+    primaAnualLabel:'Prima Anual', anualLabelText:'Prima Anual (€)', mensualLabel:'Recibo Mensual',
+    colDefault:'Opción',
+    printConfirm:'¿Desea incluir la Prima Anual en la impresión?',
+    footerText:'OPTIMIZARTE 3.0 · Herramienta de uso interno · Documento generado localmente, sin envío de datos'
+  },
+  ca: {
+    topbarTitle:'Comparatiu Assegurança de Vida', topbarSub:'Cotitzador standalone · Edició lliure',
+    pill1:'§1 · Títol', pill2:'§2 · Cobertures Defunció', pill3:'§3 · Cobertures Invalidesa',
+    pill4:'§4 · Avançament Malalties Greus', pill5:'§5 · Prima Anual',
+    lblFallEnf:'Defunció per Malaltia', lblFallAcc:'Defunció per Accident',
+    lblFallCirc:'Defunció per Accident de Circulació', lblFallConj:'Defunció Conjunta Cònjuges',
+    lblInvEnf:'Invalidesa per Malaltia', lblInvAcc:'Invalidesa per Accident',
+    lblInvCirc:'Invalidesa per Accident de Circulació',
+    lblAde25:'Avançament Malalties Greus 25%', lblAde50:'Avançament Malalties Greus 50%', lblAde75:'Avançament Malalties Greus 75%',
+    lblPrimaAnual:'Mostrar Prima Anual',
+    phTitle:'Introduir títol', phSubtitle:'Introduir subtítol',
+    btnPrint:'🖨  Imprimir', btnAdd:'＋ Afegir Opció', btnDel:'－ Eliminar Opció',
+    secFall:'Defunció', secInv:'Invalidesa', secAde:'Avançament Malalties Greus',
+    rowFallEnf:'Defunció per Malaltia', rowFallAcc:'Defunció per Accident',
+    rowFallCirc:'Defunció per Accident de Circulació', rowFallConj:'Defunció Conjunta Cònjuges',
+    rowInvEnf:'Invalidesa per Malaltia', rowInvAcc:'Invalidesa per Accident',
+    rowInvCirc:'Invalidesa per Accident de Circulació',
+    rowAde25:'Avançament Malalties Greus 25%', rowAde50:'Avançament Malalties Greus 50%', rowAde75:'Avançament Malalties Greus 75%',
+    primaAnualLabel:'Prima Anual', anualLabelText:'Prima Anual (€)', mensualLabel:'Rebut Mensual',
+    colDefault:'Opció',
+    printConfirm:'Voleu incloure la Prima Anual a la impressió?',
+    footerText:"OPTIMIZARTE 3.0 · Eina d'ús intern · Document generat localment, sense enviament de dades"
+  }
+};
+
+var curLang = 'es';
+function T(k){ return (LANG[curLang]||LANG.es)[k]||''; }
+
+function setLang(lang) {
+    curLang = lang;
+    var t = LANG[lang];
+    // Toggle buttons
+    document.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-lang')===lang); });
+    // Text elements
+    document.querySelectorAll('[data-i18n]').forEach(function(el){ var k=el.getAttribute('data-i18n'); if(t[k]!==undefined) el.textContent=t[k]; });
+    // Placeholders
+    document.querySelectorAll('[data-i18n-ph]').forEach(function(el){ var k=el.getAttribute('data-i18n-ph'); if(t[k]!==undefined) el.placeholder=t[k]; });
+    // CSS ::before for empty title/subtitle
+    var s = document.getElementById('i18n-before');
+    if(!s){ s=document.createElement('style'); s.id='i18n-before'; document.head.appendChild(s); }
+    s.textContent = '.main-title:empty::before{content:"'+t.phTitle+'"}.main-subtitle:empty::before{content:"'+t.phSubtitle+'"}';
+    // Column headers — only translate if still default
+    document.querySelectorAll('[data-col-num]').forEach(function(el){
+        var n=el.getAttribute('data-col-num'), cur=el.textContent.trim();
+        if(cur===LANG.es.colDefault+' '+n || cur===LANG.ca.colDefault+' '+n) el.textContent=t.colDefault+' '+n;
+    });
+}
+
+/* ══ Constantes ════════════════════════════════════ */
+var NORMAL_SIZE='21px', SPECIAL_SIZE='10.5px';
+var MIRROR={'row-fall-enf':'row-inv-enf','row-fall-acc':'row-inv-acc','row-fall-circ':'row-inv-circ'};
+var ROW_PILL={
+    'row-fall-enf':'pill-fall','row-fall-acc':'pill-fall','row-fall-circ':'pill-fall','row-fall-conj':'pill-fall',
+    'row-inv-enf':'pill-inv','row-inv-acc':'pill-inv','row-inv-circ':'pill-inv',
+    'row-ade-25':'pill-ade','row-ade-50':'pill-ade','row-ade-75':'pill-ade'
+};
+var ADE_ROWS=['row-ade-25','row-ade-50','row-ade-75'];
+
+/* ══ Título ════════════════════════════════════════ */
+function syncTitle(val){ document.getElementById('main-title').textContent=val; }
+function syncSubtitle(val){ document.getElementById('main-subtitle').textContent=val; }
+
+/* ══ Toggle fila ═══════════════════════════════════ */
+function toggleDataRow(rowId,show){
+    var r=document.querySelector('[data-row-id="'+rowId+'"]');
+    if(r) r.style.display=show?'':'none';
+    refreshPill(ROW_PILL[rowId]);
+}
+function refreshPill(pillId){
+    if(!pillId) return;
+    var pill=document.getElementById(pillId); if(!pill) return;
+    var any=Object.keys(ROW_PILL).some(function(rid){
+        if(ROW_PILL[rid]!==pillId) return false;
+        var el=document.querySelector('[data-row-id="'+rid+'"]');
+        return el && el.style.display!=='none';
+    });
+    pill.style.display=any?'':'none';
+}
+
+/* ══ Adelanto exclusivo ════════════════════════════ */
+function selectAdelanto(rowId,checked){
+    if(checked){
+        ADE_ROWS.forEach(function(rid){
+            if(rid===rowId) return;
+            var r=document.querySelector('[data-row-id="'+rid+'"]'); if(r) r.style.display='none';
+            var t=document.querySelector('[data-ade-id="'+rid+'"]'); if(t) t.checked=false;
+        });
+    }
+    toggleDataRow(rowId,checked);
+}
+
+/* ══ Prima anual ═══════════════════════════════════ */
+function togglePrimaAnual(show){
+    var r=document.getElementById('anual-row'); if(r) r.style.display=show?'':'none';
+}
+
+/* ══ On cell blur ══════════════════════════════════ */
+function onCellBlur(el){
+    var text=el.textContent.trim(), lower=text.toLowerCase();
+    var isSpecial=lower.indexOf('consultar')!==-1||lower.indexOf('opcional')!==-1;
+    if(isSpecial){
+        el.style.fontSize=SPECIAL_SIZE; el.style.fontWeight='400';
+    } else {
+        el.style.fontSize=''; el.style.fontWeight='';
+        var digits=text.replace(/[^\d]/g,'');
+        if(digits.length>0){ var num=parseInt(digits,10); if(!isNaN(num)) el.textContent=num.toLocaleString('de-DE')+' €'; }
+    }
+    var row=el.parentElement, rowId=row.getAttribute('data-row-id'), mirrorId=MIRROR[rowId];
+    if(mirrorId){
+        var colIdx=Array.from(row.children).indexOf(el);
+        var mRow=document.querySelector('[data-row-id="'+mirrorId+'"]');
+        if(mRow){ var mCell=mRow.children[colIdx]; if(mCell&&mCell.classList.contains('editable-cell')){ mCell.textContent=el.textContent; mCell.style.fontSize=el.style.fontSize; mCell.style.fontWeight=el.style.fontWeight; } }
+    }
+}
+
+/* ══ Prima mensual ═════════════════════════════════ */
+function calcularMensual(input){
+    var val=parseFloat(input.value)||0, mensual=(val*1.08)/12;
+    var td=input.closest('td'), idx=Array.from(td.parentElement.children).indexOf(td);
+    var div=document.getElementById('mensual-row').children[idx].querySelector('.amount');
+    if(div) div.textContent=mensual.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';
+}
+
+/* ══ Imprimir ══════════════════════════════════════ */
+function imprimirDoc(){
+    var anualRow=document.getElementById('anual-row');
+    var orig=anualRow?anualRow.style.display:'';
+    var show=confirm(T('printConfirm'));
+    if(anualRow) anualRow.style.display=show?'':'none';
+    window.focus();
+    setTimeout(function(){
+        window.print();
+        setTimeout(function(){ if(anualRow) anualRow.style.display=orig; },800);
+    },150);
+}
+
+/* ══ Agregar columna ═══════════════════════════════ */
+function agregarColumna(){
+    var headerRow=document.getElementById('header-row');
+    var tableBody=document.querySelector('#cotizador-table tbody');
+    var anualRow=document.getElementById('anual-row');
+    var mensualRow=document.getElementById('mensual-row');
+    var nextNum=headerRow.querySelectorAll('th').length;
+
+    var newTh=document.createElement('th');
+    newTh.contentEditable='true';
+    newTh.setAttribute('data-col-num',nextNum);
+    newTh.textContent=T('colDefault')+' '+nextNum;
+    headerRow.appendChild(newTh);
+
+    tableBody.querySelectorAll('tr').forEach(function(row){
+        if(row.classList.contains('pill-row')){ var td=row.querySelector('td'); if(td) td.colSpan=parseInt(td.colSpan)+1; }
+        else { var newTd=document.createElement('td'); newTd.className='editable-cell'; newTd.contentEditable='true'; newTd.setAttribute('onblur','onCellBlur(this)'); newTd.textContent='0 €'; row.appendChild(newTd); }
+    });
+
+    var aT=document.createElement('td');
+    aT.innerHTML='<div class="anual-input-container"><span class="anual-label" data-i18n="anualLabelText">'+T('anualLabelText')+'</span><input type="number" class="anual-input" placeholder="0,00" oninput="calcularMensual(this)"></div>';
+    anualRow.appendChild(aT);
+
+    var mT=document.createElement('td');
+    mT.innerHTML='<div class="monthly-box"><span class="label" contenteditable="true" data-i18n="mensualLabel">'+T('mensualLabel')+'</span><div class="amount">0,00 €</div></div>';
+    mensualRow.appendChild(mT);
+}
+
+/* ══ Eliminar columna ══════════════════════════════ */
+function eliminarColumna(){
+    var headerRow=document.getElementById('header-row');
+    var ths=headerRow.querySelectorAll('th'); if(ths.length<=2) return;
+    ths[ths.length-1].remove();
+    document.querySelector('#cotizador-table tbody').querySelectorAll('tr').forEach(function(row){
+        if(row.classList.contains('pill-row')){ var td=row.querySelector('td'); if(td) td.colSpan=parseInt(td.colSpan)-1; }
+        else { var cells=row.querySelectorAll('td'); if(cells.length>1) cells[cells.length-1].remove(); }
+    });
+    ['anual-row','mensual-row'].forEach(function(id){
+        var cells=document.getElementById(id).querySelectorAll('td'); if(cells.length>1) cells[cells.length-1].remove();
+    });
+}
+
+/* ══ Init ══════════════════════════════════════════ */
+(function(){
+    function autosize(ta){ function r(){ ta.style.height='auto'; ta.style.height=ta.scrollHeight+'px'; } ta.addEventListener('input',r); r(); }
+    autosize(document.getElementById('sb-title'));
+    autosize(document.getElementById('sb-subtitle'));
+})();
+</script>

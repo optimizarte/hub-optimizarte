@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Solicitud TIREA · OPTIMIZARTE 3.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --red:    #DC0028;
+      --dark:   #1e1e1e;
+      --gray:   #414141;
+      --light:  #F0F0F0;
+      --border: #E0E0E0;
+      --white:  #FFFFFF;
+      --blue:   #0563C1;
+      --radius: 8px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--light);
+      color: #202020;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-size: 13px;
+    }
+
+    /* TOP BAR */
+    .topbar {
+      height: 52px;
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+      flex-shrink: 0;
+    }
+    .brand { display: flex; align-items: baseline; }
+    .brand-opt { font-family:'Poppins',Arial,sans-serif; font-weight:800; font-size:.92rem; color:white; }
+    .brand-by  { font-size:.62rem; color:rgba(255,255,255,.38); margin:0 3px; font-style:italic; }
+    .brand-occ { font-family:'Poppins',Arial,sans-serif; font-weight:800; font-size:.92rem; color:var(--red); }
+    .topbar-right { text-align:right; }
+    .topbar-title { font-family:'Poppins',Arial,sans-serif; font-size:.78rem; font-weight:700; color:white; }
+    .topbar-sub   { font-size:.6rem; color:rgba(255,255,255,.42); margin-top:1px; }
+
+    /* WORKSPACE */
+    .workspace {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 390px 1fr;
+      height: calc(100vh - 52px);
+      overflow: hidden;
+    }
+
+    /* FORM PANEL */
+    .form-panel {
+      background: var(--light);
+      border-right: 1px solid #d8d8d8;
+      overflow-y: auto;
+      padding: 16px 14px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .form-panel::-webkit-scrollbar { width: 3px; }
+    .form-panel::-webkit-scrollbar-thumb { background: #ccc; }
+
+    .sec-pill {
+      display: inline-block;
+      background: var(--red);
+      color: white;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .tipo-toggle {
+      display: flex;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: white;
+    }
+    .tipo-toggle input[type=radio] { display: none; }
+    .tipo-toggle label {
+      flex: 1; text-align: center; padding: 8px 6px;
+      font-size: .8rem; cursor: pointer; color: var(--gray);
+      transition: background .15s, color .15s;
+    }
+    .tipo-toggle input[type=radio]:checked + label {
+      background: var(--dark); color: white; font-weight: 700;
+    }
+
+    .form-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 13px 13px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .field { display: flex; flex-direction: column; gap: 3px; }
+    .field label {
+      font-size: .6rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase; color: var(--gray);
+    }
+    .field input, .field select, .field textarea {
+      border: 1.5px solid var(--border);
+      border-radius: 5px; padding: 6px 9px;
+      font-family: Arial, sans-serif; font-size: .85rem;
+      color: #202020; background: white; outline: none;
+      transition: border-color .15s; width: 100%;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--red); }
+    .field input::placeholder, .field textarea::placeholder { color: #bbb; }
+    .field textarea { resize: vertical; min-height: 58px; }
+    .fr   { display: grid; gap: 8px; }
+    .c2   { grid-template-columns: 1fr 1fr; }
+    .cdoc { grid-template-columns: 82px 1fr; }
+
+    /* Checkboxes */
+    .check-item {
+      display: flex; align-items: flex-start; gap: 9px;
+      cursor: pointer; padding: 7px 0;
+    }
+    .check-item + .check-item { border-top: 1px solid #f0f0f0; }
+    .check-item input[type=checkbox] {
+      appearance: none; width: 15px; height: 15px;
+      border: 1.5px solid var(--border); border-radius: 3px;
+      background: white; cursor: pointer; flex-shrink: 0;
+      margin-top: 1px; transition: background .15s, border-color .15s;
+      position: relative;
+    }
+    .check-item input[type=checkbox]:checked { background: var(--red); border-color: var(--red); }
+    .check-item input[type=checkbox]:checked::after {
+      content: ''; position: absolute; left: 3px; top: 0;
+      width: 5px; height: 9px; border: 2px solid white;
+      border-left: none; border-top: none; transform: rotate(45deg);
+    }
+    .clabel { font-size: .82rem; color: #202020; line-height: 1.4; }
+    .csub   { font-size: .68rem; color: var(--gray); display: block; }
+
+    /* Via */
+    .via-row { display: flex; gap: 8px; }
+    .via-card {
+      flex: 1; border: 1.5px solid var(--border); border-radius: var(--radius);
+      padding: 8px 6px; text-align: center; cursor: pointer;
+      font-size: .76rem; color: var(--gray); transition: all .15s; background: white;
+    }
+    .via-card input[type=radio] { display: none; }
+    .via-card.sel { border-color: var(--red); background: rgba(220,0,40,.04); color: var(--red); font-weight: 700; }
+    .via-icon { font-size: 1.1rem; display: block; margin-bottom: 2px; }
+
+    /* Buttons — dos filas */
+    .btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+    }
+    .btn {
+      padding: 9px 8px; border-radius: 5px; border: none; cursor: pointer;
+      font-family: Arial, sans-serif; font-size: .68rem;
+      font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+      transition: all .15s;
+    }
+    .btn-primary { background: white; color: #202020; border: 1.5px solid var(--border); }
+    .btn-primary:hover { border-color: #aaa; }
+    .btn-outline { background: white; border: 1.5px solid var(--border); color: var(--gray); }
+    .btn-outline:hover { border-color: #aaa; }
+    .btn-dark { background: var(--dark); color: white; border: 1.5px solid var(--dark); }
+    .btn-dark:hover { background: #000; }
+    .emp-note { font-size: .65rem; color: var(--gray); font-style: italic; }
+
+    /* PREVIEW PANEL */
+    .preview-panel { background: #c9c0a8; overflow-y: auto; padding: 28px 40px; }
+    .preview-panel::-webkit-scrollbar { width: 4px; }
+    .preview-panel::-webkit-scrollbar-thumb { background: #a89880; border-radius: 4px; }
+    .preview-toolbar {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 18px;
+    }
+    .preview-lbl { font-size:.58rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#6b5e48; }
+    .tbtn {
+      padding: 4px 11px; border-radius: 4px;
+      border: 1px solid rgba(100,80,50,.22);
+      background: rgba(255,255,255,.5); color: #3a2e1a;
+      font-size: .6rem; font-weight: 700; letter-spacing: .06em;
+      text-transform: uppercase; cursor: pointer; margin-left: 5px;
+    }
+    .tbtn:hover { background: rgba(255,255,255,.85); }
+
+    /* LETTER */
+    .letter {
+      background: white; max-width: 710px; margin: 0 auto;
+      padding: 52px 60px 56px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.18);
+      color: #202020; font-family: Arial, Helvetica, sans-serif;
+      font-size: .88rem; line-height: 1.78; position: relative;
+    }
+    .letter::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 4px; background: var(--red);
+    }
+    .letter-recipient {
+      text-align: right; margin-bottom: 36px;
+      font-size: .86rem; line-height: 1.65;
+    }
+    .letter-recipient .rec-name { font-weight: 700; }
+    .letter-recipient .rec-email { color: var(--blue); font-weight: 700; display: block; margin-top: 3px; }
+    .letter-subject {
+      font-weight: 700; font-size: .86rem; margin-bottom: 24px;
+      text-transform: uppercase; letter-spacing: .03em;
+      border-bottom: 1px solid var(--border); padding-bottom: 12px;
+    }
+    .letter-body p  { margin-bottom: 14px; text-align: justify; }
+    .letter-body ul { margin: -4px 0 14px 26px; }
+    .letter-body ul li { margin-bottom: 3px; }
+
+    /* Signature */
+    .letter-sig {
+      margin-top: 46px; display: flex;
+      justify-content: space-between; gap: 40px;
+    }
+    .sig-block { flex: 1; border-top: 1px solid var(--border); padding-top: 8px; font-size: .82rem; color: var(--gray); }
+    .sig-right { text-align: right; }
+
+    /* DNI-size instruction box */
+    .dni-box {
+      width: 276px;      /* 85.6mm @ 96dpi * 0.82 scale */
+      min-height: 175px; /* 54mm @ 96dpi * 0.82 scale */
+      border: 2px dashed var(--red);
+      border-radius: 6px;
+      padding: 8px 10px;
+      margin-top: 22px;
+      margin-left: auto;
+      font-size: .6rem;
+      line-height: 1.45;
+      color: var(--gray);
+      background: #fefcfc;
+      position: relative;
+    }
+    .dni-box-title {
+      font-weight: 700; font-size: .58rem; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--red);
+      margin-bottom: 6px; padding-bottom: 5px;
+      border-bottom: 1px solid #eee;
+    }
+    .dni-section { margin-bottom: 5px; }
+    .dni-lbl { font-weight: 700; color: #202020; font-size: .57rem; margin-top: 5px; }
+    .dni-val { color: var(--gray); font-size: .58rem; }
+    .dni-sep { height: 1px; background: #eee; margin: 6px 0; }
+    .dni-footer {
+      border-top: 1.5px dashed #ccc;
+      padding-top: 5px; margin-top: 6px;
+      font-style: italic; font-size: .56rem;
+      color: #999; text-align: center;
+    }
+
+    .placeholder { color: #b0a090; font-style: italic; }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 22px; left: 50%;
+      transform: translateX(-50%) translateY(70px);
+      background: var(--dark); color: white; border-radius: 5px;
+      padding: 8px 20px; font-size: .74rem; font-weight: 700;
+      letter-spacing: .06em; z-index: 9999; transition: transform .25s ease;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    @media print {
+      .topbar, .form-panel, .preview-toolbar { display: none !important; }
+      body, .workspace { display: block !important; background: white !important; height: auto !important; }
+      .preview-panel { background: white !important; padding: 0 !important; overflow: visible !important; }
+      .letter { box-shadow: none !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+      .letter::before { display: none !important; }
+      .dni-box { width: 85.6mm; min-height: 54mm; }
+      @page { margin: 15mm 20mm; size: A4 portrait; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="brand">
+    <span class="brand-opt">Optimizarte</span>
+    <span class="brand-by">by</span>
+    <span class="brand-occ">Occident</span>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-title">Solicitud de Información · TIREA</div>
+    <div class="topbar-sub">Sistema de Información Histórico de Seguros del Automóvil · SIHSA / SIAPTRI</div>
+  </div>
+</div>
+
+<div class="workspace">
+
+  <!-- FORM PANEL -->
+  <div class="form-panel">
+
+    <div>
+      <div class="sec-pill">Tipo de solicitante</div>
+      <div class="tipo-toggle">
+        <input type="radio" name="tipo" id="fisica" value="fisica" checked>
+        <label for="fisica">Persona Física</label>
+        <input type="radio" name="tipo" id="juridica" value="juridica">
+        <label for="juridica">Persona Jurídica</label>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-pill" id="datos-pill">Datos del solicitante</div>
+      <div class="form-card">
+        <div class="field">
+          <label>Nombre y apellidos *</label>
+          <input type="text" id="nombre" placeholder="Nombre Apellido1 Apellido2"/>
+        </div>
+        <div class="fr cdoc">
+          <div class="field">
+            <label>Tipo doc.</label>
+            <select id="tipo-doc">
+              <option value="DNI">DNI</option>
+              <option value="NIF">NIF</option>
+              <option value="NIE">NIE</option>
+              <option value="Pasaporte">Pasaporte</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Número de documento *</label>
+            <input type="text" id="num-doc" placeholder="12345678A"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>Domicilio (calle, núm., piso)</label>
+          <input type="text" id="domicilio" placeholder="Calle Mayor, 12, 2º A"/>
+        </div>
+        <div class="fr c2">
+          <div class="field">
+            <label>Localidad</label>
+            <input type="text" id="localidad" placeholder="Figueres"/>
+          </div>
+          <div class="field">
+            <label>Código Postal</label>
+            <input type="text" id="cp" placeholder="17600" maxlength="5"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="email" placeholder="correo@ejemplo.com"/>
+        </div>
+      </div>
+    </div>
+
+    <div id="bloque-juridica" style="display:none;">
+      <div class="sec-pill">Datos de la empresa</div>
+      <div class="form-card">
+        <div class="field">
+          <label>Razón social *</label>
+          <input type="text" id="empresa" placeholder="Empresa S.L."/>
+        </div>
+        <div class="field">
+          <label>CIF *</label>
+          <input type="text" id="cif" placeholder="B12345678"/>
+        </div>
+        <p class="emp-note">Los datos personales anteriores son los del representante legal.</p>
+      </div>
+    </div>
+
+    <!-- Sistemas: SIHSA y SIAPTRI marcados por defecto -->
+    <div>
+      <div class="sec-pill">Sistema(s) solicitados</div>
+      <div class="form-card">
+        <label class="check-item">
+          <input type="checkbox" class="sistema" value="SIHSA" checked/>
+          <span class="clabel">
+            SIHSA
+            <span class="csub">Sistema de Información Histórico de Seguros del Automóvil</span>
+          </span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="sistema" value="SIAPTRI" checked/>
+          <span class="clabel">
+            SIAPTRI
+            <span class="csub">Sistema de Información de Automóviles Pérdida Total, Robo e Incendios</span>
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-pill">Información adicional <span style="font-weight:400;font-size:.58rem;opacity:.85;">(opcional)</span></div>
+      <div class="field">
+        <textarea id="info-adicional" placeholder="Matrícula, nº de póliza, nº de siniestro u otras referencias…"></textarea>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-pill">Fecha del escrito</div>
+      <div class="field">
+        <label>Fecha *</label>
+        <input type="date" id="fecha"/>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-pill">Medio de respuesta solicitado</div>
+      <div class="via-row">
+        <label class="via-card sel" id="card-email" for="via-email">
+          <input type="radio" name="via" id="via-email" value="email" checked/>
+          <span class="via-icon">✉️</span>Correo electrónico
+        </label>
+        <label class="via-card" id="card-postal" for="via-postal">
+          <input type="radio" name="via" id="via-postal" value="postal"/>
+          <span class="via-icon">📮</span>Correo postal
+        </label>
+      </div>
+    </div>
+
+    <!-- Botones en dos filas -->
+    <div class="btn-grid">
+      <!-- Fila 1 -->
+      <button class="btn btn-outline" onclick="limpiar()">Limpiar</button>
+      <button class="btn btn-dark" onclick="window.print()">Imprimir / PDF</button>
+      <!-- Fila 2 -->
+      <button class="btn btn-primary" onclick="copiarCarta()">Copiar Carta</button>
+      <button class="btn btn-dark" onclick="copiarInstrucciones()">Copiar Instrucciones</button>
+    </div>
+
+  </div><!-- /form-panel -->
+
+  <!-- PREVIEW PANEL -->
+  <div class="preview-panel">
+    <div class="preview-toolbar">
+      <span class="preview-lbl">Vista previa · Actualización en tiempo real</span>
+      <div>
+        <button class="tbtn" onclick="copiarCarta()">Copiar carta</button>
+        <button class="tbtn" onclick="copiarInstrucciones()">Copiar instrucciones</button>
+        <button class="tbtn" onclick="window.print()">Imprimir / PDF</button>
+      </div>
+    </div>
+
+    <div class="letter" id="carta">
+
+      <!-- Destinatario — derecha -->
+      <div class="letter-recipient">
+        <span class="rec-name">TIREA</span><br>
+        Att: Centro de Operaciones<br>
+        Ctra de Las Rozas – El Escorial Km 0.3<br>
+        Las Rozas, 28231 Madrid (España)<br>
+        <span class="rec-email">centro.operaciones@tirea.es</span>
+      </div>
+
+      <!-- Asunto -->
+      <div class="letter-subject" id="prev-subject">
+        SOLICITUD DE INFORMACIÓN — FICHERO HISTÓRICO DE SEGUROS DEL AUTOMÓVIL
+      </div>
+
+      <!-- Cuerpo -->
+      <div class="letter-body">
+        <p id="prev-intro"><span class="placeholder">Rellene el formulario de la izquierda para generar la carta.</span></p>
+
+        <!-- Párrafo único: identificación + RGPD art.15 (fusionados tras la coma de localidad) -->
+        <p id="prev-ident" style="display:none;"></p>
+
+        <!-- SOLICITA: -->
+        <p id="prev-solicita-lbl" style="display:none;"><strong>SOLICITA:</strong></p>
+        <p id="prev-solicita-intro" style="display:none;">Información respecto a los datos que figuran en:</p>
+        <ul id="prev-sistemas" style="display:none;margin-bottom:14px;"></ul>
+
+        <!-- Info adicional -->
+        <p id="prev-adicional" style="display:none;"></p>
+
+        <!-- Vía de respuesta -->
+        <p id="prev-via" style="display:none;"></p>
+
+        <!-- Documentación adjunta -->
+        <p id="prev-adjunta" style="display:none;"></p>
+
+        <!-- Cierre -->
+        <p id="prev-rogando" style="display:none;">En espera de respuesta en el plazo legalmente establecido, le saluda atentamente,</p>
+      </div>
+
+      <!-- Firma -->
+      <div class="letter-sig" id="prev-sig" style="display:none;">
+        <div class="sig-block">
+          <span id="prev-firma">Fdo.:</span>
+        </div>
+        <div class="sig-block sig-right">
+          <span id="prev-fecha-sig">Fecha:</span>
+        </div>
+      </div>
+
+      <!-- Caja de instrucciones tamaño DNI — derecha -->
+      <div class="dni-box" id="instrucciones-box">
+        <div class="dni-box-title">📤 Instrucciones de envío · TIREA</div>
+        <div class="dni-section">
+          <div class="dni-lbl">✉ Por correo electrónico:</div>
+          <div class="dni-val">centro.operaciones@tirea.es</div>
+        </div>
+        <div class="dni-section">
+          <div class="dni-lbl">📮 Por correo postal:</div>
+          <div class="dni-val">TIREA · Centro de Operaciones<br>Ctra Las Rozas–El Escorial Km 0.3<br>28231 Las Rozas, Madrid (España)</div>
+        </div>
+        <div class="dni-sep"></div>
+        <div class="dni-section">
+          <div class="dni-lbl">📎 Documentación a adjuntar:</div>
+          <div class="dni-val" id="dni-adjuntar">Copia DNI / NIE / Pasaporte</div>
+        </div>
+        <div class="dni-footer">✂ Adjunte aquí copia de su documento de identidad</div>
+      </div>
+
+    </div><!-- /letter -->
+  </div><!-- /preview-panel -->
+
+</div><!-- /workspace -->
+
+<div class="toast" id="toast">✓ Copiado al portapapeles</div>
+
+<script>
+  const $ = id => document.getElementById(id);
+
+  const now = new Date();
+  $('fecha').value = now.toISOString().split('T')[0];
+
+  // Toggle física/jurídica — conserva datos de física
+  document.querySelectorAll('input[name="tipo"]').forEach(r => {
+    r.addEventListener('change', () => {
+      const esJur = $('juridica').checked;
+      $('bloque-juridica').style.display = esJur ? 'block' : 'none';
+      $('datos-pill').textContent = esJur ? 'Datos del representante legal' : 'Datos del solicitante';
+      actualizar();
+    });
+  });
+
+  document.querySelectorAll('input[name="via"]').forEach(r => {
+    r.addEventListener('change', () => {
+      $('card-email').classList.toggle('sel', $('via-email').checked);
+      $('card-postal').classList.toggle('sel', $('via-postal').checked);
+      actualizar();
+    });
+  });
+
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    el.addEventListener('input', actualizar);
+    el.addEventListener('change', actualizar);
+  });
+
+  function formatFecha(val) {
+    if (!val) return null;
+    const [y, m, d] = val.split('-');
+    const meses = ['enero','febrero','marzo','abril','mayo','junio','julio',
+                   'agosto','septiembre','octubre','noviembre','diciembre'];
+    return parseInt(d) + ' de ' + meses[parseInt(m)-1] + ' de ' + y;
+  }
+
+  function buildAddr(calle, localidad, cp) {
+    const parts = [];
+    if (calle) parts.push(calle);
+    if (cp && localidad) parts.push(cp + ' ' + localidad);
+    else if (localidad) parts.push(localidad);
+    else if (cp) parts.push(cp);
+    return parts.join(', ');
+  }
+
+  const RGPD_TEXT = 'por medio de la presente manifiesta su deseo de ejercer su derecho de acceso, '
+    + 'de conformidad con el artículo 15 del Reglamento (UE) 2016/679 del Parlamento Europeo y del Consejo '
+    + 'relativo a la protección de las personas físicas en lo que respecta al tratamiento de datos personales '
+    + 'y a la libre circulación de esos datos y, en consecuencia,';
+
+  const SYS_MAP = {
+    SIHSA:   'SISTEMA DE INFORMACIÓN HISTÓRICO DE SEGUROS DEL AUTOMÓVIL (SIHSA)',
+    SIAPTRI: 'SISTEMA DE INFORMACIÓN DE AUTOMÓVILES PÉRDIDA TOTAL, ROBO E INCENDIOS (SIAPTRI)'
+  };
+  const SYS_LIST = {
+    SIHSA:   'El Sistema de Información Histórico de Seguros del Automóvil.',
+    SIAPTRI: 'El Sistema de Información de Automóviles Pérdida Total, Robo e Incendios.'
+  };
+
+  function actualizar() {
+    const esJur     = $('juridica').checked;
+    const viaPostal = $('via-postal').checked;
+    const nombre    = $('nombre').value.trim();
+    const tipoDoc   = $('tipo-doc').value;
+    const numDoc    = $('num-doc').value.trim();
+    const domicilio = $('domicilio').value.trim();
+    const localidad = $('localidad').value.trim();
+    const cp        = $('cp').value.trim();
+    const email     = $('email').value.trim();
+    const empresa   = $('empresa').value.trim();
+    const cif       = $('cif').value.trim();
+    const fechaVal  = $('fecha').value;
+    const adicional = $('info-adicional').value.trim();
+    const sistemas  = [...document.querySelectorAll('.sistema:checked')].map(c => c.value);
+
+    const hayDatos = !!(nombre || numDoc);
+    $('prev-intro').style.display = hayDatos ? 'none' : 'block';
+
+    if (!hayDatos) {
+      ['prev-ident','prev-solicita-lbl','prev-solicita-intro','prev-sistemas',
+       'prev-adicional','prev-via','prev-adjunta','prev-rogando'].forEach(id => $(id).style.display = 'none');
+      $('prev-sig').style.display = 'none';
+      $('prev-subject').textContent = 'SOLICITUD DE INFORMACIÓN — FICHERO HISTÓRICO DE SEGUROS DEL AUTOMÓVIL';
+      return;
+    }
+
+    // Asunto dinámico
+    let subject = 'SOLICITUD DE INFORMACIÓN';
+    if (sistemas.length === 1)     subject += ' — ' + SYS_MAP[sistemas[0]];
+    else if (sistemas.length >= 2) subject += ' — SIHSA / SIAPTRI';
+    else                           subject += ' — FICHERO HISTÓRICO DE SEGUROS DEL AUTOMÓVIL';
+    $('prev-subject').textContent = subject;
+
+    // Párrafo único: identificación + RGPD (fusionados tras la coma de la dirección)
+    const addrStr = buildAddr(domicilio, localidad, cp);
+    let ident = '';
+    if (!esJur) {
+      ident = (nombre ? '<strong>' + nombre + '</strong>' : '<em>Nombre y apellidos</em>')
+            + ', con ' + tipoDoc + ' n&ordm; <strong>' + (numDoc || '________') + '</strong>'
+            + (addrStr ? ', y domicilio en ' + addrStr : '')   // 'y domicilio' (no 'con')
+            + ', ' + RGPD_TEXT;
+    } else {
+      const rep     = nombre ? '<strong>' + nombre + '</strong>' : '<em>Representante legal</em>';
+      const empName = empresa ? '<strong>' + empresa + '</strong>' : '<em>Razón social</em>';
+      const cifText = cif ? 'CIF <strong>' + cif + '</strong>' : 'CIF <em>________</em>';
+      ident = rep + ', con ' + tipoDoc + ' n&ordm; <strong>' + (numDoc || '________') + '</strong>'
+            + ', actuando en representación de la entidad ' + empName + ', ' + cifText
+            + (addrStr ? ', y domicilio en ' + addrStr : '')    // 'y domicilio' (no 'con')
+            + ', ' + RGPD_TEXT;
+    }
+    $('prev-ident').innerHTML = ident;
+    $('prev-ident').style.display = 'block';
+
+    // SOLICITA:
+    $('prev-solicita-lbl').style.display = 'block';
+
+    if (sistemas.length > 0) {
+      $('prev-solicita-intro').style.display = 'block';
+      $('prev-sistemas').innerHTML = sistemas.map(s => '<li>' + SYS_LIST[s] + '</li>').join('');
+      $('prev-sistemas').style.display = 'block';
+    } else {
+      $('prev-solicita-intro').style.display = 'none';
+      $('prev-sistemas').style.display = 'none';
+    }
+
+    // Info adicional
+    if (adicional) {
+      $('prev-adicional').textContent = adicional;
+      $('prev-adicional').style.display = 'block';
+    } else {
+      $('prev-adicional').style.display = 'none';
+    }
+
+    // Vía de respuesta — 'Agradezco que la respuesta...'
+    let via = '';
+    if (viaPostal) {
+      const postalAddr = buildAddr(domicilio, localidad, cp);
+      via = 'Agradezco que la respuesta sea remitida por correo postal'
+          + (postalAddr ? ' al domicilio indicado: <strong>' + postalAddr + '</strong>' : ' al domicilio del solicitante') + '.';
+    } else {
+      via = 'Agradezco que la respuesta sea remitida por correo electrónico'
+          + (email ? ' a la dirección: <strong>' + email + '</strong>' : '') + '.';
+    }
+    $('prev-via').innerHTML = via;
+    $('prev-via').style.display = 'block';
+
+    // Adjunta — sin referencia a permisos de circulación
+    let adjunta = '';
+    if (!esJur) {
+      adjunta = 'Se adjunta copia del documento acreditativo de identidad del solicitante.';
+    } else {
+      adjunta = 'Se adjuntan: fotocopia del CIF de la empresa y copia de escritura pública de apoderamiento.';
+    }
+    $('prev-adjunta').textContent = adjunta;
+    $('prev-adjunta').style.display = 'block';
+
+    $('prev-rogando').style.display = 'block';
+
+    // Firma
+    $('prev-sig').style.display = 'flex';
+    let firmaHTML = 'Fdo.: <strong>' + (nombre || '________') + '</strong>';
+    if (esJur && empresa) firmaHTML += '<br><span style="font-size:.8rem;color:#414141;">(' + empresa + ')</span>';
+    $('prev-firma').innerHTML = firmaHTML;
+    const locFecha = (localidad ? localidad + ', ' : '') + (formatFecha(fechaVal) || '________');
+    $('prev-fecha-sig').textContent = 'Fecha: ' + locFecha;
+
+    // Actualizar caja de instrucciones según tipo de solicitante
+    const adjList = !esJur
+      ? 'Copia DNI / NIE / Pasaporte'
+      : 'CIF de la empresa · Escritura pública de apoderamiento · Copia DNI del representante';
+    $('dni-adjuntar').textContent = adjList;
+  }
+
+  // Copiar texto de la carta (sin caja de instrucciones)
+  function copiarCarta() {
+    const clone = $('carta').cloneNode(true);
+    // Quitar intro placeholder y caja instrucciones del texto copiado
+    const intro = clone.querySelector('#prev-intro');
+    if (intro) intro.remove();
+    const box = clone.querySelector('.dni-box');
+    if (box) box.remove();
+    showToast('✓ Carta copiada al portapapeles');
+    navigator.clipboard.writeText(clone.innerText || clone.textContent);
+  }
+
+  // Copiar solo las instrucciones de envío
+  function copiarInstrucciones() {
+    const box = $('instrucciones-box').cloneNode(true);
+    showToast('✓ Instrucciones copiadas al portapapeles');
+    navigator.clipboard.writeText(box.innerText || box.textContent);
+  }
+
+  function showToast(msg) {
+    const t = $('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  function limpiar() {
+    ['nombre','num-doc','domicilio','localidad','cp','email','empresa','cif','info-adicional']
+      .forEach(id => { const el = $(id); if (el) el.value = ''; });
+    $('fisica').checked = true;
+    $('via-email').checked = true;
+    $('bloque-juridica').style.display = 'none';
+    $('datos-pill').textContent = 'Datos del solicitante';
+    $('card-email').classList.add('sel');
+    $('card-postal').classList.remove('sel');
+    $('tipo-doc').value = 'DNI';
+    document.querySelectorAll('.sistema').forEach(cb => cb.checked = true); // vuelve a marcar por defecto
+    const now2 = new Date();
+    $('fecha').value = now2.toISOString().split('T')[0];
+    actualizar();
+  }
+
+  actualizar();
+</script>
+</body>
+</html>

@@ -131,8 +131,13 @@ tr.dup-row:hover td{background:#efecff}
 .dg-label{font-family:'Poppins',Arial,sans-serif;font-size:12px;font-weight:700;color:var(--dup);flex:1}
 .dg-reason{font-size:10px;color:var(--gray);background:var(--white);padding:2px 7px;border-radius:10px;border:1px solid var(--border);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
 .dg-cards{display:grid;gap:0}
-.dg-card{padding:10px 14px;border-right:1px solid var(--gray3)}
+.dg-card{padding:10px 14px 10px 14px;border-right:1px solid var(--gray3);position:relative}
 .dg-card:last-child{border-right:none}
+.card-btns{position:absolute;top:6px;right:7px;display:flex;gap:3px;z-index:2}
+.btn-card{width:20px;height:20px;border-radius:3px;border:1px solid transparent;background:transparent;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0;line-height:1;padding:0;color:var(--gray2)}
+.btn-card:hover{border-color:var(--border);background:var(--white)}
+.btn-card.sep:hover{border-color:#0563C1;color:#0563C1;background:#f0f7ff}
+.btn-card.del:hover{border-color:var(--red);color:var(--red);background:#fff7f7}
 .dg-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
 .dg-det{font-size:11px;color:var(--gray);margin-bottom:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dg-actions{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#fafafa;border-top:1px solid var(--gray3)}
@@ -842,14 +847,18 @@ function renderDuplicates(){
       const isOpt=isOptContact(c);
       const isCorp=isCorpContact(c);
       return`<div class="dg-card">
-        <div style="display:flex;align-items:center;gap:5px;margin-bottom:6px">
+        <div class="card-btns">
+          <button class="btn-card sep" title="Independitzar — no és duplicat dels altres" onclick="separateContact(${gi},${c.id})">↗</button>
+          <button class="btn-card del" title="Eliminar contacte" onclick="deleteContact(${gi},${c.id})">✕</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;margin-bottom:6px;padding-right:46px">
           <span class="src-badge ${sc(c.src)}" style="font-size:9px">${sl(c.src)}</span>
           ${isOpt?'<span style="font-size:9px;background:#ffeaed;color:var(--red);padding:1px 5px;border-radius:3px;font-weight:700">OPT</span>':''}
           ${isCorp&&!isOpt?'<span style="font-size:9px;background:#fef3c7;color:#92400e;padding:1px 5px;border-radius:3px;font-weight:700">EMPRESA</span>':''}
         </div>
-        <div class="dg-name">${e(displayName(c)||c.org||'—')}</div>
+        <div class="dg-name" style="padding-right:4px">${e(displayName(c)||c.org||'—')}</div>
         ${c.org?`<div class="dg-det" style="font-weight:600;color:var(--warn)">🏢 ${e(c.org.substring(0,35))}</div>`:''}
-        ${(c.ph||[]).slice(0,2).map(p=>`<div class="dg-det ${isOpt&&OPT_PHONES.has(nPh(p))?'style="color:var(--red);font-weight:600"':''}">📞 ${e(p)}</div>`).join('')}
+        ${(c.ph||[]).slice(0,2).map(p=>`<div class="dg-det${isOpt&&OPT_PHONES.has(nPh(p))?' style="color:var(--red);font-weight:600"':''}">📞 ${e(p)}</div>`).join('')}
         ${(c.em||[]).slice(0,1).map(x=>`<div class="dg-det">✉ ${e(x)}</div>`).join('')}
         ${c.nif?`<div class="dg-det" style="font-family:'Courier New',monospace;font-size:10px">🪪 ${e(c.nif.trim())}</div>`:''}
         ${c.pop?`<div class="dg-det">📍 ${e(c.pop)}</div>`:''}
@@ -877,6 +886,29 @@ function quickAutoMerge(gi){
   detectAndRender();
 }
 function dismissOne(gi){dismissed.add(dupGroups[gi].key);dupGroups.splice(gi,1);document.getElementById('dupBadge').textContent=dupGroups.length;renderDuplicates();renderSidebar()}
+
+function separateContact(gi,cid){
+  const g=dupGroups[gi];
+  if(!g)return;
+  g.contacts=g.contacts.filter(c=>c.id!==cid);
+  if(g.contacts.length<2){dismissed.add(g.key);dupGroups.splice(gi,1)}
+  document.getElementById('dupBadge').textContent=dupGroups.length;
+  renderDuplicates();renderSidebar();
+  showToast('Contacte independitzat','#0563C1');
+}
+
+function deleteContact(gi,cid){
+  const idx=contacts.findIndex(c=>c.id===cid);
+  if(idx>=0)contacts[idx]._merged=true;
+  const g=dupGroups[gi];
+  if(g){
+    g.contacts=g.contacts.filter(c=>c.id!==cid);
+    if(g.contacts.length<2){dismissed.add(g.key);dupGroups.splice(gi,1)}
+  }
+  document.getElementById('dupBadge').textContent=dupGroups.length;
+  renderDuplicates();renderSidebar();renderTable();
+  showToast('Contacte eliminat','var(--red)');
+}
 
 // ═══════════════════════════════════════════
 //  INDIVIDUAL MERGE MODAL

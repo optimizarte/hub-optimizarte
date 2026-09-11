@@ -138,6 +138,30 @@ tr.dup-row:hover td{background:#efecff}
 .btn-card:hover{border-color:var(--border);background:var(--white)}
 .btn-card.sep:hover{border-color:#0563C1;color:#0563C1;background:#f0f7ff}
 .btn-card.del:hover{border-color:var(--red);color:var(--red);background:#fff7f7}
+.btn-card.edt:hover{border-color:#7C3AED;color:#7C3AED;background:#f5f3ff}
+/* ── FIELD-ROW (phone/email inline edit) ── */
+.field-row{display:flex;align-items:center;gap:3px}
+.field-row>.field-val{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;color:var(--gray)}
+.field-row>.field-val.opt-ph{color:var(--red);font-weight:600}
+.field-acts{display:none;gap:2px;flex-shrink:0}
+.field-row:hover .field-acts{display:flex}
+.btn-fa{width:15px;height:15px;border:1px solid transparent;background:transparent;cursor:pointer;font-size:9px;display:flex;align-items:center;justify-content:center;border-radius:2px;padding:0;color:var(--gray2);line-height:1;transition:all .1s}
+.btn-fa:hover{border-color:var(--border);background:var(--white);color:var(--gray)}
+.btn-fa.del:hover{border-color:var(--red);color:var(--red);background:#fff7f7}
+/* ── EDIT CONTACT MODAL ── */
+.ec-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;padding:14px 18px}
+.ec-full{grid-column:1/-1}
+.ec-label{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);margin-bottom:3px;display:block}
+.ec-inp{width:100%;height:28px;border:1px solid var(--border);border-radius:4px;padding:0 8px;font-size:12px;font-family:Arial,sans-serif;color:var(--text);background:var(--white)}
+.ec-inp:focus{outline:none;border-color:var(--red)}
+.ec-list{display:flex;flex-direction:column;gap:4px}
+.ec-list-item{display:flex;gap:4px;align-items:center}
+.ec-list-item input{flex:1;height:26px;border:1px solid var(--border);border-radius:4px;padding:0 7px;font-size:11px;font-family:Arial,sans-serif}
+.ec-list-item input:focus{outline:none;border-color:var(--red)}
+.btn-list-del{width:22px;height:22px;border:1px solid var(--border);border-radius:3px;background:var(--white);color:var(--gray2);cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.btn-list-del:hover{border-color:var(--red);color:var(--red);background:#fff7f7}
+.btn-list-add{height:22px;padding:0 8px;border:1px dashed var(--border);border-radius:3px;background:transparent;color:var(--gray2);cursor:pointer;font-size:10px;font-weight:600;margin-top:2px;transition:all .12s}
+.btn-list-add:hover{border-color:var(--gray);color:var(--gray)}
 .dg-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
 .dg-det{font-size:11px;color:var(--gray);margin-bottom:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dg-actions{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#fafafa;border-top:1px solid var(--gray3)}
@@ -388,6 +412,21 @@ tr.dup-row:hover td{background:#efecff}
 <!-- FOOTER -->
 <div class="footer-bar" id="footerBar">OPTIMIZARTE 3.0 · Codi mediador: 17167 · Dades processades localment, sense enviament extern</div>
 
+<!-- EDIT CONTACT MODAL -->
+<div class="overlay" id="editCOv">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-head">
+      <div class="modal-title" id="editCTitle">Editar contacte</div>
+      <button class="modal-close" onclick="closeEditContact()">×</button>
+    </div>
+    <div class="modal-body" id="editCBody" style="padding:0;max-height:70vh;overflow-y:auto"></div>
+    <div class="modal-foot">
+      <button class="btn" onclick="closeEditContact()">Cancel·lar</button>
+      <button class="btn red" onclick="saveEditContact()">Desar canvis</button>
+    </div>
+  </div>
+</div>
+
 <!-- MERGE MODAL -->
 <div class="overlay" id="mergeOv">
   <div class="modal">
@@ -469,6 +508,52 @@ let searchQ='', filterSrc='', page=1, pageSize=50;
 let activeTab='c', dupGroups=[], selectedGroups=new Set();
 let dismissed=new Set(), pendingMerge=null, pendingImport=null;
 let sortK='full', sortD=1, nextId=RAW.length+2000;
+
+// ═══════════════════════════════════════════
+//  PERSIST (localStorage)
+// ═══════════════════════════════════════════
+const PERSIST_KEY='fco_v1';
+let persist={edits:{},deleted:[]};
+
+function savePersist(){
+  try{
+    localStorage.setItem(PERSIST_KEY,JSON.stringify({
+      edits:persist.edits,
+      deleted:persist.deleted,
+      dismissed_keys:[...dismissed]
+    }));
+  }catch(e){}
+}
+
+function loadPersist(){
+  try{
+    const raw=localStorage.getItem(PERSIST_KEY);
+    if(!raw)return;
+    const s=JSON.parse(raw);
+    persist.edits=s.edits||{};
+    persist.deleted=s.deleted||[];
+    dismissed=new Set(s.dismissed_keys||[]);
+    // Apply deletes
+    const delSet=new Set(persist.deleted);
+    contacts.forEach(c=>{if(delSet.has(c.id))c._merged=true});
+    // Apply edits overlay
+    contacts.forEach(c=>{
+      const ed=persist.edits[String(c.id)];
+      if(ed)Object.assign(c,ed);
+    });
+  }catch(e){}
+}
+
+function persistEdit(cid,fields){
+  const k=String(cid);
+  persist.edits[k]={...(persist.edits[k]||{}),...fields};
+  savePersist();
+}
+
+function persistDelete(cid){
+  if(!persist.deleted.includes(cid))persist.deleted.push(cid);
+  savePersist();
+}
 let activeDupCat='reals'; // 'reals' | 'empresa' | 'optimizarte'
 
 const SRC_META={
@@ -848,18 +933,31 @@ function renderDuplicates(){
       const isCorp=isCorpContact(c);
       return`<div class="dg-card">
         <div class="card-btns">
+          <button class="btn-card edt" title="Editar contacte" onclick="openEditContact(${c.id})">✏</button>
           <button class="btn-card sep" title="Independitzar — no és duplicat dels altres" onclick="separateContact(${gi},${c.id})">↗</button>
           <button class="btn-card del" title="Eliminar contacte" onclick="deleteContact(${gi},${c.id})">✕</button>
         </div>
-        <div style="display:flex;align-items:center;gap:5px;margin-bottom:6px;padding-right:46px">
+        <div style="display:flex;align-items:center;gap:5px;margin-bottom:6px;padding-right:66px">
           <span class="src-badge ${sc(c.src)}" style="font-size:9px">${sl(c.src)}</span>
           ${isOpt?'<span style="font-size:9px;background:#ffeaed;color:var(--red);padding:1px 5px;border-radius:3px;font-weight:700">OPT</span>':''}
           ${isCorp&&!isOpt?'<span style="font-size:9px;background:#fef3c7;color:#92400e;padding:1px 5px;border-radius:3px;font-weight:700">EMPRESA</span>':''}
         </div>
         <div class="dg-name" style="padding-right:4px">${e(displayName(c)||c.org||'—')}</div>
-        ${c.org?`<div class="dg-det" style="font-weight:600;color:var(--warn)">🏢 ${e(c.org.substring(0,35))}</div>`:''}
-        ${(c.ph||[]).slice(0,2).map(p=>`<div class="dg-det${isOpt&&OPT_PHONES.has(nPh(p))?' style="color:var(--red);font-weight:600"':''}">📞 ${e(p)}</div>`).join('')}
-        ${(c.em||[]).slice(0,1).map(x=>`<div class="dg-det">✉ ${e(x)}</div>`).join('')}
+        ${c.org?`<div class="dg-det field-row"><span class="field-val" style="font-weight:600;color:var(--warn)">🏢 ${e(c.org.substring(0,35))}</span></div>`:''}
+        ${(c.ph||[]).slice(0,3).map((p,pi)=>`<div class="dg-det field-row">
+          <span class="field-val${isOpt&&OPT_PHONES.has(nPh(p))?' opt-ph':''}">📞 ${e(p)}</span>
+          <span class="field-acts">
+            <button class="btn-fa" title="Editar" onclick="editPhCard(${gi},${c.id},${pi})">✏</button>
+            <button class="btn-fa del" title="Eliminar" onclick="deletePhCard(${gi},${c.id},${pi})">✕</button>
+          </span>
+        </div>`).join('')}
+        ${(c.em||[]).slice(0,2).map((em,ei)=>`<div class="dg-det field-row">
+          <span class="field-val">✉ ${e(em)}</span>
+          <span class="field-acts">
+            <button class="btn-fa" title="Editar" onclick="editEmCard(${gi},${c.id},${ei})">✏</button>
+            <button class="btn-fa del" title="Eliminar" onclick="deleteEmCard(${gi},${c.id},${ei})">✕</button>
+          </span>
+        </div>`).join('')}
         ${c.nif?`<div class="dg-det" style="font-family:'Courier New',monospace;font-size:10px">🪪 ${e(c.nif.trim())}</div>`:''}
         ${c.pop?`<div class="dg-det">📍 ${e(c.pop)}</div>`:''}
       </div>`}).join('');
@@ -885,7 +983,7 @@ function quickAutoMerge(gi){
   showToast('✔ Fusionat correctament','#28A745');
   detectAndRender();
 }
-function dismissOne(gi){dismissed.add(dupGroups[gi].key);dupGroups.splice(gi,1);document.getElementById('dupBadge').textContent=dupGroups.length;renderDuplicates();renderSidebar()}
+function dismissOne(gi){dismissed.add(dupGroups[gi].key);dupGroups.splice(gi,1);document.getElementById('dupBadge').textContent=dupGroups.length;renderDuplicates();renderSidebar();savePersist()}
 
 function separateContact(gi,cid){
   const g=dupGroups[gi];
@@ -893,13 +991,13 @@ function separateContact(gi,cid){
   g.contacts=g.contacts.filter(c=>c.id!==cid);
   if(g.contacts.length<2){dismissed.add(g.key);dupGroups.splice(gi,1)}
   document.getElementById('dupBadge').textContent=dupGroups.length;
-  renderDuplicates();renderSidebar();
+  renderDuplicates();renderSidebar();savePersist();
   showToast('Contacte independitzat','#0563C1');
 }
 
 function deleteContact(gi,cid){
   const idx=contacts.findIndex(c=>c.id===cid);
-  if(idx>=0)contacts[idx]._merged=true;
+  if(idx>=0){contacts[idx]._merged=true;persistDelete(contacts[idx].id)}
   const g=dupGroups[gi];
   if(g){
     g.contacts=g.contacts.filter(c=>c.id!==cid);
@@ -1061,6 +1159,24 @@ function confirmImport(){
     return{id:nextId++,src:srcName,fn,mn,ln,full:cFull,ph,em,bday:g('bday'),sex:g('sex'),cp:g('cp'),pop:g('pop'),ctry:g('ctry'),nif:g('nif'),org:g('org'),notes:g('notes'),labels:g('labels'),rgpd:g('rgpd'),npol:g('npol'),acct:g('acct'),web:g('web'),_merged:false};
   }).filter(c=>c.full||c.ph.length||c.em.length);
   if(!SRC_META[srcName])SRC_META[srcName]={color:'#'+Math.floor(Math.random()*0x555555+0x888888).toString(16),label:srcName,date:new Date().toLocaleDateString('ca')};
+  // Sync: apply saved edits to matching existing contacts; mark deleted ones
+  const delSet=new Set(persist.deleted);
+  const existByNif={},existByPh={};
+  contacts.forEach(c=>{
+    if(c.nif&&c.nif.trim())existByNif[c.nif.trim().toUpperCase()]=c;
+    (c.ph||[]).forEach(p=>{const n=nPh(p);if(n)existByPh[n]=c});
+  });
+  news.forEach(nc=>{
+    // Check if there's a matching existing contact to apply edits to
+    let matched=null;
+    if(nc.nif)matched=existByNif[nc.nif.trim().toUpperCase()];
+    if(!matched)(nc.ph||[]).forEach(p=>{if(!matched)matched=existByPh[nPh(p)]});
+    if(matched){
+      const ed=persist.edits[String(matched.id)];
+      if(ed)Object.assign(nc,ed);
+      if(delSet.has(matched.id))nc._merged=true;
+    }
+  });
   contacts.push(...news);
   closeImport();
   showToast(`✔ ${news.length} contactes importats de "${srcName}"`,'#28A745');
@@ -1103,13 +1219,140 @@ function detectAndRender(){detectDuplicates();renderSidebar();renderTable();if(a
 // ═══════════════════════════════════════════
 let sTimer=null;
 document.getElementById('searchInput').addEventListener('input',ev=>{clearTimeout(sTimer);sTimer=setTimeout(()=>{searchQ=ev.target.value;page=1;renderTable()},250)});
-document.addEventListener('keydown',ev=>{if(ev.key==='Escape'){if(document.getElementById('mergeOv').classList.contains('open'))closeMerge();if(document.getElementById('importOv').classList.contains('open'))closeImport()}});
-['mergeOv','importOv'].forEach(id=>{document.getElementById(id).addEventListener('click',ev=>{if(ev.target===ev.currentTarget){id==='mergeOv'?closeMerge():closeImport()}})});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape'){if(document.getElementById('mergeOv').classList.contains('open'))closeMerge();if(document.getElementById('importOv').classList.contains('open'))closeImport();if(document.getElementById('editCOv').classList.contains('open'))closeEditContact()}});
+['mergeOv','importOv','editCOv'].forEach(id=>{document.getElementById(id).addEventListener('click',ev=>{if(ev.target===ev.currentTarget){if(id==='mergeOv')closeMerge();else if(id==='importOv')closeImport();else closeEditContact()}})});
+
+// ═══════════════════════════════════════════
+//  INLINE PHONE / EMAIL EDIT IN CARDS
+// ═══════════════════════════════════════════
+function _getC(cid){return contacts.find(c=>c.id===cid)}
+
+function editPhCard(gi,cid,pi){
+  const c=_getC(cid);if(!c)return;
+  const cur=c.ph[pi]||'';
+  const val=prompt('Editar telèfon:',cur);
+  if(val===null)return;
+  c.ph=c.ph.slice();
+  c.ph[pi]=val.trim();
+  persistEdit(cid,{ph:[...c.ph]});
+  renderDuplicates();
+}
+function deletePhCard(gi,cid,pi){
+  const c=_getC(cid);if(!c)return;
+  c.ph=c.ph.filter((_,i)=>i!==pi);
+  persistEdit(cid,{ph:[...c.ph]});
+  renderDuplicates();
+  showToast('Telèfon eliminat','var(--red)');
+}
+function editEmCard(gi,cid,ei){
+  const c=_getC(cid);if(!c)return;
+  const val=prompt('Editar email:',c.em[ei]||'');
+  if(val===null)return;
+  c.em=c.em.slice();
+  c.em[ei]=val.trim();
+  persistEdit(cid,{em:[...c.em]});
+  renderDuplicates();
+}
+function deleteEmCard(gi,cid,ei){
+  const c=_getC(cid);if(!c)return;
+  c.em=c.em.filter((_,i)=>i!==ei);
+  persistEdit(cid,{em:[...c.em]});
+  renderDuplicates();
+  showToast('Email eliminat','var(--red)');
+}
+
+// ═══════════════════════════════════════════
+//  EDIT CONTACT MODAL (tots els camps)
+// ═══════════════════════════════════════════
+let _editCid=null;
+
+function openEditContact(cid){
+  const c=_getC(cid);if(!c)return;
+  _editCid=cid;
+  document.getElementById('editCTitle').textContent=`Editar: ${displayName(c)||c.org||'—'}`;
+  // Build ph/em list HTML helper
+  function listHtml(arr,fieldKey){
+    return `<div class="ec-list" id="ecl_${fieldKey}">
+      ${arr.map((v,i)=>`<div class="ec-list-item">
+        <input type="text" value="${e(v)}" data-fi="${i}" data-fk="${fieldKey}">
+        <button class="btn-list-del" onclick="ecDelItem('${fieldKey}',${i})">✕</button>
+      </div>`).join('')}
+    </div>
+    <button class="btn-list-add" onclick="ecAddItem('${fieldKey}')">+ Afegir</button>`;
+  }
+  const ph=c.ph||[],em=c.em||[];
+  document.getElementById('editCBody').innerHTML=`
+    <div class="ec-grid">
+      <div><label class="ec-label">Nom</label><input class="ec-inp" id="ec_fn" value="${e(c.fn||'')}"></div>
+      <div><label class="ec-label">2n Nom</label><input class="ec-inp" id="ec_mn" value="${e(c.mn||'')}"></div>
+      <div><label class="ec-label">Cognoms</label><input class="ec-inp" id="ec_ln" value="${e(c.ln||'')}"></div>
+      <div><label class="ec-label">Organització</label><input class="ec-inp" id="ec_org" value="${e(c.org||'')}"></div>
+      <div class="ec-full"><label class="ec-label">Telèfons</label>${listHtml(ph,'ph')}</div>
+      <div class="ec-full"><label class="ec-label">Emails</label>${listHtml(em,'em')}</div>
+      <div><label class="ec-label">NIF / DNI</label><input class="ec-inp" id="ec_nif" value="${e(c.nif||'')}"></div>
+      <div><label class="ec-label">Data naix.</label><input class="ec-inp" id="ec_bday" value="${e(c.bday||'')}"></div>
+      <div><label class="ec-label">Localitat</label><input class="ec-inp" id="ec_pop" value="${e(c.pop||'')}"></div>
+      <div><label class="ec-label">Codi postal</label><input class="ec-inp" id="ec_cp" value="${e(c.cp||'')}"></div>
+      <div><label class="ec-label">País</label><input class="ec-inp" id="ec_ctry" value="${e(c.ctry||'')}"></div>
+      <div><label class="ec-label">Sexe</label><input class="ec-inp" id="ec_sex" value="${e(c.sex||'')}"></div>
+      <div class="ec-full"><label class="ec-label">Notes</label><input class="ec-inp" id="ec_notes" value="${e(c.notes||'')}"></div>
+      <div class="ec-full"><label class="ec-label">Etiquetes</label><input class="ec-inp" id="ec_labels" value="${e(c.labels||'')}"></div>
+      <div><label class="ec-label">Web</label><input class="ec-inp" id="ec_web" value="${e(c.web||'')}"></div>
+      <div><label class="ec-label">RGPD</label><input class="ec-inp" id="ec_rgpd" value="${e(c.rgpd||'')}"></div>
+    </div>`;
+  document.getElementById('editCOv').classList.add('open');
+}
+function closeEditContact(){document.getElementById('editCOv').classList.remove('open');_editCid=null}
+
+function _ecGetList(fk){
+  const el=document.getElementById(`ecl_${fk}`);if(!el)return[];
+  return [...el.querySelectorAll('input[type=text]')].map(i=>i.value.trim()).filter(Boolean);
+}
+function ecDelItem(fk,idx){
+  const el=document.getElementById(`ecl_${fk}`);if(!el)return;
+  const items=[...el.querySelectorAll('.ec-list-item')];
+  if(items[idx])items[idx].remove();
+}
+function ecAddItem(fk){
+  const el=document.getElementById(`ecl_${fk}`);if(!el)return;
+  const div=document.createElement('div');div.className='ec-list-item';
+  div.innerHTML=`<input type="text" value="" data-fk="${fk}"><button class="btn-list-del" onclick="this.parentElement.remove()">✕</button>`;
+  el.appendChild(div);el.querySelector('input:last-of-type')?.focus();
+}
+
+function saveEditContact(){
+  const c=_getC(_editCid);if(!c)return;
+  const fn=document.getElementById('ec_fn').value.trim();
+  const mn=document.getElementById('ec_mn').value.trim();
+  const ln=document.getElementById('ec_ln').value.trim();
+  const org=document.getElementById('ec_org').value.trim();
+  const nif=document.getElementById('ec_nif').value.trim();
+  const bday=document.getElementById('ec_bday').value.trim();
+  const pop=document.getElementById('ec_pop').value.trim();
+  const cp=document.getElementById('ec_cp').value.trim();
+  const ctry=document.getElementById('ec_ctry').value.trim();
+  const sex=document.getElementById('ec_sex').value.trim();
+  const notes=document.getElementById('ec_notes').value.trim();
+  const labels=document.getElementById('ec_labels').value.trim();
+  const web=document.getElementById('ec_web').value.trim();
+  const rgpd=document.getElementById('ec_rgpd').value.trim();
+  const ph=_ecGetList('ph');
+  const em=_ecGetList('em');
+  const full=[fn,mn,ln].filter(Boolean).join(' ')||c.full;
+  const fields={fn,mn,ln,full,org,nif,bday,pop,cp,ctry,sex,notes,labels,web,rgpd,ph,em};
+  Object.assign(c,fields);
+  persistEdit(_editCid,fields);
+  closeEditContact();
+  renderTable();
+  if(activeTab==='d')renderDuplicates();
+  showToast('Contacte desat','#28A745');
+}
 
 // Helper for sc() used in renderSidebar inline
 function sc(src){if(!src)return'';if(src.includes('GESTIONA')&&src.includes('GOOGLE'))return'm';if(src.includes('GESTIONA'))return'g';if(src.includes('GOOGLE'))return'gl';return'm'}
 
 normalizeFull(); // Fix all names to "Nom Cognoms" order
+loadPersist();   // Restore persisted edits, deletes, dismissed groups
 setTab('c');
 detectAndRender();
 </script>

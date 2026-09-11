@@ -221,6 +221,39 @@ tr.dup-row:hover td{background:#efecff}
 
 /* Duplicate progress bar */
 .dup-prog{padding:6px 16px;background:#f0ebff;border-bottom:1px solid #e0d5ff;font-size:11px;color:var(--dup);font-weight:700;display:none}
+
+/* ── DUPLICATE CATEGORIES ── */
+.dup-cat-tabs{display:flex;gap:0;padding:10px 14px 0;border-bottom:1px solid var(--border);background:var(--white);flex-shrink:0}
+.dup-cat-btn{height:36px;padding:0 14px;border:none;border-bottom:3px solid transparent;background:transparent;color:var(--gray);font-size:10px;font-weight:700;font-family:'Poppins',Arial,sans-serif;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:all .15s;display:flex;align-items:center;gap:7px;margin-bottom:-1px;white-space:nowrap}
+.dup-cat-btn:hover{color:var(--text)}
+.dup-cat-btn.cat-r.active{border-color:#28A745;color:#28A745}
+.dup-cat-btn.cat-e.active{border-color:#D97706;color:#D97706}
+.dup-cat-btn.cat-o.active{border-color:var(--red);color:var(--red)}
+.cat-badge{border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;background:var(--gray3);color:var(--gray)}
+.dup-cat-btn.cat-r.active .cat-badge{background:#d1fae5;color:#166534}
+.dup-cat-btn.cat-e.active .cat-badge{background:#fef3c7;color:#92400e}
+.dup-cat-btn.cat-o.active .cat-badge{background:#ffeaed;color:var(--red)}
+.dup-cat-bar{display:flex;align-items:center;gap:6px;padding:7px 14px;background:#fafafa;border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
+.dup-cat-desc{font-size:11px;color:var(--gray2);flex:1;min-width:140px}
+.btn-cat-act{height:26px;padding:0 9px;border-radius:4px;border:1px solid var(--border);background:var(--white);color:var(--gray);font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;font-family:Arial,sans-serif;transition:all .12s;white-space:nowrap}
+.btn-cat-act:hover{border-color:var(--text);color:var(--text)}
+.btn-cat-act.merge{background:#e8f5e9;border-color:#28A745;color:#166534}
+.btn-cat-act.merge:hover{background:#28A745;color:#fff}
+.btn-cat-act.exp{border-color:#0563C1;color:#0563C1}
+.btn-cat-act.exp:hover{background:#0563C1;color:#fff;border-color:#0563C1}
+/* Group colours by category */
+.dup-group.cat-r .dg-head{background:#f0fdf4;border-color:#bbf7d0}
+.dup-group.cat-r.selected{border-color:#28A745;box-shadow:0 0 0 2px #28A74522,var(--sh)}
+.dup-group.cat-r .dg-head input[type=checkbox]{accent-color:#28A745}
+.dup-group.cat-r .dg-label{color:#166534}
+.dup-group.cat-e .dg-head{background:#fffbeb;border-color:#fde68a}
+.dup-group.cat-e.selected{border-color:#D97706;box-shadow:0 0 0 2px #D9770622,var(--sh)}
+.dup-group.cat-e .dg-head input[type=checkbox]{accent-color:#D97706}
+.dup-group.cat-e .dg-label{color:#92400e}
+.dup-group.cat-o .dg-head{background:#fff1f2;border-color:#ffc0c9}
+.dup-group.cat-o.selected{border-color:var(--red);box-shadow:0 0 0 2px #DC002822,var(--sh)}
+.dup-group.cat-o .dg-head input[type=checkbox]{accent-color:var(--red)}
+.dup-group.cat-o .dg-label{color:var(--red)}
 </style>
 </head>
 <body>
@@ -268,10 +301,9 @@ tr.dup-row:hover td{background:#efecff}
 <div class="toolbar" id="dtoolbar" style="display:none">
   <div class="dup-sel-info" id="selInfo">0 grups seleccionats</div>
   <div class="tool-sep"></div>
-  <button class="btn-sel-all" onclick="selectAll()">Seleccionar tots</button>
-  <button class="btn-sel-all" onclick="deselectAll()">Deseleccionar</button>
-  <button class="btn-top primary" style="height:28px;font-size:10px" onclick="mergeAllGroups()">Fusionar TOTS automàticament</button>
-  <button class="btn-top" style="height:28px;font-size:10px" onclick="dismissAll()">Ignorar tots</button>
+  <button class="btn-top primary" style="height:28px;font-size:10px" onclick="bulkMerge()">⚡ Fusionar seleccionats</button>
+  <button class="btn-top" style="height:28px;font-size:10px" onclick="bulkDismiss()">Ignorar seleccionats</button>
+  <button class="btn-top" style="height:28px;font-size:10px" onclick="deselectAll()">× Deseleccionar tot</button>
 </div>
 
 <div class="workspace">
@@ -313,6 +345,26 @@ tr.dup-row:hover td{background:#efecff}
         <button class="btn" onclick="detectAndRender()">↺ Re-detectar</button>
       </div>
       <div class="dup-prog" id="dupProg"></div>
+      <!-- Category tabs -->
+      <div class="dup-cat-tabs">
+        <button class="dup-cat-btn cat-r active" id="dcbtn_reals" onclick="setDupCat('reals')">
+          🧑 REALS <span class="cat-badge" id="catbadge_reals">0</span>
+        </button>
+        <button class="dup-cat-btn cat-e" id="dcbtn_empresa" onclick="setDupCat('empresa')">
+          🏢 EMPRESA <span class="cat-badge" id="catbadge_empresa">0</span>
+        </button>
+        <button class="dup-cat-btn cat-o" id="dcbtn_optimizarte" onclick="setDupCat('optimizarte')">
+          🔴 OPTIMIZARTE <span class="cat-badge" id="catbadge_optimizarte">0</span>
+        </button>
+      </div>
+      <!-- Per-category action bar -->
+      <div class="dup-cat-bar">
+        <span class="dup-cat-desc" id="catDesc">—</span>
+        <button class="btn-cat-act" onclick="selectAllCat()">☑ Sel. tots</button>
+        <button class="btn-cat-act" onclick="deselectAllCat()">☐ Desel.</button>
+        <button class="btn-cat-act merge" onclick="mergeAllCat()">⚡ Fusionar tots</button>
+        <button class="btn-cat-act exp" onclick="exportCatCSV(activeDupCat)">↓ Exportar CSV</button>
+      </div>
       <div class="dup-view" id="dupView"></div>
     </div>
   </main>
@@ -412,6 +464,7 @@ let searchQ='', filterSrc='', page=1, pageSize=50;
 let activeTab='c', dupGroups=[], selectedGroups=new Set();
 let dismissed=new Set(), pendingMerge=null, pendingImport=null;
 let sortK='full', sortD=1, nextId=RAW.length+2000;
+let activeDupCat='reals'; // 'reals' | 'empresa' | 'optimizarte'
 
 const SRC_META={
   'GESTIONA':{color:'#DC0028',label:'Gestiona',  date:'10/09/2025'},
@@ -426,6 +479,49 @@ function sc(src){if(!src)return'';if(src.includes('GESTIONA')&&src.includes('GOO
 function sl(src){if(!src)return src;if(src.includes('GESTIONA')&&src.includes('GOOGLE'))return'Fusió';if(src.includes('GESTIONA'))return'Gestiona';if(src.includes('GOOGLE'))return'Google';return src.substring(0,10)}
 function nPh(p){return String(p||'').replace(/\D/g,'').slice(-9)}
 function nEm(e){return String(e||'').toLowerCase().trim()}
+
+// ── OPTIMIZARTE contact detection ──
+const OPT_PHONES=new Set(['619133133','647568360','972110240','972426665']);
+const OPT_DOMAINS=['assessorances','optimizarte'];
+const OPT_USERS=['primodany','primotablet','primoberry','primobile'];
+
+function isOptContact(c){
+  if((c.ph||[]).some(p=>OPT_PHONES.has(nPh(p))))return true;
+  return(c.em||[]).some(em=>{
+    const parts=nEm(em).split('@');
+    if(parts[0]&&OPT_USERS.includes(parts[0]))return true;
+    if(parts[1]&&OPT_DOMAINS.some(d=>parts[1].includes(d)))return true;
+    return false;
+  });
+}
+
+// ── Corporate / company contact detection ──
+const CORP_RE=/\b(s\.?l\.?u?|s\.?a\.?|s\.?c\.?o?\.?|s\.?l\.?p\.?|gestor[ia]+|consultoria|asseguranc|assessoria|servicios|servicis|grup\b|group|empresa|corretoria|agencia|agència|inmobiliaria|immobiliaria|clinic|centre|center|clínica)/i;
+function isCorpContact(c){
+  if(c.org&&c.org.trim().length>2)return true;
+  const name=displayName(c);
+  if(name&&CORP_RE.test(name))return true;
+  // All-uppercase full name with no fn/ln split → likely a company
+  if(!c.fn&&!c.ln&&c.full&&c.full.trim()===c.full.trim().toUpperCase()&&c.full.trim().length>4)return true;
+  return false;
+}
+
+// ── Normalised name for comparison ──
+function normName(c){return(displayName(c)||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim()}
+
+// ── Assign a category to a detected group ──
+function categorizeGroup(g){
+  if(g.contacts.some(c=>isOptContact(c)))return'optimizarte';
+  if(g.contacts.some(c=>isCorpContact(c)))return'empresa';
+  // Check if any pair shares same normalised name → clear real duplicate
+  for(let i=0;i<g.contacts.length;i++){
+    for(let j=i+1;j<g.contacts.length;j++){
+      const na=normName(g.contacts[i]),nb=normName(g.contacts[j]);
+      if(na&&nb&&na===nb)return'reals';
+    }
+  }
+  return'reals'; // default: anything without a company or OPT pattern
+}
 
 // ── DISPLAY NAME: always "Nom Cognoms" order ──
 function displayName(c){
@@ -474,7 +570,9 @@ function detectDuplicates(){
       if(a.nif&&b.nif&&a.nif.trim().toUpperCase()===b.nif.trim().toUpperCase()&&a.nif.trim().length>=5)reasons.push('NIF');
     }
     const key=g.map(c=>c.id).sort().join(',');
-    return{contacts:g,reasons:[...new Set(reasons)],key};
+    const obj={contacts:g,reasons:[...new Set(reasons)],key};
+    obj._cat=categorizeGroup(obj);
+    return obj;
   }).filter(g=>!dismissed.has(g.key));
   selectedGroups.clear();
   document.getElementById('dupBadge').textContent=dupGroups.length;
@@ -508,7 +606,13 @@ function autoMerge(group){
     if(!m.web&&o.web)m.web=o.web;
     if(!m.notes&&o.notes)m.notes=o.notes;
   });
-  // Keep insurance fields from GESTIONA (already primary)
+  // EMPRESA: if one contact is a company/entity, preserve its identity in org field
+  if(group._cat==='empresa'){
+    const corpC=group.contacts.find(c=>isCorpContact(c));
+    if(corpC&&!m.org){
+      m.org=corpC.org||displayName(corpC)||'';
+    }
+  }
   // Rebuild full name: "Nom Cognoms"
   const fn=[m.fn,m.mn,m.ln].filter(Boolean).join(' ');
   if(fn)m.full=fn;
@@ -541,7 +645,68 @@ function mergeAllGroups(){
 }
 function dismissAll(){dismissed=new Set([...dismissed,...dupGroups.map(g=>g.key)]);detectAndRender()}
 function selectAll(){dupGroups.forEach((_,i)=>selectedGroups.add(i));document.querySelectorAll('.dg-cb').forEach(cb=>cb.checked=true);updateBulkBar()}
-function deselectAll(){selectedGroups.clear();document.querySelectorAll('.dg-cb').forEach(cb=>cb.checked=false);updateBulkBar()}
+function deselectAll(){selectedGroups.clear();document.querySelectorAll('.dg-cb').forEach(cb=>cb.checked=false);document.querySelectorAll('.dup-group').forEach(el=>el.classList.remove('selected'));updateBulkBar()}
+
+// ── Per-category select / merge / export ──
+function getActiveCatGrps(){return dupGroups.map((g,i)=>({g,i})).filter(x=>x.g._cat===activeDupCat)}
+
+function selectAllCat(){
+  getActiveCatGrps().forEach(x=>{
+    selectedGroups.add(x.i);
+    const cb=document.getElementById('dc_'+x.i);if(cb)cb.checked=true;
+    const dg=document.getElementById('dg_'+x.i);if(dg)dg.classList.add('selected');
+  });
+  updateBulkBar();
+}
+
+function deselectAllCat(){
+  getActiveCatGrps().forEach(x=>{
+    selectedGroups.delete(x.i);
+    const cb=document.getElementById('dc_'+x.i);if(cb)cb.checked=false;
+    const dg=document.getElementById('dg_'+x.i);if(dg)dg.classList.remove('selected');
+  });
+  updateBulkBar();
+}
+
+function mergeAllCat(){
+  const grps=getActiveCatGrps();
+  grps.forEach(x=>autoMerge(x.g));
+  showToast(`✔ ${grps.length} parells fusionats automàticament`,'#28A745');
+  detectAndRender();
+}
+
+function setDupCat(cat){
+  activeDupCat=cat;
+  ['reals','empresa','optimizarte'].forEach(c=>{
+    const btn=document.getElementById('dcbtn_'+c);
+    if(btn){btn.className=`dup-cat-btn cat-${c==='reals'?'r':c==='empresa'?'e':'o'}${c===cat?' active':''}`;};
+  });
+  renderDuplicates();
+}
+
+function exportCatCSV(cat){
+  const catGrps=dupGroups.filter(g=>g._cat===cat);
+  const seen=new Set();
+  const list=catGrps.flatMap(g=>g.contacts).filter(c=>{if(seen.has(c.id))return false;seen.add(c.id);return true});
+  const labels={reals:'Duplicats_Reals',empresa:'Duplicats_Empresa',optimizarte:'Duplicats_Optimizarte'};
+  _doExportCSV(list,labels[cat]||cat);
+}
+
+function _doExportCSV(list,basename){
+  const headers=['Font','Nom complet','Nom','2n Nom','Cognoms','Telèfons','Emails','Data Naix.','Sexe','Localitat','CP','País','NIF','Organització','Notes','Etiquetes','RGPD','Pòlisses','ID Compte','Web'];
+  const rows=[headers,...list.map(c=>[
+    c.src||'',displayName(c),c.fn||'',c.mn||'',c.ln||'',
+    (c.ph||[]).join(' | '),(c.em||[]).join(' | '),
+    c.bday||'',c.sex||'',c.pop||'',c.cp||'',c.ctry||'',
+    (c.nif||'').trim(),c.org||'',c.notes||'',c.labels||'',
+    c.rgpd||'',c.npol||'',c.acct||'',c.web||''
+  ])];
+  const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const filename=`${basename}_${new Date().toISOString().slice(0,10)}.csv`;
+  const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+}
 function toggleGrp(gi,v){if(v)selectedGroups.add(gi);else selectedGroups.delete(gi);const dg=document.getElementById(`dg_${gi}`);if(dg)dg.classList.toggle('selected',v);updateBulkBar()}
 function updateBulkBar(){
   const n=selectedGroups.size;
@@ -649,26 +814,51 @@ function renderSidebar(){
 //  RENDER DUPLICATES
 // ═══════════════════════════════════════════
 function renderDuplicates(){
+  // Update category tab badges
+  const cats={reals:0,empresa:0,optimizarte:0};
+  dupGroups.forEach(g=>{if(g._cat in cats)cats[g._cat]++});
+  Object.entries(cats).forEach(([cat,n])=>{const el=document.getElementById('catbadge_'+cat);if(el)el.textContent=n});
+
+  // Update category description bar
+  const CAT_DESC={reals:'Nom idèntic o molt similar entre contactes',empresa:'Un o més contactes podria ser una empresa / entitat',optimizarte:'Conté telèfon o email d\'OPTIMIZARTE'};
+  const catGrps=dupGroups.filter(g=>g._cat===activeDupCat);
+  const descEl=document.getElementById('catDesc');
+  if(descEl)descEl.textContent=`${catGrps.length} grup${catGrps.length!==1?'s':''} · ${CAT_DESC[activeDupCat]||''}`;
+
   const el=document.getElementById('dupView');
-  if(!dupGroups.length){el.innerHTML='<div class="empty"><div class="ico">✅</div><p>No s\'han trobat duplicats</p><p style="font-size:11px;color:#ccc;margin-top:4px">Tots els contactes semblen únics</p></div>';return}
-  el.innerHTML=dupGroups.map((g,gi)=>{
+  if(!catGrps.length){
+    el.innerHTML=`<div class="empty"><div class="ico">✅</div><p>Cap duplicat en aquesta categoria</p><p style="font-size:11px;color:#ccc;margin-top:4px">Prova una altra categoria o re-detecta</p></div>`;
+    return;
+  }
+
+  const catCls={reals:'cat-r',empresa:'cat-e',optimizarte:'cat-o'};
+  const cls=catCls[activeDupCat]||'cat-r';
+
+  el.innerHTML=catGrps.map(g=>{
+    const gi=dupGroups.indexOf(g); // global index (needed for merge/dismiss)
     const reasons=g.reasons.map(r=>`<span class="dg-reason">${e(r)}</span>`).join(' ');
     const ncols=Math.min(g.contacts.length,3);
-    const cards=g.contacts.slice(0,3).map(c=>`
-      <div class="dg-card">
-        <div class="src-badge ${sc(c.src)}" style="margin-bottom:6px;font-size:9px">${sl(c.src)}</div>
-        <div class="dg-name">${e(displayName(c)||'—')}</div>
-        ${(c.ph||[]).slice(0,2).map(p=>`<div class="dg-det">📞 ${e(p)}</div>`).join('')}
+    const cards=g.contacts.slice(0,3).map(c=>{
+      const isOpt=isOptContact(c);
+      const isCorp=isCorpContact(c);
+      return`<div class="dg-card">
+        <div style="display:flex;align-items:center;gap:5px;margin-bottom:6px">
+          <span class="src-badge ${sc(c.src)}" style="font-size:9px">${sl(c.src)}</span>
+          ${isOpt?'<span style="font-size:9px;background:#ffeaed;color:var(--red);padding:1px 5px;border-radius:3px;font-weight:700">OPT</span>':''}
+          ${isCorp&&!isOpt?'<span style="font-size:9px;background:#fef3c7;color:#92400e;padding:1px 5px;border-radius:3px;font-weight:700">EMPRESA</span>':''}
+        </div>
+        <div class="dg-name">${e(displayName(c)||c.org||'—')}</div>
+        ${c.org?`<div class="dg-det" style="font-weight:600;color:var(--warn)">🏢 ${e(c.org.substring(0,35))}</div>`:''}
+        ${(c.ph||[]).slice(0,2).map(p=>`<div class="dg-det ${isOpt&&OPT_PHONES.has(nPh(p))?'style="color:var(--red);font-weight:600"':''}">📞 ${e(p)}</div>`).join('')}
         ${(c.em||[]).slice(0,1).map(x=>`<div class="dg-det">✉ ${e(x)}</div>`).join('')}
         ${c.nif?`<div class="dg-det" style="font-family:'Courier New',monospace;font-size:10px">🪪 ${e(c.nif.trim())}</div>`:''}
         ${c.pop?`<div class="dg-det">📍 ${e(c.pop)}</div>`:''}
-        ${c.org?`<div class="dg-det">🏢 ${e(c.org.substring(0,30))}</div>`:''}
-      </div>`).join('');
+      </div>`}).join('');
     const sel=selectedGroups.has(gi);
-    return `<div class="dup-group${sel?' selected':''}" id="dg_${gi}">
+    return`<div class="dup-group ${cls}${sel?' selected':''}" id="dg_${gi}">
       <div class="dg-head">
         <input type="checkbox" class="dg-cb" id="dc_${gi}" ${sel?'checked':''} onchange="toggleGrp(${gi},this.checked)">
-        <label for="dc_${gi}" class="dg-label" style="cursor:pointer">Grup ${gi+1} · ${g.contacts.length} contactes</label>
+        <label for="dc_${gi}" class="dg-label" style="cursor:pointer">Grup · ${g.contacts.length} contactes</label>
         ${reasons}
       </div>
       <div class="dg-cards" style="grid-template-columns:repeat(${ncols},1fr)">${cards}</div>
@@ -850,20 +1040,7 @@ function confirmImport(){
 // ═══════════════════════════════════════════
 async function exportCSV(){
   const list=getFiltered();
-  const headers=['Font','Nom complet','Nom','2n Nom','Cognoms','Telèfons','Emails','Data Naix.','Sexe','Localitat','CP','País','NIF','Organització','Notes','Etiquetes','RGPD','Pòlisses','ID Compte','Web'];
-  const rows=[headers,...list.map(c=>[
-    c.src||'', displayName(c), c.fn||'', c.mn||'', c.ln||'',
-    (c.ph||[]).join(' | '),(c.em||[]).join(' | '),
-    c.bday||'',c.sex||'',c.pop||'',c.cp||'',c.ctry||'',
-    (c.nif||'').trim(),c.org||'',c.notes||'',c.labels||'',
-    c.rgpd||'',c.npol||'',c.acct||'',c.web||''
-  ])];
-  const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
-  const filename=`contactes_unificats_${new Date().toISOString().slice(0,10)}.csv`;
-  const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
-  try{const dl=await claude.use('downloads');if(dl){await dl.save({filename,data:blob});return}}catch(_){}
-  const url=URL.createObjectURL(blob);const a=document.createElement('a');
-  a.href=url;a.download=filename;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+  _doExportCSV(list,'contactes_unificats');
 }
 
 // ═══════════════════════════════════════════

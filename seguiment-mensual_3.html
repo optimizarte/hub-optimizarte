@@ -308,7 +308,7 @@ const ICON_DASH='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" str
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
 
 /* ── FORMAT UTILS ── */
-function fmtEur(n){return Math.round(n||0).toLocaleString('es-ES',{minimumFractionDigits:0,maximumFractionDigits:0})+' €';}
+function fmtEur(n){return Math.round(n||0).toLocaleString('es-ES')+'€';}
 function fmtOps(n){return Math.ceil(n||0);}
 function fmtPct(v){return v!==null?(v>=0?'+':'')+Math.round(v*10)/10+'%':'—';}
 
@@ -522,7 +522,7 @@ function chartExtraBono(curr,ref){
   const pctOps=ref.netOps>0?((curr.ops-ref.netOps)/ref.netOps*100):null;
   const pctPri=ref.netPrimas>0?((curr.primas-ref.netPrimas)/ref.netPrimas*100):null;
 
-  // AND logic: BOTH ops AND primas must meet threshold for each tier
+  // AND logic: both must meet threshold
   const met10=pctOps!==null&&pctPri!==null&&pctOps>=10&&pctPri>=10;
   const met15=pctOps!==null&&pctPri!==null&&pctOps>=15&&pctPri>=15;
   const met20=pctOps!==null&&pctPri!==null&&pctOps>=20&&pctPri>=20;
@@ -532,25 +532,18 @@ function chartExtraBono(curr,ref){
   else if(met15){bonus=15;bonusLbl='Extra Bono Mediano · +15%';}
   else if(met10){bonus=10;bonusLbl='Extra Bono Pequeño · +10%';}
 
-  // Objective targets per tier
-  const tiers=[
-    {pct:10,lbl:'Pequeño',opsObj:Math.ceil(ref.netOps*1.10),priObj:Math.round(ref.netPrimas*1.10),met:met10},
-    {pct:15,lbl:'Mediano', opsObj:Math.ceil(ref.netOps*1.15),priObj:Math.round(ref.netPrimas*1.15),met:met15},
-    {pct:20,lbl:'Grande',  opsObj:Math.ceil(ref.netOps*1.20),priObj:Math.round(ref.netPrimas*1.20),met:met20},
-  ];
-
   // Bars: range 0% to 25%
   const BAR_MAX=25;
   const bp=v=>Math.max(0,Math.min(100,(v/BAR_MAX)*100)).toFixed(1);
   const mrkC='rgba(180,0,20,.45)';
 
-  function bar(val,label,curVal,objVals){
+  function bar(val,label){
     if(val===null)return `<div style="font-size:.62rem;color:var(--gray-2);font-style:italic;margin-bottom:20px;">Sin datos de referencia</div>`;
     const fill=val>=10?'var(--red)':val>=0?'#FBBFD0':'#E5E7EB';
     const valC=val>=10?'var(--red)':val>=0?'var(--gray)':'var(--gray-2)';
     return `
       <div class="bar-label-row">
-        <span class="bar-section-lbl">${label} <span style="font-size:.7em;color:var(--gray-2);font-weight:400;">actual: ${curVal}</span></span>
+        <span class="bar-section-lbl">${label}</span>
         <span class="bar-cur-val" style="color:${valC}">${fmtPct(val)}</span>
       </div>
       <div class="bar-track slim">
@@ -561,57 +554,28 @@ function chartExtraBono(curr,ref){
       </div>`;
   }
 
-  // Tier objectives table
-  function tiersTable(){
-    if(!hasRef) return '';
-    const rows=tiers.map(t=>{
-      const activeStyle=bonus===t.pct?'background:#fff0f2;':'';
-      const metStyle=t.met?'color:#166534;font-weight:700;':'color:#9CA3AF;';
-      const icon=t.met?'✅':'□';
-      return `<tr style="${activeStyle}">
-        <td style="padding:3px 6px;font-size:.7rem;font-weight:700;color:${t.met?'var(--red)':'var(--gray-2)'};">${icon} +${t.pct}% ${t.lbl}</td>
-        <td style="padding:3px 6px;font-size:.7rem;text-align:right;${metStyle}">${t.opsObj} ops</td>
-        <td style="padding:3px 6px;font-size:.7rem;text-align:right;${metStyle}">${fmtEur(t.priObj)}</td>
-        <td style="padding:3px 6px;font-size:.68rem;text-align:center;color:${t.met?'#166534':'#9CA3AF'};">${t.met?'ACONSEGUIT':'—'}</td>
-      </tr>`;
-    }).join('');
-    return `
-      <div style="margin:10px 0 4px;font-size:.65rem;font-weight:700;color:var(--gray-2);text-transform:uppercase;letter-spacing:.07em;">Objectius per tram (ops I primes, condició AND)</div>
-      <table style="width:100%;border-collapse:collapse;border:1px solid #E0E0E0;border-radius:6px;overflow:hidden;margin-bottom:8px;">
-        <thead>
-          <tr style="background:#F5F5F5;">
-            <th style="padding:3px 6px;font-size:.65rem;text-align:left;color:var(--gray-2);">Tram</th>
-            <th style="padding:3px 6px;font-size:.65rem;text-align:right;color:var(--gray-2);">Objectiu Ops.</th>
-            <th style="padding:3px 6px;font-size:.65rem;text-align:right;color:var(--gray-2);">Objectiu Primes</th>
-            <th style="padding:3px 6px;font-size:.65rem;text-align:center;color:var(--gray-2);">Estat</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>`;
-  }
-
   const msgCls=bonus>0?'sms-ok':'sms-nt';
   return `<div class="chart-card">
-    <div class="chart-title">⭐ Extra Bono — Creixement</div>
-    <div class="chart-sub">Vs. mateix mes any anterior · condició: ops I primes ≥ llindar (AND)</div>
+    <div class="chart-title">⭐ Extra Bono — Crecimiento</div>
+    <div class="chart-sub">Vs. mismo mes año anterior · condición: ops Y primas ≥ umbral</div>
     <div class="bonus-pills">
-      <span class="bpill ${bonus>=10?'active':''}">+10% Extra Petit</span>
-      <span class="bpill ${bonus>=15?'active':''}">+15% Extra Mitjà</span>
-      <span class="bpill ${bonus>=20?'active':''}">+20% Extra Gran</span>
+      <span class="bpill ${bonus>=10?'active':''}">+10% si ≥10%</span>
+      <span class="bpill ${bonus>=15?'active':''}">+15% si ≥15%</span>
+      <span class="bpill ${bonus>=20?'active':''}">+20% si ≥20%</span>
     </div>
-    ${!hasRef?`<div style="font-size:.65rem;color:var(--gray-2);font-style:italic;padding:4px 0 12px;">Introdueix les dades de l'any anterior per calcular.</div>`:''}
-    ${bar(pctOps,'Operacions',fmtOps(curr.ops))}
-    ${bar(pctPri,'Primes Corregides',fmtEur(curr.primas))}
-    ${tiersTable()}
-    <div class="mrow" style="margin-top:4px;">
-      <span class="mrow-lbl" style="color:var(--gray-2);">Ref. Any Ant. · Ops. Netes</span>
+    ${!hasRef?`<div style="font-size:.65rem;color:var(--gray-2);font-style:italic;padding:4px 0 12px;">Introduce los datos del año anterior para calcular.</div>`:''}
+    ${bar(pctOps,'Operaciones')}
+    ${bar(pctPri,'Primas Corregidas')}
+    <div class="mrow" style="margin-top:8px;">
+      <span class="mrow-lbl" style="color:var(--gray-2);">Ref. Año Ant. · Ops. Netas</span>
       <span class="mrow-val" style="color:var(--gray-2);">${fmtOps(ref.netOps)}</span>
     </div>
     <div class="mrow">
-      <span class="mrow-lbl" style="color:var(--gray-2);">Ref. Any Ant. · Primes Netes</span>
+      <span class="mrow-lbl" style="color:var(--gray-2);">Ref. Año Ant. · Primas Netas</span>
       <span class="mrow-val" style="color:var(--gray-2);">${fmtEur(ref.netPrimas)}</span>
     </div>
-    <div class="status-msg ${msgCls}" style="margin-top:10px;">${bonus>0?'✅ '+bonusLbl:'➖ Sense Extra Bono · objectiu: +10% en ops I primes'}</div>
+    <div class="status-msg ${msgCls}" style="margin-top:10px;">${bonus>0?'✅ '+bonusLbl:'➖ Sin Extra Bono · objetivo: +10% en ops y primas'}</div>
+    ${bonus<20&&hasRef&&pctOps!==null&&pctPri!==null?`<div class="status-sub">Siguiente nivel: ops ${fmtPct(bonus>=10?bonus>=15?20:15:10)} · primas ${fmtPct(bonus>=10?bonus>=15?20:15:10)}</div>`:''}
   </div>`;
 }
 

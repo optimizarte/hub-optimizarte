@@ -762,8 +762,6 @@ button { font-family: var(--font); }
 .cat-edit-btn:hover{color:var(--red);background:var(--red-light);}
 
 /* ── EDITABLE CATEGORY LABELS ── */
-.cat-lbl-edit{border:none;border-bottom:1.5px solid transparent;background:transparent;font-size:inherit;font-weight:inherit;font-family:inherit;color:inherit;cursor:text;outline:none;padding:0;min-width:40px;max-width:110px;transition:border-color .15s;}
-.cat-lbl-edit:focus{border-bottom-color:currentColor;}
 /* ── CREATE NEW CAT ── */
 .cat-new-row{display:flex;align-items:center;gap:6px;padding:7px 10px;border-top:1px solid #F0F0F0;margin-top:4px;}
 .cat-new-inp{flex:1;border:none;border-bottom:1.5px solid var(--border);font-size:12px;font-family:'Inter',sans-serif;padding:2px 2px;outline:none;background:transparent;color:var(--dark);}
@@ -851,7 +849,7 @@ button { font-family: var(--font); }
       <span class="nav-badge" id="badge-all">8</span>
     </a>
 
-    <!-- Dynamic categories injected by JS -->
+    <div id="sidebar-dyn-cats"></div>
   </div>
 
   <div class="sidebar-sep"></div>
@@ -2121,285 +2119,320 @@ updateCounts();
 </script>
 
 <script>
-// ── CATEGORY SELECTOR + LABELS EDITABLES + SUPERVISIÓ PIN ─────────────────
 (function(){
-  const PIN_HASH = '79500318'; // PIN Supervisió
-  const SUPERV_VAL = 'supervisio';
-  const COLORS_DEFAULT = {
-    pagaments:'#d97706', seguiment:'#1d4ed8', formularis:'#166534',
-    analisi:'#7c3aed', instruccions:'#9CA3AF', sinistres:'#dc2626',
-    cotitzacions:'#0891b2', [SUPERV_VAL]:'#7c3aed'
-  };
+'use strict';
 
-  const STORAGE_CATS  = 'hub-custom-cats-v2';   // {val, lbl, color}[]
-  const STORAGE_SAVED = 'card-categories';        // {cardKey: val}
+/* ═══════════════════════════════════════════════════
+   CONSTANTS
+═══════════════════════════════════════════════════ */
+const PIN_CORRECT  = '79500318';
+const SUPERV_VAL   = 'supervisio';
+const KEY_CATS     = 'hub-cats-v3';
+const KEY_ASSIGNED = 'card-categories';
 
-  // ── Load/save cats ──────────────────────────────────────────────────────
-  let CATS = [];
-  function loadCats(){
-    const DEFAULT_CATS = [
-      {val:'pagaments',   lbl:'Pagaments',   color:'#d97706'},
-      {val:'seguiment',   lbl:'Seguiment',   color:'#1d4ed8'},
-      {val:'formularis',  lbl:'Formularis',  color:'#166534'},
-      {val:'analisi',     lbl:'An\u00e0lisi', color:'#7c3aed'},
-      {val:'instruccions',lbl:'Instruccions',color:'#9CA3AF'},
-      {val:'sinistres',   lbl:'Sinistres',   color:'#dc2626'},
-      {val:'cotitzacions',lbl:'Cotitzacions',color:'#0891b2'},
-      {val:SUPERV_VAL,   lbl:'Supervisi\u00f3',color:'#7c3aed'},
-    ];
-    try{
-      const stored = JSON.parse(localStorage.getItem(STORAGE_CATS)||'null');
-      if(stored&&stored.length){
-        // Merge: keep defaults updated with stored labels, add new custom ones
-        const storedMap = Object.fromEntries(stored.map(c=>[c.val,c]));
-        CATS = DEFAULT_CATS.map(d=>storedMap[d.val]?{...d,...storedMap[d.val]}:d);
-        stored.filter(s=>!DEFAULT_CATS.find(d=>d.val===s.val)).forEach(s=>CATS.push(s));
-      } else {
-        CATS = DEFAULT_CATS;
+const DEFAULT_CATS = [
+  {val:'pagaments',   lbl:'Pagaments',   color:'#d97706'},
+  {val:'seguiment',   lbl:'Seguiment',   color:'#1d4ed8'},
+  {val:'formularis',  lbl:'Formularis',  color:'#166534'},
+  {val:'analisi',     lbl:'An\u00e0lisi', color:'#7c3aed'},
+  {val:'instruccions',lbl:'Instruccions',color:'#9CA3AF'},
+  {val:'sinistres',   lbl:'Sinistres',   color:'#dc2626'},
+  {val:'cotitzacions',lbl:'Cotitzacions',color:'#0891b2'},
+  {val:SUPERV_VAL,   lbl:'Supervisi\u00f3', color:'#581c87'},
+];
+
+/* ═══ State ═══ */
+let CATS      = loadCats();
+let assigned  = loadAssigned(); // {href: val}
+
+function loadCats(){
+  try{
+    const s = JSON.parse(localStorage.getItem(KEY_CATS)||'null');
+    if(!s||!s.length) return DEFAULT_CATS.map(d=>({...d}));
+    // Merge defaults + stored custom
+    const stored = Object.fromEntries(s.map(c=>[c.val,c]));
+    const merged = DEFAULT_CATS.map(d => stored[d.val] ? {...d, lbl:stored[d.val].lbl} : {...d});
+    s.filter(x=>!DEFAULT_CATS.find(d=>d.val===x.val)).forEach(x=>merged.push({...x}));
+    return merged;
+  } catch(e){ return DEFAULT_CATS.map(d=>({...d})); }
+}
+function saveCats(){ localStorage.setItem(KEY_CATS, JSON.stringify(CATS)); }
+
+function loadAssigned(){
+  try{ return JSON.parse(localStorage.getItem(KEY_ASSIGNED)||'{}'); }catch(e){ return {}; }
+}
+function saveAssigned(){ localStorage.setItem(KEY_ASSIGNED, JSON.stringify(assigned)); }
+
+function catByVal(v){ return CATS.find(c=>c.val===v); }
+
+/* ═══ Sidebar ═══ */
+function rebuildSidebar(){
+  const container = document.getElementById('sidebar-dyn-cats');
+  if(!container) return;
+  container.innerHTML = '';
+
+  CATS.forEach(function(cat){
+    const cnt = document.querySelectorAll('.tool-card[data-category="'+cat.val+'"]').length;
+    const a = document.createElement('a');
+    a.className = 'nav-item';
+    a.href = '#';
+    a.dataset.dynCat = cat.val;
+    a.onclick = function(){ sidebarFilter(cat.val, this); return false; };
+
+    const dot = '<span style="width:9px;height:9px;border-radius:50%;background:'+cat.color+';flex-shrink:0;display:inline-block;margin-right:6px;"></span>';
+    const lock = cat.val === SUPERV_VAL ? ' \uD83D\uDD12' : '';
+    a.innerHTML = dot + cat.lbl + lock +
+      ' <span class="nav-badge gray" data-badge-cat="'+cat.val+'">'+cnt+'</span>';
+
+    container.appendChild(a);
+  });
+}
+
+function updateBadges(){
+  document.querySelectorAll('[data-badge-cat]').forEach(function(b){
+    const v = b.dataset.badgeCat;
+    b.textContent = document.querySelectorAll('.tool-card[data-category="'+v+'"]').length;
+  });
+  const allBadge = document.getElementById('badge-all');
+  if(allBadge) allBadge.textContent = document.querySelectorAll('.tool-card').length;
+}
+
+/* ═══ PIN Modal ═══ */
+let _pinEntry = '';
+let _pinCb    = null;
+
+function buildPinModal(){
+  if(document.getElementById('pinOverlay')) return;
+  const el = document.createElement('div');
+  el.className = 'pin-overlay';
+  el.id = 'pinOverlay';
+  el.innerHTML =
+    '<div class="pin-box">'+
+      '<div class="pin-icon">\uD83D\uDD12</div>'+
+      '<div class="pin-title">Supervisi\u00f3 \u2014 Acc\u00e9s restringit</div>'+
+      '<div class="pin-sub">Introdueix el PIN per continuar</div>'+
+      '<div class="pin-dots" id="pinDots">'+
+        '<div class="pin-dot" id="pd0"></div><div class="pin-dot" id="pd1"></div>'+
+        '<div class="pin-dot" id="pd2"></div><div class="pin-dot" id="pd3"></div>'+
+        '<div class="pin-dot" id="pd4"></div><div class="pin-dot" id="pd5"></div>'+
+        '<div class="pin-dot" id="pd6"></div><div class="pin-dot" id="pd7"></div>'+
+      '</div>'+
+      '<div class="pin-keypad">'+
+        [1,2,3,4,5,6,7,8,9].map(function(k){
+          return '<button class="pin-key" onclick="pinKey(''+k+'')">'+k+'</button>';
+        }).join('')+
+        '<button class="pin-key" onclick="pinKey('\u232B')">\u232B</button>'+
+        '<button class="pin-key" onclick="pinKey('0')">0</button>'+
+        '<button class="pin-key" onclick="pinKey('C')">C</button>'+
+      '</div>'+
+      '<div class="pin-err" id="pinErr"></div>'+
+      '<button class="pin-cancel" onclick="pinCancel()">Cancel\u00b7lar</button>'+
+    '</div>';
+  document.body.appendChild(el);
+}
+
+window.pinKey = function(k){
+  if(k === '\u232B'){ _pinEntry = _pinEntry.slice(0,-1); }
+  else if(k === 'C'){ _pinEntry = ''; }
+  else if(_pinEntry.length < 8){ _pinEntry += k; }
+
+  for(var i=0;i<8;i++){
+    var d=document.getElementById('pd'+i);
+    if(d) d.classList.toggle('filled',i<_pinEntry.length);
+  }
+  document.getElementById('pinErr').textContent = '';
+
+  if(_pinEntry.length === PIN_CORRECT.length){
+    if(_pinEntry === PIN_CORRECT){
+      closePinModal();
+      if(_pinCb){ var cb=_pinCb; _pinCb=null; cb(); }
+    } else {
+      document.getElementById('pinErr').textContent = 'PIN incorrecte. Torna-ho a provar.';
+      _pinEntry = '';
+      for(var j=0;j<8;j++){var d2=document.getElementById('pd'+j);if(d2)d2.classList.remove('filled');}
+    }
+  }
+};
+window.pinCancel = function(){ closePinModal(); _pinCb=null; };
+function closePinModal(){
+  _pinEntry = '';
+  var o=document.getElementById('pinOverlay');
+  if(o) o.classList.remove('open');
+}
+function openPinModal(cb){
+  buildPinModal();
+  _pinCb = cb; _pinEntry = '';
+  for(var i=0;i<8;i++){var d=document.getElementById('pd'+i);if(d)d.classList.remove('filled');}
+  document.getElementById('pinErr').textContent = '';
+  document.getElementById('pinOverlay').classList.add('open');
+}
+
+/* ═══ Intercept handleCardClick for Supervisió ═══ */
+var _origClick = window.handleCardClick;
+window.handleCardClick = function(e, card){
+  if((card.dataset.category||'') === SUPERV_VAL){
+    e.preventDefault(); e.stopPropagation();
+    openPinModal(function(){
+      var url = card.getAttribute('href');
+      if(url){
+        if(typeof isMobile === 'function' && isMobile()) window.open(url,'_blank');
+        else if(typeof openModal === 'function') openModal(card.dataset.title||url, url);
+        else window.open(url,'_blank');
       }
-    }catch(e){ CATS = DEFAULT_CATS; }
-  }
-  function saveCats(){ localStorage.setItem(STORAGE_CATS, JSON.stringify(CATS)); }
-
-  let saved = {};
-  function loadSaved(){ try{saved=JSON.parse(localStorage.getItem(STORAGE_SAVED)||'{}')}catch(e){saved={};} }
-  function saveSaved(){ localStorage.setItem(STORAGE_SAVED, JSON.stringify(saved)); }
-
-  loadCats(); loadSaved();
-
-  // ── Sidebar: rebuild dynamic cats ───────────────────────────────────────
-  function rebuildSidebar(){
-    const sidebarSection = document.querySelector('.sidebar-section');
-    if(!sidebarSection) return;
-    // Remove all dynamic cat nav-items (keep "all" + Estat section)
-    sidebarSection.querySelectorAll('.nav-item[data-dyn-cat]').forEach(el=>el.remove());
-    const allItem = sidebarSection.querySelector('.nav-item');
-    CATS.forEach(cat=>{
-      const a = document.createElement('a');
-      a.className='nav-item';
-      a.setAttribute('data-dyn-cat', cat.val);
-      a.href='#';
-      a.onclick = function(){ sidebarFilter(cat.val, this); return false; };
-      const lock = cat.val===SUPERV_VAL ? ' <span class="superv-lock">\uD83D\uDD12</span>' : '';
-      // Count cards with this cat
-      const cnt = document.querySelectorAll('.tool-card[data-category="'+cat.val+'"]').length;
-      a.innerHTML = '<span style="width:9px;height:9px;border-radius:50%;background:'+cat.color+';flex-shrink:0;display:inline-block;margin-right:4px;"></span>'
-        + cat.lbl + lock
-        + ' <span class="nav-badge gray" data-cat-badge="'+cat.val+'">'+(cnt||0)+'</span>';
-      if(allItem) sidebarSection.insertBefore(a, allItem.nextSibling);
-      else sidebarSection.appendChild(a);
     });
+    return;
+  }
+  if(_origClick) _origClick(e, card);
+};
+
+/* ═══ Card category UI: ✎ button + inline label rename ═══ */
+function buildCatUI(card){
+  var footer = card.querySelector('.card-footer-row');
+  if(!footer) return;
+  var catSpan = footer.querySelector('.card-category');
+  if(!catSpan) return;
+
+  var cardKey = card.getAttribute('href') || card.dataset.title || '';
+
+  /* Apply saved assignment */
+  if(assigned[cardKey]){
+    var s = catByVal(assigned[cardKey]);
+    if(s){ applyCatToCard(card, catSpan, s); }
   }
 
-  function updateBadges(){
-    CATS.forEach(cat=>{
-      const cnt = document.querySelectorAll('.tool-card[data-category="'+cat.val+'"]').length;
-      document.querySelectorAll('[data-cat-badge="'+cat.val+'"]').forEach(b=>b.textContent=cnt);
-    });
-    document.querySelectorAll('[data-cat-badge="all"]').forEach(b=>{
-      b.textContent=document.querySelectorAll('.tool-card').length;
-    });
-  }
+  /* Wrap span */
+  var wrap = document.createElement('div');
+  wrap.className = 'card-category-wrap';
+  catSpan.parentNode.insertBefore(wrap, catSpan);
+  wrap.appendChild(catSpan);
 
-  // ── PIN modal ────────────────────────────────────────────────────────────
-  let pinEntry = '';
-  let pinCallback = null;
+  /* ✎ button → dropdown */
+  var btn = document.createElement('button');
+  btn.className = 'cat-edit-btn';
+  btn.title = 'Canviar etiqueta';
+  btn.innerHTML = '&#9998;';
+  btn.addEventListener('click', function(e){
+    e.preventDefault(); e.stopPropagation();
+    /* Close any open dropdowns */
+    document.querySelectorAll('.cat-select-wrap').forEach(function(el){ el.remove(); });
 
-  function createPinModal(){
-    if(document.getElementById('pinOverlay')) return;
-    const div = document.createElement('div');
-    div.className='pin-overlay'; div.id='pinOverlay';
-    div.innerHTML = `
-      <div class="pin-box">
-        <div class="pin-icon">\uD83D\uDD12</div>
-        <div class="pin-title">Supervisi\u00f3 — Acc\u00e9s restringit</div>
-        <div class="pin-sub">Introdueix el PIN per continuar</div>
-        <div class="pin-dots" id="pinDots">
-          <div class="pin-dot" id="pd0"></div><div class="pin-dot" id="pd1"></div>
-          <div class="pin-dot" id="pd2"></div><div class="pin-dot" id="pd3"></div>
-          <div class="pin-dot" id="pd4"></div><div class="pin-dot" id="pd5"></div>
-          <div class="pin-dot" id="pd6"></div><div class="pin-dot" id="pd7"></div>
-        </div>
-        <div class="pin-keypad" id="pinKeypad">
-          ${[1,2,3,4,5,6,7,8,9,'','0','\u232B'].map(k=>`<button class="pin-key" data-k="${k}" onclick="pinPress('${k}')">${k}</button>`).join('')}
-        </div>
-        <div class="pin-err" id="pinErr"></div>
-        <button class="pin-cancel" onclick="pinCancel()">Cancel\u00b7lar</button>
-      </div>`;
-    document.body.appendChild(div);
-  }
+    var dd = document.createElement('div');
+    dd.className = 'cat-select-wrap open';
 
-  window.pinPress = function(k){
-    if(k==='\u232B'){ pinEntry=pinEntry.slice(0,-1); }
-    else if(pinEntry.length<8){ pinEntry+=k; }
-    // Update dots
-    for(let i=0;i<8;i++){
-      const d=document.getElementById('pd'+i);
-      if(d) d.classList.toggle('filled', i<pinEntry.length);
-    }
-    document.getElementById('pinErr').textContent='';
-    if(pinEntry.length===PIN_HASH.length){
-      if(pinEntry===PIN_HASH){
-        closePinModal();
-        if(pinCallback) pinCallback();
-      } else {
-        document.getElementById('pinErr').textContent='PIN incorrecte. Torna-ho a provar.';
-        pinEntry='';
-        for(let i=0;i<8;i++){const d=document.getElementById('pd'+i);if(d)d.classList.remove('filled');}
-      }
-    }
-  };
-  window.pinCancel = function(){ closePinModal(); pinCallback=null; };
-  function closePinModal(){
-    pinEntry='';
-    const o=document.getElementById('pinOverlay');
-    if(o){o.classList.remove('open');}
-  }
-  function openPinModal(cb){
-    createPinModal();
-    pinCallback=cb;
-    pinEntry='';
-    for(let i=0;i<8;i++){const d=document.getElementById('pd'+i);if(d)d.classList.remove('filled');}
-    document.getElementById('pinErr').textContent='';
-    document.getElementById('pinOverlay').classList.add('open');
-  }
-
-  // ── Intercept handleCardClick for Supervisió ─────────────────────────────
-  const _origHandleCardClick = window.handleCardClick;
-  window.handleCardClick = function(e, card){
-    if((card.dataset.category||'')===SUPERV_VAL){
-      e.preventDefault(); e.stopPropagation();
-      openPinModal(function(){
-        if(_origHandleCardClick) _origHandleCardClick(e, card);
-        else {
-          const url=card.getAttribute('href');
-          if(url) window.open(url,'_blank');
-        }
-      });
-      return;
-    }
-    if(_origHandleCardClick) _origHandleCardClick(e, card);
-  };
-
-  // ── Build card category UI ───────────────────────────────────────────────
-  function buildCatUI(card){
-    const footer = card.querySelector('.card-footer-row');
-    if(!footer) return;
-    const catSpan = footer.querySelector('.card-category');
-    if(!catSpan) return;
-    const cardKey = card.getAttribute('href') || card.dataset.title || '';
-
-    // Apply saved category
-    if(saved[cardKey]){
-      const s = CATS.find(c=>c.val===saved[cardKey]);
-      if(s){ catSpan.textContent=s.lbl; catSpan.style.color=s.color; card.dataset.category=s.val; }
-    }
-
-    // Make label text editable inline
-    const editInp = document.createElement('input');
-    editInp.type='text';
-    editInp.className='cat-lbl-edit';
-    editInp.value = catSpan.textContent;
-    editInp.style.color = catSpan.style.color;
-    editInp.title = 'Edita el nom de l'etiqueta';
-    editInp.onclick = function(e){ e.preventDefault(); e.stopPropagation(); this.focus(); this.select(); };
-    editInp.onchange = function(){
-      const val = this.value.trim();
-      if(!val){this.value=catSpan.textContent;return;}
-      // Update the cat in CATS and all cards + sidebar
-      const curVal = card.dataset.category;
-      const catObj = CATS.find(c=>c.val===curVal);
+    /* ── Editable label name row ── */
+    var renameRow = document.createElement('div');
+    renameRow.style.cssText = 'display:flex;align-items:center;gap:6px;padding:6px 10px 4px;border-bottom:1px solid #F0F0F0;';
+    var renameInp = document.createElement('input');
+    renameInp.type = 'text';
+    renameInp.value = catSpan.textContent;
+    renameInp.placeholder = 'Nom etiqueta...';
+    renameInp.style.cssText = 'flex:1;border:none;border-bottom:1.5px solid var(--border);font-size:12px;font-family:Inter,sans-serif;padding:2px 2px;outline:none;background:transparent;color:var(--dark);';
+    renameInp.onclick = function(ev){ ev.stopPropagation(); };
+    var renameBtn = document.createElement('button');
+    renameBtn.textContent = 'Reanomenar';
+    renameBtn.style.cssText = 'background:var(--red);color:#fff;border:none;border-radius:4px;padding:3px 7px;font-size:10.5px;font-weight:600;cursor:pointer;white-space:nowrap;';
+    renameBtn.onclick = function(ev){
+      ev.stopPropagation();
+      var newLbl = renameInp.value.trim();
+      if(!newLbl) return;
+      var curVal = card.dataset.category;
+      var catObj = catByVal(curVal);
       if(catObj){
-        catObj.lbl=val;
+        catObj.lbl = newLbl;
         saveCats();
-        // Update all spans with this category
-        document.querySelectorAll('.tool-card[data-category="'+curVal+'"] .cat-lbl-edit').forEach(inp=>inp.value=val);
+        /* Update ALL cards with this category */
+        document.querySelectorAll('.tool-card[data-category="'+curVal+'"] .card-category').forEach(function(sp){
+          sp.textContent = newLbl;
+        });
         rebuildSidebar();
       }
+      dd.remove();
     };
-    catSpan.style.display='none';
-    catSpan.parentNode.insertBefore(editInp, catSpan);
+    renameRow.appendChild(renameInp); renameRow.appendChild(renameBtn);
+    dd.appendChild(renameRow);
 
-    // Wrap
-    const wrap = document.createElement('div');
-    wrap.className='card-category-wrap';
-    editInp.parentNode.insertBefore(wrap, editInp);
-    wrap.appendChild(catSpan);
-    wrap.appendChild(editInp);
-
-    // Pencil button
-    const btn = document.createElement('button');
-    btn.className='cat-edit-btn';
-    btn.title='Canviar categoria';
-    btn.innerHTML='&#9998;';
-    btn.onclick = function(e){
-      e.preventDefault(); e.stopPropagation();
-      const existing = wrap.querySelector('.cat-select-wrap');
-      if(existing){ existing.remove(); return; }
-      document.querySelectorAll('.cat-select-wrap').forEach(el=>el.remove());
-      const dd = document.createElement('div');
-      dd.className='cat-select-wrap open';
-
-      CATS.forEach(function(cat){
-        const opt = document.createElement('div');
-        opt.className='cat-opt'+(card.dataset.category===cat.val?' selected':'');
-        opt.style.color = cat.color;
-        opt.textContent = cat.lbl + (cat.val===SUPERV_VAL?' \uD83D\uDD12':'');
-        opt.onclick=function(ev){
-          ev.stopPropagation();
-          editInp.value=cat.lbl;
-          editInp.style.color=cat.color;
-          card.dataset.category=cat.val;
-          saved[cardKey]=cat.val;
-          saveSaved();
-          dd.remove();
-          rebuildSidebar();
-          updateBadges();
-          if(typeof applyFilters==='function') applyFilters();
-        };
-        dd.appendChild(opt);
-      });
-
-      // "Crear nova etiqueta" row
-      const newRow = document.createElement('div');
-      newRow.className='cat-new-row';
-      const newInp = document.createElement('input');
-      newInp.className='cat-new-inp'; newInp.placeholder='Nova etiqueta...';
-      newInp.onclick=ev=>ev.stopPropagation();
-      const newBtn = document.createElement('button');
-      newBtn.className='cat-new-btn'; newBtn.textContent='Crear';
-      newBtn.onclick=function(ev){
+    /* ── Category options ── */
+    CATS.forEach(function(cat){
+      var opt = document.createElement('div');
+      opt.className = 'cat-opt' + (card.dataset.category===cat.val?' selected':'');
+      opt.style.color = cat.color;
+      opt.textContent = cat.lbl + (cat.val===SUPERV_VAL?' \uD83D\uDD12':'');
+      opt.addEventListener('click', function(ev){
         ev.stopPropagation();
-        const lbl=newInp.value.trim();
-        if(!lbl) return;
-        const val=lbl.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9\-]/g,'');
-        if(CATS.find(c=>c.val===val)){newInp.value='';return;}
-        const colors=['#0891b2','#d97706','#166534','#dc2626','#7c3aed','#1d4ed8'];
-        const color=colors[CATS.length%colors.length];
-        CATS.push({val,lbl,color});
-        saveCats();
-        // Apply to this card
-        editInp.value=lbl; editInp.style.color=color;
-        card.dataset.category=val; saved[cardKey]=val; saveSaved();
+        applyCatToCard(card, catSpan, cat);
+        assigned[cardKey] = cat.val;
+        saveAssigned();
         dd.remove();
         rebuildSidebar(); updateBadges();
-        if(typeof applyFilters==='function') applyFilters();
-      };
-      newRow.appendChild(newInp); newRow.appendChild(newBtn);
-      dd.appendChild(newRow);
-      wrap.appendChild(dd);
-    };
-    wrap.appendChild(btn);
+        if(typeof applyFilters === 'function') applyFilters();
+      });
+      dd.appendChild(opt);
+    });
 
-    document.addEventListener('click',function(e){
-      if(!wrap.contains(e.target)) wrap.querySelector('.cat-select-wrap')?.remove();
-    },{passive:true});
+    /* ── Create new category row ── */
+    var newRow = document.createElement('div');
+    newRow.className = 'cat-new-row';
+    var newInp = document.createElement('input');
+    newInp.className = 'cat-new-inp'; newInp.placeholder = 'Nova etiqueta...';
+    newInp.onclick = function(ev){ ev.stopPropagation(); };
+    var newBtn = document.createElement('button');
+    newBtn.className = 'cat-new-btn'; newBtn.textContent = 'Crear';
+    newBtn.addEventListener('click', function(ev){
+      ev.stopPropagation();
+      var lbl = newInp.value.trim(); if(!lbl) return;
+      var val = lbl.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+      if(!val || catByVal(val)) return;
+      var palette = ['#0891b2','#d97706','#166534','#dc2626','#7c3aed','#1d4ed8','#d946ef','#059669'];
+      var color   = palette[CATS.length % palette.length];
+      var newCat  = {val:val, lbl:lbl, color:color};
+      CATS.push(newCat);
+      saveCats();
+      applyCatToCard(card, catSpan, newCat);
+      assigned[cardKey] = val; saveAssigned();
+      dd.remove();
+      rebuildSidebar(); updateBadges();
+      if(typeof applyFilters === 'function') applyFilters();
+    });
+    newRow.appendChild(newInp); newRow.appendChild(newBtn);
+    dd.appendChild(newRow);
+
+    wrap.appendChild(dd);
+  });
+  wrap.appendChild(btn);
+
+  /* Close dropdown on outside click */
+  document.addEventListener('click', function handler(e){
+    if(!wrap.contains(e.target)){
+      var existing = wrap.querySelector('.cat-select-wrap');
+      if(existing) existing.remove();
+    }
+  }, {passive:true});
+}
+
+function applyCatToCard(card, catSpan, cat){
+  catSpan.textContent = cat.lbl;
+  catSpan.style.color = cat.color;
+  card.dataset.category = cat.val;
+  /* Show lock icon if Supervisió */
+  var lockEl = card.querySelector('.cat-lock-icon');
+  if(cat.val === SUPERV_VAL){
+    if(!lockEl){
+      lockEl = document.createElement('span');
+      lockEl.className = 'cat-lock-icon';
+      lockEl.textContent = ' \uD83D\uDD12';
+      lockEl.style.fontSize = '10px';
+      catSpan.insertAdjacentElement('afterend', lockEl);
+    }
+  } else {
+    if(lockEl) lockEl.remove();
   }
+}
 
-  // ── Init ─────────────────────────────────────────────────────────────────
-  document.querySelectorAll('#grid-live .tool-card[data-status="live"]').forEach(buildCatUI);
-  rebuildSidebar();
-  updateBadges();
+/* ═══ Init ═══ */
+document.querySelectorAll('#grid-live .tool-card[data-status="live"]').forEach(buildCatUI);
+rebuildSidebar();
+updateBadges();
+
 })();
 </script>
 <script>

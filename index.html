@@ -2176,13 +2176,14 @@ function rebuildSidebar(){
     const a = document.createElement('a');
     a.className = 'nav-item';
     a.href = '#';
+    a.style.cssText = 'display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;cursor:pointer;color:var(--gray);font-size:13px;font-family:Inter,sans-serif;text-decoration:none;transition:all .15s;';
     a.dataset.dynCat = cat.val;
-    a.onclick = function(){ sidebarFilter(cat.val, this); return false; };
+    a.onclick = function(e){ e.preventDefault(); sidebarFilter(cat.val, this); return false; };
 
-    const dot = '<span style="width:9px;height:9px;border-radius:50%;background:'+cat.color+';flex-shrink:0;display:inline-block;margin-right:6px;"></span>';
-    const lock = cat.val === SUPERV_VAL ? ' \uD83D\uDD12' : '';
-    a.innerHTML = dot + cat.lbl + lock +
-      ' <span class="nav-badge gray" data-badge-cat="'+cat.val+'">'+cnt+'</span>';
+    const dot = '<span style="width:9px;height:9px;border-radius:50%;background:'+cat.color+';flex-shrink:0;display:block;"></span>';
+    const lock = cat.val === SUPERV_VAL ? '<span style="font-size:10px;opacity:.7;">\uD83D\uDD12</span>' : '';
+    const badge = '<span class="nav-badge gray" data-badge-cat="'+cat.val+'" style="margin-left:auto;background:#E5E7EB;color:#6B7280;font-size:11px;font-weight:600;padding:1px 7px;border-radius:20px;">'+cnt+'</span>';
+    a.innerHTML = dot + '<span style="flex:1;">'+cat.lbl+'</span>' + lock + badge;
 
     container.appendChild(a);
   });

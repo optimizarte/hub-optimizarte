@@ -1,0 +1,813 @@
+<title>Seguimiento Mensual · Bonos OPTIMIZARTE</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#DC0028;--red-d:#b8001f;--red-l:#fff0f2;
+  --dark:#1e1e1e;--gray:#414141;--gray-2:#9CA3AF;
+  --border:#E0E0E0;--bg:#F0F0F0;
+  --radius:8px;--shadow:0 2px 8px rgba(0,0,0,.10);
+  --green:#10B981;--amber:#F59E0B;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gray);min-height:100vh;padding-bottom:40px;}
+
+/* ── TOPBAR ── */
+.topbar{height:52px;background:var(--dark);display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+.brand{display:flex;align-items:center;gap:3px;}
+.brand-opt{font-family:'Poppins',Arial;font-weight:800;font-size:.92rem;color:#fff;}
+.brand-by{font-size:.58rem;color:rgba(255,255,255,.35);margin:0 4px;font-style:italic;}
+.brand-occ{font-family:'Poppins',Arial;font-weight:800;font-size:.92rem;color:var(--red);}
+.topbar-r{text-align:right;}
+.topbar-title{font-family:'Poppins',Arial;font-size:.78rem;font-weight:700;color:#fff;}
+.topbar-sub{font-size:.58rem;color:rgba(255,255,255,.38);margin-top:1px;}
+
+/* ── LAYOUT ── */
+.main{max-width:1300px;margin:0 auto;padding:20px 18px 0;}
+
+/* ── SECTION PILL ── */
+.sec-pill{display:inline-flex;align-items:center;gap:6px;background:var(--red);color:#fff;padding:4px 12px;border-radius:4px;font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;}
+
+/* ── FORM CARD ── */
+.form-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px 18px;margin-bottom:18px;box-shadow:var(--shadow);}
+
+/* ── FIELDS ROW ── */
+.fields-row{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:flex-end;}
+.field{display:flex;flex-direction:column;gap:4px;}
+.field label{font-size:.56rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);}
+
+/* ── INPUTS ── */
+.field input,.field select{
+  border:none;border-bottom:1.5px solid var(--border);
+  padding:5px 2px;font-size:1.1rem;font-weight:700;
+  color:var(--dark);font-family:Arial,sans-serif;
+  background:transparent;outline:none;transition:border-color .2s;width:100%;
+  -webkit-appearance:none;appearance:none;
+}
+.field input{cursor:text;}
+.field select{cursor:pointer;}
+.field input:focus,.field select:focus{border-bottom-color:var(--red);}
+.field select option{font-weight:700;}
+.select-row{display:flex;gap:6px;align-items:flex-end;}
+.select-row .field{flex:1;}
+
+/* Current month badge (non-editable) */
+.curr-badge{font-size:1.1rem;font-weight:700;color:var(--red);padding:5px 2px;border-bottom:1.5px solid var(--border);white-space:nowrap;font-family:Arial,sans-serif;}
+
+/* Bimonthly summary */
+.bim-row{margin-top:12px;padding-top:10px;border-top:1px solid var(--border);font-size:.62rem;color:var(--gray-2);display:flex;flex-wrap:wrap;gap:12px;}
+.bim-row strong{color:var(--red);}
+
+/* ── BUTTONS ── */
+.btn-red{display:inline-flex;align-items:center;gap:6px;background:var(--red);color:#fff;padding:8px 14px;border-radius:5px;border:none;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;transition:background .15s;}
+.btn-red:hover{background:var(--red-d);}
+.btn-red svg{width:13px;height:13px;}
+.btn-dash-lg{display:inline-flex;align-items:center;gap:7px;background:var(--red);color:#fff;padding:10px 16px;border-radius:6px;border:none;font-size:.67rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;transition:background .15s;white-space:nowrap;align-self:flex-end;margin-bottom:2px;}
+.btn-dash-lg:hover{background:var(--red-d);}
+.btn-dash-lg svg{width:14px;height:14px;}
+
+/* ── FOOTER ── */
+.footer-bar{background:var(--dark);color:rgba(255,255,255,.35);font-size:.62rem;text-align:center;padding:9px;margin-top:30px;}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--bg);border-radius:12px;width:94vw;max-width:900px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.35);transform:scale(.96);transition:transform .2s;}
+.modal-overlay.open .modal{transform:scale(1);}
+.modal-header{background:var(--dark);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;border-radius:12px 12px 0 0;position:sticky;top:0;z-index:10;}
+.modal-header h2{font-family:'Poppins',Arial;font-size:.82rem;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px;}
+.modal-close{background:none;border:none;color:rgba(255,255,255,.5);font-size:1.3rem;cursor:pointer;transition:color .15s;line-height:1;padding:4px 6px;}
+.modal-close:hover{color:#fff;}
+.modal-body{padding:14px;}
+.modal-info{font-size:.62rem;color:var(--gray-2);margin-bottom:12px;display:flex;gap:16px;flex-wrap:wrap;padding:8px 10px;background:#fff;border-radius:6px;border:1px solid var(--border);}
+.modal-info strong{color:var(--dark);}
+
+/* ── CHARTS GRID ── */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:640px){.charts-grid{grid-template-columns:1fr;}}
+.chart-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:15px;}
+.chart-title{font-family:'Poppins',Arial;font-size:.72rem;font-weight:700;color:var(--dark);margin-bottom:2px;}
+.chart-sub{font-size:.58rem;color:var(--gray-2);margin-bottom:12px;}
+
+/* bonus pills — red/white */
+.bonus-pills{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+.bpill{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:10px;font-size:.58rem;font-weight:700;
+       border:1.5px solid var(--red);color:var(--red);background:#fff;transition:all .2s;}
+.bpill.active{background:var(--red);color:#fff;}
+
+/* value display */
+.val-big{font-family:'Poppins',Arial;font-size:2rem;font-weight:800;line-height:1;margin-bottom:3px;}
+.val-lbl{font-size:.58rem;color:var(--gray-2);margin-bottom:10px;}
+
+/* progress bar */
+.bar-track{position:relative;height:22px;background:#F3F4F6;border-radius:6px;overflow:visible;margin-bottom:28px;}
+.bar-track.slim{height:16px;margin-bottom:22px;}
+.bar-fill{position:absolute;left:0;top:0;height:100%;border-radius:6px;transition:width .4s ease;}
+.bar-marker{position:absolute;top:-3px;bottom:-3px;width:2px;}
+.bar-marker-lbl{position:absolute;font-size:.5rem;font-weight:700;white-space:nowrap;transform:translateX(-50%);}
+.bar-marker-lbl.top{top:-18px;}
+.bar-marker-lbl.bot{bottom:-16px;}
+
+/* metric rows */
+.mrow{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);}
+.mrow:last-child{border:none;}
+.mrow-lbl{font-size:.62rem;color:var(--gray);flex:1;}
+.mrow-val{font-size:.8rem;font-weight:700;color:var(--dark);min-width:70px;text-align:right;}
+.mrow-pct{font-size:.72rem;font-weight:700;min-width:46px;text-align:right;}
+.pup{color:var(--green);}.pdn{color:var(--red);}.pnt{color:var(--gray-2);}
+
+/* step chart (temporal) */
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;align-items:flex-end;height:80px;margin-bottom:6px;}
+.step-col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:2px;}
+.step-bar{width:100%;border-radius:4px 4px 0 0;transition:all .3s;}
+.step-lbl{font-size:.5rem;text-align:center;line-height:1.3;color:#CBD5E1;}
+.step-pct{font-size:.6rem;font-weight:700;color:#CBD5E1;}
+.step-col.active .step-lbl,.step-col.active .step-pct{color:inherit;}
+
+/* bar-label (above bar track) */
+.bar-label-row{display:flex;align-items:baseline;gap:6px;margin-bottom:4px;}
+.bar-section-lbl{font-size:.56rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray-2);}
+.bar-cur-val{font-size:.82rem;font-weight:800;}
+
+/* status */
+.status-msg{font-size:.7rem;font-weight:700;margin-top:8px;}
+.sms-ok{color:var(--green);}.sms-warn{color:var(--amber);}.sms-bad{color:var(--red);}.sms-nt{color:var(--gray-2);}
+.status-sub{font-size:.58rem;color:var(--gray-2);margin-top:2px;}
+
+/* toast */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:#fff;padding:8px 18px;border-radius:6px;font-size:.7rem;font-weight:600;opacity:0;transition:all .25s;pointer-events:none;z-index:300;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* PDF export button */
+.btn-pdf{display:inline-flex;align-items:center;gap:5px;background:transparent;border:1.5px solid rgba(255,255,255,.28);color:rgba(255,255,255,.65);padding:6px 12px;border-radius:5px;font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .2s;font-family:Arial,sans-serif;white-space:nowrap;}
+.btn-pdf:hover{border-color:var(--red);color:#fff;}
+.btn-pdf:disabled{opacity:.4;cursor:not-allowed;}
+.btn-pdf svg{width:11px;height:11px;}
+</style>
+
+<!-- ═══ TOPBAR ═══ -->
+<div class="topbar">
+  <div class="brand">
+    <span class="brand-opt">Optimizarte</span>
+    <span class="brand-by">by</span>
+    <span class="brand-occ">Occident</span>
+  </div>
+  <button class="btn-pdf" id="btnPDF">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    Exportar PDF
+  </button>
+  <div class="topbar-r">
+    <div class="topbar-title">Seguimiento Mensual de Objetivos</div>
+    <div class="topbar-sub">Control de bonificaciones · Agència 17167 · OAG</div>
+  </div>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main">
+
+  <!-- ─── CARD 1: AÑO ANTERIOR ─── -->
+  <div class="sec-pill">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    Año Anterior — Referencia Extra Bono
+  </div>
+  <div class="form-card" id="refSection">
+    <div class="fields-row">
+      <div class="field" style="min-width:210px;">
+        <label>Mes / Año de referencia</label>
+        <div class="select-row">
+          <div class="field"><select id="refMes"></select></div>
+          <div class="field" style="max-width:82px;"><input type="number" id="refAnyo" min="2020" max="2035" placeholder="2025" style="text-align:center;"></div>
+        </div>
+      </div>
+      <div class="field" style="min-width:110px;max-width:130px;">
+        <label>Ops. Corregidas</label>
+        <input type="number" id="refOps" min="0" max="999" step="1" placeholder="0">
+      </div>
+      <div class="field" style="min-width:145px;">
+        <label>Primas Corregidas (€)</label>
+        <input type="text" id="refPrimas" inputmode="decimal" placeholder="0">
+      </div>
+      <div class="field" style="min-width:110px;max-width:130px;">
+        <label>Ops. Anuladas</label>
+        <input type="number" id="refOpsAnul" min="0" max="999" step="1" placeholder="0">
+      </div>
+      <div class="field" style="min-width:155px;">
+        <label>Primas Anuladas Corr. (€)</label>
+        <input type="text" id="refPrimasAnul" inputmode="decimal" placeholder="0">
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── CARD 2: MES ANTERIOR ─── -->
+  <div class="sec-pill">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+    Mes Anterior — Referencia Bono Base
+  </div>
+  <div class="form-card" id="prevSection">
+    <div class="fields-row">
+      <div class="field" style="min-width:210px;">
+        <label>Mes / Año anterior</label>
+        <div class="select-row">
+          <div class="field"><select id="prevMes"></select></div>
+          <div class="field" style="max-width:82px;"><input type="number" id="prevAnyo" min="2020" max="2035" placeholder="2026" style="text-align:center;"></div>
+        </div>
+      </div>
+      <div class="field" style="min-width:110px;max-width:130px;">
+        <label>Operaciones</label>
+        <input type="number" id="prevOps" min="0" step="1" placeholder="0">
+      </div>
+      <div class="field" style="min-width:145px;">
+        <label>Primas Corregidas (€)</label>
+        <input type="text" id="prevPrimas" inputmode="decimal" placeholder="0">
+      </div>
+      <div class="field" style="min-width:155px;">
+        <label>Total SS.GG. (€)</label>
+        <input type="text" id="prevSsgg" inputmode="decimal" placeholder="0">
+      </div>
+      <div class="field" style="min-width:145px;">
+        <label>Total Vida (€)</label>
+        <input type="text" id="prevVida" inputmode="decimal" placeholder="0">
+      </div>
+    </div>
+    <div class="bim-row" id="bimRow">
+      Media bimestral: SS.GG. <strong id="bimSsgg">—</strong> · Vida <strong id="bimVida">—</strong> · Total <strong id="bimTotal">—</strong>
+    </div>
+  </div>
+
+  <!-- ─── CARD 3: MES EN CURSO ─── -->
+  <div class="sec-pill">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    Mes en Curso
+  </div>
+  <div class="form-card" id="currSection">
+    <div class="fields-row">
+      <div class="field" style="min-width:140px;">
+        <label>Mes en Curso</label>
+        <div class="curr-badge" id="currMesDisplay">—</div>
+      </div>
+      <div class="field" style="min-width:110px;max-width:130px;">
+        <label>Operaciones</label>
+        <input type="number" id="currOps" min="0" step="1" placeholder="0">
+      </div>
+      <div class="field" style="min-width:145px;">
+        <label>Primas Corregidas (€)</label>
+        <input type="text" id="currPrimas" inputmode="decimal" placeholder="0">
+      </div>
+      <div class="field" style="min-width:145px;">
+        <label>Total SS.GG. (€)</label>
+        <input type="text" id="currSsgg" inputmode="decimal" placeholder="0">
+      </div>
+      <div class="field" style="min-width:140px;">
+        <label>Total Vida (€)</label>
+        <input type="text" id="currVida" inputmode="decimal" placeholder="0">
+      </div>
+      <div class="field" style="min-width:100px;max-width:120px;">
+        <label>Ops. Hogar</label>
+        <input type="number" id="currHogar" min="0" max="99" step="1" placeholder="0">
+      </div>
+      <div class="field" style="min-width:100px;max-width:120px;">
+        <label>Ops. Temporal</label>
+        <input type="number" id="currTemporal" min="0" step="1" placeholder="0">
+      </div>
+      <button class="btn-dash-lg" id="btnDash">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </button>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<div class="footer-bar">OPTIMIZARTE 3.0 · Seguimiento Mensual OAG · Herramienta interna · Los datos se guardan localmente en tu navegador</div>
+<div id="toast"></div>
+
+<!-- ═══ DASHBOARD MODAL ═══ -->
+<div class="modal-overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalTitle">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </h2>
+      <button class="modal-close" id="btnCloseModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-info" id="modalInfo"></div>
+      <div class="charts-grid" id="chartsGrid"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+const MESES=['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
+const LS_KEY='oag_seguiment_v4';
+const ICON_DASH='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>';
+
+/* ── TOAST ── */
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+
+/* ── FORMAT UTILS ── */
+function fmtEur(n){return Math.round(n||0).toLocaleString('es-ES')+'€';}
+function fmtOps(n){return Math.ceil(n||0);}
+function fmtPct(v){return v!==null?(v>=0?'+':'')+Math.round(v*10)/10+'%':'—';}
+
+/* ── CURRENCY INPUT HELPERS ── */
+const CURRENCY_IDS=['refPrimas','refPrimasAnul','prevPrimas','prevSsgg','prevVida','currPrimas','currSsgg','currVida'];
+
+function getCurrencyVal(id){
+  const el=document.getElementById(id);if(!el)return 0;
+  const raw=el.dataset.raw;
+  return Math.round(parseFloat(raw)||0);
+}
+function setCurrencyVal(id,n){
+  const el=document.getElementById(id);if(!el)return;
+  const num=Math.round(parseFloat(n)||0);
+  el.dataset.raw=num;
+  el.value=num>0?num.toLocaleString('es-ES'):'';
+}
+function initCurrencyField(id){
+  const el=document.getElementById(id);if(!el)return;
+  el.dataset.raw='0';
+  el.addEventListener('focus',function(){
+    const raw=this.dataset.raw&&this.dataset.raw!=='0'?this.dataset.raw:'';
+    this.value=raw;
+    this.select();
+  });
+  el.addEventListener('blur',function(){
+    const n=Math.round(parseFloat(this.value.replace(/\./g,'').replace(',','.'))||0);
+    this.dataset.raw=n;
+    this.value=n>0?n.toLocaleString('es-ES'):'';
+    saveDataFull();updateBimCalc();liveRefresh();
+  });
+  el.addEventListener('input',function(){
+    this.dataset.raw=parseFloat(this.value.replace(/\./g,'').replace(',','.'))||0;
+  });
+}
+
+/* ── DATA GETTERS ── */
+function numVal(id){return parseFloat(document.getElementById(id)?.value)||0;}
+
+function getRef(){
+  const ops=Math.ceil(numVal('refOps')),pr=getCurrencyVal('refPrimas');
+  const opA=Math.ceil(numVal('refOpsAnul')),prA=getCurrencyVal('refPrimasAnul');
+  return{ops,primas:pr,opsAnul:opA,primasAnul:prA,netOps:ops-opA,netPrimas:pr-prA};
+}
+function getPrev(){
+  return{
+    ops:Math.ceil(numVal('prevOps')),primas:getCurrencyVal('prevPrimas'),
+    ssgg:getCurrencyVal('prevSsgg'),vida:getCurrencyVal('prevVida'),
+  };
+}
+function getCurr(){
+  return{
+    ops:Math.ceil(numVal('currOps')),primas:getCurrencyVal('currPrimas'),
+    ssgg:getCurrencyVal('currSsgg'),vida:getCurrencyVal('currVida'),
+    hogar:Math.ceil(numVal('currHogar')),temporal:Math.ceil(numVal('currTemporal')),
+  };
+}
+function getBim(){
+  const p=getPrev(),c=getCurr();
+  const bimSsgg=(p.ssgg+c.ssgg)/2,bimVida=(p.vida+c.vida)/2;
+  return{bimSsgg,bimVida,bimTotal:bimSsgg+bimVida,
+         hasData:p.ssgg>0||p.vida>0||c.ssgg>0||c.vida>0};
+}
+
+/* ── BIM CALC DISPLAY ── */
+function updateBimCalc(){
+  const bim=getBim();
+  const fmt=v=>v>0?fmtEur(v):'—';
+  const el=id=>document.getElementById(id);
+  if(el('bimSsgg'))el('bimSsgg').textContent=fmt(bim.bimSsgg);
+  if(el('bimVida'))el('bimVida').textContent=fmt(bim.bimVida);
+  if(el('bimTotal'))el('bimTotal').textContent=fmt(bim.bimTotal);
+}
+
+/* ── LOCALSTORAGE ── */
+function saveDataFull(){
+  try{
+    localStorage.setItem(LS_KEY,JSON.stringify({
+      refMes:numVal('refMes'),refAnyo:numVal('refAnyo'),
+      refOps:numVal('refOps'),refPrimas:getCurrencyVal('refPrimas'),
+      refOpsAnul:numVal('refOpsAnul'),refPrimasAnul:getCurrencyVal('refPrimasAnul'),
+      prevMes:numVal('prevMes'),prevAnyo:numVal('prevAnyo'),
+      prevOps:numVal('prevOps'),prevPrimas:getCurrencyVal('prevPrimas'),
+      prevSsgg:getCurrencyVal('prevSsgg'),prevVida:getCurrencyVal('prevVida'),
+      currOps:numVal('currOps'),currPrimas:getCurrencyVal('currPrimas'),
+      currSsgg:getCurrencyVal('currSsgg'),currVida:getCurrencyVal('currVida'),
+      currHogar:numVal('currHogar'),currTemporal:numVal('currTemporal'),
+    }));
+  }catch(e){}
+}
+function loadData(){
+  try{
+    const saved=localStorage.getItem(LS_KEY);
+    if(!saved)return false;
+    const d=JSON.parse(saved);
+    const sn=(id,v)=>{const el=document.getElementById(id);if(el&&v!=null)el.value=v;};
+    sn('refMes',d.refMes);sn('refAnyo',d.refAnyo);
+    sn('refOps',d.refOps);sn('refOpsAnul',d.refOpsAnul);
+    setCurrencyVal('refPrimas',d.refPrimas);setCurrencyVal('refPrimasAnul',d.refPrimasAnul);
+    sn('prevMes',d.prevMes);sn('prevAnyo',d.prevAnyo);
+    sn('prevOps',d.prevOps);
+    setCurrencyVal('prevPrimas',d.prevPrimas);
+    setCurrencyVal('prevSsgg',d.prevSsgg);setCurrencyVal('prevVida',d.prevVida);
+    sn('currOps',d.currOps);sn('currHogar',d.currHogar);sn('currTemporal',d.currTemporal);
+    setCurrencyVal('currPrimas',d.currPrimas);
+    setCurrencyVal('currSsgg',d.currSsgg);setCurrencyVal('currVida',d.currVida);
+    return true;
+  }catch(e){}
+  return false;
+}
+
+/* ── DASHBOARD ── */
+function openDashboard(){
+  renderDashboard();
+  document.getElementById('overlay').classList.add('open');
+}
+function liveRefresh(){
+  if(!document.getElementById('overlay').classList.contains('open'))return;
+  renderDashboard();
+}
+function closeModal(){document.getElementById('overlay').classList.remove('open');}
+
+function renderDashboard(){
+  const curr=getCurr();
+  const ref=getRef();
+  const bim=getBim();
+  const now=new Date();
+  const mesNombre=MESES[now.getMonth()];
+  document.getElementById('modalTitle').innerHTML=
+    ICON_DASH+' Dashboard · '+mesNombre+' '+now.getFullYear();
+  document.getElementById('modalInfo').innerHTML=`
+    <span>📅 <strong>${mesNombre} ${now.getFullYear()}</strong></span>
+    <span>📦 Ops.: <strong>${fmtOps(curr.ops)}</strong></span>
+    <span>💶 Primas: <strong>${fmtEur(curr.primas)}</strong></span>
+    <span>🏠 Hogar: <strong>${fmtOps(curr.hogar)}</strong></span>
+    <span>⏱ Temporal: <strong>${fmtOps(curr.temporal)}</strong></span>`;
+  document.getElementById('chartsGrid').innerHTML=
+    chartHogar(curr)+chartTemporal(curr)+chartExtraBono(curr,ref)+chartPrincipal(bim);
+}
+
+/* ═══ CHART 1 — HOGAR (sin cambios) ═══ */
+function chartHogar(curr){
+  const c=fmtOps(curr.hogar);
+  const S=5,M=7,L=9,MAX=L*1.35;
+  const pct=v=>Math.min(100,Math.max(0,v/MAX*100)).toFixed(1);
+  const level=c>=L?'lg':c>=M?'md':c>=S?'sm':'none';
+  const fill=level==='none'?'#E5E7EB':'var(--red)';
+  const mC='rgba(180,0,20,.5)';
+  const lvlMsg=level==='lg'?'🏆 ¡Bono Grande conseguido!':level==='md'?'🥈 Bono Mediano conseguido':level==='sm'?'🥉 Bono Pequeño conseguido':'Sin bono por ahora';
+  const next=level==='none'?S:level==='sm'?M:level==='md'?L:null;
+  const nextN=level==='none'?'Bono Pequeño':level==='sm'?'Bono Mediano':'Bono Grande';
+  return `<div class="chart-card">
+    <div class="chart-title">🏠 Operaciones Hogar</div>
+    <div class="chart-sub">Seguimiento mensual · objetivos de bono</div>
+    <div class="bonus-pills">
+      <span class="bpill ${c>=S?'active':''}">🥉 Peq. · ${S} ops</span>
+      <span class="bpill ${c>=M?'active':''}">🥈 Med. · ${M} ops</span>
+      <span class="bpill ${c>=L?'active':''}">🏆 Gde. · ${L} ops</span>
+    </div>
+    <div class="val-big" style="color:${fill}">${c}</div>
+    <div class="val-lbl">ops. hogar acumuladas</div>
+    <div class="bar-track">
+      <div class="bar-fill" style="width:${pct(c)}%;background:${fill};"></div>
+      ${[{v:S,l:'Peq.'},{v:M,l:'Med.'},{v:L,l:'Gde.'}].map(m=>`
+        <div class="bar-marker" style="left:${pct(m.v)}%;background:${mC};top:-2px;bottom:-2px;"></div>
+        <div class="bar-marker-lbl bot" style="left:${pct(m.v)}%;color:${mC};">${m.l} ${m.v}</div>`).join('')}
+    </div>
+    <div class="status-msg ${level==='none'?'sms-nt':'sms-ok'}">${lvlMsg}</div>
+    ${next!==null?`<div class="status-sub">Faltan <b>${Math.max(0,next-c)}</b> ops. para ${nextN}</div>`:''}
+  </div>`;
+}
+
+/* ═══ CHART 2 — TEMPORAL (sin cambios) ═══ */
+function chartTemporal(curr){
+  const t=fmtOps(curr.temporal);
+  const steps=[
+    {lbl:'0 o\nmenos',pct:'−5%',c:'var(--red)',   active:t<=0},
+    {lbl:'1 op.', pct:'0%', c:'var(--gray-2)',active:t===1},
+    {lbl:'2 ops.',pct:'+5%',c:'var(--red)',    active:t===2},
+    {lbl:'3-4\nops.',pct:'+6%',c:'var(--red)', active:t>=3&&t<=4},
+    {lbl:'5+\nops.',pct:'+7%',c:'var(--red)',  active:t>=5},
+  ];
+  const cur=steps.find(s=>s.active)||steps[0];
+  const barHs=[18,24,42,60,76];
+  const bonus=t<=0?-5:t===1?0:t===2?5:t<=4?6:7;
+  return `<div class="chart-card">
+    <div class="chart-title">⏱ Operaciones Temporal</div>
+    <div class="chart-sub">Bonificación según nivel de temporales acumulados</div>
+    <div class="val-big" style="color:${cur.c}">${cur.pct}</div>
+    <div class="val-lbl">${t} ops. temporales · nivel activo</div>
+    <div class="steps">
+      ${steps.map((s,i)=>`
+        <div class="step-col ${s.active?'active':''}" style="${s.active?'color:'+s.c+';':''}">
+          <div class="step-pct">${s.pct}</div>
+          <div class="step-bar" style="height:${barHs[i]}px;background:${s.active?s.c:'#E5E7EB'};${s.active?'box-shadow:0 2px 6px '+s.c+'44;':''}"></div>
+          <div class="step-lbl" style="white-space:pre-line;">${s.lbl}</div>
+        </div>`).join('')}
+    </div>
+    <div class="status-msg ${bonus<0?'sms-bad':bonus===0?'sms-nt':'sms-ok'}">
+      ${bonus<0?'⚠️ Penalización activa: '+cur.pct:bonus===0?'➖ Sin bonificación (1 temporal)':'✅ Bonificación activa: '+cur.pct}
+    </div>
+    <div class="status-sub">
+      ${t<=0?'Necesitas 2 temporales para bono (+5%)':t===1?'1 temporal más → bono +5%':t===2?'1 temporal más → bono +6%':t<=4?'Con '+(5-t)+' temporal'+(5-t===1?'':'es')+' más → bono +7%':'¡Nivel máximo de bonificación temporal!'}
+    </div>
+  </div>`;
+}
+
+/* ═══ CHART 3 — EXTRA BONO (thresholds 10/15/20%, dos barras) ═══ */
+function chartExtraBono(curr,ref){
+  const hasRef=ref.netOps>0||ref.netPrimas>0;
+  const pctOps=ref.netOps>0?((curr.ops-ref.netOps)/ref.netOps*100):null;
+  const pctPri=ref.netPrimas>0?((curr.primas-ref.netPrimas)/ref.netPrimas*100):null;
+
+  // AND logic: both must meet threshold
+  const met10=pctOps!==null&&pctPri!==null&&pctOps>=10&&pctPri>=10;
+  const met15=pctOps!==null&&pctPri!==null&&pctOps>=15&&pctPri>=15;
+  const met20=pctOps!==null&&pctPri!==null&&pctOps>=20&&pctPri>=20;
+
+  let bonus=0,bonusLbl='Sin Extra Bono';
+  if(met20){bonus=20;bonusLbl='Extra Bono Grande · +20%';}
+  else if(met15){bonus=15;bonusLbl='Extra Bono Mediano · +15%';}
+  else if(met10){bonus=10;bonusLbl='Extra Bono Pequeño · +10%';}
+
+  // Bars: range 0% to 25%
+  const BAR_MAX=25;
+  const bp=v=>Math.max(0,Math.min(100,(v/BAR_MAX)*100)).toFixed(1);
+  const mrkC='rgba(180,0,20,.45)';
+
+  function bar(val,label){
+    if(val===null)return `<div style="font-size:.62rem;color:var(--gray-2);font-style:italic;margin-bottom:20px;">Sin datos de referencia</div>`;
+    const fill=val>=10?'var(--red)':val>=0?'#FBBFD0':'#E5E7EB';
+    const valC=val>=10?'var(--red)':val>=0?'var(--gray)':'var(--gray-2)';
+    return `
+      <div class="bar-label-row">
+        <span class="bar-section-lbl">${label}</span>
+        <span class="bar-cur-val" style="color:${valC}">${fmtPct(val)}</span>
+      </div>
+      <div class="bar-track slim">
+        <div class="bar-fill" style="width:${bp(Math.max(0,val))}%;background:${fill};"></div>
+        ${[10,15,20].map(th=>`
+          <div class="bar-marker" style="left:${bp(th)}%;background:${mrkC};top:-2px;bottom:-2px;"></div>
+          <div class="bar-marker-lbl bot" style="left:${bp(th)}%;color:${mrkC};">${th}%</div>`).join('')}
+      </div>`;
+  }
+
+  const msgCls=bonus>0?'sms-ok':'sms-nt';
+  return `<div class="chart-card">
+    <div class="chart-title">⭐ Extra Bono — Crecimiento</div>
+    <div class="chart-sub">Vs. mismo mes año anterior · condición: ops Y primas ≥ umbral</div>
+    <div class="bonus-pills">
+      <span class="bpill ${bonus>=10?'active':''}">+10% si ≥10%</span>
+      <span class="bpill ${bonus>=15?'active':''}">+15% si ≥15%</span>
+      <span class="bpill ${bonus>=20?'active':''}">+20% si ≥20%</span>
+    </div>
+    ${!hasRef?`<div style="font-size:.65rem;color:var(--gray-2);font-style:italic;padding:4px 0 12px;">Introduce los datos del año anterior para calcular.</div>`:''}
+    ${bar(pctOps,'Operaciones')}
+    ${bar(pctPri,'Primas Corregidas')}
+    <div class="mrow" style="margin-top:8px;">
+      <span class="mrow-lbl" style="color:var(--gray-2);">Ref. Año Ant. · Ops. Netas</span>
+      <span class="mrow-val" style="color:var(--gray-2);">${fmtOps(ref.netOps)}</span>
+    </div>
+    <div class="mrow">
+      <span class="mrow-lbl" style="color:var(--gray-2);">Ref. Año Ant. · Primas Netas</span>
+      <span class="mrow-val" style="color:var(--gray-2);">${fmtEur(ref.netPrimas)}</span>
+    </div>
+    <div class="status-msg ${msgCls}" style="margin-top:10px;">${bonus>0?'✅ '+bonusLbl:'➖ Sin Extra Bono · objetivo: +10% en ops y primas'}</div>
+    ${bonus<20&&hasRef&&pctOps!==null&&pctPri!==null?`<div class="status-sub">Siguiente nivel: ops ${fmtPct(bonus>=10?bonus>=15?20:15:10)} · primas ${fmtPct(bonus>=10?bonus>=15?20:15:10)}</div>`:''}
+  </div>`;
+}
+
+/* ═══ CHART 4 — OBJETIVOS PRINCIPALES ═══ */
+function chartPrincipal(bim){
+  const SSGG_TH=[1950,2500,3250];
+  const VIDA_TH=[1875,2375,2900];
+  const TOT_TH =[5225,7100,9000];
+  const BONUS  =['10%','30%','50%'];
+  const LBL    =['Nivel 1','Nivel 2','Nivel 3'];
+
+  let achieved=-1;
+  if(bim.hasData){
+    for(let i=2;i>=0;i--){
+      if(bim.bimSsgg>=SSGG_TH[i]&&bim.bimVida>=VIDA_TH[i]&&bim.bimTotal>=TOT_TH[i]){achieved=i;break;}
+    }
+  }
+  const pillsHTML=LBL.map((l,i)=>`<span class="bpill ${achieved>=i?'active':''}">${l} · ${BONUS[i]} base</span>`).join('');
+
+  if(!bim.hasData){
+    return `<div class="chart-card">
+      <div class="chart-title">🎯 Objetivos Principales — Bono Base</div>
+      <div class="chart-sub">Media bimestral SS.GG. + Vida · Reglamento 2026</div>
+      <div class="bonus-pills">${pillsHTML}</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px;min-height:80px;color:#D1D5DB;margin-top:10px;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        <p style="font-size:.68rem;font-style:italic;color:#D1D5DB;">Introduce SS.GG. y Vida en ambas cards</p>
+        <small style="font-size:.56rem;text-align:center;color:#D1D5DB;line-height:1.5;">SS.GG. bim. ≥ 1.950 / 2.500 / 3.250€<br>Vida bim. ≥ 1.875 / 2.375 / 2.900€<br>Total bim. ≥ 5.225 / 7.100 / 9.000€</small>
+      </div>
+    </div>`;
+  }
+
+  const mrkC='rgba(180,0,20,.45)';
+  const MAX_S=SSGG_TH[2]*1.2,MAX_V=VIDA_TH[2]*1.2,MAX_T=TOT_TH[2]*1.2;
+  const bp=(v,mx)=>Math.min(100,Math.max(0,v/mx*100)).toFixed(1);
+  const mkrs=(arr,mx)=>arr.map(th=>`<div class="bar-marker" style="left:${bp(th,mx)}%;background:${mrkC};top:-2px;bottom:-2px;"></div><div class="bar-marker-lbl bot" style="left:${bp(th,mx)}%;color:${mrkC};">${fmtEur(th)}</div>`).join('');
+
+  const fS=bim.bimSsgg>=SSGG_TH[0]?'var(--red)':'#E5E7EB';
+  const fV=bim.bimVida>=VIDA_TH[0]?'var(--red)':'#E5E7EB';
+  const fT=bim.bimTotal>=TOT_TH[0]?'var(--red)':'#E5E7EB';
+  const cS=bim.bimSsgg>=SSGG_TH[0]?'var(--red)':'var(--gray-2)';
+  const cV=bim.bimVida>=VIDA_TH[0]?'var(--red)':'var(--gray-2)';
+  const cT=bim.bimTotal>=TOT_TH[0]?'var(--red)':'var(--gray-2)';
+
+  const lvlMsg=achieved<0?'➖ Sin bono base por ahora':achieved===2?'🏆 ¡Nivel 3 conseguido! +50% base':achieved===1?'🥈 Nivel 2 · +30% base':'🥉 Nivel 1 · +10% base';
+  const nextIdx=achieved+1;
+
+  return `<div class="chart-card">
+    <div class="chart-title">🎯 Objetivos Principales — Bono Base</div>
+    <div class="chart-sub">Media bimestral (mes ant. + mes actual) · Reglamento 2026</div>
+    <div class="bonus-pills">${pillsHTML}</div>
+
+    <div class="bar-label-row"><span class="bar-section-lbl">SS.GG. Bimestral</span><span class="bar-cur-val" style="color:${cS}">${fmtEur(bim.bimSsgg)}</span></div>
+    <div class="bar-track slim">${`<div class="bar-fill" style="width:${bp(bim.bimSsgg,MAX_S)}%;background:${fS};"></div>`}${mkrs(SSGG_TH,MAX_S)}</div>
+
+    <div class="bar-label-row"><span class="bar-section-lbl">Vida Bimestral</span><span class="bar-cur-val" style="color:${cV}">${fmtEur(bim.bimVida)}</span></div>
+    <div class="bar-track slim">${`<div class="bar-fill" style="width:${bp(bim.bimVida,MAX_V)}%;background:${fV};"></div>`}${mkrs(VIDA_TH,MAX_V)}</div>
+
+    <div class="bar-label-row"><span class="bar-section-lbl">Total Bimestral</span><span class="bar-cur-val" style="color:${cT}">${fmtEur(bim.bimTotal)}</span></div>
+    <div class="bar-track slim">${`<div class="bar-fill" style="width:${bp(bim.bimTotal,MAX_T)}%;background:${fT};"></div>`}${mkrs(TOT_TH,MAX_T)}</div>
+
+    <div class="status-msg ${achieved<0?'sms-nt':'sms-ok'}" style="margin-top:6px;">${lvlMsg}</div>
+    ${nextIdx<=2?`<div class="status-sub">Sig. nivel: SS.GG.≥${fmtEur(SSGG_TH[nextIdx])} · Vida≥${fmtEur(VIDA_TH[nextIdx])} · Tot.≥${fmtEur(TOT_TH[nextIdx])}</div>`:''}
+  </div>`;
+}
+
+/* ── PDF EXPORT ── */
+function loadScript(src){
+  return new Promise((res,rej)=>{
+    if(document.querySelector('script[src="'+src+'"]')){res();return;}
+    const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;
+    document.head.appendChild(s);
+  });
+}
+
+async function exportPDF(){
+  const btn=document.getElementById('btnPDF');
+  const orig=btn.innerHTML;
+  btn.disabled=true;
+  btn.innerHTML='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg> Generando...';
+  toast('⏳ Preparando PDF...');
+  try{
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+
+    const curr=getCurr(),ref=getRef(),bim=getBim(),prev=getPrev();
+    const now=new Date();
+    const mesN=MESES[now.getMonth()],yr=now.getFullYear();
+    const refMesN=MESES[(parseInt(document.getElementById('refMes').value)||1)-1];
+    const refAnyoV=document.getElementById('refAnyo').value||'—';
+    const prevMesN=MESES[(parseInt(document.getElementById('prevMes').value)||1)-1];
+    const prevAnyoV=document.getElementById('prevAnyo').value||'—';
+
+    /* ─ Build print container ─ */
+    const W=880;
+    const div=document.createElement('div');
+    div.style.cssText='position:fixed;left:-9999px;top:0;width:'+W+'px;background:#F0F0F0;font-family:Arial,sans-serif;';
+
+    const card=(title,content)=>`
+      <div style="background:#fff;border:1px solid #E0E0E0;border-radius:8px;padding:13px 15px;box-shadow:0 2px 5px rgba(0,0,0,.06);">
+        <div style="display:inline-block;background:#DC0028;color:#fff;padding:2px 9px;border-radius:3px;font-size:7.5px;font-weight:700;letter-spacing:.1em;margin-bottom:9px;">${title}</div>
+        ${content}
+      </div>`;
+    const row2=(items)=>`<div style="display:grid;grid-template-columns:1fr 1fr;gap:7px 12px;">${items.map(([lbl,val,col])=>`
+      <div>
+        <div style="font-size:6.5px;color:#9CA3AF;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:1px;">${lbl}</div>
+        <div style="font-size:14px;font-weight:700;color:${col||'#1e1e1e'};">${val}</div>
+      </div>`).join('')}</div>`;
+
+    div.innerHTML=`
+<div style="height:48px;background:#1e1e1e;display:flex;align-items:center;justify-content:space-between;padding:0 20px;">
+  <div><span style="font-weight:800;font-size:13px;color:#fff;">Optimizarte</span><span style="font-size:9px;color:rgba(255,255,255,.4);margin:0 4px;font-style:italic;">by</span><span style="font-weight:800;font-size:13px;color:#DC0028;">Occident</span></div>
+  <div style="font-size:11px;font-weight:700;color:#fff;">Seguimiento Mensual de Objetivos</div>
+  <div style="font-size:9px;color:rgba(255,255,255,.5);">Agència 17167 · OAG · ${mesN} ${yr}</div>
+</div>
+<div style="padding:14px 16px 0;">
+
+<div style="display:inline-flex;align-items:center;gap:6px;background:#DC0028;color:#fff;padding:3px 10px;border-radius:4px;font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">◼ RESUMEN DE DATOS</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
+${card('AÑO ANTERIOR',`
+  <div style="font-size:8px;color:#9CA3AF;font-weight:700;text-transform:uppercase;margin-bottom:2px;">Mes / Año referencia</div>
+  <div style="font-size:14px;font-weight:700;color:#1e1e1e;margin-bottom:9px;">${refMesN} ${refAnyoV}</div>
+  ${row2([['Ops. Corregidas',fmtOps(ref.ops)],['Primas Corr.',fmtEur(ref.primas)],['Ops. Anuladas',fmtOps(ref.opsAnul),'#DC0028'],['Primas Anu.',fmtEur(ref.primasAnul),'#DC0028']])}
+  <div style="margin-top:8px;padding-top:6px;border-top:1px solid #E0E0E0;font-size:8.5px;color:#9CA3AF;">Neto: <strong style="color:#1e1e1e;">${fmtOps(ref.netOps)} ops · ${fmtEur(ref.netPrimas)}</strong></div>`)}
+${card('MES ANTERIOR',`
+  <div style="font-size:8px;color:#9CA3AF;font-weight:700;text-transform:uppercase;margin-bottom:2px;">Mes / Año</div>
+  <div style="font-size:14px;font-weight:700;color:#1e1e1e;margin-bottom:9px;">${prevMesN} ${prevAnyoV}</div>
+  ${row2([['Operaciones',fmtOps(prev.ops)],['Primas Corr.',fmtEur(prev.primas)],['SS.GG.',fmtEur(prev.ssgg)],['Vida',fmtEur(prev.vida)]])}`)}
+${card('MES EN CURSO',`
+  <div style="font-size:8px;color:#9CA3AF;font-weight:700;text-transform:uppercase;margin-bottom:2px;">Mes en curso</div>
+  <div style="font-size:14px;font-weight:700;color:#DC0028;margin-bottom:9px;">${mesN} ${yr}</div>
+  ${row2([['Operaciones',fmtOps(curr.ops)],['Primas Corr.',fmtEur(curr.primas)],['SS.GG.',fmtEur(curr.ssgg)],['Vida',fmtEur(curr.vida)],['Ops. Hogar',fmtOps(curr.hogar)],['Ops. Temporal',fmtOps(curr.temporal)]])}`)}
+</div>
+
+<div style="background:#fff;border:1px solid #E0E0E0;border-radius:8px;padding:9px 14px;margin-bottom:14px;font-size:10px;color:#9CA3AF;display:flex;gap:18px;align-items:center;">
+  📊 Media Bimestral: SS.GG.&nbsp;<strong style="color:#DC0028;">${fmtEur(bim.bimSsgg)}</strong>&nbsp;·&nbsp;Vida&nbsp;<strong style="color:#DC0028;">${fmtEur(bim.bimVida)}</strong>&nbsp;·&nbsp;Total&nbsp;<strong style="color:#DC0028;">${fmtEur(bim.bimTotal)}</strong>
+</div>
+
+<div style="display:inline-flex;align-items:center;gap:6px;background:#DC0028;color:#fff;padding:3px 10px;border-radius:4px;font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">◼ DASHBOARD DE BONIFICACIONES</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-bottom:16px;">
+${chartHogar(curr)}${chartTemporal(curr)}${chartExtraBono(curr,ref)}${chartPrincipal(bim)}
+</div>
+
+</div>
+<div style="background:#1e1e1e;color:rgba(255,255,255,.35);font-size:8px;text-align:center;padding:7px;">
+  OPTIMIZARTE 3.0 · Seguimiento Mensual OAG Agència 17167 · Generado ${now.toLocaleDateString('es-ES')} ${now.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}
+</div>`;
+
+    document.body.appendChild(div);
+
+    const canvas=await html2canvas(div,{
+      scale:1.8,
+      useCORS:true,
+      logging:false,
+      backgroundColor:'#F0F0F0',
+      windowWidth:W,
+    });
+    document.body.removeChild(div);
+
+    const{jsPDF}=window.jspdf;
+    const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    const pW=210,pH=297;
+    const ratio=canvas.width/pW;
+    const totalH=canvas.height/ratio;
+    const imgData=canvas.toDataURL('image/jpeg',0.93);
+
+    let yOff=0;
+    while(yOff<totalH){
+      if(yOff>0)pdf.addPage();
+      pdf.addImage(imgData,'JPEG',0,-yOff,pW,totalH);
+      yOff+=pH;
+    }
+
+    const fname='seguiment-'+mesN.toLowerCase()+'-'+yr+'-OAG17167.pdf';
+    pdf.save(fname);
+    toast('✅ PDF exportado: '+fname);
+  }catch(e){
+    console.error('PDF export error:',e);
+    toast('❌ Error al exportar PDF');
+  }finally{
+    btn.disabled=false;btn.innerHTML=orig;
+  }
+}
+
+/* ══════════════════════════════════════
+   INIT — DOMContentLoaded
+══════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded',function(){
+
+  /* Build month selects */
+  ['refMes','prevMes'].forEach(selId=>{
+    const sel=document.getElementById(selId);
+    MESES.forEach((m,i)=>{const opt=document.createElement('option');opt.value=i+1;opt.textContent=m;sel.appendChild(opt);});
+  });
+
+  /* Init currency fields */
+  CURRENCY_IDS.forEach(initCurrencyField);
+
+  /* Auto-set month defaults */
+  const now=new Date();
+  const curMo=now.getMonth()+1,curYr=now.getFullYear();
+  // Ref: same month, previous year
+  document.getElementById('refMes').value=curMo;
+  document.getElementById('refAnyo').value=curYr-1;
+  // Prev: last month
+  const prevMo=curMo===1?12:curMo-1,prevYr=curMo===1?curYr-1:curYr;
+  document.getElementById('prevMes').value=prevMo;
+  document.getElementById('prevAnyo').value=prevYr;
+  // Curr: display only
+  document.getElementById('currMesDisplay').textContent=MESES[curMo-1]+' '+curYr;
+
+  /* Load saved data */
+  loadData();
+  updateBimCalc();
+
+  /* Input listeners */
+  ['refSection','prevSection','currSection'].forEach(sId=>{
+    document.getElementById(sId)?.addEventListener('input',function(){
+      saveDataFull();updateBimCalc();liveRefresh();
+    });
+  });
+
+  /* Dashboard button */
+  document.getElementById('btnDash').addEventListener('click',openDashboard);
+
+  /* PDF export button */
+  document.getElementById('btnPDF').addEventListener('click',exportPDF);
+
+  /* Modal close */
+  document.getElementById('btnCloseModal').addEventListener('click',closeModal);
+  document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
+});
+</script>

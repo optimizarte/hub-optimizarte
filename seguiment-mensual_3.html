@@ -1,4 +1,4 @@
-<title>Seguimiento Mensual · Bonos OPTIMIZARTE</title>
+<title>Seguiment Mensual · Bonos OPTIMIZARTE</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -20,6 +20,15 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gra
 .topbar-r{text-align:right;}
 .topbar-title{font-family:'Poppins',Arial;font-size:.78rem;font-weight:700;color:#fff;}
 .topbar-sub{font-size:.58rem;color:rgba(255,255,255,.38);margin-top:1px;}
+
+/* ── LANG TOGGLE ── */
+.lang-toggle{display:flex;gap:3px;}
+.btn-lang{background:transparent;border:1.5px solid rgba(255,255,255,.22);color:rgba(255,255,255,.5);padding:4px 9px;border-radius:4px;font-size:.58rem;font-weight:700;letter-spacing:.06em;cursor:pointer;transition:all .18s;font-family:'Poppins',Arial;}
+.btn-lang:hover{border-color:rgba(255,255,255,.5);color:#fff;}
+.btn-lang.active{background:var(--red);border-color:var(--red);color:#fff;}
+
+/* ── TOPBAR RIGHT ACTIONS ── */
+.topbar-actions{display:flex;align-items:center;gap:10px;}
 
 /* ── LAYOUT ── */
 .main{max-width:1300px;margin:0 auto;padding:20px 18px 0;}
@@ -151,13 +160,19 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gra
     <span class="brand-by">by</span>
     <span class="brand-occ">Occident</span>
   </div>
-  <button class="btn-pdf" id="btnPDF">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-    Exportar PDF
-  </button>
+  <div class="topbar-actions">
+    <div class="lang-toggle">
+      <button class="btn-lang active" id="btnLangES">ES</button>
+      <button class="btn-lang" id="btnLangCA">CA</button>
+    </div>
+    <button class="btn-pdf" id="btnPDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span data-i18n="btnPDF">Exportar PDF</span>
+    </button>
+  </div>
   <div class="topbar-r">
-    <div class="topbar-title">Seguimiento Mensual de Objetivos</div>
-    <div class="topbar-sub">Control de bonificaciones · Agència 17167 · OAG</div>
+    <div class="topbar-title" data-i18n="topbarTitle">Seguimiento Mensual de Objetivos</div>
+    <div class="topbar-sub" data-i18n="topbarSub">Control de bonificaciones · Agència 17167 · OAG</div>
   </div>
 </div>
 
@@ -167,31 +182,31 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gra
   <!-- ─── CARD 1: AÑO ANTERIOR ─── -->
   <div class="sec-pill">
     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-    Año Anterior — Referencia Extra Bono
+    <span data-i18n="pillRef">Año Anterior — Referencia Extra Bono</span>
   </div>
   <div class="form-card" id="refSection">
     <div class="fields-row">
       <div class="field" style="min-width:210px;">
-        <label>Mes / Año de referencia</label>
+        <label data-i18n="lblMesRef">Mes / Año de referencia</label>
         <div class="select-row">
           <div class="field"><select id="refMes"></select></div>
           <div class="field" style="max-width:82px;"><input type="number" id="refAnyo" min="2020" max="2035" placeholder="2025" style="text-align:center;"></div>
         </div>
       </div>
       <div class="field" style="min-width:110px;max-width:130px;">
-        <label>Ops. Corregidas</label>
+        <label data-i18n="lblOpsCorr">Ops. Corregidas</label>
         <input type="number" id="refOps" min="0" max="999" step="1" placeholder="0">
       </div>
       <div class="field" style="min-width:145px;">
-        <label>Primas Corregidas (€)</label>
+        <label data-i18n="lblPrimasCorr">Primas Corregidas (€)</label>
         <input type="text" id="refPrimas" inputmode="decimal" placeholder="0">
       </div>
       <div class="field" style="min-width:110px;max-width:130px;">
-        <label>Ops. Anuladas</label>
+        <label data-i18n="lblOpsAnul">Ops. Anuladas</label>
         <input type="number" id="refOpsAnul" min="0" max="999" step="1" placeholder="0">
       </div>
       <div class="field" style="min-width:155px;">
-        <label>Primas Anuladas Corr. (€)</label>
+        <label data-i18n="lblPrimasAnul">Primas Anuladas Corr. (€)</label>
         <input type="text" id="refPrimasAnul" inputmode="decimal" placeholder="0">
       </div>
     </div>
@@ -200,23 +215,23 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gra
   <!-- ─── CARD 2: MES ANTERIOR ─── -->
   <div class="sec-pill">
     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-    Mes Anterior — Referencia Bono Base
+    <span data-i18n="pillPrev">Mes Anterior — Referencia Bono Base</span>
   </div>
   <div class="form-card" id="prevSection">
     <div class="fields-row">
       <div class="field" style="min-width:210px;">
-        <label>Mes / Año anterior</label>
+        <label data-i18n="lblMesPrev">Mes / Año anterior</label>
         <div class="select-row">
           <div class="field"><select id="prevMes"></select></div>
           <div class="field" style="max-width:82px;"><input type="number" id="prevAnyo" min="2020" max="2035" placeholder="2026" style="text-align:center;"></div>
         </div>
       </div>
       <div class="field" style="min-width:110px;max-width:130px;">
-        <label>Operaciones</label>
+        <label data-i18n="lblOps">Operaciones</label>
         <input type="number" id="prevOps" min="0" step="1" placeholder="0">
       </div>
       <div class="field" style="min-width:145px;">
-        <label>Primas Corregidas (€)</label>
+        <label data-i18n="lblPrimasCorr">Primas Corregidas (€)</label>
         <input type="text" id="prevPrimas" inputmode="decimal" placeholder="0">
       </div>
       <div class="field" style="min-width:155px;">
@@ -229,27 +244,27 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gra
       </div>
     </div>
     <div class="bim-row" id="bimRow">
-      Media bimestral: SS.GG. <strong id="bimSsgg">—</strong> · Vida <strong id="bimVida">—</strong> · Total <strong id="bimTotal">—</strong>
+      <span data-i18n="bimLabel">Media bimestral:</span> SS.GG. <strong id="bimSsgg">—</strong> · Vida <strong id="bimVida">—</strong> · Total <strong id="bimTotal">—</strong>
     </div>
   </div>
 
   <!-- ─── CARD 3: MES EN CURSO ─── -->
   <div class="sec-pill">
     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-    Mes en Curso
+    <span data-i18n="pillCurr">Mes en Curso</span>
   </div>
   <div class="form-card" id="currSection">
     <div class="fields-row">
       <div class="field" style="min-width:140px;">
-        <label>Mes en Curso</label>
+        <label data-i18n="lblMesCurr">Mes en Curso</label>
         <div class="curr-badge" id="currMesDisplay">—</div>
       </div>
       <div class="field" style="min-width:110px;max-width:130px;">
-        <label>Operaciones</label>
+        <label data-i18n="lblOps">Operaciones</label>
         <input type="number" id="currOps" min="0" step="1" placeholder="0">
       </div>
       <div class="field" style="min-width:145px;">
-        <label>Primas Corregidas (€)</label>
+        <label data-i18n="lblPrimasCorr">Primas Corregidas (€)</label>
         <input type="text" id="currPrimas" inputmode="decimal" placeholder="0">
       </div>
       <div class="field" style="min-width:145px;">
@@ -261,11 +276,11 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gra
         <input type="text" id="currVida" inputmode="decimal" placeholder="0">
       </div>
       <div class="field" style="min-width:100px;max-width:120px;">
-        <label>Ops. Hogar</label>
+        <label data-i18n="lblHogar">Ops. Hogar</label>
         <input type="number" id="currHogar" min="0" max="99" step="1" placeholder="0">
       </div>
       <div class="field" style="min-width:100px;max-width:120px;">
-        <label>Ops. Temporal</label>
+        <label data-i18n="lblTemporal">Ops. Temporal</label>
         <input type="number" id="currTemporal" min="0" step="1" placeholder="0">
       </div>
       <button class="btn-dash-lg" id="btnDash">
@@ -277,7 +292,7 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gra
 
 </div><!-- /main -->
 
-<div class="footer-bar">OPTIMIZARTE 3.0 · Seguimiento Mensual OAG · Herramienta interna · Los datos se guardan localmente en tu navegador</div>
+<div class="footer-bar" data-i18n="footer">OPTIMIZARTE 3.0 · Seguimiento Mensual OAG · Herramienta interna · Los datos se guardan localmente en tu navegador</div>
 <div id="toast"></div>
 
 <!-- ═══ DASHBOARD MODAL ═══ -->
@@ -300,15 +315,177 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gra
 <script>
 'use strict';
 
-const MESES=['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
+/* ── LANGUAGE CONSTANTS ── */
+const MESES_ES=['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
+const MESES_CA=['GENER','FEBRER','MARÇ','ABRIL','MAIG','JUNY','JULIOL','AGOST','SETEMBRE','OCTUBRE','NOVEMBRE','DESEMBRE'];
 const LS_KEY='oag_seguiment_v4';
+let currentLang='es';
+
+const STRINGS={
+  es:{
+    topbarTitle:'Seguimiento Mensual de Objetivos',
+    topbarSub:'Control de bonificaciones · Agència 17167 · OAG',
+    btnPDF:'Exportar PDF',
+    pillRef:'Año Anterior — Referencia Extra Bono',
+    pillPrev:'Mes Anterior — Referencia Bono Base',
+    pillCurr:'Mes en Curso',
+    lblMesRef:'Mes / Año de referencia',
+    lblMesPrev:'Mes / Año anterior',
+    lblOpsCorr:'Ops. Corregidas',
+    lblPrimasCorr:'Primas Corregidas (€)',
+    lblOpsAnul:'Ops. Anuladas',
+    lblPrimasAnul:'Primas Anuladas Corr. (€)',
+    lblOps:'Operaciones',
+    lblMesCurr:'Mes en Curso',
+    lblHogar:'Ops. Hogar',
+    lblTemporal:'Ops. Temporal',
+    bimLabel:'Media bimestral:',
+    footer:'OPTIMIZARTE 3.0 · Seguimiento Mensual OAG · Herramienta interna · Los datos se guardan localmente en tu navegador',
+    c1Title:'🏠 Operaciones Hogar',
+    c1Sub:'Seguimiento mensual · objetivos de bono',
+    c1PillS:'🥉 Peq.',c1PillM:'🥈 Med.',c1PillL:'🏆 Gde.',
+    c1ValLbl:'ops. hogar acumuladas',
+    c1BonusL:'🏆 ¡Bono Grande conseguido!',
+    c1BonusM:'🥈 Bono Mediano conseguido',
+    c1BonusS:'🥉 Bono Pequeño conseguido',
+    c1NoBonus:'Sin bono por ahora',
+    c1FaltanPre:'Faltan',c1FaltanPost:'ops. para',
+    c1BonusPeq:'Bono Pequeño',c1BonusMed:'Bono Mediano',c1BonusGde:'Bono Grande',
+    c2Title:'⏱ Operaciones Temporal',
+    c2Sub:'Bonificación según nivel de temporales acumulados',
+    c2ValLbl:'ops. temporales · nivel activo',
+    c2Penalty:'⚠️ Penalización activa:',
+    c2NoBonus:'➖ Sin bonificación (1 temporal)',
+    c2Active:'✅ Bonificación activa:',
+    c2Need2:'Necesitas 2 temporales para bono (+5%)',
+    c2Need1:'1 temporal más → bono +5%',
+    c2Need1b:'1 temporal más → bono +6%',
+    c2NeedN:'más → bono +7%',
+    c2Max:'¡Nivel máximo de bonificación temporal!',
+    c2Temp1:'temporal',c2Temps:'temporales',c2Con:'Con',
+    c3Title:'⭐ Extra Bono — Creixement',
+    c3Sub:'Vs. mateix mes any anterior · condició: ops I primes ≥ llindar',
+    c3NoRef:"Introdueix les dades de l'any anterior per calcular.",
+    c3NoRefBar:'Sense dades de referència',
+    c3LblOps:'Operacions',c3LblPri:'Primes Corregides',
+    c3TblTitle:'Objectius per tram',
+    c3TblObj:'Objectiu',c3TblOps:'Ops mín.',c3TblPri:'Primes mín.',c3TblStat:'Estat',c3TblCurr:'Actual',
+    c3Base:'Base de càlcul (any ant.):',
+    c3BonusLbls:['Extra Bono Petit · +10%','Extra Bono Mitjà · +15%','Extra Bono Gran · +20%'],
+    c3NoBonusMsg:'➖ Sense Extra Bono · objectiu: +10% en ops i primes',
+    c3Falten:'Faltan',
+    c4Title:'🎯 Objetivos Principales — Bono Base',
+    c4Sub:'Media bimestral (mes ant. + mes actual) · Reglamento 2026',
+    c4EmptySub:'Media bimestral SS.GG. + Vida · Reglamento 2026',
+    c4EmptyMsg:'Introduce SS.GG. y Vida en ambas cards',
+    c4LblN1:'Nivel 1',c4LblN2:'Nivel 2',c4LblN3:'Nivel 3',
+    c4LblSsgg:'SS.GG. Bimestral',c4LblVida:'Vida Bimestral',c4LblTotal:'Total Bimestral',
+    c4LvlNone:'➖ Sin bono base por ahora',
+    c4LvlL3:'🏆 ¡Nivel 3 conseguido! +50% base',
+    c4LvlL2:'🥈 Nivel 2 · +30% base',
+    c4LvlL1:'🥉 Nivel 1 · +10% base',
+    c4NextLvl:'Sig. nivel:',
+    modalOps:'Ops.:',modalPrimas:'Primas:',modalSsgg:'SS.GG.:',
+    modalVida:'Vida:',modalHogar:'Hogar:',modalTemporal:'Temporal:',
+  },
+  ca:{
+    topbarTitle:"Seguiment Mensual d'Objectius",
+    topbarSub:'Control de bonificacions · Agència 17167 · OAG',
+    btnPDF:'Exportar PDF',
+    pillRef:'Any Anterior — Referència Extra Bono',
+    pillPrev:'Mes Anterior — Referència Bono Base',
+    pillCurr:'Mes en Curs',
+    lblMesRef:'Mes / Any de referència',
+    lblMesPrev:'Mes / Any anterior',
+    lblOpsCorr:'Ops. Corregides',
+    lblPrimasCorr:'Primes Corregides (€)',
+    lblOpsAnul:'Ops. Anul·lades',
+    lblPrimasAnul:'Primes Anul·lades Corr. (€)',
+    lblOps:'Operacions',
+    lblMesCurr:'Mes en Curs',
+    lblHogar:'Ops. Llar',
+    lblTemporal:'Ops. Temporal',
+    bimLabel:'Mitjana bimestral:',
+    footer:'OPTIMIZARTE 3.0 · Seguiment Mensual OAG · Eina interna · Les dades es guarden localment al teu navegador',
+    c1Title:'🏠 Operacions Llar',
+    c1Sub:'Seguiment mensual · objectius de bo',
+    c1PillS:'🥉 Pet.',c1PillM:'🥈 Mit.',c1PillL:'🏆 Gde.',
+    c1ValLbl:'ops. llar acumulades',
+    c1BonusL:'🏆 Bo Gran aconseguit!',
+    c1BonusM:'🥈 Bo Mitjà aconseguit',
+    c1BonusS:'🥉 Bo Petit aconseguit',
+    c1NoBonus:'Sense bo per ara',
+    c1FaltanPre:'Falten',c1FaltanPost:'ops. per a',
+    c1BonusPeq:'Bo Petit',c1BonusMed:'Bo Mitjà',c1BonusGde:'Bo Gran',
+    c2Title:'⏱ Operacions Temporal',
+    c2Sub:'Bonificació segons nivell de temporals acumulats',
+    c2ValLbl:'ops. temporals · nivell actiu',
+    c2Penalty:'⚠️ Penalització activa:',
+    c2NoBonus:'➖ Sense bonificació (1 temporal)',
+    c2Active:'✅ Bonificació activa:',
+    c2Need2:'Necessites 2 temporals per bo (+5%)',
+    c2Need1:'1 temporal més → bo +5%',
+    c2Need1b:'1 temporal més → bo +6%',
+    c2NeedN:'més → bo +7%',
+    c2Max:'Nivell màxim de bonificació temporal!',
+    c2Temp1:'temporal',c2Temps:'temporals',c2Con:'Amb',
+    c3Title:'⭐ Extra Bono — Creixement',
+    c3Sub:'Vs. mateix mes any anterior · condició: ops I primes ≥ llindar',
+    c3NoRef:"Introdueix les dades de l'any anterior per calcular.",
+    c3NoRefBar:'Sense dades de referència',
+    c3LblOps:'Operacions',c3LblPri:'Primes Corregides',
+    c3TblTitle:'Objectius per tram',
+    c3TblObj:'Objectiu',c3TblOps:'Ops mín.',c3TblPri:'Primes mín.',c3TblStat:'Estat',c3TblCurr:'Actual',
+    c3Base:'Base de càlcul (any ant.):',
+    c3BonusLbls:['Extra Bono Petit · +10%','Extra Bono Mitjà · +15%','Extra Bono Gran · +20%'],
+    c3NoBonusMsg:'➖ Sense Extra Bono · objectiu: +10% en ops i primes',
+    c3Falten:'Falten',
+    c4Title:'🎯 Objectius Principals — Bono Base',
+    c4Sub:'Mitjana bimestral (mes ant. + mes actual) · Reglament 2026',
+    c4EmptySub:'Mitjana bimestral SS.GG. + Vida · Reglament 2026',
+    c4EmptyMsg:'Introdueix SS.GG. i Vida a les dues cards',
+    c4LblN1:'Nivell 1',c4LblN2:'Nivell 2',c4LblN3:'Nivell 3',
+    c4LblSsgg:'SS.GG. Bimestral',c4LblVida:'Vida Bimestral',c4LblTotal:'Total Bimestral',
+    c4LvlNone:'➖ Sense bono base per ara',
+    c4LvlL3:'🏆 Nivell 3 aconseguit! +50% base',
+    c4LvlL2:'🥈 Nivell 2 · +30% base',
+    c4LvlL1:'🥉 Nivell 1 · +10% base',
+    c4NextLvl:'Seg. nivell:',
+    modalOps:'Ops.:',modalPrimas:'Primes:',modalSsgg:'SS.GG.:',
+    modalVida:'Vida:',modalHogar:'Llar:',modalTemporal:'Temporal:',
+  }
+};
+
+function T(key){return(STRINGS[currentLang]||STRINGS.es)[key]||key;}
+function getMeses(){return currentLang==='ca'?MESES_CA:MESES_ES;}
+
+function applyLang(lang){
+  currentLang=lang;
+  document.getElementById('btnLangES').classList.toggle('active',lang==='es');
+  document.getElementById('btnLangCA').classList.toggle('active',lang==='ca');
+  document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=T(el.dataset.i18n);});
+  const months=getMeses();
+  ['refMes','prevMes'].forEach(selId=>{
+    const sel=document.getElementById(selId);if(!sel)return;
+    const val=sel.value;
+    while(sel.options.length)sel.remove(0);
+    months.forEach((m,i)=>{const opt=document.createElement('option');opt.value=i+1;opt.textContent=m;sel.appendChild(opt);});
+    sel.value=val;
+  });
+  const now=new Date();
+  document.getElementById('currMesDisplay').textContent=months[now.getMonth()]+' '+now.getFullYear();
+  try{localStorage.setItem('oag_lang',lang);}catch(e){}
+  liveRefresh();
+}
+
 const ICON_DASH='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>';
 
 /* ── TOAST ── */
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
 
 /* ── FORMAT UTILS ── */
-function fmtEur(n){return Math.round(n||0).toLocaleString('es-ES')+'€';}
+function fmtN(n){return Math.round(n||0).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
+function fmtEur(n){return fmtN(n)+'€';}
 function fmtOps(n){return Math.ceil(n||0);}
 function fmtPct(v){return v!==null?(v>=0?'+':'')+Math.round(v*10)/10+'%':'—';}
 
@@ -324,7 +501,7 @@ function setCurrencyVal(id,n){
   const el=document.getElementById(id);if(!el)return;
   const num=Math.round(parseFloat(n)||0);
   el.dataset.raw=num;
-  el.value=num>0?num.toLocaleString('es-ES'):'';
+  el.value=num>0?fmtN(num):'';
 }
 function initCurrencyField(id){
   const el=document.getElementById(id);if(!el)return;
@@ -337,7 +514,7 @@ function initCurrencyField(id){
   el.addEventListener('blur',function(){
     const n=Math.round(parseFloat(this.value.replace(/\./g,'').replace(',','.'))||0);
     this.dataset.raw=n;
-    this.value=n>0?n.toLocaleString('es-ES'):'';
+    this.value=n>0?fmtN(n):'';
     saveDataFull();updateBimCalc();liveRefresh();
   });
   el.addEventListener('input',function(){
@@ -436,54 +613,54 @@ function renderDashboard(){
   const ref=getRef();
   const bim=getBim();
   const now=new Date();
-  const mesNombre=MESES[now.getMonth()];
+  const mesNombre=getMeses()[now.getMonth()];
   document.getElementById('modalTitle').innerHTML=
     ICON_DASH+' Dashboard · '+mesNombre+' '+now.getFullYear();
   document.getElementById('modalInfo').innerHTML=`
     <span>📅 <strong>${mesNombre} ${now.getFullYear()}</strong></span>
-    <span>📦 Ops.: <strong>${fmtOps(curr.ops)}</strong></span>
-    <span>💶 Primas: <strong>${fmtEur(curr.primas)}</strong></span>
-    <span>📊 SS.GG.: <strong>${fmtEur(curr.ssgg)}</strong></span>
-    <span>❤️ Vida: <strong>${fmtEur(curr.vida)}</strong></span>
-    <span>🏠 Hogar: <strong>${fmtOps(curr.hogar)}</strong></span>
-    <span>⏱ Temporal: <strong>${fmtOps(curr.temporal)}</strong></span>`;
+    <span>📦 ${T('modalOps')} <strong>${fmtOps(curr.ops)}</strong></span>
+    <span>💶 ${T('modalPrimas')} <strong>${fmtEur(curr.primas)}</strong></span>
+    <span>📊 ${T('modalSsgg')} <strong>${fmtEur(curr.ssgg)}</strong></span>
+    <span>❤️ ${T('modalVida')} <strong>${fmtEur(curr.vida)}</strong></span>
+    <span>🏠 ${T('modalHogar')} <strong>${fmtOps(curr.hogar)}</strong></span>
+    <span>⏱ ${T('modalTemporal')} <strong>${fmtOps(curr.temporal)}</strong></span>`;
   document.getElementById('chartsGrid').innerHTML=
-    chartHogar(curr)+chartTemporal(curr)+chartExtraBono(curr,ref)+chartPrincipal(bim);
+    chartPrincipal(bim)+chartExtraBono(curr,ref)+chartHogar(curr)+chartTemporal(curr);
 }
 
-/* ═══ CHART 1 — HOGAR (sin cambios) ═══ */
+/* ═══ CHART 1 — HOGAR ═══ */
 function chartHogar(curr){
   const c=fmtOps(curr.hogar);
   const S=5,M=7,L=9,MAX=L*1.35;
   const pct=v=>Math.min(100,Math.max(0,v/MAX*100)).toFixed(1);
   const level=c>=L?'lg':c>=M?'md':c>=S?'sm':'none';
-  const fill=level==='none'?'#E5E7EB':'var(--red)';
+  const fill=level==='none'?'#9CA3AF':'var(--red)';
   const mC='rgba(180,0,20,.5)';
-  const lvlMsg=level==='lg'?'🏆 ¡Bono Grande conseguido!':level==='md'?'🥈 Bono Mediano conseguido':level==='sm'?'🥉 Bono Pequeño conseguido':'Sin bono por ahora';
+  const lvlMsg=level==='lg'?T('c1BonusL'):level==='md'?T('c1BonusM'):level==='sm'?T('c1BonusS'):T('c1NoBonus');
   const next=level==='none'?S:level==='sm'?M:level==='md'?L:null;
-  const nextN=level==='none'?'Bono Pequeño':level==='sm'?'Bono Mediano':'Bono Grande';
+  const nextN=level==='none'?T('c1BonusPeq'):level==='sm'?T('c1BonusMed'):T('c1BonusGde');
   return `<div class="chart-card">
-    <div class="chart-title">🏠 Operaciones Hogar</div>
-    <div class="chart-sub">Seguimiento mensual · objetivos de bono</div>
+    <div class="chart-title">${T('c1Title')}</div>
+    <div class="chart-sub">${T('c1Sub')}</div>
     <div class="bonus-pills">
-      <span class="bpill ${c>=S?'active':''}">🥉 Peq. · ${S} ops</span>
-      <span class="bpill ${c>=M?'active':''}">🥈 Med. · ${M} ops</span>
-      <span class="bpill ${c>=L?'active':''}">🏆 Gde. · ${L} ops</span>
+      <span class="bpill ${c>=S?'active':''}">${T('c1PillS')} · ${S} ops</span>
+      <span class="bpill ${c>=M?'active':''}">${T('c1PillM')} · ${M} ops</span>
+      <span class="bpill ${c>=L?'active':''}">${T('c1PillL')} · ${L} ops</span>
     </div>
     <div class="val-big" style="color:${fill}">${c}</div>
-    <div class="val-lbl">ops. hogar acumuladas</div>
+    <div class="val-lbl">${T('c1ValLbl')}</div>
     <div class="bar-track">
       <div class="bar-fill" style="width:${pct(c)}%;background:${fill};"></div>
-      ${[{v:S,l:'Peq.'},{v:M,l:'Med.'},{v:L,l:'Gde.'}].map(m=>`
+      ${[{v:S,l:T('c1PillS')},{v:M,l:T('c1PillM')},{v:L,l:T('c1PillL')}].map(m=>`
         <div class="bar-marker" style="left:${pct(m.v)}%;background:${mC};top:-2px;bottom:-2px;"></div>
         <div class="bar-marker-lbl bot" style="left:${pct(m.v)}%;color:${mC};">${m.l} ${m.v}</div>`).join('')}
     </div>
     <div class="status-msg ${level==='none'?'sms-nt':'sms-ok'}">${lvlMsg}</div>
-    ${next!==null?`<div class="status-sub">Faltan <b>${Math.max(0,next-c)}</b> ops. para ${nextN}</div>`:''}
+    ${next!==null?`<div class="status-sub">${T('c1FaltanPre')} <b>${Math.max(0,next-c)}</b> ${T('c1FaltanPost')} ${nextN}</div>`:''}
   </div>`;
 }
 
-/* ═══ CHART 2 — TEMPORAL (sin cambios) ═══ */
+/* ═══ CHART 2 — TEMPORAL ═══ */
 function chartTemporal(curr){
   const t=fmtOps(curr.temporal);
   const steps=[
@@ -496,11 +673,12 @@ function chartTemporal(curr){
   const cur=steps.find(s=>s.active)||steps[0];
   const barHs=[18,24,42,60,76];
   const bonus=t<=0?-5:t===1?0:t===2?5:t<=4?6:7;
+  const subMsg=t<=0?T('c2Need2'):t===1?T('c2Need1'):t===2?T('c2Need1b'):t<=4?`${T('c2Con')} ${5-t} ${5-t===1?T('c2Temp1'):T('c2Temps')} ${T('c2NeedN')}`:T('c2Max');
   return `<div class="chart-card">
-    <div class="chart-title">⏱ Operaciones Temporal</div>
-    <div class="chart-sub">Bonificación según nivel de temporales acumulados</div>
+    <div class="chart-title">${T('c2Title')}</div>
+    <div class="chart-sub">${T('c2Sub')}</div>
     <div class="val-big" style="color:${cur.c}">${cur.pct}</div>
-    <div class="val-lbl">${t} ops. temporales · nivel activo</div>
+    <div class="val-lbl">${t} ${T('c2ValLbl')}</div>
     <div class="steps">
       ${steps.map((s,i)=>`
         <div class="step-col ${s.active?'active':''}" style="${s.active?'color:'+s.c+';':''}">
@@ -510,28 +688,23 @@ function chartTemporal(curr){
         </div>`).join('')}
     </div>
     <div class="status-msg ${bonus<0?'sms-bad':bonus===0?'sms-nt':'sms-ok'}">
-      ${bonus<0?'⚠️ Penalización activa: '+cur.pct:bonus===0?'➖ Sin bonificación (1 temporal)':'✅ Bonificación activa: '+cur.pct}
+      ${bonus<0?T('c2Penalty')+' '+cur.pct:bonus===0?T('c2NoBonus'):T('c2Active')+' '+cur.pct}
     </div>
-    <div class="status-sub">
-      ${t<=0?'Necesitas 2 temporales para bono (+5%)':t===1?'1 temporal más → bono +5%':t===2?'1 temporal más → bono +6%':t<=4?'Con '+(5-t)+' temporal'+(5-t===1?'':'es')+' más → bono +7%':'¡Nivel máximo de bonificación temporal!'}
-    </div>
+    <div class="status-sub">${subMsg}</div>
   </div>`;
 }
 
-/* ═══ CHART 3 — EXTRA BONO (thresholds 10/15/20%, dos barras) ═══ */
+/* ═══ CHART 3 — EXTRA BONO ═══ */
 function chartExtraBono(curr,ref){
-  // Use GROSS corrected figures as base (ops corregides, primes corregides)
   const hasRef=ref.ops>0||ref.primas>0;
   const pctOps=ref.ops>0?((curr.ops-ref.ops)/ref.ops*100):null;
   const pctPri=ref.primas>0?((curr.primas-ref.primas)/ref.primas*100):null;
 
-  // Targets: always round UP (ceil). Based on gross corrected figures.
   const THRESHOLDS=[
-    {t:10,lbl:'Extra Bono Petit · +10%',short:'+10%'},
-    {t:15,lbl:'Extra Bono Mitjà · +15%',short:'+15%'},
-    {t:20,lbl:'Extra Bono Gran · +20%',short:'+20%'}
+    {t:10,short:'+10%'},{t:15,short:'+15%'},{t:20,short:'+20%'}
   ];
-  const targets=THRESHOLDS.map(({t,lbl,short})=>{
+  const targets=THRESHOLDS.map(({t,short},idx)=>{
+    const lbl=T('c3BonusLbls')[idx];
     const tOps=ref.ops>0?Math.ceil(ref.ops*(1+t/100)):null;
     const tPri=ref.primas>0?Math.ceil(ref.primas*(1+t/100)):null;
     const okOps=pctOps!==null&&pctOps>=t;
@@ -540,46 +713,55 @@ function chartExtraBono(curr,ref){
     return {t,lbl,short,tOps,tPri,okOps,okPri,ok};
   });
 
-  // Bonus level: highest tier where BOTH are met (AND logic)
-  let bonus=0,bonusLbl='Sense Extra Bono';
+  let bonus=0,bonusLbl=T('c3NoBonusMsg');
   for(let i=targets.length-1;i>=0;i--){
     if(targets[i].ok){bonus=targets[i].t;bonusLbl=targets[i].lbl;break;}
   }
 
-  // Bar: 0..25% range. Markers show % on TOP, target value on BOTTOM.
   const BAR_MAX=25;
   const bp=v=>Math.max(0,Math.min(100,(v/BAR_MAX)*100)).toFixed(1);
   const mrkC='rgba(180,0,20,.45)';
 
-  function bar(val,label,tVals,fmtBot,currLbl){
-    if(val===null)return `<div style="font-size:.62rem;color:var(--gray-2);font-style:italic;margin-bottom:20px;">Sense dades de referència</div>`;
-    const fill=val>=10?'var(--red)':val>=0?'#FBBFD0':'#E5E7EB';
-    const valC=val>=10?'var(--red)':val>=0?'var(--gray)':'var(--gray-2)';
+  function bar(val,label,tVals,fmtBot,currLbl,currRaw){
+    if(val===null)return `<div style="font-size:.62rem;color:var(--gray-2);font-style:italic;margin-bottom:20px;">${T('c3NoRefBar')}</div>`;
+    const achieved=val>=10;
+    const fill=achieved?'var(--red)':'#9CA3AF';
+    const valC=achieved?'var(--red)':'var(--gray)';
+    /* Absolute scale: full track = tVals[2]*1.15 so all markers fit with headroom */
+    const maxV=tVals[2]!==null?tVals[2]*1.15:1;
+    const bpV=v=>Math.min(100,Math.max(0,v/maxV*100)).toFixed(1);
+    const fillW=bpV(Math.max(0,currRaw||0));
+    /* Label: absolute deficit when below first target; % when achieved */
+    let topLbl;
+    if(achieved){topLbl=fmtPct(val);}
+    else if(tVals[0]!==null&&currRaw!=null){
+      const def=tVals[0]-(currRaw||0);
+      topLbl=def>0?T('c3Falten')+' '+fmtBot(def):fmtPct(val);
+    }else{topLbl=fmtPct(val);}
+    const PCTS=['+10%','+15%','+20%'];
     return `
       <div class="bar-label-row">
         <span class="bar-section-lbl">${label}</span>
-        <span class="bar-cur-val" style="color:${valC}">${fmtPct(val)}</span>
+        <span class="bar-cur-val" style="color:${valC}">${topLbl}</span>
       </div>
-      <div style="font-size:.56rem;color:var(--gray-2);margin:-2px 0 2px 0;">Actual: <strong style="color:${valC};">${currLbl}</strong></div>
+      <div style="font-size:.56rem;color:var(--gray-2);margin:-2px 0 2px 0;">${T('c3TblCurr')}: <strong style="color:${valC};">${currLbl}</strong></div>
       <div class="bar-track slim" style="margin-top:18px;">
-        <div class="bar-fill" style="width:${bp(Math.max(0,val))}%;background:${fill};"></div>
-        ${[10,15,20].map((th,i)=>`
-          <div class="bar-marker" style="left:${bp(th)}%;background:${mrkC};top:-2px;bottom:-2px;"></div>
-          <div class="bar-marker-lbl top" style="left:${bp(th)}%;color:${mrkC};">${th}%</div>
-          <div class="bar-marker-lbl bot" style="left:${bp(th)}%;color:${mrkC};white-space:nowrap;">${tVals[i]!==null?fmtBot(tVals[i]):'-'}</div>`).join('')}
+        <div class="bar-fill" style="width:${fillW}%;background:${fill};"></div>
+        ${tVals.map((th,i)=>th===null?'':`
+          <div class="bar-marker" style="left:${bpV(th)}%;background:${mrkC};top:-2px;bottom:-2px;"></div>
+          <div class="bar-marker-lbl top" style="left:${bpV(th)}%;color:${mrkC};">${PCTS[i]}</div>
+          <div class="bar-marker-lbl bot" style="left:${bpV(th)}%;color:${mrkC};white-space:nowrap;">${fmtBot(th)}</div>`).join('')}
       </div>`;
   }
 
-  // Targets table
   const tableRows=targets.map(({t,short,tOps,tPri,okOps,okPri,ok})=>{
     const cOps=okOps?'color:var(--green);font-weight:700;':'color:var(--gray-2);';
     const cPri=okPri?'color:var(--green);font-weight:700;':'color:var(--gray-2);';
-    const estat=ok?'✅':'❌';
     return `<tr>
       <td style="padding:4px 6px;font-weight:700;color:var(--gray);">${short}</td>
       <td style="padding:4px 6px;${cOps}">${tOps!==null?tOps:'-'}</td>
       <td style="padding:4px 6px;${cPri}">${tPri!==null?fmtEur(tPri):'-'}</td>
-      <td style="padding:4px 6px;text-align:center;">${estat}</td>
+      <td style="padding:4px 6px;text-align:center;">${ok?'✅':'❌'}</td>
     </tr>`;
   }).join('');
 
@@ -588,46 +770,46 @@ function chartExtraBono(curr,ref){
 
   const targetsTable=hasRef?`
     <div style="margin-top:14px;">
-      <div style="font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);margin-bottom:5px;">Objectius per tram</div>
+      <div style="font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);margin-bottom:5px;">${T('c3TblTitle')}</div>
       <table style="width:100%;border-collapse:collapse;font-size:.62rem;">
         <thead>
           <tr style="background:#F5F5F5;">
-            <th style="padding:4px 6px;text-align:left;color:var(--gray-2);font-weight:700;">Objectiu</th>
-            <th style="padding:4px 6px;text-align:left;color:var(--gray-2);font-weight:700;">Ops mín.</th>
-            <th style="padding:4px 6px;text-align:left;color:var(--gray-2);font-weight:700;">Primes mín.</th>
-            <th style="padding:4px 6px;text-align:center;color:var(--gray-2);font-weight:700;">Estat</th>
+            <th style="padding:4px 6px;text-align:left;color:var(--gray-2);font-weight:700;">${T('c3TblObj')}</th>
+            <th style="padding:4px 6px;text-align:left;color:var(--gray-2);font-weight:700;">${T('c3TblOps')}</th>
+            <th style="padding:4px 6px;text-align:left;color:var(--gray-2);font-weight:700;">${T('c3TblPri')}</th>
+            <th style="padding:4px 6px;text-align:center;color:var(--gray-2);font-weight:700;">${T('c3TblStat')}</th>
           </tr>
         </thead>
         <tbody>
           ${tableRows}
           <tr style="border-top:1.5px solid var(--border);background:#FAFAFA;">
-            <td style="padding:4px 6px;color:var(--gray-2);font-style:italic;">Actual</td>
+            <td style="padding:4px 6px;color:var(--gray-2);font-style:italic;">${T('c3TblCurr')}</td>
             <td style="padding:4px 6px;${actualOpsC}">${curr.ops}</td>
             <td style="padding:4px 6px;${actualPriC}">${fmtEur(curr.primas)}</td>
             <td style="padding:4px 6px;"></td>
           </tr>
         </tbody>
       </table>
-      <div style="font-size:.56rem;color:var(--gray-2);margin-top:4px;">Base de càlcul (any ant.): Ops. ${fmtOps(ref.ops)} · Primes ${fmtEur(ref.primas)}</div>
+      <div style="font-size:.56rem;color:var(--gray-2);margin-top:4px;">${T('c3Base')} Ops. ${fmtOps(ref.ops)} · Primes ${fmtEur(ref.primas)}</div>
     </div>`:'';
 
   const tOpsArr=targets.map(x=>x.tOps);
   const tPriArr=targets.map(x=>x.tPri);
-
   const msgCls=bonus>0?'sms-ok':'sms-nt';
+
   return `<div class="chart-card">
-    <div class="chart-title">⭐ Extra Bono — Creixement</div>
-    <div class="chart-sub">Vs. mateix mes any anterior · condició: ops I primes ≥ llindar</div>
+    <div class="chart-title">${T('c3Title')}</div>
+    <div class="chart-sub">${T('c3Sub')}</div>
     <div class="bonus-pills">
       <span class="bpill ${bonus>=10?'active':''}">+10%</span>
       <span class="bpill ${bonus>=15?'active':''}">+15%</span>
       <span class="bpill ${bonus>=20?'active':''}">+20%</span>
     </div>
-    ${!hasRef?`<div style="font-size:.65rem;color:var(--gray-2);font-style:italic;padding:4px 0 12px;">Introdueix les dades de l'any anterior per calcular.</div>`:''}
-    ${bar(pctOps,'Operacions',tOpsArr,v=>v+'',fmtOps(curr.ops)+' ops')}
-    ${bar(pctPri,'Primes Corregides',tPriArr,v=>fmtEur(v),fmtEur(curr.primas))}
+    ${!hasRef?`<div style="font-size:.65rem;color:var(--gray-2);font-style:italic;padding:4px 0 12px;">${T('c3NoRef')}</div>`:''}
+    ${bar(pctOps,T('c3LblOps'),tOpsArr,v=>fmtN(v)+' ops',fmtOps(curr.ops)+' ops',curr.ops)}
+    ${bar(pctPri,T('c3LblPri'),tPriArr,fmtEur,fmtEur(curr.primas),curr.primas)}
     ${targetsTable}
-    <div class="status-msg ${msgCls}" style="margin-top:10px;">${bonus>0?'✅ '+bonusLbl:'➖ Sense Extra Bono · objectiu: +10% en ops i primes'}</div>
+    <div class="status-msg ${msgCls}" style="margin-top:10px;">${bonus>0?'✅ '+bonusLbl:T('c3NoBonusMsg')}</div>
   </div>`;
 }
 
@@ -637,7 +819,7 @@ function chartPrincipal(bim){
   const VIDA_TH=[1875,2375,2900];
   const TOT_TH =[5225,7100,9000];
   const BONUS  =['10%','30%','50%'];
-  const LBL    =['Nivel 1','Nivel 2','Nivel 3'];
+  const LBL    =[T('c4LblN1'),T('c4LblN2'),T('c4LblN3')];
 
   let achieved=-1;
   if(bim.hasData){
@@ -649,12 +831,12 @@ function chartPrincipal(bim){
 
   if(!bim.hasData){
     return `<div class="chart-card">
-      <div class="chart-title">🎯 Objetivos Principales — Bono Base</div>
-      <div class="chart-sub">Media bimestral SS.GG. + Vida · Reglamento 2026</div>
+      <div class="chart-title">${T('c4Title')}</div>
+      <div class="chart-sub">${T('c4EmptySub')}</div>
       <div class="bonus-pills">${pillsHTML}</div>
       <div style="display:flex;flex-direction:column;align-items:center;gap:8px;min-height:80px;color:#D1D5DB;margin-top:10px;">
         <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-        <p style="font-size:.68rem;font-style:italic;color:#D1D5DB;">Introduce SS.GG. y Vida en ambas cards</p>
+        <p style="font-size:.68rem;font-style:italic;color:#D1D5DB;">${T('c4EmptyMsg')}</p>
         <small style="font-size:.56rem;text-align:center;color:#D1D5DB;line-height:1.5;">SS.GG. bim. ≥ 1.950 / 2.500 / 3.250€<br>Vida bim. ≥ 1.875 / 2.375 / 2.900€<br>Total bim. ≥ 5.225 / 7.100 / 9.000€</small>
       </div>
     </div>`;
@@ -665,32 +847,32 @@ function chartPrincipal(bim){
   const bp=(v,mx)=>Math.min(100,Math.max(0,v/mx*100)).toFixed(1);
   const mkrs=(arr,mx)=>arr.map(th=>`<div class="bar-marker" style="left:${bp(th,mx)}%;background:${mrkC};top:-2px;bottom:-2px;"></div><div class="bar-marker-lbl bot" style="left:${bp(th,mx)}%;color:${mrkC};">${fmtEur(th)}</div>`).join('');
 
-  const fS=bim.bimSsgg>=SSGG_TH[0]?'var(--red)':'#E5E7EB';
-  const fV=bim.bimVida>=VIDA_TH[0]?'var(--red)':'#E5E7EB';
-  const fT=bim.bimTotal>=TOT_TH[0]?'var(--red)':'#E5E7EB';
+  const fS=bim.bimSsgg>=SSGG_TH[0]?'var(--red)':'#9CA3AF';
+  const fV=bim.bimVida>=VIDA_TH[0]?'var(--red)':'#9CA3AF';
+  const fT=bim.bimTotal>=TOT_TH[0]?'var(--red)':'#9CA3AF';
   const cS=bim.bimSsgg>=SSGG_TH[0]?'var(--red)':'var(--gray-2)';
   const cV=bim.bimVida>=VIDA_TH[0]?'var(--red)':'var(--gray-2)';
   const cT=bim.bimTotal>=TOT_TH[0]?'var(--red)':'var(--gray-2)';
 
-  const lvlMsg=achieved<0?'➖ Sin bono base por ahora':achieved===2?'🏆 ¡Nivel 3 conseguido! +50% base':achieved===1?'🥈 Nivel 2 · +30% base':'🥉 Nivel 1 · +10% base';
+  const lvlMsg=achieved<0?T('c4LvlNone'):achieved===2?T('c4LvlL3'):achieved===1?T('c4LvlL2'):T('c4LvlL1');
   const nextIdx=achieved+1;
 
   return `<div class="chart-card">
-    <div class="chart-title">🎯 Objetivos Principales — Bono Base</div>
-    <div class="chart-sub">Media bimestral (mes ant. + mes actual) · Reglamento 2026</div>
+    <div class="chart-title">${T('c4Title')}</div>
+    <div class="chart-sub">${T('c4Sub')}</div>
     <div class="bonus-pills">${pillsHTML}</div>
 
-    <div class="bar-label-row"><span class="bar-section-lbl">SS.GG. Bimestral</span><span class="bar-cur-val" style="color:${cS}">${fmtEur(bim.bimSsgg)}</span></div>
+    <div class="bar-label-row"><span class="bar-section-lbl">${T('c4LblSsgg')}</span><span class="bar-cur-val" style="color:${cS}">${fmtEur(bim.bimSsgg)}</span></div>
     <div class="bar-track slim">${`<div class="bar-fill" style="width:${bp(bim.bimSsgg,MAX_S)}%;background:${fS};"></div>`}${mkrs(SSGG_TH,MAX_S)}</div>
 
-    <div class="bar-label-row"><span class="bar-section-lbl">Vida Bimestral</span><span class="bar-cur-val" style="color:${cV}">${fmtEur(bim.bimVida)}</span></div>
+    <div class="bar-label-row"><span class="bar-section-lbl">${T('c4LblVida')}</span><span class="bar-cur-val" style="color:${cV}">${fmtEur(bim.bimVida)}</span></div>
     <div class="bar-track slim">${`<div class="bar-fill" style="width:${bp(bim.bimVida,MAX_V)}%;background:${fV};"></div>`}${mkrs(VIDA_TH,MAX_V)}</div>
 
-    <div class="bar-label-row"><span class="bar-section-lbl">Total Bimestral</span><span class="bar-cur-val" style="color:${cT}">${fmtEur(bim.bimTotal)}</span></div>
+    <div class="bar-label-row"><span class="bar-section-lbl">${T('c4LblTotal')}</span><span class="bar-cur-val" style="color:${cT}">${fmtEur(bim.bimTotal)}</span></div>
     <div class="bar-track slim">${`<div class="bar-fill" style="width:${bp(bim.bimTotal,MAX_T)}%;background:${fT};"></div>`}${mkrs(TOT_TH,MAX_T)}</div>
 
     <div class="status-msg ${achieved<0?'sms-nt':'sms-ok'}" style="margin-top:6px;">${lvlMsg}</div>
-    ${nextIdx<=2?`<div class="status-sub">Sig. nivel: SS.GG.≥${fmtEur(SSGG_TH[nextIdx])} · Vida≥${fmtEur(VIDA_TH[nextIdx])} · Tot.≥${fmtEur(TOT_TH[nextIdx])}</div>`:''}
+    ${nextIdx<=2?`<div class="status-sub">${T('c4NextLvl')} SS.GG.≥${fmtEur(SSGG_TH[nextIdx])} · Vida≥${fmtEur(VIDA_TH[nextIdx])} · Tot.≥${fmtEur(TOT_TH[nextIdx])}</div>`:''}
   </div>`;
 }
 
@@ -715,10 +897,11 @@ async function exportPDF(){
 
     const curr=getCurr(),ref=getRef(),bim=getBim(),prev=getPrev();
     const now=new Date();
-    const mesN=MESES[now.getMonth()],yr=now.getFullYear();
-    const refMesN=MESES[(parseInt(document.getElementById('refMes').value)||1)-1];
+    const months=getMeses();
+    const mesN=months[now.getMonth()],yr=now.getFullYear();
+    const refMesN=months[(parseInt(document.getElementById('refMes').value)||1)-1];
     const refAnyoV=document.getElementById('refAnyo').value||'—';
-    const prevMesN=MESES[(parseInt(document.getElementById('prevMes').value)||1)-1];
+    const prevMesN=months[(parseInt(document.getElementById('prevMes').value)||1)-1];
     const prevAnyoV=document.getElementById('prevAnyo').value||'—';
 
     /* ─ Build print container ─ */
@@ -740,52 +923,43 @@ async function exportPDF(){
     div.innerHTML=`
 <div style="height:48px;background:#1e1e1e;display:flex;align-items:center;justify-content:space-between;padding:0 20px;">
   <div><span style="font-weight:800;font-size:13px;color:#fff;">Optimizarte</span><span style="font-size:9px;color:rgba(255,255,255,.4);margin:0 4px;font-style:italic;">by</span><span style="font-weight:800;font-size:13px;color:#DC0028;">Occident</span></div>
-  <div style="font-size:11px;font-weight:700;color:#fff;">Seguimiento Mensual de Objetivos</div>
+  <div style="font-size:11px;font-weight:700;color:#fff;">${T('topbarTitle')}</div>
   <div style="font-size:9px;color:rgba(255,255,255,.5);">Agència 17167 · OAG · ${mesN} ${yr}</div>
 </div>
 <div style="padding:14px 16px 0;">
-
-<div style="display:inline-flex;align-items:center;gap:6px;background:#DC0028;color:#fff;padding:3px 10px;border-radius:4px;font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">◼ RESUMEN DE DATOS</div>
-
+<div style="display:inline-flex;align-items:center;gap:6px;background:#DC0028;color:#fff;padding:3px 10px;border-radius:4px;font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">◼ ${currentLang==='ca'?'RESUM DE DADES':'RESUMEN DE DATOS'}</div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
-${card('AÑO ANTERIOR',`
-  <div style="font-size:8px;color:#9CA3AF;font-weight:700;text-transform:uppercase;margin-bottom:2px;">Mes / Año referencia</div>
+${card(T('pillRef').toUpperCase(),`
+  <div style="font-size:8px;color:#9CA3AF;font-weight:700;text-transform:uppercase;margin-bottom:2px;">${T('lblMesRef')}</div>
   <div style="font-size:14px;font-weight:700;color:#1e1e1e;margin-bottom:9px;">${refMesN} ${refAnyoV}</div>
-  ${row2([['Ops. Corregidas',fmtOps(ref.ops)],['Primas Corr.',fmtEur(ref.primas)],['Ops. Anuladas',fmtOps(ref.opsAnul),'#DC0028'],['Primas Anu.',fmtEur(ref.primasAnul),'#DC0028']])}
-  <div style="margin-top:8px;padding-top:6px;border-top:1px solid #E0E0E0;font-size:8.5px;color:#9CA3AF;">Neto: <strong style="color:#1e1e1e;">${fmtOps(ref.netOps)} ops · ${fmtEur(ref.netPrimas)}</strong></div>`)}
-${card('MES ANTERIOR',`
-  <div style="font-size:8px;color:#9CA3AF;font-weight:700;text-transform:uppercase;margin-bottom:2px;">Mes / Año</div>
+  ${row2([[T('lblOpsCorr'),fmtOps(ref.ops)],[currentLang==='ca'?'Primes Corr.':'Primas Corr.',fmtEur(ref.primas)],[T('lblOpsAnul'),fmtOps(ref.opsAnul),'#DC0028'],[currentLang==='ca'?'Primes Anu.':'Primas Anu.',fmtEur(ref.primasAnul),'#DC0028']])}
+  <div style="margin-top:8px;padding-top:6px;border-top:1px solid #E0E0E0;font-size:8.5px;color:#9CA3AF;">Net: <strong style="color:#1e1e1e;">${fmtOps(ref.netOps)} ops · ${fmtEur(ref.netPrimas)}</strong></div>`)}
+${card(T('pillPrev').toUpperCase(),`
+  <div style="font-size:8px;color:#9CA3AF;font-weight:700;text-transform:uppercase;margin-bottom:2px;">${T('lblMesPrev')}</div>
   <div style="font-size:14px;font-weight:700;color:#1e1e1e;margin-bottom:9px;">${prevMesN} ${prevAnyoV}</div>
-  ${row2([['Operaciones',fmtOps(prev.ops)],['Primas Corr.',fmtEur(prev.primas)],['SS.GG.',fmtEur(prev.ssgg)],['Vida',fmtEur(prev.vida)]])}`)}
-${card('MES EN CURSO',`
-  <div style="font-size:8px;color:#9CA3AF;font-weight:700;text-transform:uppercase;margin-bottom:2px;">Mes en curso</div>
+  ${row2([[T('lblOps'),fmtOps(prev.ops)],[currentLang==='ca'?'Primes Corr.':'Primas Corr.',fmtEur(prev.primas)],['SS.GG.',fmtEur(prev.ssgg)],['Vida',fmtEur(prev.vida)]])}`)}
+${card(T('pillCurr').toUpperCase(),`
+  <div style="font-size:8px;color:#9CA3AF;font-weight:700;text-transform:uppercase;margin-bottom:2px;">${T('lblMesCurr')}</div>
   <div style="font-size:14px;font-weight:700;color:#DC0028;margin-bottom:9px;">${mesN} ${yr}</div>
-  ${row2([['Operaciones',fmtOps(curr.ops)],['Primas Corr.',fmtEur(curr.primas)],['SS.GG.',fmtEur(curr.ssgg)],['Vida',fmtEur(curr.vida)],['Ops. Hogar',fmtOps(curr.hogar)],['Ops. Temporal',fmtOps(curr.temporal)]])}`)}
+  ${row2([[T('lblOps'),fmtOps(curr.ops)],[currentLang==='ca'?'Primes Corr.':'Primas Corr.',fmtEur(curr.primas)],['SS.GG.',fmtEur(curr.ssgg)],['Vida',fmtEur(curr.vida)],[T('lblHogar'),fmtOps(curr.hogar)],[T('lblTemporal'),fmtOps(curr.temporal)]])}`)}
 </div>
-
 <div style="background:#fff;border:1px solid #E0E0E0;border-radius:8px;padding:9px 14px;margin-bottom:14px;font-size:10px;color:#9CA3AF;display:flex;gap:18px;align-items:center;">
-  📊 Media Bimestral: SS.GG.&nbsp;<strong style="color:#DC0028;">${fmtEur(bim.bimSsgg)}</strong>&nbsp;·&nbsp;Vida&nbsp;<strong style="color:#DC0028;">${fmtEur(bim.bimVida)}</strong>&nbsp;·&nbsp;Total&nbsp;<strong style="color:#DC0028;">${fmtEur(bim.bimTotal)}</strong>
+  📊 ${T('bimLabel')} SS.GG.&nbsp;<strong style="color:#DC0028;">${fmtEur(bim.bimSsgg)}</strong>&nbsp;·&nbsp;Vida&nbsp;<strong style="color:#DC0028;">${fmtEur(bim.bimVida)}</strong>&nbsp;·&nbsp;Total&nbsp;<strong style="color:#DC0028;">${fmtEur(bim.bimTotal)}</strong>
 </div>
-
-<div style="display:inline-flex;align-items:center;gap:6px;background:#DC0028;color:#fff;padding:3px 10px;border-radius:4px;font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">◼ DASHBOARD DE BONIFICACIONES</div>
-
+<div style="display:inline-flex;align-items:center;gap:6px;background:#DC0028;color:#fff;padding:3px 10px;border-radius:4px;font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">◼ ${currentLang==='ca'?'DASHBOARD DE BONIFICACIONS':'DASHBOARD DE BONIFICACIONES'}</div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-bottom:16px;">
-${chartHogar(curr)}${chartTemporal(curr)}${chartExtraBono(curr,ref)}${chartPrincipal(bim)}
+${chartPrincipal(bim)}${chartExtraBono(curr,ref)}${chartHogar(curr)}${chartTemporal(curr)}
 </div>
-
 </div>
 <div style="background:#1e1e1e;color:rgba(255,255,255,.35);font-size:8px;text-align:center;padding:7px;">
-  OPTIMIZARTE 3.0 · Seguimiento Mensual OAG Agència 17167 · Generado ${now.toLocaleDateString('es-ES')} ${now.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}
+  OPTIMIZARTE 3.0 · ${currentLang==='ca'?'Seguiment Mensual OAG Agència 17167':'Seguimiento Mensual OAG Agència 17167'} · ${currentLang==='ca'?'Generat':'Generado'} ${now.toLocaleDateString('es-ES')} ${now.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}
 </div>`;
 
     document.body.appendChild(div);
 
     const canvas=await html2canvas(div,{
-      scale:1.8,
-      useCORS:true,
-      logging:false,
-      backgroundColor:'#F0F0F0',
-      windowWidth:W,
+      scale:1.8,useCORS:true,logging:false,
+      backgroundColor:'#F0F0F0',windowWidth:W,
     });
     document.body.removeChild(div);
 
@@ -805,7 +979,7 @@ ${chartHogar(curr)}${chartTemporal(curr)}${chartExtraBono(curr,ref)}${chartPrinc
 
     const fname='seguiment-'+mesN.toLowerCase()+'-'+yr+'-OAG17167.pdf';
     pdf.save(fname);
-    toast('✅ PDF exportado: '+fname);
+    toast('✅ PDF '+(currentLang==='ca'?'exportat':'exportado')+': '+fname);
   }catch(e){
     console.error('PDF export error:',e);
     toast('❌ Error al exportar PDF');
@@ -819,11 +993,25 @@ ${chartHogar(curr)}${chartTemporal(curr)}${chartExtraBono(curr,ref)}${chartPrinc
 ══════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded',function(){
 
+  /* Load saved language */
+  try{
+    const savedLang=localStorage.getItem('oag_lang');
+    if(savedLang==='ca')currentLang='ca';
+  }catch(e){}
+
   /* Build month selects */
+  const months=getMeses();
   ['refMes','prevMes'].forEach(selId=>{
     const sel=document.getElementById(selId);
-    MESES.forEach((m,i)=>{const opt=document.createElement('option');opt.value=i+1;opt.textContent=m;sel.appendChild(opt);});
+    months.forEach((m,i)=>{const opt=document.createElement('option');opt.value=i+1;opt.textContent=m;sel.appendChild(opt);});
   });
+
+  /* Apply saved language to static elements */
+  if(currentLang==='ca'){
+    document.getElementById('btnLangCA').classList.add('active');
+    document.getElementById('btnLangES').classList.remove('active');
+    document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=T(el.dataset.i18n);});
+  }
 
   /* Init currency fields */
   CURRENCY_IDS.forEach(initCurrencyField);
@@ -831,15 +1019,12 @@ document.addEventListener('DOMContentLoaded',function(){
   /* Auto-set month defaults */
   const now=new Date();
   const curMo=now.getMonth()+1,curYr=now.getFullYear();
-  // Ref: same month, previous year
   document.getElementById('refMes').value=curMo;
   document.getElementById('refAnyo').value=curYr-1;
-  // Prev: last month
   const prevMo=curMo===1?12:curMo-1,prevYr=curMo===1?curYr-1:curYr;
   document.getElementById('prevMes').value=prevMo;
   document.getElementById('prevAnyo').value=prevYr;
-  // Curr: display only
-  document.getElementById('currMesDisplay').textContent=MESES[curMo-1]+' '+curYr;
+  document.getElementById('currMesDisplay').textContent=getMeses()[curMo-1]+' '+curYr;
 
   /* Load saved data */
   loadData();
@@ -851,6 +1036,10 @@ document.addEventListener('DOMContentLoaded',function(){
       saveDataFull();updateBimCalc();liveRefresh();
     });
   });
+
+  /* Language toggle */
+  document.getElementById('btnLangES').addEventListener('click',()=>applyLang('es'));
+  document.getElementById('btnLangCA').addEventListener('click',()=>applyLang('ca'));
 
   /* Dashboard button */
   document.getElementById('btnDash').addEventListener('click',openDashboard);

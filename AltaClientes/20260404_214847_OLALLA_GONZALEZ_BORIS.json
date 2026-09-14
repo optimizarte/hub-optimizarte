@@ -19,11 +19,16 @@
   "cp": "",
   "localidad": "",
   "seguros": [
+    "Salud",
+    "Hogar",
     "Auto",
     "Moto",
-    "Salud"
+    "Vida",
+    "Decesos",
+    "Ahorro Garantizado",
+    "Ahorro Inversion"
   ],
-  "ramo_data": "{\"auto-1\":{\"matricula\":\"\",\"mesVcto\":\"\",\"marca\":\"\",\"modelo\":\"\",\"version\":\"\",\"propietario\":\"tomador\",\"conductor\":\"tomador\",\"sincos\":[],\"observaciones\":\"\",\"observacionesNota\":\"\",\"vto\":\"\",\"estado\":\"vto-inmediato\",\"_saved\":true},\"salud-1\":{\"modalidad\":\"Cuadro médico\",\"copago\":\"Si\",\"personas\":1,\"personasData\":[{\"fnac\":\"2026-03-30\",\"sexo\":\"\",\"prof\":\"jmjj,jy\",\"deporte\":\"No\",\"deporteNombre\":\"\"}],\"observaciones\":\"No\",\"observacionesNota\":\"\",\"vto\":\"2026-04-05\",\"estado\":\"vto-inmediato\",\"_saved\":true},\"moto-1\":{\"estado\":\"vto-inmediato\"}}",
+  "ramo_data": "{\"auto-1\":{\"matricula\":\"7031LMR\",\"mesVcto\":\"Abril\",\"marca\":\"RENAUL\",\"modelo\":\"CLIO\",\"version\":\"1.5 TSI\",\"propietario\":\"otro\",\"ownerNombre\":\"DANIEL\",\"ownerAp1\":\"HERNANDEZ\",\"ownerAp2\":\"SEGURA\",\"ownerDni\":\"40441819e\",\"ownerFnac\":\"1972-09-12\",\"ownerFcarnet\":\"1990-12-04\",\"conductor\":\"propietario\",\"sincos\":[],\"observaciones\":\"No\",\"observacionesNota\":\"\",\"vto\":\"2026-04-05\",\"estado\":\"vto-inmediato\",\"_saved\":true},\"salud-1\":{\"modalidad\":\"Cuadro médico\",\"copago\":\"Si\",\"personas\":1,\"personasData\":[{\"fnac\":\"2026-03-30\",\"sexo\":\"\",\"prof\":\"jmjj,jy\",\"deporte\":\"No\",\"deporteNombre\":\"\"}],\"observaciones\":\"No\",\"observacionesNota\":\"\",\"vto\":\"2026-04-05\",\"estado\":\"vto-inmediato\",\"_saved\":true},\"moto-1\":{\"estado\":\"vto-inmediato\"},\"hogar-1\":{\"tipoProp\":\"Propietario\",\"tipoViv\":\"Principal\",\"piscina\":\"No\",\"hipoteca\":\"Si\",\"capital\":\"120000\",\"personas\":3,\"dirInmueble\":\"Vicenç Bou 3 2 A\",\"cpInmueble\":\"17600\",\"locInmueble\":\"Figueres\",\"observaciones\":\"Si\",\"observacionesNota\":\"Lorem ipsum es el texto que se usa habitualmente en diseño gráfico en demostraciones de tipografías o de bocetos para diseños para probar el arte visual antes de insertar el texto final.\",\"vto\":\"2026-10-01\",\"estado\":\"vto-inmediato\",\"_saved\":true},\"vida-1\":{\"personas\":1,\"profesion\":\"ENFERMERA\",\"capital\":\"100000\",\"deportes\":\"No\",\"deporteNombre\":\"\",\"personasData\":[{\"fnac\":\"\",\"sexo\":\"\"}],\"destinoHipoteca\":true,\"destinoSucesiones\":false,\"destinoFamiliar\":false,\"observaciones\":\"Si\",\"observacionesNota\":\"INVALIDEZ + ENFERMEDADES GRAVES\",\"vto\":\"2026-08-15\",\"estado\":\"vto-inmediato\",\"_saved\":true},\"ahorro-g-1\":{\"tieneAhorros\":\"No\",\"aportaciones\":\"\",\"activo\":\"\",\"notas\":\"\",\"quiereAhorrar\":\"Si\",\"aportacionesQuiere\":\"200\",\"aportacionInicial\":\"0\",\"notasQuiere\":\"JUBILACION\",\"observaciones\":\"No\",\"observacionesNota\":\"\",\"vto\":\"2026-08-15\",\"estado\":\"necesita\",\"_saved\":true},\"ahorro-i-1\":{\"tieneAhorros\":\"\",\"aportaciones\":\"\",\"activo\":\"\",\"notas\":\"\",\"quiereAhorrar\":\"\",\"aportacionesQuiere\":\"\",\"aportacionInicial\":\"\",\"notasQuiere\":\"\",\"observaciones\":\"\",\"observacionesNota\":\"\",\"vto\":\"\",\"estado\":\"necesita\",\"_saved\":true},\"decesos-1\":{\"personas\":3,\"personasData\":[{\"fnac\":\"1978-09-26\",\"sexo\":\"H\"},{\"fnac\":\"2008-12-03\",\"sexo\":\"H\"},{\"fnac\":\"2005-06-30\",\"sexo\":\"H\"}],\"mascotas\":[],\"observaciones\":\"Si\",\"observacionesNota\":\"INCINERACON\",\"vto\":\"2026-04-23\",\"estado\":\"facilita\",\"_saved\":true}}",
   "colab_recoge": "Dany Hernandez",
   "colab_recoge_racf": "M441819E",
   "colab_asigna": "Dany Hernandez",
@@ -33,7 +38,7 @@
   "fecha_accion": "",
   "origen_sw": "",
   "origen_detalle": "",
-  "timestamp": "4/4/2026, 21:49:51",
+  "timestamp": "5/4/2026, 11:45:14",
   "par_nombre": "OLALLA",
   "par_ap1": "GONZALEZ",
   "par_ap2": "BORIS",
@@ -58,6 +63,6 @@
   "aut_empleados": "",
   "vtos_per": false,
   "aut_emp": false,
-  "fechaCreacion": "2026-04-04T19:49:51.747Z",
-  "fechaModificacion": "2026-04-04T19:49:51.747Z"
+  "fechaCreacion": "2026-04-05T09:45:14.390Z",
+  "fechaModificacion": "2026-04-05T09:45:14.390Z"
 }

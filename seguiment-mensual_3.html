@@ -921,21 +921,21 @@ function chartExtraBono(curr,ref){
     const maxV=tVals[2]!==null?tVals[2]*1.15:1;
     const bpV=v=>Math.min(100,Math.max(0,v/maxV*100)).toFixed(1);
     const fillW=bpV(Math.max(0,currRaw||0));
-    /* Label: absolute deficit when below first target; % when achieved */
-    let topLbl;
-    if(achieved){topLbl=fmtPct(val);}
-    else if(tVals[0]!==null&&currRaw!=null){
-      const def=tVals[0]-(currRaw||0);
-      topLbl=def>0?T('c3Falten')+' '+fmtBot(def):fmtPct(val);
-    }else{topLbl=fmtPct(val);}
+    const PCTS_TH=[10,15,20];
     const PCTS=['+10%','+15%','+20%'];
+    /* Three objectives: each achieved one in red, unachieved in gray */
+    const targetsHtml=tVals.map((th,i)=>{
+      if(th===null)return '-';
+      const ok=val!==null&&val>=PCTS_TH[i];
+      return `<span style="color:${ok?'var(--red)':'#9CA3AF'};font-weight:${ok?'800':'500'};">${fmtBot(th)}</span>`;
+    }).join('<span style="color:#D1D5DB;padding:0 4px;font-weight:300;">/</span>');
     return `
-      <div class="bar-label-row">
+      <div style="margin-bottom:3px;">
         <span class="bar-section-lbl">${label}</span>
-        <span class="bar-cur-val" style="color:${valC}">${topLbl}</span>
       </div>
-      <div style="font-size:.56rem;color:var(--gray-2);margin:-2px 0 2px 0;">${T('c3TblCurr')}: <strong style="color:${valC};">${currLbl}</strong></div>
-      <div class="bar-track slim" style="margin-top:18px;">
+      <div style="font-size:.75rem;line-height:1.4;margin-bottom:2px;">${targetsHtml}</div>
+      <div style="font-size:.56rem;color:var(--gray-2);margin-bottom:4px;">${T('c3TblCurr')}: <strong style="color:${valC};">${currLbl}</strong></div>
+      <div class="bar-track slim" style="margin-top:12px;">
         <div class="bar-fill" style="width:${fillW}%;background:${fill};"></div>
         ${tVals.map((th,i)=>th===null?'':`
           <div class="bar-marker" style="left:${bpV(th)}%;background:${mrkC};top:-2px;bottom:-2px;"></div>

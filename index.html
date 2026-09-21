@@ -1550,8 +1550,6 @@ button { font-family: var(--font); }
         </div>
       </a>
 
-        </div><!-- /grid-live -->
-		
       <!-- ★ Analitzador ChatBot WhatsApp -->
       <a class="tool-card"
          href="https://claude.ai/artifact/XcL2tbnfrsUzeJZ63wK8dD"
@@ -1576,7 +1574,7 @@ button { font-family: var(--font); }
           <div class="card-title">Analitzador ChatBot WhatsApp</div>
           <div class="card-desc">Visualitzador dels 8 mòduls SendPulse: prompts complets, versions i estat de sincronització.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#16a34a;">Anàlisi</span>
+            <span class="card-category" style="color:#7c3aed;">Anàlisi</span>
             <div class="card-arrow">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
             </div>
@@ -1859,6 +1857,7 @@ let currentSearch = '';
 
 function sidebarFilter(cat, el) {
   currentFilter = cat;
+  try{ localStorage.setItem('hub-filter', cat); }catch(e){}
   document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
   el.classList.add('active');
   // Sync chips
@@ -1868,6 +1867,7 @@ function sidebarFilter(cat, el) {
 
 function chipFilter(cat, el) {
   currentFilter = cat;
+  try{ localStorage.setItem('hub-filter', cat); }catch(e){}
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
   applyFilters();
@@ -2315,9 +2315,18 @@ function openPinModal(cb){ buildPinModal(); _pinCb=cb; _pinEntry=''; for(var i=0
 /* ══ INTERCEPT handleCardClick for Supervisió + Favs filter ═ */
 var _origClick = window.handleCardClick;
 window.handleCardClick = function(e, card){
+  /* External URLs (http/https to other domains) always open in new tab */
+  var href = card.getAttribute('href')||'';
+  var isExternal = /^https?:\/\//.test(href) && !href.includes(location.hostname) && location.hostname !== 'localhost' && location.hostname !== '';
+  if(isExternal){ e.preventDefault(); window.open(href,'_blank'); return; }
+
   if((card.dataset.category||'')===SUPERV_VAL){
     e.preventDefault(); e.stopPropagation();
-    openPinModal(function(){ if(_origClick) _origClick(e,card); else { var u=card.getAttribute('href'); if(u) window.open(u,'_blank'); } });
+    openPinModal(function(){
+      if(isExternal){ window.open(href,'_blank'); }
+      else if(_origClick){ _origClick(e,card); }
+      else if(href){ window.open(href,'_blank'); }
+    });
     return;
   }
   if(_origClick) _origClick(e,card);
@@ -2464,6 +2473,25 @@ document.querySelectorAll('#grid-live .tool-card[data-status="live"]').forEach(b
 initFavBtns();
 rebuildSidebar();
 updateBadges();
+
+/* Restore last filter after all setup */
+(function restoreFilter(){
+  try{
+    var saved = localStorage.getItem('hub-filter');
+    if(!saved || saved === 'all') return;
+    currentFilter = saved;
+    /* Activate matching nav-item */
+    var matchNav = null;
+    if(saved === '_fav') matchNav = document.getElementById('nav-favorits');
+    else matchNav = document.querySelector('.nav-item[data-dyn-cat="'+saved+'"]');
+    if(matchNav){
+      document.querySelectorAll('.nav-item').forEach(function(i){i.classList.remove('active');});
+      matchNav.classList.add('active');
+    }
+    syncChips(saved);
+    applyFilters();
+  }catch(e){}
+})();
 
 })();
 </script>

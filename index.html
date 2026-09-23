@@ -977,13 +977,8 @@ button { font-family: var(--font); }
   <!-- Filter chips -->
   <div class="filter-bar">
     <span class="filter-label">Filtrar:</span>
-    <div class="chip active" onclick="chipFilter('all',this)">Totes</div>
-    <div class="chip" onclick="chipFilter('formularis',this)">Formularis</div>
-    <div class="chip" onclick="chipFilter('instruccions',this)">Instruccions</div>
-    <div class="chip" onclick="chipFilter('analisi',this)">Anàlisi</div>
-    <div class="chip" onclick="chipFilter('sinistres',this)">Sinistres</div>
-    <div class="chip" onclick="chipFilter('pagaments',this)">Pagaments</div>
-    <div class="chip" onclick="chipFilter('cotitzacions',this)">Cotitzacions</div>
+    <div class="chip active" data-cat="all" onclick="chipFilter('all',this)">Totes</div>
+    <span id="chips-dyn-cats" style="display:contents"></span>
   </div>
 
   <!-- ─── Cards container ─── -->
@@ -1021,7 +1016,7 @@ button { font-family: var(--font); }
           <div class="card-desc">Infografia de seguiment mensual de vendes: KPIs, bonos, objectius i evolució de l'agència Optimizarte 3.0.</div>
           <div id="seg-folder-info" style="font-size:10.5px;color:var(--gray-2);margin:2px 0;display:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
           <div class="card-footer-row">
-            <span class="card-category">Anàlisi</span>
+            <span class="card-category" style="color:#7c3aed;">Anàlisi</span>
             <div style="display:flex;gap:6px;align-items:center;">
               <button id="seg-folder-btn" onclick="pickSeguimentFolder(event)"
                 style="background:none;border:1.5px solid var(--border);border-radius:5px;padding:3px 8px;font-size:10.5px;font-weight:600;cursor:pointer;color:var(--gray);font-family:'Inter',sans-serif;white-space:nowrap;"
@@ -1060,7 +1055,7 @@ button { font-family: var(--font); }
           <div class="card-title">Calendari de Pagaments</div>
           <div class="card-desc">Generador de calendaris de venciments i fraccionament de primes per pòlisses. Visualització mensual i anual.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#d97706">Pagaments</span>
+            <span class="card-category" style="color:#d97706;">Pagaments</span>
             <div class="card-arrow">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path d="m9 18 6-6-6-6"/>
@@ -1128,7 +1123,7 @@ button { font-family: var(--font); }
           <div class="card-title">Alta de Client</div>
           <div class="card-desc">Formulari d'alta de nous clients: particular, empresa o autònom. Recull totes les dades necessàries per a la gestió a l'agència.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:var(--green)">Formularis</span>
+            <span class="card-category" style="color:#166534;">Formularis</span>
             <div class="card-arrow">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
             </div>
@@ -1159,7 +1154,7 @@ button { font-family: var(--font); }
           <div class="card-title">Canvi de Mediador</div>
           <div class="card-desc">Generador de cartes de canvi de mediador a OPTIMIZARTE 3.0. Vista pr&#232;via d&#39;impressi&#243; i activitat Gestiona integrades.</div>
           <div class="card-footer-row">
-            <span class="card-category">Formularis</span>
+            <span class="card-category" style="color:#166534;">Formularis</span>
             <div class="card-arrow">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
             </div>
@@ -1194,7 +1189,7 @@ button { font-family: var(--font); }
           <div class="card-title">No Renovació de Pòlissa</div>
           <div class="card-desc">Genera la comunicació formal de no renovació (Art. 22, Llei 50/1980). Arrossega el PDF de la pòlissa per extreure les dades automàticament.</div>
           <div class="card-footer-row">
-            <span class="card-category">Formularis</span>
+            <span class="card-category" style="color:#166534;">Formularis</span>
             <div class="card-arrow">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
             </div>
@@ -1226,7 +1221,7 @@ button { font-family: var(--font); }
           <div class="card-title">Rehabilitació de Pòlissa</div>
           <div class="card-desc">Sol·licitud de rehabilitació i certificat d'inexistència de sinistres. Per a persona física, empresa i comunitat de propietaris.</div>
           <div class="card-footer-row">
-            <span class="card-category">Formularis</span>
+            <span class="card-category" style="color:#166534;">Formularis</span>
             <div class="card-arrow">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
             </div>
@@ -1285,7 +1280,7 @@ button { font-family: var(--font); }
           <div class="card-title">Seguiment Vendes Excel</div>
           <div class="card-desc">Importa el full Excel de seguiment de vendes Occident i genera automàticament la infografia mensual de l’agència.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#166534;">Seguiment</span>
+            <span class="card-category" style="color:#1d4ed8;">Seguiment</span>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1314,7 +1309,7 @@ button { font-family: var(--font); }
           <div class="card-title">Sol·licitud TIREA / SIHSA</div>
           <div class="card-desc">Generador de sol·licituds d’informació TIREA i SIHSA per a consulta de dades de pòlisses al sistema Occident.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#0891b2;">Formularis</span>
+            <span class="card-category" style="color:#166534;">Formularis</span>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1400,7 +1395,7 @@ button { font-family: var(--font); }
           <div class="card-title">Comparativo Vida</div>
           <div class="card-desc">Comparativa de productes de segur de vida: capitals, primes, cobertures i condicions. Informe personalitzat per al client.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#DC0028;">Cotitzacions</span>
+            <span class="card-category" style="color:#0891b2;">Cotitzacions</span>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1429,7 +1424,7 @@ button { font-family: var(--font); }
           <div class="card-title">Configurador de Accesorios</div>
           <div class="card-desc">Configurador d'accessoris per a vèhicles: seleccionador de peces, imports i generació de document per al client.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#d97706;">Cotitzacions</span>
+            <span class="card-category" style="color:#0891b2;">Cotitzacions</span>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1458,7 +1453,7 @@ button { font-family: var(--font); }
           <div class="card-title">Comparativa Préstecs Hipotecaris</div>
           <div class="card-desc">Simulador banc (amb bonificació) vs. mediador col·legiat: quotes, primes d'assegurança, costos totals i estalvi net durant tota la vida del préstec.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#0563C1;">Cotitzacions</span>
+            <span class="card-category" style="color:#0891b2;">Cotitzacions</span>
             <div class="card-arrow">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
             </div>
@@ -1487,7 +1482,7 @@ button { font-family: var(--font); }
           <div class="card-title">Directori d'Assistència</div>
           <div class="card-desc">Directori de serveis d'assistència Occident: telèfons, cobertures i contactes per a sinistres i emergències.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#0891b2;">Sinistres</span>
+            <span class="card-category" style="color:#dc2626;">Sinistres</span>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1517,7 +1512,7 @@ button { font-family: var(--font); }
           <div class="card-title">Fusió de Contactes</div>
           <div class="card-desc">Eina per fusionar i gestionar contactes duplicats. Unifica registres de clients i neteja la base de dades de l'agència.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#7c3aed;">Formularis</span>
+            <span class="card-category" style="color:#166534;">Formularis</span>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1544,7 +1539,7 @@ button { font-family: var(--font); }
           <div class="card-title">Seguiment Mensual · Bonos</div>
           <div class="card-desc">Seguiment mensual de bonos OPTIMIZARTE: objectius, assoliments i evolució dels bonos de producció per ram.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#DC0028;">Seguiment</span>
+            <span class="card-category" style="color:#1d4ed8;">Seguiment</span>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1603,7 +1598,7 @@ button { font-family: var(--font); }
           <div class="card-title">Traductor IA</div>
           <div class="card-desc">Traductor intel·ligent amb IA: traduccions professionals multilingues adaptades al context d'assegurances i documents de l'agència.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#0891b2;">Formularis</span>
+            <span class="card-category" style="color:#166534;">Formularis</span>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1632,7 +1627,7 @@ button { font-family: var(--font); }
           <div class="card-title">Contacte WhatsApp · QR</div>
           <div class="card-desc">Codi QR de l'oficina (+34 972 426 665) i enllaços wa.me amb missatges predefinits: consultes, renovacions, pressupostos i sinistres.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#15803d;">Formularis</span>
+            <span class="card-category" style="color:#166534;">Formularis</span>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1926,6 +1921,7 @@ function chipFilter(cat, el) {
   try{ localStorage.setItem('hub-filter', cat); }catch(e){}
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.toggle('active', (i.dataset.dynCat || '') === cat));
   applyFilters();
 }
 
@@ -1941,7 +1937,7 @@ function bnavFilter(cat, el) {
 function syncChips(cat) {
   const cleanCat = cat.startsWith('_') ? 'all' : cat;
   document.querySelectorAll('.chip').forEach(c => {
-    c.classList.toggle('active', c.textContent.trim().toLowerCase().includes(cleanCat) || (cleanCat === 'all' && c.textContent.includes('Totes')));
+    c.classList.toggle('active', (c.dataset.cat || '') === cleanCat);
   });
 }
 
@@ -2271,6 +2267,24 @@ function loadJSON(k,def){ try{var v=localStorage.getItem(k);return v?JSON.parse(
 function saveJSON(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
 function catByVal(v){ return CATS.find(function(c){return c.val===v;}); }
 
+/* Colors per a etiquetes noves: cap coincideix amb els de DEFAULT_CATS */
+var NEW_CAT_PALETTE = ['#db2777','#ea580c','#0d9488','#4f46e5','#65a30d','#c026d3','#854d0e','#0369a1','#be123c','#475569'];
+function nextFreeColor(){
+  var used = CATS.map(function(c){return (c.color||'').toLowerCase();});
+  var free = NEW_CAT_PALETTE.find(function(c){return used.indexOf(c.toLowerCase())===-1;});
+  return free || NEW_CAT_PALETTE[CATS.length % NEW_CAT_PALETTE.length];
+}
+/* Repara etiquetes personalitzades antigues que compartien color amb una altra */
+(function dedupeColors(){
+  var changed=false, seen={};
+  CATS.forEach(function(c){
+    var k=(c.color||'').toLowerCase();
+    if(seen[k] && !DEFAULT_CATS.find(function(d){return d.val===c.val;})){ c.color=nextFreeColor(); changed=true; }
+    seen[(c.color||'').toLowerCase()]=true;
+  });
+  if(changed) saveCats();
+})();
+
 /* ══ SIDEBAR REBUILD ═══════════════════════════════════════ */
 function rebuildSidebar(){
   var container = document.getElementById('sidebar-dyn-cats');
@@ -2289,10 +2303,31 @@ function rebuildSidebar(){
     var dot   = '<span style="width:9px;height:9px;border-radius:50%;background:'+cat.color+';flex-shrink:0;display:block;"></span>';
     var lock  = cat.val===SUPERV_VAL ? '<span style="font-size:11px;opacity:.7;">\uD83D\uDD12</span>' : '';
     var badge = '<span class="nav-badge gray" data-badge-cat="'+cat.val+'" style="margin-left:auto;">'+cnt+'</span>';
-    a.innerHTML = dot + '<span style="flex:1;">'+cat.lbl+'</span>' + lock + badge;
+    a.innerHTML = dot + '<span style="flex:1;">'+escHtml(cat.lbl)+'</span>' + lock + badge;
+    if(typeof currentFilter!=='undefined' && currentFilter===cat.val) a.classList.add('active');
     container.appendChild(a);
   });
+  rebuildChips();
 }
+
+/* Chips (mòbil): generades a partir de CATS, igual que el sidebar */
+function rebuildChips(){
+  var box = document.getElementById('chips-dyn-cats');
+  if(!box) return;
+  box.innerHTML = '';
+  var cur = (typeof currentFilter!=='undefined') ? currentFilter : 'all';
+  CATS.forEach(function(cat){
+    var c = document.createElement('div');
+    c.className = 'chip' + (cur===cat.val ? ' active' : '');
+    c.dataset.cat = cat.val;
+    c.textContent = cat.lbl + (cat.val===SUPERV_VAL ? ' \uD83D\uDD12' : '');
+    c.onclick = function(){ chipFilter(cat.val, this); };
+    box.appendChild(c);
+  });
+  var all = document.querySelector('.chip[data-cat="all"]');
+  if(all) all.classList.toggle('active', cur==='all' || cur.charAt(0)==='_');
+}
+function escHtml(t){ return String(t).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];}); }
 
 function updateBadges(){
   CATS.forEach(function(cat){
@@ -2433,8 +2468,9 @@ function buildCatUI(card){
   if(!catSpan) return;
   var cardKey = card.getAttribute('href') || card.dataset.title || '';
 
-  /* Apply saved assignment */
-  if(assigned[cardKey]){ var s=catByVal(assigned[cardKey]); if(s) applyCatToCard(card,catSpan,s); }
+  /* Apply saved assignment, or the card's own category, so label + color always come from CATS */
+  var s = catByVal(assigned[cardKey] || card.dataset.category);
+  if(s) applyCatToCard(card,catSpan,s);
 
   /* Wrap */
   var wrap = document.createElement('div');
@@ -2448,9 +2484,11 @@ function buildCatUI(card){
   btn.className = 'cat-edit-btn';
   btn.title = 'Canviar etiqueta';
   btn.innerHTML = '&#9998;';
+  ['mousedown','pointerdown','touchstart'].forEach(function(t){ btn.addEventListener(t,function(ev){ev.stopPropagation();},{passive:true}); });
+  btn.setAttribute('draggable','false');
   btn.addEventListener('click', function(e){
     e.preventDefault(); e.stopPropagation();
-    document.querySelectorAll('.cat-select-wrap').forEach(function(el){el.remove();});
+    closeCatDD();
 
     var dd = document.createElement('div');
     dd.className = 'cat-select-wrap open';
@@ -2505,8 +2543,7 @@ function buildCatUI(card){
       var lbl=newInp.value.trim(); if(!lbl) return;
       var val=lbl.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
       if(!val||catByVal(val)) return;
-      var pal=['#0891b2','#d97706','#166534','#dc2626','#7c3aed','#1d4ed8','#d946ef','#059669'];
-      var newCat={val:val,lbl:lbl,color:pal[CATS.length%pal.length]};
+      var newCat={val:val,lbl:lbl,color:nextFreeColor()};
       CATS.push(newCat); saveCats();
       applyCatToCard(card,catSpan,newCat);
       assigned[cardKey]=val; saveJSON(KEY_ASSIGN,assigned);
@@ -2517,12 +2554,40 @@ function buildCatUI(card){
     newRow.appendChild(newInp); newRow.appendChild(newBtn);
     dd.appendChild(newRow);
 
-    wrap.appendChild(dd);
+    /* Enter crea / desa, Escape tanca */
+    newInp.addEventListener('keydown',function(ev){ ev.stopPropagation(); if(ev.key==='Enter'){ev.preventDefault();newBtn.click();} if(ev.key==='Escape'){dd.remove();} });
+    renInp.addEventListener('keydown',function(ev){ ev.stopPropagation(); if(ev.key==='Enter'){ev.preventDefault();renBtn.click();} if(ev.key==='Escape'){dd.remove();} });
+
+    /* El desplegable es col·loca al <body>, fora de la targeta: cap clic dins seu pot obrir l'eina */
+    ['click','mousedown','pointerdown','touchstart','dragstart'].forEach(function(t){
+      dd.addEventListener(t,function(ev){ ev.stopPropagation(); },{passive:true});
+    });
+    dd.style.position='fixed';
+    dd.style.right='auto'; dd.style.bottom='auto';
+    dd.style.width='220px';
+    dd.style.zIndex='2000';
+    document.body.appendChild(dd);
+    var r=btn.getBoundingClientRect();
+    var h=dd.offsetHeight, w=dd.offsetWidth;
+    var top = (r.top - h - 6 >= 8) ? (r.top - h - 6) : Math.min(r.bottom + 6, window.innerHeight - h - 8);
+    var left = Math.max(8, Math.min(r.left - 8, window.innerWidth - w - 8));
+    dd.style.top = Math.max(8, top) + 'px';
+    dd.style.left = left + 'px';
+    _openCatDD = { dd: dd, btn: btn };
   });
   wrap.appendChild(btn);
-
-  document.addEventListener('click',function(e){ if(!wrap.contains(e.target)){var ex=wrap.querySelector('.cat-select-wrap');if(ex)ex.remove();} },{passive:true});
 }
+
+/* Tancar el desplegable en clicar fora, fer scroll o redimensionar */
+var _openCatDD = null;
+function closeCatDD(){ document.querySelectorAll('.cat-select-wrap').forEach(function(el){el.remove();}); _openCatDD=null; }
+document.addEventListener('click',function(e){
+  if(!_openCatDD) return;
+  if(_openCatDD.dd.contains(e.target) || _openCatDD.btn.contains(e.target)) return;
+  closeCatDD();
+});
+window.addEventListener('resize', closeCatDD);
+document.addEventListener('scroll', function(e){ if(_openCatDD && !_openCatDD.dd.contains(e.target)) closeCatDD(); }, true);
 
 /* ══ INIT ════════════════════════════════════════════════════ */
 document.querySelectorAll('#grid-live .tool-card[data-status="live"]').forEach(buildCatUI);

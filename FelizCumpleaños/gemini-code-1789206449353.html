@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Cumpleaños! - Optimizarte</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- PANTALLA 1: Botón para pedir permisos -->
+    <div id="pantalla-inicio" class="pantalla visible">
+        <h1>¡Tenemos una sorpresa para ti!</h1>
+        <p>Enciende la vela, pide un deseo y sopla fuerte cerca del micrófono de tu móvil.</p>
+        <button id="btn-empezar">Acercarse a la tarta</button>
+    </div>
+
+    <!-- PANTALLA 2: La vela interactiva -->
+    <div id="pantalla-vela" class="pantalla oculta">
+        <p class="instruccion-soplar">Sopla al micrófono...</p>
+        <div class="contenedor-vela">
+            <!-- Gráfico SVG de la vela -->
+            <svg viewBox="0 0 200 400" xmlns="http://www.w3.org/2000/svg" class="svg-vela">
+                <!-- Resplandor de fondo -->
+                <circle id="resplandor" cx="100" cy="100" r="50" fill="#ffb400" opacity="0.2" />
+                <!-- Cuerpo de la vela -->
+                <rect x="70" y="150" width="60" height="200" rx="5" fill="#fdfdfd" />
+                <rect x="70" y="150" width="60" height="15" fill="#eeeeee" /> <!-- Borde superior -->
+                <!-- Mecha -->
+                <line x1="100" y1="150" x2="100" y2="130" stroke="#333" stroke-width="4" />
+                <!-- Llama -->
+                <path id="llama" d="M 100 130 Q 80 100 100 70 Q 120 100 100 130 Z" fill="#ffb400" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- PANTALLA 3: Mensaje final -->
+    <div id="pantalla-mensaje" class="pantalla oculta">
+        <h1 class="mensaje-destacado">¡Feliz Cumpleaños!</h1>
+        <p>Que se cumplan todos tus deseos en este día tan especial.</p>
+        <p>Con cariño, el equipo de <strong>Optimizarte - Occident</strong>.</p>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>

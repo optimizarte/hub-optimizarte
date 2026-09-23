@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard Mediador · Occident</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--red:#DC0028;--dark:#202020;--topbar:#1e1e1e;--gray:#414141;--gray2:#BEBEBE;--gray3:#EFEFEF;--white:#fff;--bg:#F0F0F0;--border:#E0E0E0;--r:8px;--shadow:0 2px 8px rgba(0,0,0,.10);--font:Arial,Helvetica,sans-serif;--poppins:'Poppins',Arial,sans-serif;--green:#28A745;--orange:#E8740C;--blue:#0563C1;--sw:238px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--dark)}
+
+/* UPLOAD SCREEN */
+#uploadScreen{display:flex;flex-direction:column;min-height:100vh;background:var(--bg)}
+.upload-topbar{height:52px;background:var(--topbar);display:flex;align-items:center;justify-content:space-between;padding:0 22px;flex-shrink:0}
+.upload-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px}
+.brand-opt{font-family:var(--poppins);font-weight:800;font-size:.92rem;color:#fff}
+.brand-by{font-size:.62rem;color:rgba(255,255,255,.38);margin:0 3px;font-style:italic}
+.brand-occ{font-family:var(--poppins);font-weight:800;font-size:.92rem;color:var(--red)}
+.topbar-title{font-family:var(--poppins);font-size:.78rem;font-weight:700;color:#fff}
+.topbar-sub{font-size:.6rem;color:rgba(255,255,255,.42);margin-top:1px}
+.drop-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:48px 72px;text-align:center;cursor:pointer;transition:all .2s;max-width:520px;width:100%;box-shadow:var(--shadow);border-top:4px solid var(--red)}
+.drop-card:hover,.drop-card.dragover{background:#fffafa;border-top-color:#b8001f;box-shadow:0 4px 20px rgba(220,0,40,.15)}
+.drop-icon{font-size:52px;margin-bottom:14px}
+.drop-title{font-family:var(--poppins);font-size:18px;font-weight:700;color:var(--dark);margin-bottom:8px}
+.drop-sub{font-size:13px;color:var(--gray);margin-bottom:22px;line-height:1.5}
+.drop-btn{background:var(--red);color:#fff;border:none;padding:10px 26px;border-radius:5px;font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;font-family:var(--poppins)}
+.drop-btn:hover{background:#b8001f}
+.drop-info{margin-top:14px;font-size:10px;color:var(--gray2);letter-spacing:.03em}
+.upload-footer{height:34px;background:var(--topbar);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.upload-footer span{font-size:.62rem;color:rgba(255,255,255,.35);letter-spacing:.03em}
+#fileInput{display:none}
+
+/* SEC PILL */
+.sec-pill{display:inline-block;background:var(--red);color:#fff;padding:3px 10px;border-radius:4px;font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
+
+/* DASHBOARD */
+#dashboardScreen{display:none;flex-direction:column;min-height:100vh}
+.topbar{height:52px;background:var(--topbar);color:#fff;padding:0 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.35);flex-shrink:0}
+.topbar-left{display:flex;align-items:center;gap:16px}
+.topbar-right{display:flex;align-items:center;gap:14px}
+.period-pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:3px 10px;border-radius:20px;font-size:11px;letter-spacing:.03em}
+.mediator-info{text-align:right}
+.mediator-info strong{font-family:var(--poppins);font-size:.78rem;font-weight:700;display:block;color:#fff}
+.mediator-info span{font-size:.6rem;color:rgba(255,255,255,.5)}
+.btn-change{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.85);padding:5px 11px;border-radius:4px;font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;font-family:var(--poppins)}
+.btn-change:hover{background:rgba(255,255,255,.18)}
+
+/* LAYOUT */
+.layout{display:flex;flex:1}
+.sidebar{width:var(--sw);background:var(--topbar);position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;flex-shrink:0}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:2px}
+.nav-group{padding:16px 16px 4px;display:flex;align-items:center;gap:0}
+.nav-group-pill{display:inline-block;background:var(--red);color:#fff;padding:2px 8px;border-radius:3px;font-size:.55rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;color:rgba(255,255,255,.65);cursor:pointer;transition:all .15s;font-size:.78rem;border-left:3px solid transparent}
+.nav-item:hover{background:rgba(255,255,255,.05);color:#fff}
+.nav-item.active{background:rgba(220,0,40,.18);color:#fff;border-left-color:var(--red)}
+.nav-icon{font-size:14px;width:18px;text-align:center;opacity:.8}
+.lock-badge{margin-left:auto;font-size:.55rem;background:rgba(220,0,40,.55);padding:2px 6px;border-radius:3px;color:#fff;font-family:var(--poppins);font-weight:700;letter-spacing:.04em}
+
+/* CONTENT */
+.content{flex:1;padding:22px;overflow-y:auto;background:var(--bg)}
+.tab{display:none}.tab.active{display:block}
+.sec-title{font-family:var(--poppins);font-size:17px;font-weight:700;color:var(--dark);margin-bottom:2px}
+.sec-sub{font-size:11px;color:var(--gray);margin-bottom:12px}
+.divider{height:2px;background:var(--red);width:36px;margin:4px 0 14px}
+.footer-bar{background:var(--topbar);color:rgba(255,255,255,.35);font-size:.62rem;text-align:center;padding:8px;letter-spacing:.03em;flex-shrink:0}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-bottom:20px}
+.kpi{background:#fff;border-radius:var(--r);padding:16px;box-shadow:var(--shadow);border-top:3px solid var(--red);position:relative;overflow:hidden;border:1px solid var(--border);border-top:3px solid var(--red)}
+.kpi.g{border-top-color:var(--green)}.kpi.b{border-top-color:var(--blue)}.kpi.o{border-top-color:var(--orange)}
+.kpi-lbl{font-family:var(--poppins);font-size:.58rem;color:var(--gray);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.kpi-val{font-family:var(--poppins);font-size:22px;font-weight:700;line-height:1;color:var(--dark)}
+.kpi-val.sm{font-size:18px}
+.kpi-badge{margin-top:5px;font-size:11px;font-weight:600}
+.up{color:var(--green)}.dn{color:var(--red)}.neu{color:var(--gray)}
+.kpi-ico{position:absolute;right:12px;top:12px;font-size:20px;opacity:.12}
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);margin-bottom:18px}
+.card-title{font-family:var(--poppins);font-size:.72rem;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:7px;text-transform:uppercase;letter-spacing:.06em;color:var(--dark)}
+.card-title::before{content:'';display:block;width:3px;height:13px;background:var(--red);border-radius:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.chart-wrap{position:relative;height:250px}
+.chart-wrap.tall{height:300px}
+
+/* TABLES */
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:11px}
+th{background:var(--red);color:#fff;padding:8px 10px;text-align:right;font-size:10px;font-weight:700;white-space:nowrap}
+th:first-child{text-align:left}
+td{padding:7px 10px;border-bottom:1px solid var(--border);text-align:right;color:var(--gray)}
+td:first-child{text-align:left;color:var(--dark);font-weight:600}
+tr:hover td{background:#fafafa}
+tr:last-child td{font-weight:700;color:var(--dark);background:#f8f8f8;border-top:2px solid var(--border)}
+.tp{color:var(--green);font-weight:700}.tn{color:var(--red);font-weight:700}
+.mrow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)}
+.mrow:last-child{border-bottom:none}
+.mrow-l{font-size:12px;color:var(--gray)}.mrow-v{font-size:13px;font-weight:700}
+.prog{background:var(--gray3);border-radius:4px;height:7px;overflow:hidden;margin-top:3px}
+.prog-b{height:100%;background:var(--red);border-radius:4px}
+.prog-b.g{background:var(--green)}.prog-b.b{background:var(--blue)}.prog-b.o{background:var(--orange)}
+
+/* PIN */
+.pin-wall{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:380px}
+.pin-card{background:#fff;border-radius:var(--r);padding:32px 44px;box-shadow:var(--shadow);text-align:center;max-width:340px;border-top:4px solid var(--red)}
+.pin-icon{font-size:40px;margin-bottom:10px}
+.pin-title{font-family:var(--poppins);font-size:16px;font-weight:700;margin-bottom:5px;color:var(--dark)}
+.pin-desc{font-size:11px;color:var(--gray);margin-bottom:18px}
+.pin-input{width:100%;border:2px solid var(--border);border-radius:var(--r);padding:11px;font-size:18px;text-align:center;letter-spacing:5px;outline:none;font-family:monospace}
+.pin-input:focus{border-color:var(--red)}
+.pin-btn{width:100%;background:var(--red);color:#fff;border:none;padding:11px;border-radius:var(--r);font-size:13px;font-weight:700;cursor:pointer;margin-top:10px;font-family:var(--font)}
+.pin-err{color:var(--red);font-size:11px;margin-top:7px;display:none}
+
+/* TEAM */
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:20px}
+.team-card{background:#fff;border-radius:var(--r);padding:16px;box-shadow:var(--shadow);text-align:center;border-top:3px solid var(--red)}
+.team-av{width:46px;height:46px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;margin:0 auto 8px}
+.team-name{font-family:var(--poppins);font-size:.72rem;font-weight:700;margin-bottom:5px;color:var(--dark)}
+.team-role{font-family:var(--poppins);font-size:.58rem;color:var(--gray);background:var(--bg);padding:2px 8px;border-radius:12px;letter-spacing:.03em}
+
+/* PDF FAB */
+.pdf-fab{position:fixed;bottom:28px;right:28px;background:var(--red);color:#fff;border:none;border-radius:50px;padding:12px 22px;font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 16px rgba(220,0,40,.45);font-family:var(--poppins);display:flex;align-items:center;gap:8px;z-index:200}
+.pdf-fab:hover{background:#b8001f;transform:translateY(-1px)}
+
+/* PDF MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:12px;padding:32px;max-width:420px;width:90%;box-shadow:0 8px 40px rgba(0,0,0,.2)}
+.modal-title{font-family:var(--poppins);font-size:16px;font-weight:700;margin-bottom:6px;color:var(--dark)}
+.modal-sub{font-size:11px;color:var(--gray);margin-bottom:20px}
+.modal-opt{border:2px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:12px;cursor:pointer;transition:all .15s}
+.modal-opt:hover{border-color:var(--gray2)}
+.modal-opt.selected{border-color:var(--red);background:#fff8f8}
+.modal-opt-title{font-family:var(--poppins);font-size:.72rem;font-weight:700;margin-bottom:3px;display:flex;align-items:center;gap:8px;color:var(--dark)}
+.modal-opt-desc{font-size:.65rem;color:var(--gray)}
+.pin-inline{margin-top:10px;display:none}
+.pin-inline input{width:100%;border:2px solid var(--border);border-radius:6px;padding:9px;font-size:16px;text-align:center;letter-spacing:4px;outline:none;font-family:monospace}
+.pin-inline input:focus{border-color:var(--red)}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+.btn-cancel{flex:1;background:var(--bg);border:1px solid var(--border);padding:10px;border-radius:5px;font-size:.65rem;cursor:pointer;font-family:var(--poppins);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.btn-export{flex:2;background:var(--red);color:#fff;border:none;padding:10px;border-radius:5px;font-size:.65rem;font-weight:700;cursor:pointer;font-family:var(--poppins);letter-spacing:.06em;text-transform:uppercase}
+.btn-export:hover{background:#b8001f}
+.pin-modal-err{color:var(--red);font-size:11px;margin-top:6px;display:none}
+.nota{font-size:10px;color:var(--gray2);margin-top:7px;font-style:italic}
+
+/* PRINT */
+@media print{
+  #uploadScreen,.btn-change,.pdf-fab,.modal-overlay,.sidebar,.footer-bar,.upload-topbar,.upload-footer{display:none!important}
+  #dashboardScreen{display:block!important}
+  .layout{display:block}
+  .content{padding:10px}
+  .tab{display:block!important;page-break-before:always}
+  .tab:first-of-type{page-break-before:avoid}
+  .tab-fin{display:none!important}
+  body.pf .tab-fin{display:block!important}
+  .pin-wall{display:none!important}
+  .fin-content{display:block!important}
+  .topbar{position:static!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .card{box-shadow:none;border:1px solid var(--border)}
+  canvas{max-width:100%!important}
+  .chart-wrap{height:200px}
+}
+</style>
+</head>
+<body>
+
+<!-- UPLOAD SCREEN -->
+<div id="uploadScreen">
+  <div class="upload-topbar">
+    <div style="display:flex;align-items:center;gap:4px">
+      <span class="brand-opt">Optimizarte</span>
+      <span class="brand-by">by</span>
+      <span class="brand-occ">Occident</span>
+    </div>
+    <div style="text-align:right">
+      <div class="topbar-title">Dashboard Mediador</div>
+      <div class="topbar-sub">Herramienta de análisis de seguimiento mensual</div>
+    </div>
+  </div>
+  <div class="upload-body">
+    <div class="drop-card" id="dropZone" onclick="document.getElementById('fileInput').click()">
+      <div class="drop-icon">📊</div>
+      <div class="drop-title">Arrastra la Ficha de Mediador</div>
+      <div class="drop-sub">Archivo .xlsx del portal Occident · Compatible con cualquier mes<br>Los datos financieros quedan protegidos por PIN</div>
+      <button class="drop-btn" onclick="event.stopPropagation();document.getElementById('fileInput').click()">Seleccionar archivo</button>
+      <div class="drop-info">No se envía ningún dato · Todo el procesamiento es local en tu navegador</div>
+    </div>
+    <div id="uploadErr" style="color:var(--red);font-size:12px;margin-top:14px;display:none"></div>
+  </div>
+  <div class="upload-footer"><span>OPTIMIZARTE 3.0 · Occident Seguros · Documento procesado localmente, sin envío de datos</span></div>
+  <input type="file" id="fileInput" accept=".xlsx,.xls">
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboardScreen">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div style="display:flex;align-items:center;gap:4px">
+        <span class="brand-opt">Optimizarte</span>
+        <span class="brand-by">by</span>
+        <span class="brand-occ">Occident</span>
+      </div>
+      <div style="width:1px;height:22px;background:rgba(255,255,255,.15)"></div>
+      <div>
+        <div class="topbar-title">Dashboard Mediador</div>
+        <div class="topbar-sub">Seguimiento mensual de ventas y calidad</div>
+      </div>
+      <span class="period-pill" id="hdrPeriod">—</span>
+    </div>
+    <div class="topbar-right">
+      <div class="mediator-info"><strong id="hdrName">—</strong><span id="hdrCanal">—</span></div>
+      <button class="btn-change" onclick="goUpload()">⬆ Cambiar archivo</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar">
+      <div style="padding:14px 16px 2px"><div class="nav-group-pill">Visión general</div></div>
+      <div class="nav-item active" onclick="showTab('resumen',this)"><span class="nav-icon">📊</span>Resumen</div>
+      <div style="padding:14px 16px 2px"><div class="nav-group-pill">Actividad</div></div>
+      <div class="nav-item" onclick="showTab('ofertas',this)"><span class="nav-icon">📋</span>Ofertas y Operaciones</div>
+      <div class="nav-item" onclick="showTab('actividad',this)"><span class="nav-icon">⚡</span>Actividad Mes</div>
+      <div class="nav-item" onclick="showTab('esfuerzo',this)"><span class="nav-icon">🎯</span>Esfuerzo de Ventas</div>
+      <div class="nav-item" onclick="showTab('primas',this)"><span class="nav-icon">💶</span>Primas</div>
+      <div style="padding:14px 16px 2px"><div class="nav-group-pill">Calidad</div></div>
+      <div class="nav-item" onclick="showTab('calidad',this)"><span class="nav-icon">⭐</span>Calidad</div>
+      <div class="nav-item" onclick="showTab('clientes',this)"><span class="nav-icon">👥</span>Clientes</div>
+      <div style="padding:14px 16px 2px"><div class="nav-group-pill">Negocio</div></div>
+      <div class="nav-item" onclick="showTab('facturacion',this)"><span class="nav-icon">🏦</span>Facturación y Cartera</div>
+      <div class="nav-item" onclick="showTab('crecimiento',this)"><span class="nav-icon">📈</span>Crecimiento</div>
+      <div class="nav-item" onclick="showTab('colaboradores',this)"><span class="nav-icon">🤝</span>Colaboradores</div>
+      <div style="padding:14px 16px 2px"><div class="nav-group-pill" style="background:rgba(220,0,40,.7)">🔒 Financiero</div></div>
+      <div class="nav-item" onclick="showProtected('ingresos',this)"><span class="nav-icon">💰</span>Ingresos<span class="lock-badge">PIN</span></div>
+      <div class="nav-item" onclick="showProtected('resultados',this)"><span class="nav-icon">📉</span>Resultados<span class="lock-badge">PIN</span></div>
+      <div class="nav-item" onclick="showProtected('bonos',this)"><span class="nav-icon">🎁</span>Bonos<span class="lock-badge">PIN</span></div>
+      <div style="padding:18px 16px 12px;margin-top:auto">
+        <div style="font-size:.55rem;color:rgba(255,255,255,.25);line-height:1.6;letter-spacing:.02em">OPTIMIZARTE 3.0<br>Occident Seguros<br>Datos procesados localmente</div>
+      </div>
+    </nav>
+
+    <main class="content">
+
+      <!-- RESUMEN -->
+      <div class="tab active" id="tab-resumen">
+        <div class="sec-title">Resumen Ejecutivo</div>
+        <div id="resumen-sub" class="sec-sub">—</div>
+        <div class="divider"></div>
+        <div class="kpi-grid" id="kpi-resumen"></div>
+        <div class="grid2">
+          <div class="card"><div class="card-title">Ofertas vs Operaciones · 12 meses</div><div class="chart-wrap"><canvas id="cResumenTrend"></canvas></div></div>
+          <div class="card"><div class="card-title">Cartera por Producto</div><div class="chart-wrap"><canvas id="cResumenDona"></canvas></div></div>
+        </div>
+        <div class="grid3" id="resumen-cards"></div>
+      </div>
+
+      <!-- OFERTAS -->
+      <div class="tab" id="tab-ofertas">
+        <div class="sec-title">Ofertas y Operaciones de Venta</div>
+        <div class="sec-sub">Evolución mensual últimos 12 meses + acumulados anuales</div>
+        <div class="divider"></div>
+        <div class="kpi-grid" id="kpi-ofertas"></div>
+        <div class="card"><div class="card-title">Evolución Mensual</div><div class="chart-wrap tall"><canvas id="cOfertasEvol"></canvas></div></div>
+        <div class="grid2">
+          <div class="card"><div class="card-title">Ofertas por Producto</div><div class="tbl" id="tbl-ofertas-prod"></div></div>
+          <div class="card"><div class="card-title">Operaciones por Producto</div><div class="tbl" id="tbl-ops-prod"></div></div>
+        </div>
+        <div class="card"><div class="card-title">Tasa Conversión Oferta→Venta</div><div class="chart-wrap"><canvas id="cConversion"></canvas></div></div>
+      </div>
+
+      <!-- ACTIVIDAD -->
+      <div class="tab" id="tab-actividad">
+        <div class="sec-title">Actividad · Mes Actual</div>
+        <div class="sec-sub" id="act-sub">Operaciones, primas y anulaciones del mes</div>
+        <div class="divider"></div>
+        <div class="kpi-grid" id="kpi-actividad"></div>
+        <div class="card"><div class="card-title">Seguros Generales</div><div class="tbl" id="tbl-act-sg"></div></div>
+        <div class="card"><div class="card-title">Vida</div><div class="tbl" id="tbl-act-vida"></div></div>
+        <div class="card"><div class="card-title">Ventas vs Anulaciones</div><div class="chart-wrap"><canvas id="cActBar"></canvas></div></div>
+      </div>
+
+      <!-- ESFUERZO -->
+      <div class="tab" id="tab-esfuerzo">
+        <div class="sec-title">Esfuerzo de Ventas</div>
+        <div class="sec-sub">Seguros Generales · Acumulado TAM</div>
+        <div class="divider"></div>
+        <div class="kpi-grid" id="kpi-esfuerzo"></div>
+        <div class="card"><div class="card-title">Métricas por Producto</div><div class="tbl" id="tbl-esfuerzo"></div></div>
+        <div class="grid2">
+          <div class="card"><div class="card-title">Efectividad vs Tasa Anulación</div><div class="chart-wrap"><canvas id="cEsfuerzoBar"></canvas></div></div>
+          <div class="card"><div class="card-title">Diferencial Esf.−Anulación</div><div id="esfuerzo-dif"></div></div>
+        </div>
+      </div>
+
+      <!-- PRIMAS -->
+      <div class="tab" id="tab-primas">
+        <div class="sec-title">Primas</div>
+        <div class="sec-sub">Evolución primas ventas, corregidas y líquidas</div>
+        <div class="divider"></div>
+        <div class="kpi-grid" id="kpi-primas"></div>
+        <div class="card"><div class="card-title">Primas Ventas · SSGG vs Vida</div><div class="chart-wrap tall"><canvas id="cPrimasEvol"></canvas></div></div>
+        <div class="card"><div class="card-title">Resumen Primas por Categoría</div><div class="tbl" id="tbl-primas"></div></div>
+        <div class="card"><div class="card-title">Primas Líquidas Corregidas sin Suspensión</div><div class="chart-wrap"><canvas id="cPrimasLiq"></canvas></div></div>
+      </div>
+
+      <!-- CALIDAD -->
+      <div class="tab" id="tab-calidad">
+        <div class="sec-title">Calidad</div>
+        <div class="sec-sub">Indicadores de calidad · Período actual</div>
+        <div class="divider"></div>
+        <div class="kpi-grid" id="kpi-calidad"></div>
+        <div class="grid2">
+          <div class="card"><div class="card-title">Tasa Anulación TAM · Evolución</div><div class="chart-wrap"><canvas id="cAnulTAM"></canvas></div></div>
+          <div class="card"><div class="card-title">Visitas</div><div class="tbl" id="tbl-visitas"></div></div>
+        </div>
+        <div class="grid2">
+          <div class="card"><div class="card-title">% Ofertas ADN</div><div class="chart-wrap"><canvas id="cADN"></canvas></div></div>
+          <div class="card"><div class="card-title">Indicadores Clave</div><div id="calidad-cards"></div></div>
+        </div>
+      </div>
+
+      <!-- CLIENTES -->
+      <div class="tab" id="tab-clientes">
+        <div class="sec-title">Clientes</div>
+        <div class="sec-sub">Análisis de base de clientes · Período actual</div>
+        <div class="divider"></div>
+        <div class="kpi-grid" id="kpi-clientes"></div>
+        <div class="grid2">
+          <div class="card"><div class="card-title">Evolución Clientes</div><div class="chart-wrap tall"><canvas id="cClientesEvol"></canvas></div></div>
+          <div class="card"><div class="card-title">Segmentación</div><div class="chart-wrap"><canvas id="cClientesSeg"></canvas></div><div id="clientes-pills" style="margin-top:10px"></div></div>
+        </div>
+        <div class="card"><div class="card-title">% eClientes y Póliza/Cliente</div><div class="chart-wrap"><canvas id="cEcliente"></canvas></div></div>
+        <div class="grid2">
+          <div class="card"><div class="card-title">Histórico Clientes</div><div class="tbl" id="tbl-clientes-hist"></div></div>
+          <div class="card"><div class="card-title">Ratios Calidad Cliente</div><div class="tbl" id="tbl-clientes-ratio"></div></div>
+        </div>
+      </div>
+
+      <!-- FACTURACIÓN -->
+      <div class="tab" id="tab-facturacion">
+        <div class="sec-title">Facturación y Cartera</div>
+        <div class="sec-sub">Primas facturadas y pólizas en cartera</div>
+        <div class="divider"></div>
+        <div class="kpi-grid" id="kpi-facturacion"></div>
+        <div class="card"><div class="card-title">Primas Facturadas por Producto</div><div class="chart-wrap"><canvas id="cFactBar"></canvas></div></div>
+        <div class="grid2">
+          <div class="card"><div class="card-title">Seguros Generales</div><div class="tbl" id="tbl-fact-sg"></div></div>
+          <div class="card"><div class="card-title">Vida</div><div class="tbl" id="tbl-fact-vida"></div></div>
+        </div>
+      </div>
+
+      <!-- CRECIMIENTO -->
+      <div class="tab" id="tab-crecimiento">
+        <div class="sec-title">Crecimiento</div>
+        <div class="sec-sub">Tasas de crecimiento interanual</div>
+        <div class="divider"></div>
+        <div class="kpi-grid" id="kpi-crecimiento"></div>
+        <div class="card"><div class="card-title">Tasas de Crecimiento · Evolución</div><div class="chart-wrap tall"><canvas id="cCrecimiento"></canvas></div></div>
+        <div class="card"><div class="card-title">Detalle por Período</div><div class="tbl" id="tbl-crecimiento"></div></div>
+      </div>
+
+      <!-- COLABORADORES -->
+      <div class="tab" id="tab-colaboradores">
+        <div class="sec-title">Colaboradores y Planea</div>
+        <div class="sec-sub" id="colab-sub">Equipo mediador</div>
+        <div class="divider"></div>
+        <div class="team-grid" id="team-grid"></div>
+        <div class="card"><div class="card-title">Información del Mediador</div><div id="mediator-info"></div></div>
+      </div>
+
+      <!-- INGRESOS (PIN) -->
+      <div class="tab tab-fin" id="tab-ingresos">
+        <div class="pin-wall" id="pw-ingresos">
+          <div class="pin-card"><div class="pin-icon">🔒</div><div class="pin-title">Acceso restringido</div><div class="pin-desc">Sección de ingresos y comisiones. Introduce el código.</div><input class="pin-input" id="pi-ingresos" type="password" maxlength="8" placeholder="••••••••" oninput="chkPin('ingresos')"><div class="pin-err" id="pe-ingresos">Código incorrecto</div></div>
+        </div>
+        <div class="fin-content" id="fc-ingresos" style="display:none">
+          <div class="sec-title">Ingresos</div><div class="sec-sub">Comisiones, premio neto y bonos TAM</div><div class="divider"></div>
+          <div class="kpi-grid" id="kpi-ingresos"></div>
+          <div class="card"><div class="card-title">Comisiones Mensuales</div><div class="chart-wrap tall"><canvas id="cComisiones"></canvas></div></div>
+          <div class="card"><div class="card-title">Bonos TAM · Evolución</div><div class="chart-wrap"><canvas id="cBonosTAM"></canvas></div></div>
+          <div class="card"><div class="card-title">Detalle por Período</div><div class="tbl" id="tbl-ingresos"></div></div>
+        </div>
+      </div>
+
+      <!-- RESULTADOS (PIN) -->
+      <div class="tab tab-fin" id="tab-resultados">
+        <div class="pin-wall" id="pw-resultados">
+          <div class="pin-card"><div class="pin-icon">🔒</div><div class="pin-title">Acceso restringido</div><div class="pin-desc">Sección de resultados técnicos. Introduce el código.</div><input class="pin-input" id="pi-resultados" type="password" maxlength="8" placeholder="••••••••" oninput="chkPin('resultados')"><div class="pin-err" id="pe-resultados">Código incorrecto</div></div>
+        </div>
+        <div class="fin-content" id="fc-resultados" style="display:none">
+          <div class="sec-title">Resultados Técnicos</div><div class="sec-sub">Ratio combinado y resultado técnico financiero</div><div class="divider"></div>
+          <div class="kpi-grid" id="kpi-resultados"></div>
+          <div class="card"><div class="card-title">Ratio Combinado vs Resultado Técnico</div><div class="chart-wrap tall"><canvas id="cResultados"></canvas></div></div>
+          <div class="card"><div class="card-title">Detalle Mensual</div><div class="tbl" id="tbl-resultados"></div></div>
+        </div>
+      </div>
+
+      <!-- BONOS (PIN) -->
+      <div class="tab tab-fin" id="tab-bonos">
+        <div class="pin-wall" id="pw-bonos">
+          <div class="pin-card"><div class="pin-icon">🔒</div><div class="pin-title">Acceso restringido</div><div class="pin-desc">Sección de bonos e ingresos detallados. Introduce el código.</div><input class="pin-input" id="pi-bonos" type="password" maxlength="8" placeholder="••••••••" oninput="chkPin('bonos')"><div class="pin-err" id="pe-bonos">Código incorrecto</div></div>
+        </div>
+        <div class="fin-content" id="fc-bonos" style="display:none">
+          <div class="sec-title">Seguimiento de Bonos</div><div class="sec-sub">Bonos, comisiones y total ingresos mensuales</div><div class="divider"></div>
+          <div class="kpi-grid" id="kpi-bonos"></div>
+          <div class="card"><div class="card-title">Composición de Ingresos</div><div class="chart-wrap tall"><canvas id="cBonosBar"></canvas></div></div>
+          <div class="card"><div class="card-title">Detalle Bonos por Mes</div><div class="tbl" id="tbl-bonos"></div></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <button class="pdf-fab" onclick="openPdfModal()">🖨 Exportar PDF</button>
+  <div class="footer-bar">OPTIMIZARTE 3.0 · Occident Seguros · Procesado localmente · Sin envío de datos</div>
+</div>
+
+<!-- PDF MODAL -->
+<div class="modal-overlay" id="pdfModal">
+  <div class="modal">
+    <div class="modal-title">Exportar Dashboard PDF</div>
+    <div class="modal-sub">El informe incluye todos los apartados del dashboard en páginas separadas.</div>
+    <div class="modal-opt selected" id="opt-nofin" onclick="selectOpt('nofin')">
+      <div class="modal-opt-title">📄 Sin datos financieros</div>
+      <div class="modal-opt-desc">Incluye todos los apartados excepto Ingresos, Resultados y Bonos. Listo para compartir en reunión.</div>
+    </div>
+    <div class="modal-opt" id="opt-fin" onclick="selectOpt('fin')">
+      <div class="modal-opt-title">🔒 Incluir datos financieros</div>
+      <div class="modal-opt-desc">Requiere código PIN. El PDF incluirá también Ingresos, Resultados y Bonos.</div>
+      <div class="pin-inline" id="pin-inline-wrap">
+        <input id="pin-pdf" type="password" maxlength="8" placeholder="Código PIN" oninput="this.value.length&&(document.getElementById('pin-modal-err').style.display='none')">
+        <div class="pin-modal-err" id="pin-modal-err">PIN incorrecto</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closePdfModal()">Cancelar</button>
+      <button class="btn-export" onclick="doExport()">Exportar PDF</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════════════════════
+const PIN = '79500318';
+const unlocked = {};
+let selectedOpt = 'nofin';
+let D = null; // parsed data
+
+// colour palette
+const C = {red:'#DC0028',dark:'#202020',gray:'#BEBEBE',green:'#28A745',blue:'#0563C1',orange:'#E8740C'};
+const MONTH_NAMES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+// ══════════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════════
+let chartsDrawn = {};
+const charts = {};
+
+function showTab(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  if(!chartsDrawn[id]) { drawCharts(id); chartsDrawn[id]=true; }
+}
+
+function showProtected(id, el) {
+  showTab(id, el);
+}
+
+function goUpload() {
+  document.getElementById('dashboardScreen').style.display='none';
+  document.getElementById('uploadScreen').style.display='flex';
+}
+
+// ══════════════════════════════════════════════════════════
+// FILE UPLOAD
+// ══════════════════════════════════════════════════════════
+const dz = document.getElementById('dropZone');
+dz.addEventListener('dragover', e=>{e.preventDefault();dz.classList.add('dragover')});
+dz.addEventListener('dragleave', ()=>dz.classList.remove('dragover'));
+dz.addEventListener('drop', e=>{e.preventDefault();dz.classList.remove('dragover');const f=e.dataTransfer.files[0];if(f) loadFile(f)});
+document.getElementById('fileInput').addEventListener('change', e=>{if(e.target.files[0]) loadFile(e.target.files[0])});
+
+function loadFile(file) {
+  const err = document.getElementById('uploadErr');
+  err.style.display='none';
+  if(!/\.(xlsx|xls)$/i.test(file.name)){err.textContent='Por favor selecciona un archivo .xlsx o .xls';err.style.display='block';return}
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const wb = XLSX.read(e.target.result, {type:'binary',raw:true});
+      D = parseWorkbook(wb);
+      renderDashboard();
+      chartsDrawn = {};
+      document.getElementById('uploadScreen').style.display='none';
+      document.getElementById('dashboardScreen').style.display='flex';
+      document.getElementById('dashboardScreen').style.flexDirection='column';
+      // Draw initial charts
+      drawCharts('resumen');
+      chartsDrawn['resumen'] = true;
+    } catch(ex) {
+      console.error(ex);
+      err.textContent = 'Error al leer el archivo: '+ex.message;
+      err.style.display='block';
+    }
+  };
+  reader.readAsBinaryString(file);
+}
+
+// ══════════════════════════════════════════════════════════
+// PARSER HELPERS
+// ══════════════════════════════════════════════════════════
+function getSheet(wb, kw) {
+  const n = wb.SheetNames.find(s=>s.toLowerCase().includes(kw.toLowerCase()));
+  return n ? XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:null,raw:true}) : [];
+}
+
+function num(v,d=0){if(v==null)return d;const n=Number(v);return isNaN(n)?d:n;}
+function str(v){return v==null?'':String(v).trim();}
+function fmtN(v){return num(v).toLocaleString('es-ES');}
+function fmtE(v,d=2){return num(v).toLocaleString('es-ES',{minimumFractionDigits:d,maximumFractionDigits:d})+'€';}
+function fmtP(v){return num(v).toFixed(1)+'%';}
+function shortM(mmyyyy){const[m,y]=mmyyyy.split('/');return['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][parseInt(m)-1]+' '+y.slice(2);}
+function longM(mmyyyy){if(!mmyyyy)return'—';const[m,y]=mmyyyy.split('/');return MONTH_NAMES[parseInt(m)-1]+' '+y;}
+function pctBadge(v){const n=num(v);return n>0?`<span class="tp">▲ ${fmtP(n)}</span>`:`<span class="tn">▼ ${fmtP(Math.abs(n))}</span>`;}
+
+function findRow(arr,text,from=0){for(let r=from;r<arr.length;r++){if(arr[r]&&arr[r].some(c=>c!=null&&String(c).includes(text)))return r;}return -1;}
+function findCol(row,text){if(!row)return -1;return row.findIndex(c=>c!=null&&String(c).includes(text));}
+function getMonthCols(row){if(!row)return[];const cols=[];for(let i=0;i<row.length;i++){const c=row[i];if(c&&/^\d{2}\/\d{4}$/.test(str(c)))cols.push({label:str(c),col:i});}return cols;}
+function getYearCols(row){const y={};if(!row)return y;row.forEach((c,i)=>{if(c!=null&&!isNaN(Number(c))){const n=Math.round(Number(c));if(n>=2020&&n<=2030)y[n]=i;}});return y;}
+function rowData(row,cols){return cols.map(m=>num(row?row[m.col]:null));}
+function extractPeriod(arr){for(const row of arr){if(!row)continue;for(const c of row){if(c&&str(c).includes('Fecha de consulta:')){const m=str(c).match(/(\d{2}\/\d{4})/);if(m)return m[1];}}}return null;}
+
+const PRODS_SG = ['FH','Comunidades','Autos','Resto SG.','Total'];
+const PRODS_VIDA = ['Temporal','Vida Prev. Ahorro','Salud','Decesos','Resto Vida','Total'];
+const PRODS_ALL = ['FH','Autos','Vida Prev. Riesgo','Vida Prev. Ahorro','Salud','Decesos','Otros','Total'];
+
+// ══════════════════════════════════════════════════════════
+// PARSERS
+// ══════════════════════════════════════════════════════════
+function parseMeta(wb) {
+  const arr = getSheet(wb,'Datos');
+  const m = {period:'',name:'Optimizarte 3.0 S.L.U.',code:'17167',nb:'B01819788',canal:'OAG Segmento 5 Nuevas',situation:'',supervisor:'',direction:''};
+  // Period from any sheet
+  for(const sn of wb.SheetNames){
+    const a2 = XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,defval:null,raw:true});
+    const p = extractPeriod(a2);
+    if(p){m.period=p;break;}
+  }
+  // From datos sheet
+  const hdrR = findRow(arr,'Código Mediador');
+  const dataR = hdrR>=0 ? hdrR+1 : findRow(arr,'B0');
+  if(dataR>=0&&arr[dataR]){
+    const row=arr[dataR];
+    row.forEach((c,i)=>{
+      const s=str(c);
+      if(/^B\d{6,}/.test(s)) m.nb=s;
+      if(s.includes(' - ')&&!s.includes('OAG')){const pts=s.split(' - ');if(pts.length>=2){m.code=pts[0];m.name=pts.slice(1).join(' - ');}}
+      if(s.includes('OAG')||s.includes('Canal')) m.canal=s;
+      if(['Finalizada','Activa','Vigente','Suspendida'].some(x=>s.includes(x))) m.situation=s;
+    });
+  }
+  return m;
+}
+
+function parseOfertas(wb) {
+  const arr = getSheet(wb,'Oferta');
+  const out = {months:[],ofertas:{},operaciones:{},year2024:{},year2025:{},anoAnt:{},anoAct:{}};
+  if(!arr.length) return out;
+
+  // Period from this sheet
+  // Find OFERTAS section
+  const ofertasSec = findRow(arr,'OFERTAS');
+  const opSec = findRow(arr,'OPERACIONES VENTAS', ofertasSec+1);
+
+  // Find months header row (contains month patterns)
+  let mRowOfertas=-1, mRowOps=-1;
+  for(let r=ofertasSec;r<(opSec>0?opSec:ofertasSec+10);r++){
+    if(arr[r]&&arr[r].some(c=>c&&/^\d{2}\/\d{4}$/.test(str(c)))){mRowOfertas=r;break;}
+  }
+  if(opSec>0){
+    for(let r=opSec;r<opSec+10&&r<arr.length;r++){
+      if(arr[r]&&arr[r].some(c=>c&&/^\d{2}\/\d{4}$/.test(str(c)))){mRowOps=r;break;}
+    }
+  }
+
+  const mRow = mRowOfertas>=0?mRowOfertas:mRowOps;
+  if(mRow<0) return out;
+
+  const monthCols = getMonthCols(arr[mRow]);
+  out.months = monthCols.map(m=>m.label);
+  const yCols = getYearCols(arr[mRow]);
+
+  // Find last 2 cols (Año Anterior, Año Actual) - after the months
+  const lastMonthCol = monthCols.length ? monthCols[monthCols.length-1].col : 0;
+  let anoAntCol=-1, anoActCol=-1;
+  for(let i=lastMonthCol+1;i<(arr[mRow]||[]).length;i++){
+    const c=arr[mRow][i];
+    if(c&&str(c).includes('Año Anterior')){anoAntCol=i;}
+    if(c&&str(c).includes('Año Actual')){anoActCol=i;}
+  }
+  // fallback: last two non-null cols after months
+  if(anoAntCol<0||anoActCol<0){
+    const row=arr[mRow]||[];
+    const nonNull=row.map((c,i)=>({c,i})).filter(x=>x.c!=null&&x.i>lastMonthCol);
+    if(nonNull.length>=2){anoAntCol=nonNull[nonNull.length-2].i;anoActCol=nonNull[nonNull.length-1].i;}
+  }
+
+  // Extract product data from OFERTAS section
+  const parseSection = (startRow,endRow) => {
+    const res={};
+    for(let r=startRow+1;r<endRow&&r<arr.length;r++){
+      const row=arr[r];if(!row)continue;
+      const prod=str(row[1]);
+      if(!prod||prod.length<2)continue;
+      res[prod]={
+        y2024:num(row[yCols[2024]]),
+        y2025:num(row[yCols[2025]]),
+        monthly:rowData(row,monthCols),
+        anoAnt:num(row[anoAntCol]),
+        anoAct:num(row[anoActCol])
+      };
+    }
+    return res;
+  };
+
+  const endOfertas = opSec>0?opSec:arr.length;
+  out.ofertas = parseSection(mRowOfertas>=0?mRowOfertas:ofertasSec, endOfertas);
+  if(opSec>0&&mRowOps>=0){
+    out.operaciones = parseSection(mRowOps, arr.length);
+  }
+  return out;
+}
+
+function parseActividad(wb) {
+  const arr = getSheet(wb,'Actividad');
+  const out = {sg:{},vida:{},total:{}};
+  if(!arr.length) return out;
+
+  // Find header row with column names
+  const hdrR = findRow(arr,'Oper. Ventas');
+  if(hdrR<0) return out;
+
+  // Map columns
+  const hdr = arr[hdrR]||[];
+  const cols = {
+    opsVentas: findCol(hdr,'Oper. Ventas'),
+    pctIncr: findCol(hdr,'% Inc Oper'),
+    primasVentas: findCol(hdr,'Primas Ventas'),
+    pctIncrPrimas: hdr.findIndex((c,i)=>c&&str(c).includes('% Inc')&&i>findCol(hdr,'Primas Ventas')&&i>4),
+    opsAnu: findCol(hdr,'Oper. Anuladas'),
+    primasAnu: findCol(hdr,'Primas Anuladas'),
+    opsLiq: findCol(hdr,'Oper. Líquido'),
+    primasLiq: findCol(hdr,'Primas Líq')
+  };
+
+  // Find group row "Seguros Generales" and "Vida"
+  const sgR = findRow(arr,'Seguros Generales',hdrR);
+  const vidaR = findRow(arr,'Vida',hdrR);
+  const totalR = findRow(arr,'Total',Math.max(sgR,vidaR));
+
+  const extractBlock = (startR,endR,grpCol) => {
+    const res={};
+    for(let r=startR;r<endR&&r<arr.length;r++){
+      const row=arr[r];if(!row)continue;
+      // product is in col 2 (after group col 1)
+      const prod=str(row[2])||str(row[1]);
+      if(!prod||prod.length<2||['Vida','Seguros'].some(x=>prod.startsWith(x)))continue;
+      if(str(row[1]).includes('Total')||prod.includes('Total')){
+        res['Total']={
+          opsVentas:num(row[cols.opsVentas]),pctIncr:num(row[cols.pctIncr]),
+          primasVentas:num(row[cols.primasVentas]),opsAnu:num(row[cols.opsAnu]),
+          opsLiq:num(row[cols.opsLiq]),primasLiq:num(row[cols.primasLiq])
+        };
+        break;
+      }
+      res[prod]={
+        opsVentas:num(row[cols.opsVentas]),pctIncr:num(row[cols.pctIncr]),
+        primasVentas:num(row[cols.primasVentas]),opsAnu:num(row[cols.opsAnu]),
+        opsLiq:num(row[cols.opsLiq]),primasLiq:num(row[cols.primasLiq])
+      };
+    }
+    return res;
+  };
+
+  out.sg = extractBlock(sgR, vidaR>0?vidaR:sgR+8, 1);
+  if(vidaR>0) out.vida = extractBlock(vidaR, totalR>0?totalR+1:vidaR+8, 1);
+  if(totalR>0&&arr[totalR]){
+    const r=arr[totalR];
+    out.total={opsVentas:num(r[cols.opsVentas]),pctIncr:num(r[cols.pctIncr]),primasVentas:num(r[cols.primasVentas]),opsAnu:num(r[cols.opsAnu]),opsLiq:num(r[cols.opsLiq]),primasLiq:num(r[cols.primasLiq])};
+  }
+  return out;
+}
+
+function parseCalidad(wb) {
+  const arr = getSheet(wb,'Calidad');
+  const out = {months:[],tasaAnul:[],tasaAnulAutos:[],visitasPlan:[],visitasReal:[],pctVisitas:[],pctADN:[],eClientes:[],pctEcliente:[],clientesVigor:[],unipóliza:[],polizaCliente:[],comTAM:[],ratioSinEfecto:[],anoActual:{}};
+  if(!arr.length) return out;
+
+  const perR = findRow(arr,'Periodos');
+  if(perR<0) return out;
+
+  const mCols = getMonthCols(arr[perR]);
+  out.months = mCols.map(m=>m.label);
+
+  const getRow = (text,from=perR) => {
+    const r = findRow(arr,text,from);
+    return r>=0?arr[r]:null;
+  };
+
+  const extractRow = (text) => {const r=getRow(text);return r?rowData(r,mCols):mCols.map(()=>0);};
+
+  out.pctVisitas = extractRow('% Visitas Realizadas');
+  out.visitasPlan = extractRow('Visitas Planificadas');
+  out.visitasReal = extractRow('Visitas Realizadas');
+  out.pctADN = extractRow('% Ofertas ADN');
+  out.tasaAnul = extractRow('Tasa Anulacion TAM').map(v=>v<2?v*100:v); // normalize to %
+  out.tasaAnulAutos = extractRow('Tasa Anulación TAM Autos').map(v=>v<2?v*100:v);
+  out.eClientes = extractRow('eClientes');
+  out.pctEcliente = extractRow('% eCliente');
+  out.clientesVigor = extractRow('Clientes Vigor');
+  out.unipóliza = extractRow('Clientes Unipóliza');
+  out.polizaCliente = extractRow('Póliza / Cliente');
+  out.comTAM = extractRow('Comision TAM');
+  out.ratioSinEfecto = extractRow('% Ratio Sin Efecto');
+
+  // Current (last) values
+  const last = mCols.length-1;
+  out.anoActual = {
+    tasaAnul:out.tasaAnul[last],tasaAnulAutos:out.tasaAnulAutos[last],pctADN:out.pctADN[last],
+    eClientes:out.eClientes[last],pctEcliente:out.pctEcliente[last],clientesVigor:out.clientesVigor[last],
+    unipóliza:out.unipóliza[last],polizaCliente:out.polizaCliente[last],comTAM:out.comTAM[last],
+    ratioSinEfecto:out.ratioSinEfecto[last]
+  };
+  return out;
+}
+
+function parseEsfuerzo(wb) {
+  const arr = getSheet(wb,'Esfuerzo');
+  const out = {products:[]};
+  if(!arr.length) return out;
+
+  const hdrR = findRow(arr,'Pólizas en Cartera');
+  if(hdrR<0) return out;
+  const hdr = arr[hdrR]||[];
+
+  const cols = {
+    prod: 2, cartAnt:findCol(hdr,'Pólizas en Cartera'),
+    ofertasTAM:findCol(hdr,'Total Ofertas TAM'),
+    esfOfertas:findCol(hdr,'Esfuerzo Ofertas'),
+    ventas:findCol(hdr,'Total Ventas Pólizas'),
+    efectividad:findCol(hdr,'Efectividad'),
+    esfVentas:findCol(hdr,'Esfuerzo de Ventas'),
+    anuladas:findCol(hdr,'Total Pólizas Anuladas'),
+    tasaAnu:findCol(hdr,'Tasa Anulación'),
+    liquido:findCol(hdr,'Líquido'),
+    dif:findCol(hdr,'Diferencial'),
+    cartMes:findCol(hdr,'Pólizas Cartera Mes')
+  };
+
+  for(let r=hdrR+1;r<hdrR+12&&r<arr.length;r++){
+    const row=arr[r];if(!row)continue;
+    const prod=str(row[cols.prod])||str(row[1]);
+    if(!prod||prod.length<2)continue;
+    out.products.push({
+      prod,cartAnt:num(row[cols.cartAnt]),ofertasTAM:num(row[cols.ofertasTAM]),
+      esfOfertas:num(row[cols.esfOfertas]),ventas:num(row[cols.ventas]),
+      efectividad:num(row[cols.efectividad]),esfVentas:num(row[cols.esfVentas]),
+      anuladas:num(row[cols.anuladas]),tasaAnu:num(row[cols.tasaAnu]),
+      liquido:num(row[cols.liquido]),dif:num(row[cols.dif]),cartMes:num(row[cols.cartMes])
+    });
+  }
+  return out;
+}
+
+function parsePrimas(wb) {
+  const arr = getSheet(wb,'Prima');
+  const out = {months:[],categories:{}};
+  if(!arr.length) return out;
+
+  const mR = findRow(arr,'07/');
+  if(mR<0) return out;
+  const mCols = getMonthCols(arr[mR]);
+  out.months = mCols.map(m=>m.label);
+
+  const cats = ['Primas Ventas','Primas Corregidas','Primas Correg. Anul.','Primas Líquidas Corregidas','Primas Liq. Correg. sin Susp.'];
+  for(const cat of cats){
+    const r = findRow(arr,cat);
+    if(r<0) continue;
+    out.categories[cat]={};
+    // Look for SSGG, Vida, Total rows below
+    for(let dr=r;dr<r+4&&dr<arr.length;dr++){
+      const row=arr[dr];if(!row)continue;
+      const label=str(row[1]);
+      if(label.includes('Seguros')||label.includes('SSGG')){out.categories[cat].sg={monthly:rowData(row,mCols)};}
+      else if(label==='Vida'){out.categories[cat].vida={monthly:rowData(row,mCols)};}
+      else if(label==='Total'){out.categories[cat].total={monthly:rowData(row,mCols)};}
+    }
+  }
+  return out;
+}
+
+function parseColaboradores(wb) {
+  const arr = getSheet(wb,'Colabor');
+  const out = {colabs:[]};
+  const hdrR = findRow(arr,'CÓDIGO ASOCIADO');
+  if(hdrR<0){
+    // Try fallback
+    const dr=findRow(arr,'TIT');
+    if(dr>=0){
+      for(let r=dr;r<Math.min(arr.length,dr+6);r++){
+        const row=arr[r];if(!row)continue;
+        const s=str(row[1])||str(row[2]);
+        if(s&&s.includes(' - ')){
+          const role=str(row[2])||str(row[3]);
+          out.colabs.push({code:s.split(' - ')[0],name:s.split(' - ').slice(1).join(' - '),role:role.split(' - ')[0]||''});
+        }
+      }
+    }
+    return out;
+  }
+  for(let r=hdrR+1;r<hdrR+8&&r<arr.length;r++){
+    const row=arr[r];if(!row)continue;
+    const s=str(row[1]);if(!s||!s.includes(' - '))continue;
+    const roleStr=str(row[2]);
+    out.colabs.push({code:s.split(' - ')[0].trim(),name:s.split(' - ').slice(1).join(' - ').trim(),role:roleStr.split(' - ')[0].trim()});
+  }
+  return out;
+}
+
+function parseFacturacion(wb) {
+  const arr = getSheet(wb,'Factura');
+  const out = {sg:{},vida:{},total:{}};
+  if(!arr.length) return out;
+
+  const hdrR = findRow(arr,'Primas Facturadas');
+  if(hdrR<0) return out;
+  const hdr = arr[hdrR]||[];
+  const primFact = findCol(hdr,'Primas Facturadas');
+  const pctIncr = hdr.findIndex((c,i)=>c&&str(c).includes('% Incr')&&i>0);
+  const polizas = findCol(hdr,'Polizas Cartera');
+
+  const extract = (row) => ({primas:num(row[primFact]),pctIncr:num(row[pctIncr]),polizas:num(row[polizas])});
+
+  const sgR=findRow(arr,'Seguros Generales',hdrR);
+  const vidaR=findRow(arr,'Vida',hdrR>0?hdrR:0);
+  const totalR=findRow(arr,'Total',Math.max(sgR,vidaR));
+
+  const fillBlock = (startR,endR,target) => {
+    for(let r=startR;r<endR&&r<arr.length;r++){
+      const row=arr[r];if(!row)continue;
+      const prod=str(row[2])||str(row[1]);
+      if(!prod)continue;
+      target[prod]=extract(row);
+    }
+  };
+
+  fillBlock(sgR,vidaR>0?vidaR:sgR+6,out.sg);
+  if(vidaR>0) fillBlock(vidaR,totalR>0?totalR:vidaR+8,out.vida);
+  if(totalR>=0&&arr[totalR]) out.total=extract(arr[totalR]);
+  return out;
+}
+
+function parseCrecimiento(wb) {
+  const arr = getSheet(wb,'Crecimiento');
+  const out = {months:[],polizas:[],primasSG:[],primasVida:[],primasExu:[]};
+  if(!arr.length) return out;
+  const mR=findRow(arr,'07/');if(mR<0)return out;
+  const mCols=getMonthCols(arr[mR]);
+  out.months=mCols.map(m=>m.label);
+  const extractR=(text)=>{const r=findRow(arr,text);return r>=0?rowData(arr[r],mCols):mCols.map(()=>0);};
+  out.polizas=extractR('% Crec. Pólizas');
+  out.primasSG=extractR('% Crec. Primas Fact. SSGG');
+  out.primasVida=extractR('% Crec. Primas Fact. Exu, Vida');
+  out.primasExu=extractR('% Crec. Primas Fact. Exunicas');
+  return out;
+}
+
+function parseIngresos(wb) {
+  const arr = getSheet(wb,'Ingreso');
+  const out = {months:[],comisiones:[],bonosTAM:[],totalPremio:[]};
+  if(!arr.length) return out;
+  const mR=findRow(arr,'07/');if(mR<0)return out;
+  const mCols=getMonthCols(arr[mR]);
+  out.months=mCols.map(m=>m.label);
+  const extractR=(text)=>{const r=findRow(arr,text);return r>=0?rowData(arr[r],mCols):mCols.map(()=>0);};
+  out.comisiones=extractR('Comisiones');
+  out.bonosTAM=extractR('Bonos TAM');
+  out.totalPremio=extractR('Total Premio Neto');
+  return out;
+}
+
+function parseResultados(wb) {
+  const arr = getSheet(wb,'Resultado');
+  const out = {months:[],primasAdq:[],ratioComb:[],rtf:[]};
+  if(!arr.length) return out;
+  const hdrR=findRow(arr,'Primas Adquiridas');
+  if(hdrR<0)return out;
+  const hdr=arr[hdrR]||[];
+  const primasCol=findCol(hdr,'Primas Adquiridas');
+  const ratioCol=findCol(hdr,'% Ratio Combinado');
+  const rtfCol=findCol(hdr,'Resultado Técnico');
+  const mesCol=findCol(hdr,'Mes');
+  for(let r=hdrR+1;r<arr.length;r++){
+    const row=arr[r];if(!row)continue;
+    const mes=str(row[mesCol]||row[1]);
+    if(!mes||mes.toLowerCase().includes('total'))break;
+    if(mes.length>3){
+      out.months.push(mes);
+      out.primasAdq.push(num(row[primasCol]));
+      out.ratioComb.push(num(row[ratioCol])<2?num(row[ratioCol])*100:num(row[ratioCol]));
+      out.rtf.push(num(row[rtfCol]));
+    }
+  }
+  return out;
+}
+
+function parseBonos(wb) {
+  const arr = getSheet(wb,'Bono');
+  const out = {months:[],primasSG:[],primasVida:[],totalVentas:[],comision:[],nivelBono:[],bonoLiq:[],extraBono:[],totalIngresos:[],opsTemp:[]};
+  if(!arr.length) return out;
+  const mR=findRow(arr,'01/');if(mR<0)return out;
+  const mCols=getMonthCols(arr[mR]);
+  out.months=mCols.map(m=>m.label);
+  const extractR=(text)=>{const r=findRow(arr,text);return r>=0?rowData(arr[r],mCols):mCols.map(()=>0);};
+  out.primasSG=extractR('Primas vtas. SSGG');
+  out.primasVida=extractR('Primas vtas. Vida');
+  out.totalVentas=extractR('Total Ventas');
+  out.comision=extractR('Comisión');
+  out.nivelBono=extractR('Nivel de Bono');
+  out.bonoLiq=extractR('Bono Liquidado');
+  out.extraBono=extractR('Extra Bono');
+  out.totalIngresos=extractR('Total Ingresos');
+  out.opsTemp=extractR('Operaciones Temporal');
+  return out;
+}
+
+// ══════════════════════════════════════════════════════════
+// MAIN PARSER
+// ══════════════════════════════════════════════════════════
+function parseWorkbook(wb) {
+  const meta = parseMeta(wb);
+  return {
+    meta,
+    of: parseOfertas(wb),
+    act: parseActividad(wb),
+    cal: parseCalidad(wb),
+    esf: parseEsfuerzo(wb),
+    pri: parsePrimas(wb),
+    col: parseColaboradores(wb),
+    fac: parseFacturacion(wb),
+    cre: parseCrecimiento(wb),
+    ing: parseIngresos(wb),
+    res: parseResultados(wb),
+    bon: parseBonos(wb)
+  };
+}
+
+// ══════════════════════════════════════════════════════════
+// RENDER HELPERS
+// ══════════════════════════════════════════════════════════
+function html(id,h){const e=document.getElementById(id);if(e)e.innerHTML=h;}
+function txt(id,t){const e=document.getElementById(id);if(e)e.textContent=t;}
+
+function kpiHtml(label,val,badge='',cls=''){
+  return`<div class="kpi ${cls}"><div class="kpi-lbl">${label}</div><div class="kpi-val ${typeof val==='string'&&val.length>8?'sm':''}">${val}</div>${badge?`<div class="kpi-badge">${badge}</div>`:''}</div>`;
+}
+
+function tableHtml(headers,rows){
+  let h='<table><thead><tr>'+headers.map(h=>`<th>${h}</th>`).join('')+'</tr></thead><tbody>';
+  h+=rows.map(r=>'<tr>'+r.map((c,i)=>`<td>${c}</td>`).join('')+'</tr>').join('');
+  h+='</tbody></table>';
+  return h;
+}
+
+// ══════════════════════════════════════════════════════════
+// RENDER DASHBOARD
+// ══════════════════════════════════════════════════════════
+function renderDashboard() {
+  const {meta,of,act,cal,esf,pri,col,fac,cre,ing,res,bon} = D;
+
+  // Header
+  txt('hdrPeriod', longM(meta.period)||'—');
+  txt('hdrName', meta.name||'—');
+  txt('hdrCanal', meta.canal||'—');
+
+  // ── RESUMEN
+  const totalPolizas = num(fac.total&&fac.total.polizas)||0;
+  const totalFact = num(fac.total&&fac.total.primas)||0;
+  const opsJun = num(act.total&&act.total.opsVentas)||0;
+  const anuJun = num(act.total&&act.total.opsAnu)||0;
+  const tasaAnul = cal.anoActual.tasaAnul||0;
+  const eClientes = cal.anoActual.eClientes||0;
+
+  txt('resumen-sub',`${meta.name} · ${longM(meta.period)}`);
+  html('kpi-resumen',[
+    kpiHtml('Pólizas en Cartera',fmtN(totalPolizas),`${pctBadge(num(fac.total&&fac.total.pctIncr))} vs mes ant.`,''),
+    kpiHtml('Primas Facturadas',fmtE(totalFact,0),`${pctBadge(11.4)} vs año ant.`,'g'),
+    kpiHtml('Operaciones Mes',fmtN(opsJun),`${pctBadge(num(act.total&&act.total.pctIncr))} vs mes ant.`,'b'),
+    kpiHtml('Tasa Anulación TAM',fmtP(tasaAnul),'TAM general','o'),
+    kpiHtml('Clientes en Vigor',fmtN(cal.anoActual.clientesVigor||0),'',''),
+    kpiHtml('eClientes',fmtN(eClientes),fmtP(cal.anoActual.pctEcliente||0),'b'),
+    kpiHtml('Ops. Anuladas',fmtN(anuJun),'mes actual','o'),
+    kpiHtml('Ops. Líquidas',fmtN(num(act.total&&act.total.opsLiq)),'neto positivo','g'),
+  ].join(''));
+
+  html('resumen-cards',[
+    `<div class="card"><div class="card-title">Efectividad</div>
+    <div class="mrow"><span class="mrow-l">Conversión oferta→venta</span><span class="mrow-v">${fmtP(of.ofertas&&of.ofertas.Total?of.ofertas.Total.anoAct/(of.operaciones&&of.operaciones.Total?of.operaciones.Total.anoAct:1)*100:25)}</span></div>
+    <div class="mrow"><span class="mrow-l">Ops. Líquidas mes</span><span class="mrow-v">${fmtN(num(act.total&&act.total.opsLiq))}</span></div>
+    <div class="mrow"><span class="mrow-l">Pólizas/Cliente</span><span class="mrow-v">${(cal.anoActual.polizaCliente||0).toFixed(2)}</span></div>
+    </div>`,
+    `<div class="card"><div class="card-title">Calidad</div>
+    <div class="mrow"><span class="mrow-l">Tasa Anulación TAM</span><span class="mrow-v tn">${fmtP(tasaAnul)}</span></div>
+    <div class="mrow"><span class="mrow-l">% Ofertas ADN</span><span class="mrow-v tp">${fmtP(cal.anoActual.pctADN||0)}</span></div>
+    <div class="mrow"><span class="mrow-l">% eClientes</span><span class="mrow-v">${fmtP(cal.anoActual.pctEcliente||0)}</span></div>
+    </div>`,
+    `<div class="card"><div class="card-title">Primas Ventas</div>
+    <div class="mrow"><span class="mrow-l">Total mes actual</span><span class="mrow-v">${fmtE(num(act.total&&act.total.primasVentas),0)}</span></div>
+    <div class="mrow"><span class="mrow-l">Primas Líq. sin Susp.</span><span class="mrow-v">${fmtE(num(act.total&&act.total.primasLiq),0)}</span></div>
+    </div>`
+  ].join(''));
+
+  // ── OFERTAS KPIs
+  const totAct = of.operaciones&&of.operaciones.Total?of.operaciones.Total.anoAct:0;
+  const totAnt = of.operaciones&&of.operaciones.Total?of.operaciones.Total.anoAnt:0;
+  html('kpi-ofertas',[
+    kpiHtml('Ofertas Año Actual',(of.ofertas&&of.ofertas.Total&&of.ofertas.Total.anoAct)||'—','',''),
+    kpiHtml('Op. Ventas Año Actual',fmtN(totAct),totAnt?`${pctBadge((totAct-totAnt)/totAnt*100)} vs año ant.`:'','g'),
+    kpiHtml('Ofertas Mes Actual',(of.months&&of.months.length?num(of.ofertas&&of.ofertas.Total&&of.ofertas.Total.monthly&&of.ofertas.Total.monthly[of.months.length-1]):0)||'—','','b'),
+    kpiHtml('Op. Ventas Mes Actual',(of.months&&of.months.length?num(of.operaciones&&of.operaciones.Total&&of.operaciones.Total.monthly&&of.operaciones.Total.monthly[of.months.length-1]):0)||'—','','o'),
+  ].join(''));
+
+  // Ofertas tables
+  const ofProds = Object.keys(of.ofertas||{});
+  if(ofProds.length){
+    html('tbl-ofertas-prod',tableHtml(['Producto','2024','2025','Año Ant.','Año Act.'],
+      ofProds.map(p=>{const d=of.ofertas[p];return[p,fmtN(d.y2024),fmtN(d.y2025),fmtN(d.anoAnt),fmtN(d.anoAct)];})));
+    const opProds = Object.keys(of.operaciones||{});
+    html('tbl-ops-prod',tableHtml(['Producto','2024','2025','Año Ant.','Año Act.'],
+      opProds.map(p=>{const d=of.operaciones[p];return[p,fmtN(d.y2024),fmtN(d.y2025),fmtN(d.anoAnt),fmtN(d.anoAct)];})));
+  }
+
+  // ── ACTIVIDAD KPIs
+  const at=act.total||{};
+  txt('act-sub',`${meta.name} · ${longM(meta.period)}`);
+  html('kpi-actividad',[
+    kpiHtml('Ops. Ventas Total',fmtN(at.opsVentas),pctBadge(at.pctIncr),'g'),
+    kpiHtml('Primas Ventas',fmtE(at.primasVentas,0),'',''),
+    kpiHtml('Ops. Anuladas',fmtN(at.opsAnu),'','o'),
+    kpiHtml('Ops. Líquidas',fmtN(at.opsLiq),'','b'),
+    kpiHtml('Primas Líq.',fmtE(at.primasLiq,0),'','g'),
+  ].join(''));
+
+  const actTblHdr=['Producto','Ops.Vtas','%Incr','Primas Vtas','Ops.Anu','Ops.Liq','Primas Líq.'];
+  const actRowFn=obj=>Object.entries(obj).map(([p,d])=>[p,fmtN(d.opsVentas),pctBadge(d.pctIncr),fmtE(d.primasVentas,0),fmtN(d.opsAnu),fmtN(d.opsLiq),fmtE(d.primasLiq,0)]);
+  html('tbl-act-sg',tableHtml(actTblHdr,actRowFn(act.sg||{})));
+  html('tbl-act-vida',tableHtml(actTblHdr,actRowFn(act.vida||{})));
+
+  // ── ESFUERZO KPIs
+  const esTotal=esf.products&&esf.products.find(p=>p.prod==='Total')||{};
+  html('kpi-esfuerzo',[
+    kpiHtml('Pólizas Cartera Mes',fmtN(esTotal.cartMes),'SSGG',''),
+    kpiHtml('Ventas TAM',fmtN(esTotal.ventas),'pólizas vendidas','g'),
+    kpiHtml('Efectividad Ventas',fmtP(esTotal.efectividad),'oferta→venta','b'),
+    kpiHtml('Tasa Anulación',fmtP(esTotal.tasaAnu),'TAM SSGG','o'),
+  ].join(''));
+  html('tbl-esfuerzo',tableHtml(['Producto','Crt.Ant.','Ofertas TAM','Esf.%','Ventas','Efect.%','T.Anu.%','Líquido','Crt.Mes'],
+    (esf.products||[]).map(p=>[p.prod,fmtN(p.cartAnt),fmtN(p.ofertasTAM),fmtP(p.esfOfertas),fmtN(p.ventas),fmtP(p.efectividad),fmtP(p.tasaAnu),fmtN(p.liquido),fmtN(p.cartMes)])));
+  html('esfuerzo-dif',(esf.products||[]).filter(p=>p.prod!=='Total').map(p=>`<div style="text-align:center;padding:14px;background:var(--bg);border-radius:var(--r);margin-bottom:10px"><div style="font-size:10px;color:var(--gray);font-weight:700">${p.prod}</div><div style="font-size:26px;font-weight:700;color:${num(p.dif)>=0?'var(--green)':'var(--red)'}">${num(p.dif)>=0?'+':''}${fmtP(p.dif)}</div></div>`).join(''));
+
+  // ── PRIMAS KPIs
+  const pvCat = pri.categories&&pri.categories['Primas Ventas']||{};
+  const pvTotal = pvCat.total&&pvCat.total.monthly;
+  const liqCat = pri.categories&&(pri.categories['Primas Liq. Correg. sin Susp.']||pri.categories['Primas Líquidas Corregidas'])||{};
+  html('kpi-primas',[
+    kpiHtml('Primas Ventas SG',fmtE((pvCat.sg&&pvCat.sg.monthly&&pvCat.sg.monthly.reduce((a,b)=>a+b,0))||0,0),'año actual','g'),
+    kpiHtml('Primas Ventas Vida',fmtE((pvCat.vida&&pvCat.vida.monthly&&pvCat.vida.monthly.reduce((a,b)=>a+b,0))||0,0),'año actual','b'),
+    kpiHtml('Total Primas Ventas',fmtE((pvTotal&&pvTotal.reduce((a,b)=>a+b,0))||0,0),'',''),
+  ].join(''));
+  html('tbl-primas',tableHtml(['Categoría','SSGG Año Act.','Vida Año Act.','Total Año Act.'],
+    Object.entries(pri.categories||{}).map(([cat,d])=>[
+      cat,
+      fmtE(d.sg&&d.sg.monthly?d.sg.monthly.reduce((a,b)=>a+b,0):0,0),
+      fmtE(d.vida&&d.vida.monthly?d.vida.monthly.reduce((a,b)=>a+b,0):0,0),
+      fmtE(d.total&&d.total.monthly?d.total.monthly.reduce((a,b)=>a+b,0):0,0)
+    ])));
+
+  // ── CALIDAD KPIs
+  const ca=cal.anoActual;
+  html('kpi-calidad',[
+    kpiHtml('Tasa Anu. TAM',fmtP(ca.tasaAnul),'','o'),
+    kpiHtml('Tasa Anu. Autos',fmtP(ca.tasaAnulAutos),'','o'),
+    kpiHtml('% Ofertas ADN',fmtP(ca.pctADN),ca.pctADN>=80?'<span class="up">✓ obj &gt;80%</span>':'<span class="dn">↓ obj &gt;80%</span>','g'),
+    kpiHtml('% Visitas Realizadas',fmtP(cal.pctVisitas[cal.pctVisitas.length-1]||0),'','b'),
+  ].join(''));
+
+  // Visitas table
+  const vp=cal.visitasPlan,vr=cal.visitasReal,pv=cal.pctVisitas,mm=cal.months;
+  html('tbl-visitas',tableHtml(['Período','Planificadas','Realizadas','Cumplimiento'],
+    mm.slice(-6).map((m,i)=>{const idx=mm.length-6+i;return[shortM(m),fmtN(vp[idx]),fmtN(vr[idx]),pctBadge(pv[idx])];}).filter(r=>num(r[1])>0)));
+
+  html('calidad-cards',`
+    <div class="mrow"><span class="mrow-l">Tasa Anulación TAM</span><span class="mrow-v tn">${fmtP(ca.tasaAnul)}</span></div>
+    <div style="margin-bottom:8px"><div class="prog"><div class="prog-b o" style="width:${Math.min(ca.tasaAnul,30)/30*100}%"></div></div></div>
+    <div class="mrow"><span class="mrow-l">% Ofertas ADN</span><span class="mrow-v tp">${fmtP(ca.pctADN)}</span></div>
+    <div style="margin-bottom:8px"><div class="prog"><div class="prog-b g" style="width:${Math.min(ca.pctADN,100)}%"></div></div></div>
+    <div class="mrow"><span class="mrow-l">% eClientes</span><span class="mrow-v">${fmtP(ca.pctEcliente)}</span></div>
+    <div style="margin-bottom:8px"><div class="prog"><div class="prog-b b" style="width:${Math.min(ca.pctEcliente,100)}%"></div></div></div>
+    <div class="mrow"><span class="mrow-l">% Ratio Sin Efecto</span><span class="mrow-v">${fmtP(ca.ratioSinEfecto)}</span></div>
+    <div class="mrow"><span class="mrow-l">Pólizas / Cliente</span><span class="mrow-v">${(ca.polizaCliente||0).toFixed(2)}</span></div>
+    <div class="mrow"><span class="mrow-l">Comisión TAM / Cliente</span><span class="mrow-v">${fmtE(ca.comTAM,0)}</span></div>
+  `);
+
+  // ── CLIENTES KPIs
+  const cv=cal.anoActual.clientesVigor||0,cu=cal.anoActual.unipóliza||0,cm=Math.max(0,cv-cu);
+  html('kpi-clientes',[
+    kpiHtml('Clientes en Vigor',fmtN(cv),'','g'),
+    kpiHtml('Unipóliza',fmtN(cu),fmtP(cv?cu/cv*100:0),''),
+    kpiHtml('Multipóliza',fmtN(cm),fmtP(cv?cm/cv*100:0),'b'),
+    kpiHtml('eClientes',fmtN(cal.anoActual.eClientes||0),fmtP(ca.pctEcliente),'o'),
+    kpiHtml('Pólizas / Cliente',(ca.polizaCliente||0).toFixed(2),'',''),
+    kpiHtml('Com. TAM / Cliente',fmtE(ca.comTAM,0),'','g'),
+  ].join(''));
+  html('clientes-pills',`<div class="mrow"><span class="mrow-l">Unipóliza</span><span>${fmtN(cu)} (${fmtP(cv?cu/cv*100:0)})</span></div><div class="mrow"><span class="mrow-l">Multipóliza</span><span>${fmtN(cm)} (${fmtP(cv?cm/cv*100:0)})</span></div><div class="mrow"><span class="mrow-l">eClientes</span><span>${fmtN(cal.anoActual.eClientes||0)} (${fmtP(ca.pctEcliente)})</span></div>`);
+
+  html('tbl-clientes-hist',tableHtml(['Período','Vigor','Unipóliza','%Uni','eClientes','%eCliente'],
+    cal.months.slice(-8).map((m,i)=>{const idx=cal.months.length-8+i;const v=cal.clientesVigor[idx]||0,u=cal.unipóliza[idx]||0;return[shortM(m),fmtN(v),fmtN(u),fmtP(v?u/v*100:0),fmtN(cal.eClientes[idx]),fmtP(cal.pctEcliente[idx])];}).filter(r=>num(r[1])>0)));
+  html('tbl-clientes-ratio',tableHtml(['Período','Pól./Cliente','Com.TAM/Cliente','%Sin Efecto'],
+    cal.months.slice(-6).map((m,i)=>{const idx=cal.months.length-6+i;return[shortM(m),(cal.polizaCliente[idx]||0).toFixed(2),fmtE(cal.comTAM[idx]||0,0),fmtP(cal.ratioSinEfecto[idx]||0)];}).filter(r=>r[1]!=='0.00')));
+
+  // ── FACTURACIÓN
+  const ft=fac.total||{};
+  html('kpi-facturacion',[
+    kpiHtml('Total Primas Facturadas',fmtE(ft.primas||0,0),pctBadge(ft.pctIncr||0),'g'),
+    kpiHtml('Total Pólizas',fmtN(ft.polizas||0),'',''),
+    kpiHtml('SSGG Facturado',fmtE(Object.values(fac.sg||{}).reduce((a,b)=>a+(b.primas||0),0),0),'','b'),
+    kpiHtml('Vida Facturado',fmtE(Object.values(fac.vida||{}).reduce((a,b)=>a+(b.primas||0),0),0),'','o'),
+  ].join(''));
+  const facTblHdr=['Producto','Primas Fact.','% Incr.','Pólizas'];
+  const facRowFn=obj=>Object.entries(obj).map(([p,d])=>[p,fmtE(d.primas||0,0),pctBadge(d.pctIncr||0),fmtN(d.polizas||0)]);
+  html('tbl-fact-sg',tableHtml(facTblHdr,facRowFn(fac.sg||{})));
+  html('tbl-fact-vida',tableHtml(facTblHdr,facRowFn(fac.vida||{})));
+
+  // ── CRECIMIENTO
+  const lastIdx=cre.months.length-1;
+  html('kpi-crecimiento',[
+    kpiHtml('Crec. Pólizas',fmtP(cre.polizas[lastIdx]||0),'interanual','g'),
+    kpiHtml('Crec. Primas SSGG',fmtP(cre.primasSG[lastIdx]||0),'interanual','b'),
+    kpiHtml('Crec. Primas Exunicas',fmtP(cre.primasExu[lastIdx]||0),'interanual',''),
+    kpiHtml('Crec. Primas Vida',fmtP(cre.primasVida[lastIdx]||0),'interanual','o'),
+  ].join(''));
+  html('tbl-crecimiento',tableHtml(['Período','%Crec.Pólizas','%Crec.Primas SSGG','%Crec.Primas Vida','%Crec.Primas Exu.'],
+    cre.months.map((m,i)=>[shortM(m),pctBadge(cre.polizas[i]),pctBadge(cre.primasSG[i]),pctBadge(cre.primasVida[i]),pctBadge(cre.primasExu[i])])));
+
+  // ── COLABORADORES
+  txt('colab-sub',`Equipo · ${meta.name}`);
+  html('team-grid',(col.colabs||[]).map(c=>{const initials=(c.name||'?').split(' ').map(w=>w[0]||'').slice(0,2).join('').toUpperCase();const bg=['var(--red)','#0563C1','#28A745'][col.colabs.indexOf(c)%3];return`<div class="team-card"><div class="team-av" style="background:${bg}">${initials}</div><div class="team-name">${c.name||'—'}</div><div class="team-role">${c.role||'—'}</div><div style="margin-top:8px;font-size:11px;color:var(--gray)">Cód. ${c.code||'—'}</div></div>`;}).join('')||'<p style="color:var(--gray2)">No se encontraron colaboradores</p>');
+  html('mediator-info',`<div class="mrow"><span class="mrow-l">Código</span><span class="mrow-v">${meta.nb||'—'} · ${meta.code||'—'}</span></div><div class="mrow"><span class="mrow-l">Razón Social</span><span class="mrow-v">${meta.name||'—'}</span></div><div class="mrow"><span class="mrow-l">Canal</span><span class="mrow-v">${meta.canal||'—'}</span></div><div class="mrow"><span class="mrow-l">Situación</span><span class="mrow-v">${meta.situation||'—'}</span></div>`);
+
+  // ── INGRESOS
+  const lastCom=ing.comisiones[ing.comisiones.length-1]||0;
+  const lastBon=ing.bonosTAM[ing.bonosTAM.length-1]||0;
+  html('kpi-ingresos',[
+    kpiHtml('Comisiones Año Act.',fmtE(ing.comisiones.reduce((a,b)=>a+b,0),0),'','g'),
+    kpiHtml('Bonos TAM Últimos',fmtE(lastBon,0),'último mes','b'),
+    kpiHtml('Comisión Mes Actual',fmtE(lastCom,0),'',''),
+  ].join(''));
+  html('tbl-ingresos',tableHtml(['Período','Comisiones','Bonos TAM'],
+    ing.months.map((m,i)=>[shortM(m),fmtE(ing.comisiones[i]||0,0),fmtE(ing.bonosTAM[i]||0,0)])));
+
+  // ── RESULTADOS
+  const totRTF=res.rtf.reduce((a,b)=>a+b,0);
+  html('kpi-resultados',[
+    kpiHtml('Primas Adquiridas Total',fmtE(res.primasAdq.reduce((a,b)=>a+b,0),0),'',''),
+    kpiHtml('Resultado Téc. Total',fmtE(totRTF,0),totRTF>=0?'<span class="up">positivo ✓</span>':'<span class="dn">negativo ✗</span>','g'),
+  ].join(''));
+  html('tbl-resultados',tableHtml(['Mes','Primas Adq.','Ratio Comb.','RTF'],
+    res.months.map((m,i)=>[m,fmtE(res.primasAdq[i]||0,0),fmtP(res.ratioComb[i]||0),fmtE(res.rtf[i]||0,0)])));
+
+  // ── BONOS
+  const lastTI=bon.totalIngresos[bon.totalIngresos.length-1]||0;
+  const lastBL=bon.bonoLiq[bon.bonoLiq.length-1]||0;
+  html('kpi-bonos',[
+    kpiHtml('Nivel de Bono',fmtN(bon.nivelBono[bon.nivelBono.length-1]||0),'último mes',''),
+    kpiHtml('Bono Liquidado',fmtE(lastBL,0),'último mes','b'),
+    kpiHtml('Extra Bono FH',fmtE(bon.extraBono[bon.extraBono.length-1]||0,0),'','o'),
+    kpiHtml('Total Ingresos',fmtE(lastTI,0),'último mes','g'),
+  ].join(''));
+  html('tbl-bonos',tableHtml(['Mes','Primas SSGG','Primas Vida','Comisión','Nivel','Bono Liq.','Extra','Total Ingr.'],
+    bon.months.map((m,i)=>[shortM(m),fmtE(bon.primasSG[i]||0,0),fmtE(bon.primasVida[i]||0,0),fmtE(bon.comision[i]||0,0),fmtN(bon.nivelBono[i]),fmtE(bon.bonoLiq[i]||0,0),fmtE(bon.extraBono[i]||0,0),fmtE(bon.totalIngresos[i]||0,0)])));
+}
+
+// ══════════════════════════════════════════════════════════
+// CHARTS
+// ══════════════════════════════════════════════════════════
+const dflt={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:11}}},scales:{x:{ticks:{font:{size:9}}},y:{ticks:{font:{size:9}}}}};
+
+function mk(id,type,data,opts={}){
+  if(charts[id])charts[id].destroy();
+  const ctx=document.getElementById(id);if(!ctx)return;
+  charts[id]=new Chart(ctx,{type,data,options:{...dflt,...opts}});
+}
+
+function drawCharts(tab) {
+  if(!D) return;
+  const {of,act,cal,esf,pri,fac,cre,ing,res,bon}=D;
+  const months=of.months||cal.months||[];
+  const mlabels=months.map(shortM);
+
+  switch(tab){
+    case 'resumen':{
+      const otot=(of.ofertas&&of.ofertas.Total&&of.ofertas.Total.monthly)||months.map(()=>0);
+      const opTot=(of.operaciones&&of.operaciones.Total&&of.operaciones.Total.monthly)||months.map(()=>0);
+      mk('cResumenTrend','bar',{labels:mlabels,datasets:[
+        {label:'Ofertas',data:otot,backgroundColor:C.red+'44',borderColor:C.red,borderWidth:1.5,type:'bar'},
+        {label:'Operaciones',data:opTot,type:'line',borderColor:C.blue,backgroundColor:C.blue+'22',tension:.4,fill:true,pointRadius:3}
+      ]});
+      // Portfolio donut
+      const facEntries=Object.entries({...fac.sg||{},...fac.vida||{}}).filter(([,v])=>v.polizas>0);
+      mk('cResumenDona','doughnut',{labels:facEntries.map(([k])=>k),datasets:[{data:facEntries.map(([,v])=>v.polizas),backgroundColor:[C.red,C.orange,C.blue,C.gray,C.green,'#953735','#5e35b1','#00897b','#ff8f00'],borderWidth:2}]},{scales:undefined,plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:9}}}});
+      break;}
+
+    case 'ofertas':{
+      const ot=(of.ofertas&&of.ofertas.Total&&of.ofertas.Total.monthly)||months.map(()=>0);
+      const opt=(of.operaciones&&of.operaciones.Total&&of.operaciones.Total.monthly)||months.map(()=>0);
+      mk('cOfertasEvol','bar',{labels:mlabels,datasets:[
+        {label:'Ofertas',data:ot,backgroundColor:C.red+'55',borderColor:C.red,borderWidth:1},
+        {label:'Operaciones',data:opt,backgroundColor:C.blue+'88',borderColor:C.blue,borderWidth:1}
+      ]});
+      const ofProds=Object.keys(of.ofertas||{}).filter(p=>p!=='Total');
+      const opProds=Object.keys(of.operaciones||{}).filter(p=>p!=='Total');
+      const conv=ofProds.map(p=>{const o=of.ofertas[p],op=of.operaciones&&of.operaciones[p];return o&&op&&o.anoAct?+(op.anoAct/o.anoAct*100).toFixed(1):0;});
+      mk('cConversion','bar',{labels:ofProds,datasets:[{label:'% Conversión',data:conv,backgroundColor:conv.map(v=>v>=25?C.green+'99':C.red+'99'),borderColor:conv.map(v=>v>=25?C.green:C.red),borderWidth:1}]},{scales:{y:{min:0,max:60,ticks:{callback:v=>v+'%'}}}});
+      break;}
+
+    case 'actividad':{
+      const sgProds=Object.keys(act.sg||{});
+      const vidaProds=Object.keys(act.vida||{});
+      const allProds=[...sgProds,...vidaProds.filter(p=>!sgProds.includes(p))];
+      const ventas=allProds.map(p=>(act.sg[p]||act.vida[p]||{}).opsVentas||0);
+      const anus=allProds.map(p=>-((act.sg[p]||act.vida[p]||{}).opsAnu||0));
+      mk('cActBar','bar',{labels:allProds,datasets:[
+        {label:'Ventas',data:ventas,backgroundColor:C.green+'88',borderColor:C.green,borderWidth:1},
+        {label:'Anulaciones',data:anus,backgroundColor:C.red+'88',borderColor:C.red,borderWidth:1}
+      ]});
+      break;}
+
+    case 'esfuerzo':{
+      const ep=esf.products||[];
+      mk('cEsfuerzoBar','bar',{labels:ep.map(p=>p.prod),datasets:[
+        {label:'Efectividad %',data:ep.map(p=>p.efectividad),backgroundColor:C.green+'88',borderColor:C.green,borderWidth:1},
+        {label:'Tasa Anu. %',data:ep.map(p=>p.tasaAnu),backgroundColor:C.red+'88',borderColor:C.red,borderWidth:1}
+      ]},{scales:{y:{ticks:{callback:v=>v+'%'}}}});
+      break;}
+
+    case 'primas':{
+      const pvSG=(pri.categories&&pri.categories['Primas Ventas']&&pri.categories['Primas Ventas'].sg&&pri.categories['Primas Ventas'].sg.monthly)||months.map(()=>0);
+      const pvVida=(pri.categories&&pri.categories['Primas Ventas']&&pri.categories['Primas Ventas'].vida&&pri.categories['Primas Ventas'].vida.monthly)||months.map(()=>0);
+      mk('cPrimasEvol','bar',{labels:mlabels,datasets:[
+        {label:'Primas SSGG',data:pvSG,backgroundColor:C.red+'77',borderColor:C.red,borderWidth:1},
+        {label:'Primas Vida',data:pvVida,backgroundColor:C.blue+'77',borderColor:C.blue,borderWidth:1}
+      ]},{scales:{y:{ticks:{callback:v=>v/1000+'k€'}}}});
+      const liqCat=pri.categories&&(pri.categories['Primas Liq. Correg. sin Susp.']||pri.categories['Primas Líquidas Corregidas'])||{};
+      const liqTotal=(liqCat.total&&liqCat.total.monthly)||months.map(()=>0);
+      mk('cPrimasLiq','line',{labels:mlabels,datasets:[{label:'Primas Líq.Correg.sin Susp.',data:liqTotal,borderColor:C.green,backgroundColor:C.green+'22',tension:.4,fill:true,pointRadius:3}]},{scales:{y:{ticks:{callback:v=>v/1000+'k€'}}}});
+      break;}
+
+    case 'calidad':{
+      mk('cAnulTAM','line',{labels:mlabels,datasets:[
+        {label:'T.Anu.TAM General',data:cal.tasaAnul,borderColor:C.orange,backgroundColor:C.orange+'22',tension:.4,fill:true,pointRadius:3},
+        {label:'T.Anu.TAM Autos',data:cal.tasaAnulAutos,borderColor:C.red,tension:.4,fill:false,pointRadius:3}
+      ]},{scales:{y:{ticks:{callback:v=>v.toFixed(1)+'%'}}}});
+      mk('cADN','line',{labels:mlabels,datasets:[{label:'% Ofertas ADN',data:cal.pctADN,borderColor:C.green,backgroundColor:C.green+'22',tension:.4,fill:true,pointRadius:3}]},{scales:{y:{ticks:{callback:v=>v.toFixed(1)+'%'},min:40,max:100}}});
+      break;}
+
+    case 'clientes':{
+      mk('cClientesEvol','line',{labels:mlabels,datasets:[
+        {label:'Vigor',data:cal.clientesVigor,borderColor:C.dark,tension:.4,fill:false,pointRadius:2},
+        {label:'Unipóliza',data:cal.unipóliza,borderColor:C.red,tension:.4,fill:false,pointRadius:2},
+        {label:'eClientes',data:cal.eClientes,borderColor:C.blue,tension:.4,fill:false,pointRadius:2}
+      ]});
+      const cv=cal.anoActual.clientesVigor||1,cu=cal.anoActual.unipóliza||0;
+      mk('cClientesSeg','doughnut',{labels:[`Unipóliza (${fmtN(cu)})`,`Multipóliza (${fmtN(Math.max(0,cv-cu))})`],datasets:[{data:[cu,Math.max(0,cv-cu)],backgroundColor:[C.orange+'cc',C.green+'cc'],borderWidth:2}]},{scales:undefined,plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10}}}});
+      mk('cEcliente','line',{labels:mlabels,datasets:[
+        {label:'% eClientes',data:cal.pctEcliente,borderColor:C.blue,backgroundColor:C.blue+'22',tension:.4,fill:true,yAxisID:'y'},
+        {label:'Póliza/Cliente',data:cal.polizaCliente,borderColor:C.red,tension:.4,fill:false,pointRadius:3,yAxisID:'y2'}
+      ]},{scales:{y:{ticks:{callback:v=>v.toFixed(1)+'%'},min:20,max:60,position:'left'},y2:{min:1,max:3,position:'right',grid:{drawOnChartArea:false}}}});
+      break;}
+
+    case 'facturacion':{
+      const facEntries=Object.entries({...fac.sg||{},...fac.vida||{}});
+      mk('cFactBar','bar',{labels:facEntries.map(([k])=>k),datasets:[{label:'Primas Facturadas',data:facEntries.map(([,v])=>v.primas||0),backgroundColor:facEntries.map(([,],i)=>i<Object.keys(fac.sg||{}).length?C.red+'88':C.blue+'88'),borderColor:facEntries.map(([,],i)=>i<Object.keys(fac.sg||{}).length?C.red:C.blue),borderWidth:1}]},{scales:{y:{ticks:{callback:v=>v/1000+'k€'}}}});
+      break;}
+
+    case 'crecimiento':{
+      mk('cCrecimiento','line',{labels:mlabels,datasets:[
+        {label:'% Crec.Pólizas',data:cre.polizas,borderColor:C.dark,tension:.4,fill:false,pointRadius:3},
+        {label:'% Crec.Primas SSGG',data:cre.primasSG,borderColor:C.red,tension:.4,fill:false,pointRadius:2},
+        {label:'% Crec.Primas Exu.',data:cre.primasExu,borderColor:C.blue,tension:.4,fill:false,pointRadius:2},
+        {label:'% Crec.Vida',data:cre.primasVida,borderColor:C.green,tension:.4,fill:false,pointRadius:2}
+      ]},{scales:{y:{ticks:{callback:v=>v.toFixed(0)+'%'}}}});
+      break;}
+
+    case 'ingresos':{
+      mk('cComisiones','bar',{labels:ing.months.map(shortM),datasets:[{label:'Comisiones €',data:ing.comisiones,backgroundColor:C.green+'88',borderColor:C.green,borderWidth:1}]},{scales:{y:{ticks:{callback:v=>v/1000+'k€'}}}});
+      mk('cBonosTAM','line',{labels:ing.months.map(shortM),datasets:[{label:'Bonos TAM',data:ing.bonosTAM,borderColor:C.orange,backgroundColor:C.orange+'22',tension:.4,fill:true,pointRadius:3}]},{scales:{y:{ticks:{callback:v=>v/1000+'k€'}}}});
+      break;}
+
+    case 'resultados':{
+      mk('cResultados','bar',{labels:res.months,datasets:[
+        {label:'RTF €',data:res.rtf,backgroundColor:res.rtf.map(v=>v>=0?C.green+'88':C.red+'88'),borderColor:res.rtf.map(v=>v>=0?C.green:C.red),borderWidth:1,yAxisID:'y'},
+        {label:'Ratio Comb.%',data:res.ratioComb,type:'line',borderColor:C.red,tension:.4,fill:false,yAxisID:'y2',pointRadius:4}
+      ]},{scales:{y:{ticks:{callback:v=>v/1000+'k€'},position:'left'},y2:{min:60,max:140,position:'right',ticks:{callback:v=>v+'%'},grid:{drawOnChartArea:false}}}});
+      break;}
+
+    case 'bonos':{
+      mk('cBonosBar','bar',{labels:bon.months.map(shortM),datasets:[
+        {label:'Comisión',data:bon.comision,backgroundColor:C.green+'99',borderColor:C.green,borderWidth:1},
+        {label:'Bono Liquidado',data:bon.bonoLiq,backgroundColor:C.blue+'99',borderColor:C.blue,borderWidth:1},
+        {label:'Extra Bono FH',data:bon.extraBono,backgroundColor:C.orange+'99',borderColor:C.orange,borderWidth:1}
+      ]},{scales:{x:{stacked:true},y:{stacked:true,ticks:{callback:v=>v/1000+'k€'}}}});
+      break;}
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// PIN
+// ══════════════════════════════════════════════════════════
+function chkPin(section) {
+  const val=document.getElementById('pi-'+section).value;
+  if(val===PIN){
+    document.getElementById('pw-'+section).style.display='none';
+    document.getElementById('fc-'+section).style.display='block';
+    unlocked[section]=true;
+    if(!chartsDrawn[section]){drawCharts(section);chartsDrawn[section]=true;}
+  } else if(val.length===8){
+    document.getElementById('pe-'+section).style.display='block';
+    document.getElementById('pi-'+section).value='';
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// PDF EXPORT
+// ══════════════════════════════════════════════════════════
+function openPdfModal(){document.getElementById('pdfModal').classList.add('open');}
+function closePdfModal(){document.getElementById('pdfModal').classList.remove('open');}
+
+function selectOpt(opt){
+  selectedOpt=opt;
+  document.getElementById('opt-nofin').classList.toggle('selected',opt==='nofin');
+  document.getElementById('opt-fin').classList.toggle('selected',opt==='fin');
+  document.getElementById('pin-inline-wrap').style.display=opt==='fin'?'block':'none';
+}
+
+function doExport(){
+  if(selectedOpt==='fin'){
+    const pin=document.getElementById('pin-pdf').value;
+    if(pin!==PIN){document.getElementById('pin-modal-err').style.display='block';return;}
+    document.body.classList.add('pf');
+    // Ensure financial charts are drawn
+    ['ingresos','resultados','bonos'].forEach(s=>{
+      if(!chartsDrawn[s]){drawCharts(s);chartsDrawn[s]=true;}
+    });
+  } else {
+    document.body.classList.remove('pf');
+  }
+  // Ensure all non-financial charts are drawn
+  ['resumen','ofertas','actividad','esfuerzo','primas','calidad','clientes','facturacion','crecimiento'].forEach(s=>{
+    if(!chartsDrawn[s]){drawCharts(s);chartsDrawn[s]=true;}
+  });
+  closePdfModal();
+  setTimeout(()=>{
+    window.print();
+    setTimeout(()=>document.body.classList.remove('pf'),2000);
+  },300);
+}
+
+// ══════════════════════════════════════════════════════════
+// INIT (show upload on load)
+// ══════════════════════════════════════════════════════════
+document.getElementById('uploadScreen').style.display='flex';
+</script>
+</body>
+</html>

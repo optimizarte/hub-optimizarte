@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Cartas de Cambio de Mediador — OPTIMIZARTE 3.0</title>
+    <style>
+        :root {
+            --occ-red:     #DC0028;
+            --occ-red-alt: #B8001F;
+            --occ-dark:    #202020;
+            --occ-gray:    #414141;
+            --occ-gray-3:  #E7E6E6;
+            --occ-light:   #F5F5F5;
+            --occ-white:   #FFFFFF;
+            --occ-border:  #E0E0E0;
+            --occ-radius:  8px;
+            --occ-shadow:  0 2px 12px rgba(0,0,0,0.09);
+            --occ-font:    Arial, Helvetica, sans-serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: var(--occ-font);
+            background-color: var(--occ-light);
+            color: var(--occ-dark);
+            line-height: 1.5;
+            margin: 0;
+            padding: 28px 20px 48px;
+        }
+
+        /* ── CONTENEDOR ── */
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            background: var(--occ-white);
+            border-radius: var(--occ-radius);
+            box-shadow: var(--occ-shadow);
+            overflow: hidden;
+        }
+
+        /* ── CABECERA NEGRA ── */
+        header {
+            background-color: #2D2D2D;
+            color: var(--occ-white);
+            padding: 14px 32px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        header .hdr-logo { flex-shrink: 0; }
+        header .hdr-text { flex: 1; }
+
+        header h1 {
+            margin: 0 0 5px;
+            font-family: Georgia, serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        header p {
+            margin: 0;
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.65);
+        }
+
+        /* ── BARRA ROJA ── */
+        .section-bar {
+            height: 4px;
+            background: linear-gradient(90deg, var(--occ-red) 0%, var(--occ-red-alt) 100%);
+        }
+
+        /* ── FORMULARIO ── */
+        .form-content { padding: 28px 32px 30px; }
+
+        fieldset {
+            border: 1px solid var(--occ-border);
+            border-radius: var(--occ-radius);
+            padding: 20px 22px 16px;
+            margin-bottom: 20px;
+            background: var(--occ-white);
+            position: relative;
+        }
+
+        legend {
+            font-weight: 700;
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--occ-white);
+            background: var(--occ-red);
+            padding: 4px 14px;
+            border-radius: 4px;
+            margin-left: -4px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        @media (max-width: 600px) {
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+
+        .form-group { margin-bottom: 13px; }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 700;
+            font-size: 0.78rem;
+            color: var(--occ-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 9px 11px;
+            border: 1px solid var(--occ-border);
+            border-radius: 5px;
+            font-family: var(--occ-font);
+            font-size: 0.9rem;
+            color: var(--occ-dark);
+            background: #FAFAFA;
+            transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--occ-red);
+            box-shadow: 0 0 0 3px rgba(220, 0, 40, 0.12);
+            background: var(--occ-white);
+        }
+
+        .form-control[readonly] {
+            background: var(--occ-gray-3);
+            color: var(--occ-gray);
+            cursor: default;
+        }
+
+        /* Localidad y CP */
+        #localidad, #codigoPostal { font-weight: normal; }
+
+        /* ── CHECKBOX ── */
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--occ-dark);
+            margin-bottom: 16px;
+            user-select: none;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: 17px;
+            height: 17px;
+            cursor: pointer;
+            accent-color: var(--occ-red);
+            flex-shrink: 0;
+        }
+
+        /* ── SECCIÓN JURÍDICA ── */
+        #juridica-section {
+            display: none;
+            background: #FFF5F7;
+            border: 1px solid rgba(220,0,40,0.2);
+            border-radius: 6px;
+            padding: 16px 18px;
+            margin-bottom: 16px;
+        }
+
+        .info-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: transparent;
+            border: 1px solid rgba(220,0,40,0.3);
+            border-radius: 20px;
+            padding: 3px 11px;
+            font-size: 0.75rem;
+            color: var(--occ-red);
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        /* ── PÓLIZAS ── */
+        .policy-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .policy-row .policy-ramo { flex: 1.5; min-width: 0; }
+        .policy-row .policy-num  { flex: 2;   min-width: 0; }
+
+        .policy-btns {
+            display: flex;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+
+        /* ── BOTONES ── */
+        .btn {
+            padding: 8px 13px;
+            border: none;
+            border-radius: 5px;
+            font-family: var(--occ-font);
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background-color 0.18s, transform 0.1s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn:active { transform: scale(0.97); }
+
+        .btn-primary {
+            background-color: var(--occ-red);
+            color: var(--occ-white);
+            width: 100%;
+            padding: 13px;
+            font-size: 0.95rem;
+            border-radius: var(--occ-radius);
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .btn-primary:hover { background-color: var(--occ-red-alt); }
+
+        .btn-add {
+            background-color: var(--occ-dark);
+            color: var(--occ-white);
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+
+        .btn-add:hover { background-color: #3a3a3a; }
+
+        .btn-remove {
+            background-color: var(--occ-gray-3);
+            color: var(--occ-red);
+            font-size: 1.1rem;
+            line-height: 1;
+            border: 1px solid rgba(220,0,40,0.25);
+        }
+
+        .btn-remove:hover:not(:disabled) { background-color: #fde8ec; }
+        .btn-remove:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .actions { margin-top: 24px; }
+
+        /* ── FOOTER NEGRO ── */
+        .form-footer {
+            background: var(--occ-dark);
+            padding: 13px 32px;
+            font-size: 0.74rem;
+            color: rgba(255,255,255,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <div class="hdr-logo" style="font-family:system-ui,sans-serif;font-size:15px;font-weight:700;letter-spacing:-.01em;color:#fff">
+          Optimizarte
+          <span style="font-family:Arial,sans-serif;font-size:9.5px;font-weight:500;color:#999;margin:0 3px;letter-spacing:0">by</span>
+          <span style="font-weight:700;color:#DC0028">Occident</span>
+        </div>
+        <div class="hdr-text">
+          <h1>Generador de Cartas de Cambio de Mediador</h1>
+          <p>Completa los campos para generar la solicitud de asignación a OPTIMIZARTE 3.0 · Código 260963</p>
+        </div>
+    </header>
+
+    <div class="section-bar"></div>
+
+    <div class="form-content">
+        <form id="mediadorForm" onsubmit="generarCarta(event)">
+
+            <!-- Destino y Mediador -->
+            <fieldset>
+                <legend>Destino y Mediador</legend>
+                <div class="grid-2" style="margin-top:14px;">
+                    <div class="form-group">
+                        <label for="compania">Compañía Aseguradora</label>
+                        <input type="text" id="compania" class="form-control" value="OCCIDENT" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mediador">Nuevo Mediador / Código</label>
+                        <input type="text" id="mediador" class="form-control" value="OPTIMIZARTE 3.0 (Código: 260963)">
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Datos del Tomador -->
+            <fieldset>
+                <legend>Datos del Tomador</legend>
+                <div style="margin-top:14px;">
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="esJuridica" onchange="toggleJuridica()">
+                        El tomador es una Persona Jurídica (actúa representante persona física)
+                    </label>
+
+                    <!-- Sección Persona Jurídica -->
+                    <div id="juridica-section">
+                        <div class="info-chip">
+                            <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="12" height="10" rx="1"/><path d="M5 7h6M5 10h4"/></svg>
+                            Datos de la Entidad
+                        </div>
+
+                        <!-- Tipo entidad + Calidad representante -->
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label for="tipoEntidad">Tipo de Entidad</label>
+                                <select id="tipoEntidad" class="form-control">
+                                    <option value="" disabled selected>Seleccione tipo</option>
+                                    <option value="Mercantil">Mercantil (S.L., S.A., etc.)</option>
+                                    <option value="Comunidad de Propietarios">Comunidad de Propietarios</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="calidadRepresentante">Calidad del Representante</label>
+                                <select id="calidadRepresentante" class="form-control">
+                                    <option value="" disabled selected>Seleccione calidad</option>
+                                    <option value="Gerente">Gerente</option>
+                                    <option value="Administrador">Administrador</option>
+                                    <option value="Propietario">Propietario</option>
+                                    <option value="Representante">Representante</option>
+                                    <option value="Presidente">Presidente</option>
+                                    <option value="Secretario">Secretario</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Razón social + CIF -->
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label for="razonSocial">Denominación / Razón Social</label>
+                                <input type="text" id="razonSocial" class="form-control" placeholder="Ej: Empresa S.L.">
+                            </div>
+                            <div class="form-group">
+                                <label for="cif">CIF de la Persona Jurídica</label>
+                                <input type="text" id="cif" class="form-control" placeholder="Ej: B12345678">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Nombre + DNI -->
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label id="lblNombre" for="nombreTomador">Nombre y Apellidos del Tomador</label>
+                            <input type="text" id="nombreTomador" class="form-control" placeholder="Nombre y apellidos" required>
+                        </div>
+                        <div class="form-group">
+                            <label id="lblDni" for="dniTomador">DNI del Tomador</label>
+                            <input type="text" id="dniTomador" class="form-control" placeholder="00000000X" required>
+                        </div>
+                    </div>
+
+                    <!-- Localidad + CP (en negrita) -->
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="localidad">Localidad de Residencia</label>
+                            <input type="text" id="localidad" class="form-control" placeholder="Figueres" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="codigoPostal">Código Postal</label>
+                            <input type="text" id="codigoPostal" class="form-control" placeholder="17600" required>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Pólizas: ambos botones en cada fila -->
+            <fieldset>
+                <legend>Pólizas Objeto de Cambio</legend>
+                <div id="polizas-container" style="margin-top:14px;"></div>
+            </fieldset>
+
+            <div class="actions">
+                <button type="submit" class="btn btn-primary">
+                    <svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right:6px;"><path d="M4 4h12v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4z"/><path d="M8 4V2h4v2"/><path d="M7 11l2 2 4-4"/></svg>
+                    Generar Vista Previa de la Carta + Actividad Gestiona
+                </button>
+            </div>
+        </form>
+
+    </div>
+
+    <!-- FOOTER NEGRO -->
+    <div class="form-footer">
+        <svg viewBox="0 0 20 20" width="13" height="13" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.8" style="flex-shrink:0"><circle cx="10" cy="10" r="8"/><path d="M10 9v5M10 7v.5"/></svg>
+        Uso interno · OPTIMIZARTE 3.0 · Código mediador: 260963 · Documento generado localmente, sin envío de datos
+    </div>
+
+</div>
+
+<script>
+    const RAMOS_OPTIONS = `
+        <option value="" disabled selected>Seleccione Ramo</option>
+        <option value="Autos">Autos</option>
+        <option value="Hogar">Hogar</option>
+        <option value="Vida">Vida</option>
+        <option value="Decesos">Decesos</option>
+        <option value="Salud">Salud</option>
+        <option value="Comercio / Pymes">Comercio / Pymes</option>
+        <option value="Responsabilidad Civil">Responsabilidad Civil</option>
+        <option value="Otro">Otro</option>
+    `;
+
+    function crearFilaPoliza() {
+        const row = document.createElement('div');
+        row.className = 'policy-row';
+        row.innerHTML = `
+            <select class="form-control policy-ramo" required>${RAMOS_OPTIONS}</select>
+            <input type="text" class="form-control policy-num" placeholder="Número de Póliza (Ej: 8-23.189.206-M)" required>
+            <div class="policy-btns">
+                <button type="button" class="btn btn-add" onclick="agregarFila()" title="Añadir póliza">＋</button>
+                <button type="button" class="btn btn-remove" onclick="eliminarFila(this)" title="Eliminar esta línea">−</button>
+            </div>
+        `;
+        return row;
+    }
+
+    function agregarFila() {
+        document.getElementById('polizas-container').appendChild(crearFilaPoliza());
+        updatePolicyButtons();
+    }
+
+    function eliminarFila(btn) {
+        btn.closest('.policy-row').remove();
+        updatePolicyButtons();
+    }
+
+    function updatePolicyButtons() {
+        const rows = document.querySelectorAll('.policy-row');
+        rows.forEach(row => {
+            const removeBtn = row.querySelector('.btn-remove');
+            if (removeBtn) removeBtn.disabled = rows.length === 1;
+        });
+    }
+
+    function toggleJuridica() {
+        const esJuridica = document.getElementById('esJuridica').checked;
+        const juridicaSection   = document.getElementById('juridica-section');
+        const lblNombre         = document.getElementById('lblNombre');
+        const lblDni            = document.getElementById('lblDni');
+        const razonSocial       = document.getElementById('razonSocial');
+        const cif               = document.getElementById('cif');
+        const tipoEntidad       = document.getElementById('tipoEntidad');
+        const calidadRepres     = document.getElementById('calidadRepresentante');
+
+        if (esJuridica) {
+            juridicaSection.style.display = 'block';
+            lblNombre.textContent = 'Nombre y Apellidos del Representante';
+            lblDni.textContent    = 'DNI del Representante';
+            razonSocial.required  = true;
+            cif.required          = true;
+            tipoEntidad.required  = true;
+            calidadRepres.required = true;
+        } else {
+            juridicaSection.style.display = 'none';
+            lblNombre.textContent = 'Nombre y Apellidos del Tomador';
+            lblDni.textContent    = 'DNI del Tomador';
+            razonSocial.required  = false;
+            cif.required          = false;
+            tipoEntidad.required  = false;
+            calidadRepres.required = false;
+        }
+    }
+
+    function generarCarta(event) {
+        event.preventDefault();
+
+        const compañia   = document.getElementById('compania').value;
+        const esJuridica = document.getElementById('esJuridica').checked;
+        const nombre     = document.getElementById('nombreTomador').value;
+        const dni        = document.getElementById('dniTomador').value;
+        const localidad  = document.getElementById('localidad').value;
+        const cp         = document.getElementById('codigoPostal').value;
+
+        let razonSocial = '', cif = '', calidad = '', tipoEntidad = '';
+        if (esJuridica) {
+            razonSocial  = document.getElementById('razonSocial').value;
+            cif          = document.getElementById('cif').value;
+            calidad      = document.getElementById('calidadRepresentante').value;
+            tipoEntidad  = document.getElementById('tipoEntidad').value;
+        }
+
+        const ramos   = document.querySelectorAll('.policy-ramo');
+        const numeros = document.querySelectorAll('.policy-num');
+
+        let polizasHtml = '';
+        const sep = 'border-left:2px solid #E0E0E0;';
+        for (let i = 0; i < ramos.length; i += 2) {
+            const bg   = Math.floor(i / 2) % 2 === 0 ? '#FAFAFA' : '#FFFFFF';
+            const r1   = ramos[i]   ? ramos[i].value   : '';
+            const n1   = numeros[i] ? numeros[i].value : '';
+            const r2   = ramos[i + 1]   ? ramos[i + 1].value   : '';
+            const n2   = numeros[i + 1] ? numeros[i + 1].value : '';
+            polizasHtml += `<tr style="background:${bg}">
+                <td style="padding:5px 11px;border-bottom:1px solid #E7E6E6;">${r1}</td>
+                <td style="padding:5px 11px;border-bottom:1px solid #E7E6E6;font-weight:bold;">${n1}</td>
+                <td style="padding:5px 11px;border-bottom:1px solid #E7E6E6;${sep}">${r2}</td>
+                <td style="padding:5px 11px;border-bottom:1px solid #E7E6E6;font-weight:bold;">${n2}</td>
+            </tr>`;
+        }
+
+        const fechaActual = new Date().toLocaleDateString('es-ES', {
+            year: 'numeric', month: 'long', day: 'numeric'
+        });
+
+        let parrafoIdentificacion = '';
+        let firmaTexto = '';
+
+        if (esJuridica) {
+            const entidadDesc = tipoEntidad === 'Comunidad de Propietarios'
+                ? `la Comunidad de Propietarios <strong>${razonSocial}</strong>`
+                : `la entidad mercantil <strong>${razonSocial}</strong>`;
+
+            parrafoIdentificacion = `Por medio de la presente carta, yo, <strong>${nombre}</strong>, con DNI N.º <strong>${dni}</strong>, actuando en calidad de <strong>${calidad}</strong> de ${entidadDesc}, provista de CIF N.º <strong>${cif}</strong>, con domicilio fiscal y residencia en <strong>${localidad}</strong> (CP <strong>${cp}</strong>), en su condición de tomadora de los contratos de seguro suscritos con su entidad, me dirijo a ustedes para solicitar formalmente el <strong>cambio de mediación</strong> de la cartera de pólizas detallada a continuación.`;
+
+            firmaTexto = `Atentamente,<br><br><br><br><br><br>
+<span style="display:inline-block;min-width:210px;border-top:1px solid #414141;padding-top:5px;">
+<strong>${nombre}</strong><br>
+<span style="font-size:9pt;color:#414141;">en calidad de ${calidad}</span>
+</span>`;
+        } else {
+            parrafoIdentificacion = `Por medio de la presente carta, yo, <strong>${nombre}</strong>, con DNI N.º <strong>${dni}</strong>, residente en <strong>${localidad}</strong> (CP <strong>${cp}</strong>), en mi condición de tomador/a de los contratos de seguro contratados con su entidad, me dirijo a ustedes para solicitar formalmente el <strong>cambio de mediación</strong> de mi cartera de pólizas.`;
+
+            firmaTexto = `Atentamente,<br><br><br><br><br><br>
+<span style="display:inline-block;min-width:210px;border-top:1px solid #414141;padding-top:5px;">
+<strong>${nombre}</strong>
+</span>`;
+        }
+
+        const sw = screen.availWidth, sh = screen.availHeight, half = Math.floor(sw / 2);
+        const ventanaCarta = window.open('', 'carta_preview', 'width=' + half + ',height=' + sh + ',left=0,top=0');
+        ventanaCarta.document.write(`<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Carta Cambio Mediador — ${nombre}</title>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 13mm 16mm;
+        }
+
+        @media print {
+            html, body { background: white !important; }
+            .carta-header, .red-bar, .carta-footer, .no-print { display: none !important; }
+            .page-wrap {
+                max-width: 100% !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+            }
+            .carta-body  { padding: 0 !important; }
+            body         { font-size: 10pt !important; line-height: 1.38 !important; }
+            .destinatario{ margin-bottom: 7px !important; padding-bottom: 5px !important; font-size: 10pt !important; }
+            .dest-fecha  { font-size: 10pt !important; }
+            .asunto      { margin-bottom: 7px !important; padding: 5px 10px !important; font-size: 10pt !important; }
+            .bl          { height: 0.7em !important; }
+            .paragraph   { margin-bottom: 0.9em !important; font-size: 10pt !important; }
+            .highlight-box { padding: 6px 11px !important; margin: 6px 0 !important; font-size: 10pt !important; }
+            .policy-table  { margin: 5px 0 !important; font-size: 9.5pt !important; }
+            .policy-table thead th { padding: 5px 10px !important; font-size: 8.5pt !important; }
+            .policy-table td       { padding: 4px 10px !important; }
+            .signature-section     { margin-top: 10px !important; }
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 11pt;
+            line-height: 1.6;
+            color: #414141;
+            margin: 0;
+            padding: 0;
+            background: #F5F5F5;
+        }
+        .page-wrap {
+            max-width: 700px;
+            margin: 30px auto 48px;
+            background: #FFFFFF;
+            box-shadow: 0 2px 18px rgba(0,0,0,0.10);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .carta-header {
+            background: #DC0028;
+            padding: 16px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .carta-header-title { color: white; font-size: 11pt; font-weight: bold; }
+        .carta-header-sub   { color: rgba(255,255,255,0.8); font-size: 8pt; margin-top: 2px; }
+        .red-bar { height: 3px; background: #B8001F; }
+        .carta-body { padding: 28px 36px 30px; }
+
+        .destinatario {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 20px;
+            font-size: 11pt;
+            font-weight: bold;
+            color: #202020;
+            margin-bottom: 18px;
+            padding-bottom: 11px;
+            border-bottom: 1px solid #E7E6E6;
+        }
+        .dest-fecha {
+            font-weight: normal;
+            font-size: 10.5pt;
+            color: #414141;
+            white-space: nowrap;
+        }
+        .bl { height: 1.4em; }
+        .asunto {
+            font-weight: bold;
+            font-size: 11pt;
+            color: #202020;
+            margin-bottom: 14px;
+            padding: 8px 14px;
+            background: #F5F5F5;
+            border-left: 4px solid #DC0028;
+            border-radius: 0 4px 4px 0;
+        }
+        .paragraph {
+            margin-bottom: 1.5em;
+            text-align: justify;
+            font-size: 11pt;
+        }
+        .highlight-box {
+            background: #FFF5F7;
+            border: 1px solid rgba(220,0,40,0.2);
+            border-left: 4px solid #DC0028;
+            border-radius: 0 5px 5px 0;
+            padding: 10px 16px;
+            margin: 10px 0;
+            font-size: 11pt;
+        }
+        .highlight-box strong { color: #202020; }
+        .policy-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0;
+            font-size: 10.5pt;
+        }
+        .policy-table thead th {
+            background: #DC0028;
+            color: white;
+            text-align: left;
+            padding: 7px 12px;
+            font-size: 9.5pt;
+            font-weight: bold;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+        .policy-table td {
+            padding: 6px 12px;
+            border-bottom: 1px solid #E7E6E6;
+        }
+        .signature-section { margin-top: 22px; page-break-inside: avoid; }
+        .carta-footer {
+            background: #E7E6E6;
+            padding: 8px 36px;
+            font-size: 7.5pt;
+            color: #BEBEBE;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .no-print { text-align: center; padding: 18px 0 6px; }
+        .btn-print {
+            background: #DC0028;
+            color: white;
+            border: none;
+            padding: 10px 26px;
+            font-family: Arial, sans-serif;
+            font-size: 10pt;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+        .btn-print:hover { background: #B8001F; }
+    </style>
+</head>
+<body>
+<div class="page-wrap">
+
+    <div class="carta-header">
+        <div>
+            <div class="carta-header-title">Solicitud de Cambio de Mediador</div>
+            <div class="carta-header-sub">Asignación de cartera a OPTIMIZARTE 3.0 · Código 260963</div>
+        </div>
+        <svg viewBox="0 0 140 40" xmlns="http://www.w3.org/2000/svg" width="100" height="30">
+            <path d="M14 3 C10 3 6 7 6 12 C6 19 14 27 14 27 C14 27 22 19 22 12 C22 7 18 3 14 3Z" fill="white"/>
+            <circle cx="14" cy="12" r="3.5" fill="#DC0028"/>
+            <text x="28" y="20" font-family="Arial" font-size="17" font-weight="bold" fill="white">Occident</text>
+        </svg>
+    </div>
+    <div class="red-bar"></div>
+
+    <div class="carta-body">
+
+        <div class="destinatario">
+            <span>A/A: ${compañia}</span>
+            <span class="dest-fecha">En <strong>${localidad}</strong>, a ${fechaActual}</span>
+        </div>
+
+        <div class="bl"></div>
+        <div class="bl"></div>
+        <div class="asunto">ASUNTO: Solicitud de cambio de mediador y asignación de cartera</div>
+
+        <div class="bl"></div>
+        <div class="bl"></div>
+        <div class="paragraph">Estimados señores,</div>
+
+        <div class="paragraph">${parrafoIdentificacion}</div>
+
+        <div class="paragraph">Con efecto inmediato desde la recepción de este escrito, desautorizo al mediador actualmente asignado a mis contratos y designo de forma expresa e irrevocable como nuevo mediador de mi cartera a:</div>
+
+        <div class="bl"></div>
+        <div class="highlight-box">
+            <strong>Mediador Designado:</strong> OPTIMIZARTE 3.0<br>
+            <strong>Código de Mediador:</strong> 260963
+        </div>
+
+        <div class="bl"></div>
+        <div class="bl"></div>
+        <div class="paragraph">Las pólizas sujetas a este cambio de mediación son las siguientes:</div>
+        <div class="bl"></div>
+
+        <table class="policy-table">
+            <thead><tr>
+                <th>Ramo / Tipo de Seguro</th>
+                <th>Número de Póliza</th>
+                <th style="border-left:2px solid rgba(255,255,255,0.35)">Ramo / Tipo de Seguro</th>
+                <th>Número de Póliza</th>
+            </tr></thead>
+            <tbody>${polizasHtml}</tbody>
+        </table>
+
+        <div class="bl"></div>
+        <div class="bl"></div>
+        <div class="paragraph">Esta designación concede al nuevo mediador facultades plenas para la gestión, asesoramiento, seguimiento y tramitación de los citados contratos, así como el devengo de los derechos económicos y comisiones correspondientes, conforme a la normativa vigente reguladora de la distribución de seguros.</div>
+
+        <div class="paragraph">Les ruego procedan a actualizar sus registros administrativos a la mayor brevedad y me envíen confirmación escrita de la efectiva tramitación de esta solicitud.</div>
+
+        <div class="paragraph">Agradeciendo de antemano su atención, reciban un cordial saludo.</div>
+
+        <div class="signature-section">${firmaTexto}</div>
+
+        <div class="no-print">
+            <button class="btn-print" onclick="window.print()">Imprimir / Guardar como PDF</button>
+        </div>
+    </div>
+
+    <div class="carta-footer">
+        <span>Documento generado con OPTIMIZARTE 3.0 · Herramienta interna</span>
+        <span>${fechaActual}</span>
+    </div>
+
+</div>
+</body>
+</html>`);
+        ventanaCarta.document.close();
+
+        // ── Poblar sección Gestiona ──
+        const polizaNums = Array.from(numeros).map(n => n.value).filter(v => v.trim());
+        const gestiAsunto = 'SOLICITUD CAMBIO DE MEDIADOR + ' + polizaNums.join(' + ') + ' - ' + nombre;
+
+        let gestiCuerpo = 'Solicito el cambio de mediador de las pólizas:\n';
+        for (let i = 0; i < ramos.length; i++) {
+            const num = numeros[i].value.trim();
+            if (num) gestiCuerpo += `· Póliza: ${num} – Código contrato: 260963\n`;
+        }
+
+        const gestiCuerpoFinal = gestiCuerpo.trim();
+        const gestiWin = window.open('', 'gestiona_win', 'width=' + (sw - half) + ',height=' + sh + ',left=' + half + ',top=0');
+        gestiWin.document.write(`<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Actividad Gestiona</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+body { font-family: Arial, Helvetica, sans-serif; background: #F5F5F5; margin: 0; padding: 20px; color: #414141; }
+.card { background: white; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.09); overflow: hidden; }
+.card-header { background: #202020; color: white; padding: 16px 22px; }
+.card-header h2 { margin: 0 0 3px; font-size: 1rem; font-weight: 700; }
+.card-header p { margin: 0; font-size: 0.74rem; opacity: 0.5; }
+.red-bar { height: 3px; background: #DC0028; }
+.card-body { padding: 22px; }
+label { display: block; font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #414141; margin-bottom: 5px; }
+.field-wrap { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 18px; }
+input[type=text], textarea { flex: 1; min-width: 0; padding: 9px 11px; border: 1px solid #E0E0E0; border-radius: 5px; font-family: Arial, sans-serif; font-size: 0.88rem; color: #202020; background: #FAFAFA; transition: border-color 0.15s; }
+input[type=text]:focus, textarea:focus { outline: none; border-color: #DC0028; background: white; }
+textarea { resize: vertical; line-height: 1.5; }
+.btn-copy { background: #E7E6E6; color: #414141; border: 1px solid #E0E0E0; padding: 9px 13px; border-radius: 5px; font-family: Arial, sans-serif; font-size: 0.78rem; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; display: flex; align-items: center; gap: 5px; transition: background 0.15s, color 0.15s, border-color 0.15s; }
+.btn-copy:hover { background: #202020; color: white; border-color: #202020; }
+.divider { border: none; border-top: 1px solid #E7E6E6; margin: 18px 0; }
+.btn-gestiona { display: inline-flex; align-items: center; gap: 7px; background: #DC0028; color: white; padding: 11px 20px; border-radius: 5px; font-family: Arial, sans-serif; font-weight: 700; font-size: 0.85rem; text-decoration: none; transition: background 0.15s; }
+.btn-gestiona:hover { background: #B8001F; }
+.footer-note { font-size: 0.72rem; color: #BEBEBE; margin-top: 14px; margin-bottom: 0; }
+</style>
+</head>
+<body>
+<div class="card">
+<div class="card-header">
+    <h2>Actividad Gestiona</h2>
+    <p>OPTIMIZARTE 3.0 &middot; C&oacute;digo mediador: 260963</p>
+</div>
+<div class="red-bar"></div>
+<div class="card-body">
+    <label>Asunto del correo</label>
+    <div class="field-wrap">
+        <input type="text" id="g-asunto" value="${gestiAsunto}">
+        <button class="btn-copy" onclick="copiarG('g-asunto', this)">
+            <svg viewBox="0 0 20 20" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="10" height="10" rx="1"/><path d="M4 12H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v1"/></svg>
+            Copiar
+        </button>
+    </div>
+    <label>Cuerpo del mensaje</label>
+    <div class="field-wrap">
+        <textarea id="g-cuerpo" rows="6">${gestiCuerpoFinal}</textarea>
+        <button class="btn-copy" onclick="copiarG('g-cuerpo', this)" style="align-self:flex-start">
+            <svg viewBox="0 0 20 20" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="10" height="10" rx="1"/><path d="M4 12H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v1"/></svg>
+            Copiar
+        </button>
+    </div>
+    <hr class="divider">
+    <div style="text-align:right;">
+        <a href="https://gestiona.gco.global/gestionadministrativa/gestiondeagencia/actividades" target="_blank" class="btn-gestiona">
+            <svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 3h4v4M11 9l6-6M9 5H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-4"/></svg>
+            Abrir Actividad en Gestiona
+        </a>
+    </div>
+    <p class="footer-note">Revisa los datos antes de pegar. C&oacute;digo contrato: siempre 260963.</p>
+</div>
+</div>
+<script>
+function copiarG(id, btn) {
+    const el = document.getElementById(id);
+    navigator.clipboard.writeText(el.value).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '✓ Copiado';
+        btn.style.background = '#28A745';
+        btn.style.color = 'white';
+        btn.style.borderColor = '#28A745';
+        setTimeout(() => {
+            btn.innerHTML = orig;
+            btn.style.background = '';
+            btn.style.color = '';
+            btn.style.borderColor = '';
+        }, 2200);
+    });
+}
+<\/script>
+</body>
+</html>`);
+        gestiWin.document.close();
+    }
+
+    // Inicializar primera fila al cargar
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('polizas-container').appendChild(crearFilaPoliza());
+        updatePolicyButtons();
+    });
+</script>
+
+</body>
+</html>

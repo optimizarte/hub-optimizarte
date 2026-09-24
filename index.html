@@ -2433,7 +2433,7 @@ function loadCats(){
 }
 function saveCats(){ saveJSON(KEY_CATS, CATS); }
 function loadJSON(k,def){ try{var v=localStorage.getItem(k);return v?JSON.parse(v):def;}catch(e){return def;} }
-function saveJSON(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
+function saveJSON(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){ console.warn('No s\'ha pogut desar a localStorage:', k, e); } }
 function catByVal(v){ return CATS.find(function(c){return c.val===v;}); }
 
 /* Colors per a etiquetes noves: cap coincideix amb els de DEFAULT_CATS */
@@ -2784,11 +2784,11 @@ function buildCatUI(card){
       var chosen = Array.prototype.map.call(listBox.querySelectorAll('input[type="checkbox"]:checked'), function(c){ return c.value; });
       if(!chosen.length && CATS[0]) chosen = [CATS[0].val];
       assigned[cardKey] = chosen;
-      saveJSON(KEY_ASSIGN, assigned);
       renderTags();
       dd.remove();
       rebuildSidebar(); updateBadges();
       if(typeof applyFilters === 'function') applyFilters();
+      saveJSON(KEY_ASSIGN, assigned);
     });
     dd.appendChild(saveBtn);
 

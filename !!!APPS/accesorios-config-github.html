@@ -1,0 +1,1132 @@
+<title>Configurador de Accesorios · OPTIMIZARTE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ─── TOKENS ─────────────────────────────────────────── */
+:root {
+  --bg:        #F3F0EC;
+  --surface:   #FFFFFF;
+  --surface-2: #EAE7E2;
+  --border:    #E2DDD9;
+  --text:      #0F1923;
+  --text-2:    #64615D;
+  --text-3:    #A09C98;
+  --brand:     #DC0028;
+  --brand-d:   #B5001F;
+  --brand-t:   rgba(220,0,40,0.07);
+  --green:     #1A7A4B;
+  --green-bg:  #EAF6F0;
+  --r:         10px;
+  --r-sm:      7px;
+  --sh:        0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:        #0F1923;
+    --surface:   #162030;
+    --surface-2: #1D2C3C;
+    --border:    #283848;
+    --text:      #EDE9E4;
+    --text-2:    #9A9590;
+    --text-3:    #5C5854;
+    --brand:     #FF3352;
+    --brand-d:   #E6002D;
+    --brand-t:   rgba(255,51,82,0.1);
+    --green:     #29AA6D;
+    --green-bg:  rgba(41,170,109,0.12);
+  }
+}
+:root[data-theme="dark"] {
+  --bg:        #0F1923;
+  --surface:   #162030;
+  --surface-2: #1D2C3C;
+  --border:    #283848;
+  --text:      #EDE9E4;
+  --text-2:    #9A9590;
+  --text-3:    #5C5854;
+  --brand:     #FF3352;
+  --brand-d:   #E6002D;
+  --brand-t:   rgba(255,51,82,0.1);
+  --green:     #29AA6D;
+  --green-bg:  rgba(41,170,109,0.12);
+}
+
+/* ─── RESET ──────────────────────────────────────────── */
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* ─── HEADER — BLACK (Occident / OPTIMIZARTE style) ─── */
+.app-hdr {
+  background: #0F1923;
+  height: 56px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: 0 2px 8px rgba(0,0,0,.35);
+}
+.logo {
+  font-size: 19px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -.4px;
+}
+.logo span { opacity: .5; font-weight: 400; }
+.hdr-tag {
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255,255,255,.65);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+/* ─── PAGE ───────────────────────────────────────────── */
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 20px 16px 60px;
+}
+
+/* ─── STEP CARDS ─────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  box-shadow: var(--sh);
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+.card-hdr {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.step-n {
+  width: 28px;
+  height: 28px;
+  background: var(--brand);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.card-ttl {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text);
+}
+.card-body { padding: 20px; }
+
+/* ─── FORM ───────────────────────────────────────────── */
+.fgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.f2 { grid-column: 1 / -1; }
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: .7px;
+}
+.field input {
+  height: 46px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 0 13px;
+  font-size: 16px;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--surface);
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+  -webkit-appearance: none;
+}
+.field input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-t);
+}
+.mono-f {
+  font-family: 'Courier New', monospace !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+}
+
+/* ─── PASTE AREA ─────────────────────────────────────── */
+.paste-hint {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.6;
+  padding: 10px 14px;
+  background: var(--brand-t);
+  border-left: 3px solid var(--brand);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  margin-bottom: 12px;
+}
+.paste-hint strong { color: var(--text); }
+.paste-area {
+  width: 100%;
+  min-height: 140px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 12px 13px;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--surface-2);
+  resize: vertical;
+  outline: none;
+  line-height: 1.65;
+  transition: border-color .15s;
+  -webkit-appearance: none;
+}
+.paste-area:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-t);
+}
+
+/* ─── BUTTONS ────────────────────────────────────────── */
+.btn-row {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 11px 22px;
+  border-radius: var(--r-sm);
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  transition: all .15s;
+  white-space: nowrap;
+  min-height: 46px;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-brand { background: var(--brand); color: #fff; }
+.btn-brand:hover { background: var(--brand-d); }
+.btn-ghost { background: transparent; color: var(--text-2); border: 1.5px solid var(--border); }
+.btn-ghost:hover { background: var(--surface-2); color: var(--text); }
+.btn-lg { padding: 14px 28px; font-size: 16px; border-radius: var(--r); }
+
+/* ─── PARSE ERROR / SUCCESS MSG ──────────────────────── */
+.parse-msg {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-left: 3px solid var(--brand);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.65;
+  background: var(--brand-t);
+}
+.parse-msg strong { color: var(--brand); }
+.parse-msg em { font-style: italic; color: var(--text-2); }
+
+/* ─── PREVIEW ────────────────────────────────────────── */
+.meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 11px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.pill-brand { background: var(--brand-t); color: var(--brand); }
+.pill-neutral { background: var(--surface-2); color: var(--text-2); }
+
+.search-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.search-in {
+  flex: 1;
+  height: 46px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 0 13px;
+  font-size: 16px;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--surface);
+  outline: none;
+  transition: border-color .15s;
+  -webkit-appearance: none;
+}
+.search-in:focus { border-color: var(--brand); }
+
+/* ─── TABLE ──────────────────────────────────────────── */
+.tbl-wrap {
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th {
+  background: var(--surface-2);
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: .7px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+th.r { text-align: right; }
+tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: middle;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--brand-t); }
+.td-code {
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  color: var(--brand);
+  font-size: 12px;
+  white-space: nowrap;
+  width: 90px;
+}
+.td-desc { color: var(--text-2); }
+.td-price {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  width: 120px;
+}
+.empty-state {
+  padding: 36px;
+  text-align: center;
+  color: var(--text-3);
+  font-size: 13px;
+}
+
+/* ─── GENERATE SECTION ───────────────────────────────── */
+.gen-note {
+  background: var(--surface-2);
+  border-radius: var(--r-sm);
+  padding: 14px 16px;
+  font-size: 14px;
+  color: var(--text-2);
+  line-height: 1.65;
+  margin-bottom: 18px;
+}
+.gen-note strong { color: var(--text); }
+.gen-cta { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+
+/* ─── LANG SELECTOR ─────────────────────────────────── */
+.lang-sel { display: flex; border-radius: var(--r-sm); overflow: hidden; border: 1.5px solid var(--border); }
+.lang-btn { flex: 1; height: 46px; border: none; cursor: pointer; font-size: 12px; font-weight: 800; font-family: inherit; background: var(--surface); color: var(--text-2); transition: all .15s; letter-spacing: .5px; }
+.lang-btn + .lang-btn { border-left: 1.5px solid var(--border); }
+.lang-btn.active { background: var(--brand); color: #fff; }
+.lang-btn:hover:not(.active) { background: var(--surface-2); color: var(--text); }
+
+/* ─── UTILS ──────────────────────────────────────────── */
+.hidden { display: none !important; }
+
+/* ─── MOBILE ─────────────────────────────────────────── */
+@media (max-width: 560px) {
+  .fgrid { grid-template-columns: 1fr; }
+  .card-body { padding: 16px; }
+  .card-hdr { padding: 12px 16px; }
+  .btn-row { flex-direction: column; }
+  .btn-row .btn { width: 100%; }
+  .gen-cta { flex-direction: column; align-items: stretch; }
+  .gen-cta .btn { width: 100%; }
+  .paste-area { font-size: 16px; }
+  .hdr-tag { display: none; }
+}
+</style>
+
+<!-- ══ ADMIN INTERFACE ══════════════════════════════════════ -->
+<div class="app-hdr">
+  <span class="logo">OPTIMIZART<span>€</span></span>
+  <span class="hdr-tag">Configurador de accesorios</span>
+</div>
+
+<div class="page">
+
+  <!-- PASO 1: DATOS DEL CLIENTE -->
+  <div class="card">
+    <div class="card-hdr">
+      <div class="step-n">1</div>
+      <div class="card-ttl">Datos del cliente y vehículo</div>
+    </div>
+    <div class="card-body">
+      <div class="fgrid">
+        <div class="field">
+          <label>Nombre del cliente</label>
+          <input type="text" id="clientName" autocomplete="off">
+        </div>
+        <div class="field">
+          <label>Idioma del formulario</label>
+          <div class="lang-sel">
+            <button class="lang-btn active" onclick="setLang('es')">ES</button>
+            <button class="lang-btn" onclick="setLang('ca')">CA</button>
+            <button class="lang-btn" onclick="setLang('fr')">FR</button>
+            <button class="lang-btn" onclick="setLang('en')">EN</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Teléfono del cliente (WhatsApp)</label>
+          <input type="tel" id="clientPhone" autocomplete="off">
+        </div>
+        <div class="field">
+          <label>Email del cliente</label>
+          <input type="email" id="clientEmail" autocomplete="off">
+        </div>
+        <div class="field">
+          <label>Matrícula</label>
+          <input type="text" id="plate" class="mono-f" autocomplete="off">
+        </div>
+        <div class="field">
+          <label>Marca / Modelo</label>
+          <input type="text" id="model" autocomplete="off">
+        </div>
+        <div class="field">
+          <label>Email del agente (receptor)</label>
+          <input type="email" id="agentEmail" autocomplete="off">
+        </div>
+        <div class="field">
+          <label>Fecha del formulario</label>
+          <input type="date" id="formDate">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 2: PEGAR LISTA -->
+  <div class="card">
+    <div class="card-hdr">
+      <div class="step-n">2</div>
+      <div class="card-ttl">Lista de accesorios</div>
+    </div>
+    <div class="card-body">
+      <div class="paste-hint">
+        Copie la lista directamente desde Excel y péguela aquí.<br>
+        Formato: <strong>Código [TAB] Descripción [TAB] Precio</strong> — una línea por accesorio.
+      </div>
+      <textarea class="paste-area" id="rawData" placeholder="Código	Descripción	Precio
+U12	ALFOMBRILLAS VELOURS	119,46
+221	ASIENTO DEL CONDUCTOR CON AJUSTE ELÉCTRICO	767,08
+401	ASIENTOS DELANTEROS DE CONFORT CON CALEFACCIÓN	1492,65"></textarea>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="clearAll()">Limpiar</button>
+        <button class="btn btn-brand" onclick="processData()">▶ Procesar lista</button>
+      </div>
+      <div id="parseMsg" class="parse-msg hidden"></div>
+    </div>
+  </div>
+
+  <!-- PASO 3: VISTA PREVIA (oculto hasta parsear) -->
+  <div class="card hidden" id="previewCard">
+    <div class="card-hdr">
+      <div class="step-n">3</div>
+      <div class="card-ttl">Vista previa</div>
+    </div>
+    <div class="card-body">
+      <div class="meta-row">
+        <div class="pills">
+          <span class="pill pill-brand" id="countPill">—</span>
+          <span class="pill pill-neutral" id="totalPill">—</span>
+        </div>
+        <button class="btn btn-ghost" style="padding:6px 12px;font-size:12px;min-height:36px" onclick="clearAll()">✕ Nueva lista</button>
+      </div>
+      <div class="search-bar">
+        <input class="search-in" id="searchPrev" placeholder="Buscar por código o descripción…" oninput="filterPreview()">
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Descripción</th>
+              <th class="r">Precio</th>
+            </tr>
+          </thead>
+          <tbody id="prevBody"></tbody>
+        </table>
+        <div id="prevEmpty" class="empty-state hidden">Sin resultados para esa búsqueda.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 4: GENERAR (oculto hasta parsear) -->
+  <div class="card hidden" id="generateCard">
+    <div class="card-hdr">
+      <div class="step-n">4</div>
+      <div class="card-ttl">Generar formulario para el cliente</div>
+    </div>
+    <div class="card-body">
+      <div class="gen-note">
+        El formulario <strong>.html</strong> se descargará en su equipo. A continuación se abrirá el cliente
+        de <strong>email</strong> o <strong>WhatsApp</strong> con un mensaje preparado — adjunte el archivo descargado
+        y envíelo. El cliente lo abre en su navegador, marca sus accesorios y le reenvía el resumen.
+      </div>
+      <div class="gen-cta">
+        <button class="btn btn-brand btn-lg" id="genBtnEmail" onclick="generateClientForm('email')">📧&nbsp;Enviar por email</button>
+        <button class="btn btn-brand btn-lg" id="genBtnWa" onclick="generateClientForm('wa')" style="background:#25D366;border-color:#25D366;">💬&nbsp;WhatsApp</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+var accessories = [];
+
+/* ── Init ─────────────────────────────────────────────── */
+(function() {
+  var d = new Date();
+  var y = d.getFullYear();
+  var m = String(d.getMonth() + 1).padStart(2, '0');
+  var day = String(d.getDate()).padStart(2, '0');
+  document.getElementById('formDate').value = y + '-' + m + '-' + day;
+  document.getElementById('clientPhone').value = '+34 ';
+})();
+
+var currentLang = 'es';
+
+var TRANSLATIONS = {
+  es: {
+    htag: 'Verificación de accesorios',
+    instr: 'Revise la lista y marque los accesorios que lleva su vehículo. Al terminar, pulse <strong>Email</strong> o <strong>WhatsApp</strong> para enviarnos el detalle.',
+    searchPh: 'Buscar accesorio…',
+    markAll: 'Marcar todos', unmark: 'Desmarcar',
+    thCode: 'Código', thDesc: 'Descripción', thPrice: 'Precio',
+    noResults: 'Sin resultados para esa búsqueda.',
+    cnt0: '0 accesorios seleccionados',
+    cntSingular: '1 accesorio seleccionado', cntPlural: ' accesorios seleccionados',
+    itemSg: 'accesorio', itemPl: 'accesorios',
+    alertEmpty: 'Por favor, marque al menos un accesorio antes de enviar.',
+    alertEmptyWa: 'Por favor, marque al menos un accesorio antes de compartir.',
+    emailSubjPfx: 'Accesorios vehículo – ',
+    emailSalute: 'Estimado agente,', emailIntro: 'Le envío los accesorios seleccionados para el vehículo',
+    emailSection: 'ACCESORIOS MARCADOS:', emailTotal: 'TOTAL:', emailDate: 'Fecha:', emailSign: 'Atentamente,',
+    waHead: '🚗 Accesorios – ',
+    btnEmail: '📧 Email', btnWa: '💬 WhatsApp',
+    locale: 'es-ES'
+  },
+  ca: {
+    htag: 'Verificació d\'accessoris',
+    instr: 'Revisi la llista i marqui els accessoris del seu vehicle. Quan acabi, premeu <strong>Email</strong> o <strong>WhatsApp</strong> per enviar-nos el detall.',
+    searchPh: 'Cercar accessori…',
+    markAll: 'Marcar tots', unmark: 'Desmarcar',
+    thCode: 'Codi', thDesc: 'Descripció', thPrice: 'Preu',
+    noResults: 'Sense resultats per a aquesta cerca.',
+    cnt0: '0 accessoris seleccionats',
+    cntSingular: '1 accessori seleccionat', cntPlural: ' accessoris seleccionats',
+    itemSg: 'accessori', itemPl: 'accessoris',
+    alertEmpty: 'Si us plau, marqui almenys un accessori abans d\'enviar.',
+    alertEmptyWa: 'Si us plau, marqui almenys un accessori abans de compartir.',
+    emailSubjPfx: 'Accessoris vehicle – ',
+    emailSalute: 'Estimat agent,', emailIntro: 'Li envio els accessoris seleccionats per al vehicle',
+    emailSection: 'ACCESSORIS MARCATS:', emailTotal: 'TOTAL:', emailDate: 'Data:', emailSign: 'Atentament,',
+    waHead: '🚗 Accessoris – ',
+    btnEmail: '📧 Email', btnWa: '💬 WhatsApp',
+    locale: 'ca-ES'
+  },
+  fr: {
+    htag: 'Vérification des accessoires',
+    instr: 'Vérifiez la liste et cochez les accessoires de votre véhicule. Une fois terminé, appuyez sur <strong>Email</strong> ou <strong>WhatsApp</strong> pour nous envoyer le détail.',
+    searchPh: 'Rechercher un accessoire…',
+    markAll: 'Tout cocher', unmark: 'Décocher',
+    thCode: 'Code', thDesc: 'Description', thPrice: 'Prix',
+    noResults: 'Aucun résultat pour cette recherche.',
+    cnt0: '0 accessoire sélectionné',
+    cntSingular: '1 accessoire sélectionné', cntPlural: ' accessoires sélectionnés',
+    itemSg: 'accessoire', itemPl: 'accessoires',
+    alertEmpty: 'Veuillez cocher au moins un accessoire avant d\'envoyer.',
+    alertEmptyWa: 'Veuillez cocher au moins un accessoire avant de partager.',
+    emailSubjPfx: 'Accessoires véhicule – ',
+    emailSalute: 'Monsieur/Madame,', emailIntro: 'Je vous envoie les accessoires sélectionnés pour le véhicule',
+    emailSection: 'ACCESSOIRES COCHÉS :', emailTotal: 'TOTAL :', emailDate: 'Date :', emailSign: 'Cordialement,',
+    waHead: '🚗 Accessoires – ',
+    btnEmail: '📧 Email', btnWa: '💬 WhatsApp',
+    locale: 'fr-FR'
+  },
+  en: {
+    htag: 'Accessories verification',
+    instr: 'Review the list and tick the accessories your vehicle has. When done, press <strong>Email</strong> or <strong>WhatsApp</strong> to send us the details.',
+    searchPh: 'Search accessory…',
+    markAll: 'Select all', unmark: 'Deselect',
+    thCode: 'Code', thDesc: 'Description', thPrice: 'Price',
+    noResults: 'No results for this search.',
+    cnt0: '0 accessories selected',
+    cntSingular: '1 accessory selected', cntPlural: ' accessories selected',
+    itemSg: 'accessory', itemPl: 'accessories',
+    alertEmpty: 'Please tick at least one accessory before sending.',
+    alertEmptyWa: 'Please tick at least one accessory before sharing.',
+    emailSubjPfx: 'Vehicle accessories – ',
+    emailSalute: 'Dear agent,', emailIntro: 'I am sending the selected accessories for the vehicle',
+    emailSection: 'CHECKED ACCESSORIES:', emailTotal: 'TOTAL:', emailDate: 'Date:', emailSign: 'Kind regards,',
+    waHead: '🚗 Accessories – ',
+    btnEmail: '📧 Email', btnWa: '💬 WhatsApp',
+    locale: 'en-GB'
+  }
+};
+
+var ADMIN_MSGS = {
+  es: {
+    waMsg: function(cn, pl) { return 'Adjuntamos el formulario de posibles accesorios que puede llevar tu vehículo'+(pl?' '+pl:'')+'.\nÁbrelo, marca los accesorios que lleva tu vehículo y pulsa «WhatsApp» o «Email» para enviarnos el detalle.'; },
+    emailSubj: function(cn, pl) { return 'Formulario de accesorios'+(cn?' – '+cn:'')+(pl?' ('+pl+')':''); },
+    emailBody: function(cn, pl) { return 'Hola '+cn+',\n\nTe adjunto el formulario de verificación de accesorios'+(pl?' para tu vehículo '+pl:'')+'.\nPor favor, ábrelo con tu navegador, marca los accesorios que lleva tu vehículo y envíame el resumen por WhatsApp o email.\n\nUn saludo,\nOPTIMIZARTE'; }
+  },
+  ca: {
+    waMsg: function(cn, pl) { return 'Adjuntem el formulari dels possibles accessoris del teu vehicle'+(pl?' '+pl:'')+'.\nObre\'l, marca els accessoris que porta el teu vehicle i prem «WhatsApp» o «Email» per enviar-nos el detall.'; },
+    emailSubj: function(cn, pl) { return 'Formulari d\'accessoris'+(cn?' – '+cn:'')+(pl?' ('+pl+')':''); },
+    emailBody: function(cn, pl) { return 'Hola '+cn+',\n\nT\'adjunto el formulari de verificació d\'accessoris'+(pl?' per al teu vehicle '+pl:'')+'.\nSi us plau, obre\'l amb el teu navegador, marca els accessoris del teu vehicle i envia\'m el resum per WhatsApp o email.\n\nUna salutació,\nOPTIMIZARTE'; }
+  },
+  fr: {
+    waMsg: function(cn, pl) { return 'Nous vous joignons le formulaire des accessoires possibles pour votre véhicule'+(pl?' '+pl:'')+'.\nOuvrez-le, cochez les accessoires de votre véhicule et appuyez sur «WhatsApp» ou «Email» pour nous envoyer le détail.'; },
+    emailSubj: function(cn, pl) { return 'Formulaire d\'accessoires'+(cn?' – '+cn:'')+(pl?' ('+pl+')':''); },
+    emailBody: function(cn, pl) { return 'Bonjour '+cn+',\n\nVeuillez trouver ci-joint le formulaire de vérification des accessoires'+(pl?' pour votre véhicule '+pl:'')+'.\nMerci de l\'ouvrir dans votre navigateur, de cocher les accessoires de votre véhicule et de nous envoyer le récapitulatif par WhatsApp ou email.\n\nCordialement,\nOPTIMIZARTE'; }
+  },
+  en: {
+    waMsg: function(cn, pl) { return 'Please find attached the accessories form for your vehicle'+(pl?' '+pl:'')+'.\nOpen it, tick the accessories your vehicle has and press «WhatsApp» or «Email» to send us the details.'; },
+    emailSubj: function(cn, pl) { return 'Vehicle accessories form'+(cn?' – '+cn:'')+(pl?' ('+pl+')':''); },
+    emailBody: function(cn, pl) { return 'Hello '+cn+',\n\nPlease find attached the accessories verification form'+(pl?' for your vehicle '+pl:'')+'.\nPlease open it in your browser, tick the accessories your vehicle has and send us the summary via WhatsApp or email.\n\nKind regards,\nOPTIMIZARTE'; }
+  }
+};
+
+function setLang(l) {
+  currentLang = l;
+  document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.textContent.toLowerCase() === l);
+  });
+}
+
+/* ── Utilities ────────────────────────────────────────── */
+function fmt(n) {
+  return new Intl.NumberFormat('es-ES', {
+    style: 'currency', currency: 'EUR',
+    minimumFractionDigits: 2, maximumFractionDigits: 2
+  }).format(n);
+}
+function eh(s) {
+  return String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function ej(s) {
+  return String(s)
+    .replace(/\\/g, '\\\\')
+    .replace(/'/g, "\\'")
+    .replace(/\n/g, '\\n');
+}
+function showMsg(html) {
+  var el = document.getElementById('parseMsg');
+  el.innerHTML = html;
+  el.classList.remove('hidden');
+}
+function hideMsg() {
+  document.getElementById('parseMsg').classList.add('hidden');
+}
+
+/* ── Separator detection ──────────────────────────────── */
+function detectSep(lines) {
+  for (var i = 0; i < lines.length; i++) {
+    var ln = lines[i].trim();
+    if (!ln) continue;
+    if (ln.indexOf('\t') >= 0) return 'tab';
+    if ((ln.match(/;/g) || []).length >= 2) return 'semi';
+    if (/\s{2,}/.test(ln)) return 'spaces';
+  }
+  return 'tab'; /* default — let it fail gracefully */
+}
+
+function splitLine(ln, sep) {
+  if (sep === 'tab')   return ln.split('\t');
+  if (sep === 'semi')  return ln.split(';');
+  if (sep === 'spaces') return ln.trim().split(/\s{2,}/);
+  return ln.split('\t');
+}
+
+/* ── Parse & preview ──────────────────────────────────── */
+function processData() {
+  hideMsg();
+  var raw = document.getElementById('rawData').value.trim();
+
+  if (!raw) {
+    showMsg('<strong>Sin datos.</strong> Pegue la lista de accesorios copiada desde Excel.');
+    return;
+  }
+
+  var lines = raw.split(/\r?\n/);
+  var sep = detectSep(lines);
+  var parsed = [];
+  var skipped = 0;
+
+  for (var i = 0; i < lines.length; i++) {
+    var ln = lines[i];
+    if (!ln.trim()) continue;
+
+    var parts = splitLine(ln, sep);
+    // Strip leading empty fields (Gestiona exports a leading tab before each row)
+    while (parts.length > 0 && parts[0].trim() === '') { parts.shift(); }
+    if (parts.length < 3) { skipped++; continue; }
+
+    var code = parts[0].trim();
+    var desc = parts[1].trim();
+    var priceRaw = parts[2].trim()
+      .replace(/[€$\s]/g, '')
+      .replace(/\./g, '')
+      .replace(',', '.');
+    var price = parseFloat(priceRaw);
+
+    if (!code || !desc || isNaN(price)) { skipped++; continue; }
+
+    /* Skip header row */
+    var cl = code.toLowerCase();
+    var dl = desc.toLowerCase();
+    if (cl === 'código' || cl === 'codigo' ||
+        dl === 'descripción' || dl === 'descripcion') continue;
+
+    parsed.push({ code: code, desc: desc, price: price, idx: parsed.length });
+  }
+
+  if (!parsed.length) {
+    showMsg(
+      '<strong>No se han podido extraer datos.</strong><br>' +
+      'Asegúrese de copiar directamente desde Excel (seleccione las celdas → Ctrl+C) ' +
+      'y pegar aquí (Ctrl+V / ⌘+V).<br>' +
+      '<em>Formato esperado: Código [TAB] Descripción [TAB] Precio — una fila por accesorio.</em>'
+    );
+    return;
+  }
+
+  accessories = parsed;
+  renderPreview('');
+  document.getElementById('previewCard').classList.remove('hidden');
+  document.getElementById('generateCard').classList.remove('hidden');
+  if (skipped > 0) {
+    showMsg(skipped + ' línea' + (skipped !== 1 ? 's' : '') + ' ignorada' + (skipped !== 1 ? 's' : '') +
+      ' (sin formato válido). El resto se procesó correctamente.');
+  }
+  setTimeout(function() {
+    document.getElementById('previewCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 80);
+}
+
+function renderPreview(filter) {
+  var items = filter
+    ? accessories.filter(function(a) {
+        return a.code.toLowerCase().indexOf(filter) >= 0 ||
+               a.desc.toLowerCase().indexOf(filter) >= 0;
+      })
+    : accessories;
+
+  var tbody = document.getElementById('prevBody');
+  var empty = document.getElementById('prevEmpty');
+
+  if (!items.length) {
+    tbody.innerHTML = '';
+    empty.classList.remove('hidden');
+  } else {
+    empty.classList.add('hidden');
+    tbody.innerHTML = items.map(function(a) {
+      return '<tr>' +
+        '<td class="td-code">' + eh(a.code) + '</td>' +
+        '<td class="td-desc">' + eh(a.desc) + '</td>' +
+        '<td class="td-price">' + fmt(a.price) + '</td>' +
+        '</tr>';
+    }).join('');
+  }
+
+  var total = accessories.reduce(function(s, a) { return s + a.price; }, 0);
+  document.getElementById('countPill').textContent =
+    accessories.length + ' accesorio' + (accessories.length !== 1 ? 's' : '');
+  document.getElementById('totalPill').textContent = 'Total catálogo: ' + fmt(total);
+}
+
+function filterPreview() {
+  renderPreview(document.getElementById('searchPrev').value.toLowerCase().trim());
+}
+
+function clearAll() {
+  accessories = [];
+  document.getElementById('rawData').value = '';
+  var sp = document.getElementById('searchPrev');
+  if (sp) sp.value = '';
+  document.getElementById('previewCard').classList.add('hidden');
+  document.getElementById('generateCard').classList.add('hidden');
+  hideMsg();
+}
+
+/* ── Generate client form ─────────────────────────────── */
+function generateClientForm(mode) {
+  if (!accessories.length) {
+    showMsg('<strong>Sin datos.</strong> Primero procese la lista de accesorios en el Paso 2.');
+    return;
+  }
+
+  var clientName  = document.getElementById('clientName').value.trim() || 'Cliente';
+  var clientEmail = document.getElementById('clientEmail').value.trim() || '';
+  var clientPhone = document.getElementById('clientPhone').value.trim() || '';
+  var plate       = document.getElementById('plate').value.toUpperCase().trim() || '';
+  var model       = document.getElementById('model').value.trim() || '';
+  var agentEmail  = document.getElementById('agentEmail').value.trim() || '';
+  var rawDate = document.getElementById('formDate').value;
+  var dateStr = '';
+  if (rawDate) {
+    var dp = rawDate.split('-');
+    dateStr = dp[2] + '/' + dp[1] + '/' + dp[0];
+  }
+
+  var html  = buildClientHTML(clientName, plate, model, dateStr, agentEmail, accessories, clientPhone, currentLang);
+  var fname = 'accesorios_' + (plate || clientName.replace(/\s+/g, '_') || 'cliente') + '.html';
+
+  /* Disparar enlace de envío sincrónicamente (mismo tick de click = sin bloqueador de popups) */
+  if (mode === 'email') {
+    var subj = encodeURIComponent(ADMIN_MSGS[currentLang].emailSubj(clientName, plate));
+    var emailBody = encodeURIComponent(ADMIN_MSGS[currentLang].emailBody(clientName, plate));
+    /* mailto: SIN target="_blank" para que funcione en el iframe del artifact */
+    var aEmail = document.createElement('a');
+    aEmail.href = 'mailto:' + clientEmail + '?subject=' + subj + '&body=' + emailBody;
+    document.body.appendChild(aEmail);
+    aEmail.click();
+    document.body.removeChild(aEmail);
+  } else if (mode === 'wa') {
+    /* Extraer solo dígitos para wa.me (ej: "+34 612 345 678" → "34612345678") */
+    var phoneDigits = clientPhone.replace(/\D/g, '');
+    var waMsg = ADMIN_MSGS[currentLang].waMsg(clientName, plate);
+    var aWa = document.createElement('a');
+    aWa.href = 'https://wa.me/' + phoneDigits + '?text=' + encodeURIComponent(waMsg);
+    aWa.target = '_blank';
+    aWa.rel = 'noopener noreferrer';
+    document.body.appendChild(aWa);
+    aWa.click();
+    document.body.removeChild(aWa);
+  }
+
+  /* Descarga del formulario HTML */
+  try {
+    var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    var dlUrl = URL.createObjectURL(blob);
+    var aDl = document.createElement('a');
+    aDl.href = dlUrl;
+    aDl.download = fname;
+    document.body.appendChild(aDl);
+    aDl.click();
+    document.body.removeChild(aDl);
+    setTimeout(function() { URL.revokeObjectURL(dlUrl); }, 5000);
+  } catch(e) {
+    showMsg('No se pudo generar la descarga: ' + String(e));
+  }
+}
+
+/* ── Client HTML builder ──────────────────────────────── */
+function buildClientHTML(clientName, plate, model, dateStr, agentEmail, accs, clientPhone, lang) {
+
+  var T = TRANSLATIONS[lang || 'es'];
+  var runtimeT = JSON.stringify({
+    cntSingular: T.cntSingular, cntPlural: T.cntPlural, cnt0: T.cnt0,
+    itemSg: T.itemSg, itemPl: T.itemPl,
+    alertEmpty: T.alertEmpty, alertEmptyWa: T.alertEmptyWa,
+    emailSubjPfx: T.emailSubjPfx, emailSalute: T.emailSalute,
+    emailIntro: T.emailIntro, emailSection: T.emailSection,
+    emailTotal: T.emailTotal, emailDate: T.emailDate, emailSign: T.emailSign,
+    waHead: T.waHead, locale: T.locale
+  }).replace(/`/g, '\\x60').replace(/<\//g, '<\\/');
+
+  var accsJson = JSON.stringify(accs.map(function(a) {
+    return { code: a.code, desc: a.desc, price: a.price };
+  })).replace(/`/g, '\\x60');
+
+  var phoneTrimmed = clientPhone ? clientPhone.trim() : '';
+
+  var bannerItems = '';
+  bannerItems += mkInfo('Cliente',   eh(clientName), false);
+  if (plate)        bannerItems += mkInfo('Matrícula', eh(plate),        true);
+  if (model)        bannerItems += mkInfo('Vehículo',  eh(model),        false);
+  if (phoneTrimmed) bannerItems += mkInfo('Teléfono',  eh(phoneTrimmed), false);
+  if (dateStr)      bannerItems += mkInfo('Fecha',     eh(dateStr),      false);
+
+  function mkInfo(label, val, mono) {
+    return '<div class="bi"><div class="bi-l">' + label + '</div>' +
+           '<div class="bi-v' + (mono ? ' mono' : '') + '">' + val + '</div></div>';
+  }
+
+  var clientScript = [
+    'var T=' + runtimeT + ';',
+    'var A = ' + accsJson + ';',
+    'var AE = \'' + ej(agentEmail) + '\';',
+    'var CN = \'' + ej(clientName) + '\';',
+    'var PL = \'' + ej(plate)      + '\';',
+    'var MD = \'' + ej(model)      + '\';',
+    'A.forEach(function(a,i){ a._i=i; a._c=false; });',
+    'var cur=\'\';',
+
+    'function fmt(n){',
+    '  return new Intl.NumberFormat(\'es-ES\',{',
+    '    style:\'currency\',currency:\'EUR\',',
+    '    minimumFractionDigits:2,maximumFractionDigits:2',
+    '  }).format(n);',
+    '}',
+
+    'function eh(s){',
+    '  return String(s).replace(/&/g,\'&amp;\').replace(/</g,\'&lt;\').replace(/>/g,\'&gt;\');',
+    '}',
+
+    'function fi(){',
+    '  return cur?A.filter(function(a){',
+    '    return a.code.toLowerCase().indexOf(cur)>=0||',
+    '           a.desc.toLowerCase().indexOf(cur)>=0;',
+    '  }):A.slice();',
+    '}',
+
+    'function rt(items){',
+    '  var tb=document.getElementById(\'tb\');',
+    '  var nr=document.getElementById(\'nr\');',
+    '  if(!items.length){tb.innerHTML=\'\';nr.classList.remove(\'hdn\');return;}',
+    '  nr.classList.add(\'hdn\');',
+    '  tb.innerHTML=items.map(function(a){',
+    '    return \'<tr id="r\'+a._i+\'" class="\'+(a._c?\'ck\':\'\')+\'">\'+',
+    '      \'<td class="tdc"><input type="checkbox" \'+(a._c?\'checked\':\'\')+\' onchange="tg(\'+a._i+\')" /></td>\'+',
+    '      \'<td class="tda">\'+eh(a.code)+\'</td>\'+',
+    '      \'<td class="tdb">\'+eh(a.desc)+\'</td>\'+',
+    '      \'<td class="tdp">\'+fmt(a.price)+\'</td>\'+',
+    '      \'</tr>\';',
+    '  }).join(\'\');',
+    '}',
+
+    'function tg(i){',
+    '  A[i]._c=!A[i]._c;',
+    '  var r=document.getElementById(\'r\'+i);',
+    '  if(r)r.className=A[i]._c?\'ck\':\'\';',
+    '  us();',
+    '}',
+
+    'function ft(){',
+    '  cur=document.getElementById(\'si\').value.toLowerCase().trim();',
+    '  rt(fi());',
+    '}',
+
+    'function sa(){fi().forEach(function(a){a._c=true;});rt(fi());us();}',
+    'function ca(){A.forEach(function(a){a._c=false;});rt(fi());us();}',
+
+    'function us(){',
+    '  var sel=A.filter(function(a){return a._c;});',
+    '  var tot=sel.reduce(function(s,a){return s+a.price;},0);',
+    '  document.getElementById(\'sct\').textContent=',
+    '    sel.length===1?T.cntSingular:sel.length+T.cntPlural;',
+    '  document.getElementById(\'stot\').textContent=fmt(tot);',
+    '}',
+
+    'function se(){',
+    '  var sel=A.filter(function(a){return a._c;});',
+    '  if(!sel.length){alert(T.alertEmpty);return;}',
+    '  var tot=sel.reduce(function(s,a){return s+a.price;},0);',
+    '  var subj=encodeURIComponent(T.emailSubjPfx+CN+(PL?\' (\'+PL+\')\':\'\')); ',
+    '  var B=[];',
+    '  B.push(T.emailSalute);B.push(\'\');',
+    '  B.push(T.emailIntro+(PL?\' \'+PL:\'\')+(MD?\' (\'+MD+\')\':\'\')+\':\');',
+    '  B.push(\'\');B.push(T.emailSection);',
+    '  sel.forEach(function(a){',
+    '    B.push(\'\u2022 [\'+a.code+\'] \'+a.desc+\'  \u2014  \'+fmt(a.price));',
+    '  });',
+    '  B.push(\'\');',
+    '  B.push(T.emailTotal+\' \'+fmt(tot)+\'  (\'+sel.length+\' \'+(sel.length!==1?T.itemPl:T.itemSg)+\')\');',
+    '  B.push(\'\');B.push(T.emailDate+\' \'+new Date().toLocaleDateString(T.locale));',
+    '  B.push(\'\');B.push(T.emailSign);B.push(CN);',
+    '  var aE=document.createElement(\'a\');',
+    '  aE.href=\'mailto:\'+AE+\'?subject=\'+subj+\'&body=\'+encodeURIComponent(B.join(\'\\n\'));',
+    '  document.body.appendChild(aE);aE.click();document.body.removeChild(aE);',
+    '}',
+
+    'function sw(){',
+    '  var sel=A.filter(function(a){return a._c;});',
+    '  if(!sel.length){alert(T.alertEmptyWa);return;}',
+    '  var tot=sel.reduce(function(s,a){return s+a.price;},0);',
+    '  var L=[];',
+    '  L.push(T.waHead+CN+(PL?\' (\'+PL+\')\':\'\')); ',
+    '  if(MD)L.push(MD);',
+    '  L.push(\'\');',
+    '  sel.forEach(function(a){',
+    '    L.push(\'\u2022 [\'+a.code+\'] \'+a.desc+\'  \u2014  \'+fmt(a.price));',
+    '  });',
+    '  L.push(\'\');',
+    '  L.push(T.emailTotal+\' \'+fmt(tot)+\'  (\'+sel.length+\' \'+(sel.length!==1?T.itemPl:T.itemSg)+\')\');',
+    '  window.open(\'https://wa.me/34647568360?text=\'+encodeURIComponent(L.join(\'\\n\')),\'_blank\');',
+    '}',
+
+    'rt(A);us();'
+  ].join('\n');
+
+  /* ── Assemble client HTML ─────────────────────────── */
+  var lines = [];
+  lines.push('<!DOCTYPE html>');
+  lines.push('<html lang="' + (lang || 'es') + '">');
+  lines.push('<head>');
+  lines.push('<meta charset="UTF-8">');
+  lines.push('<meta name="viewport" content="width=device-width,initial-scale=1.0">');
+  lines.push('<title>Accesorios \u2013 ' + eh(clientName) + (plate ? ' (' + eh(plate) + ')' : '') + '</title>');
+  lines.push('<link rel="preconnect" href="https://fonts.googleapis.com">');
+  lines.push('<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>');
+  lines.push('<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">');
+  lines.push('<style>');
+
+  /* CSS tokens */
+  lines.push(':root{--bg:#F3F0EC;--sf:#fff;--sf2:#EAE7E2;--bd:#E2DDD9;--tx:#0F1923;--tx2:#64615D;--tx3:#A09C98;--br:#DC0028;--brd:#B5001F;--brt:rgba(220,0,40,.07);--gn:#1A7A4B;--gnb:#EAF6F0;--r:10px}');
+  lines.push('@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0F1923;--sf:#162030;--sf2:#1D2C3C;--bd:#283848;--tx:#EDE9E4;--tx2:#9A9590;--tx3:#5C5854;--br:#FF3352;--brd:#E6002D;--brt:rgba(255,51,82,.1);--gn:#29AA6D;--gnb:rgba(41,170,109,.12)}}');
+  lines.push(':root[data-theme=dark]{--bg:#0F1923;--sf:#162030;--sf2:#1D2C3C;--bd:#283848;--tx:#EDE9E4;--tx2:#9A9590;--tx3:#5C5854;--br:#FF3352;--brd:#E6002D;--brt:rgba(255,51,82,.1);--gn:#29AA6D;--gnb:rgba(41,170,109,.12)}');
+  lines.push('*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}');
+  lines.push('body{font-family:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;padding-bottom:108px;font-size:15px;line-height:1.5}');
+
+  /* Header — BLACK */
+  lines.push('.hdr{background:#0F1923;height:54px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.35)}');
+  lines.push('.logo{font-size:18px;font-weight:800;color:#fff;letter-spacing:-.4px}.logo span{opacity:.5;font-weight:400}');
+  lines.push('.htag{font-size:10px;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:1.2px}');
+
+  /* Banner */
+  lines.push('.banner{background:var(--sf);border-bottom:1px solid var(--bd);padding:12px 20px;display:flex;flex-wrap:wrap;gap:16px 24px}');
+  lines.push('.bi{display:flex;flex-direction:column;gap:2px}.bi-l{font-size:10px;font-weight:800;color:var(--tx3);text-transform:uppercase;letter-spacing:.7px}.bi-v{font-size:13px;font-weight:700;color:var(--tx)}.bi-v.mono{font-family:"Courier New",monospace;letter-spacing:1.5px;text-transform:uppercase}');
+
+  /* Layout */
+  lines.push('.wrap{max-width:860px;margin:0 auto;padding:16px 16px 0}');
+  lines.push('.instr{background:var(--sf);border:1px solid var(--bd);border-left:4px solid var(--br);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--tx2);margin-bottom:14px;line-height:1.65}');
+
+  /* Toolbar */
+  lines.push('.tb{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}');
+  lines.push('.si{flex:1;min-width:160px;height:46px;border:1.5px solid var(--bd);border-radius:7px;padding:0 12px;font-size:16px;font-family:inherit;color:var(--tx);background:var(--sf);outline:none;-webkit-appearance:none;transition:border-color .15s}.si:focus{border-color:var(--br)}');
+
+  /* Buttons */
+  lines.push('.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:9px 16px;border-radius:7px;border:none;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit;transition:all .15s;white-space:nowrap;min-height:44px;-webkit-tap-highlight-color:transparent}');
+  lines.push('.bgh{background:var(--sf);color:var(--tx2);border:1.5px solid var(--bd)}.bgh:hover{background:var(--sf2)}');
+  lines.push('.bbr{background:var(--br);color:#fff}.bbr:hover{background:var(--brd)}');
+  lines.push('.bwp{background:#25D366;color:#fff;border:none;font-size:14px;padding:9px 18px}.bwp:hover{background:#1da851}');
+
+  /* Card + table */
+  lines.push('.card{background:var(--sf);border-radius:var(--r);border:1px solid var(--bd);overflow:hidden;margin-bottom:12px}');
+  lines.push('.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}');
+  lines.push('table{width:100%;border-collapse:collapse;font-size:13px}');
+  lines.push('thead th{background:var(--sf2);padding:8px 10px;text-align:left;font-size:10px;font-weight:800;color:var(--tx3);text-transform:uppercase;letter-spacing:.7px;border-bottom:1px solid var(--bd);white-space:nowrap}');
+  lines.push('th.r{text-align:right}th.c{text-align:center;width:44px}');
+  lines.push('tbody td{padding:10px 10px;border-bottom:1px solid var(--bd);color:var(--tx);vertical-align:middle}');
+  lines.push('tbody tr:last-child td{border-bottom:none}');
+  lines.push('tbody tr.ck{background:var(--gnb)}');
+  lines.push('tbody tr:not(.ck):hover td{background:var(--brt)}');
+  lines.push('.tdc{text-align:center;width:44px}');
+  lines.push('.tda{font-family:"Courier New",monospace;font-weight:700;color:var(--br);font-size:11px;white-space:nowrap;width:74px}');
+  lines.push('.tdb{color:var(--tx2)}');
+  lines.push('.tdp{text-align:right;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;width:110px}');
+  lines.push('input[type=checkbox]{width:22px;height:22px;cursor:pointer;accent-color:var(--gn);flex-shrink:0}');
+
+  /* Sticky bar */
+  lines.push('.sbar{position:fixed;bottom:0;left:0;right:0;background:var(--sf);border-top:2px solid var(--bd);padding:10px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:10px;box-shadow:0 -4px 18px rgba(0,0,0,.12);z-index:10}');
+  lines.push('.si2{display:flex;flex-direction:column;gap:2px;min-width:0;flex-shrink:0}.sct{font-size:11px;font-weight:600;color:var(--tx2)}.stot{font-size:20px;font-weight:800;color:var(--br);font-variant-numeric:tabular-nums;white-space:nowrap}');
+  lines.push('.sacts{margin-left:auto;display:flex;gap:7px;flex-wrap:wrap;align-items:center}');
+  lines.push('.nr{padding:32px;text-align:center;color:var(--tx3);font-size:13px}');
+  lines.push('.hdn{display:none!important}');
+
+  /* Mobile responsive */
+  lines.push('@media(max-width:560px){');
+  lines.push('.sbar{flex-direction:column;align-items:stretch;padding:10px 14px;gap:8px}');
+  lines.push('.si2{flex-direction:row;align-items:baseline;justify-content:space-between}');
+  lines.push('.sacts{margin-left:0;display:flex;flex-direction:column;gap:6px}');
+  lines.push('.sacts .btn{width:100%}');
+  lines.push('.stot{font-size:18px}');
+  lines.push('.tda{display:none}');
+  lines.push('th.hc{display:none}');
+  lines.push('.htag{display:none}');
+  lines.push('}');
+
+  /* Print */
+  lines.push('@media print{.tb,.sbar,.hdr{display:none!important}.instr{border-left:none}.banner{position:static}body{background:#fff;padding-bottom:0}.card{box-shadow:none}}');
+
+  lines.push('</style>');
+  lines.push('</head><body>');
+
+  /* Header */
+  lines.push('<div class="hdr"><span class="logo">OPTIMIZART<span>\u20ac</span></span><span class="htag">' + T.htag + '</span></div>');
+
+  /* Info banner */
+  lines.push('<div class="banner">' + bannerItems + '</div>');
+
+  /* Main content */
+  lines.push('<div class="wrap">');
+  lines.push('<div class="tb">');
+  lines.push('<input class="si" id="si" type="search" placeholder="' + T.searchPh + '" oninput="ft()">');
+  lines.push('<button class="btn bgh" onclick="sa()">' + T.markAll + '</button>');
+  lines.push('<button class="btn bgh" onclick="ca()">' + T.unmark + '</button>');
+  lines.push('</div>');
+
+  lines.push('<div class="card"><div class="tw"><table>');
+  lines.push('<thead><tr><th class="c">\u2713</th><th class="hc">' + T.thCode + '</th><th>' + T.thDesc + '</th><th class="r">' + T.thPrice + '</th></tr></thead>');
+  lines.push('<tbody id="tb"></tbody>');
+  lines.push('</table>');
+  lines.push('<div id="nr" class="nr hdn">' + T.noResults + '</div>');
+  lines.push('</div></div>');
+  lines.push('</div>');
+
+  /* Sticky action bar */
+  lines.push('<div class="sbar">');
+  lines.push('<div class="si2">');
+  lines.push('<div class="sct" id="sct">' + T.cnt0 + '</div>');
+  lines.push('<div class="stot" id="stot">0,00\u00a0\u20ac</div>');
+  lines.push('</div>');
+  lines.push('<div class="sacts">');
+  lines.push('<button class="btn bbr" onclick="se()">' + T.btnEmail + '</button>');
+  lines.push('<button class="btn bwp" onclick="sw()">' + T.btnWa + '</button>');
+  lines.push('</div>');
+  lines.push('</div>');
+
+  lines.push('<script>');
+  lines.push(clientScript);
+  lines.push('<\/script>');
+  lines.push('</body></html>');
+
+  return lines.join('\n');
+}
+</script>

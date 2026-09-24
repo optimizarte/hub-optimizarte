@@ -455,6 +455,19 @@ button { font-family: var(--font); }
   font-size: 10.5px; font-weight: 600;
   color: var(--red); text-transform: uppercase; letter-spacing: .5px;
 }
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  min-width: 0;
+}
+.card-tag {
+  font-size: 9.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .4px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
 .card-arrow {
   width: 26px; height: 26px; border-radius: 50%;
   background: var(--bg);
@@ -480,6 +493,109 @@ button { font-family: var(--font); }
 }
 .card-add:hover { border-color: var(--red); color: var(--red); background: var(--red-light); }
 .card-add span { font-size: 12.5px; font-weight: 600; }
+.card-add.drag-over {
+  border-color: var(--red);
+  background: var(--red-light);
+  color: var(--red);
+  box-shadow: 0 0 0 3px rgba(220,0,40,0.12) inset;
+}
+.card-add-hint { font-size: 10.5px; font-weight: 400; color: var(--gray-3); }
+
+/* Add-tool overlay — works on desktop AND mobile (not gated by the 768px modal rule) */
+.add-tool-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 500;
+  padding: 16px;
+}
+.add-tool-overlay.open { display: flex; }
+.add-tool-box {
+  background: var(--white);
+  border-radius: var(--radius);
+  width: 100%; max-width: 420px;
+  max-height: 88vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-md);
+}
+.add-tool-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--gray-4);
+  font-size: 14px; font-weight: 700; color: var(--dark);
+}
+.add-tool-body { padding: 18px; }
+.add-dropzone {
+  border: 2px dashed var(--gray-4);
+  border-radius: var(--radius-sm);
+  padding: 30px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .18s;
+}
+.add-dropzone:hover, .add-dropzone.drag-over {
+  border-color: var(--red);
+  background: var(--red-light);
+}
+.add-dropzone .adz-icon { font-size: 30px; line-height: 1; }
+.add-dropzone .adz-title { font-size: 13.5px; font-weight: 600; color: var(--dark); margin-top: 8px; }
+.add-dropzone .adz-sub { font-size: 12px; color: var(--gray-2); margin-top: 3px; }
+
+.add-item {
+  border: 1px solid var(--gray-4);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  margin-bottom: 10px;
+}
+.add-item label {
+  display: block; font-size: 10.5px; font-weight: 700;
+  color: var(--gray-2); text-transform: uppercase; letter-spacing: .5px;
+  margin: 8px 0 4px;
+}
+.add-item label:first-child { margin-top: 0; }
+.add-item input[type="text"], .add-item select {
+  width: 100%;
+  border: 1.5px solid var(--gray-4);
+  border-radius: 7px;
+  padding: 8px 10px;
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--dark);
+  outline: none;
+  background: var(--white);
+}
+.add-item input[type="text"]:focus, .add-item select:focus { border-color: var(--red); }
+.add-item-file { font-size: 11px; color: var(--gray-3); margin-top: 6px; word-break: break-all; }
+
+.add-actions { display: flex; gap: 10px; margin-top: 4px; }
+.add-btn {
+  flex: 1;
+  border: none; border-radius: 8px;
+  padding: 11px;
+  font-family: var(--font); font-size: 13.5px; font-weight: 700;
+  cursor: pointer;
+}
+.add-btn-primary { background: var(--red); color: white; }
+.add-btn-primary:hover { background: var(--red-dark); }
+.add-btn-ghost { background: var(--bg); color: var(--gray); }
+.add-btn-ghost:hover { background: var(--gray-4); }
+
+.card-remove-btn {
+  position: absolute; top: 10px; right: 10px;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.92);
+  border: 1px solid var(--gray-4);
+  color: var(--gray-2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; line-height: 1;
+  cursor: pointer;
+  opacity: 0; transition: opacity .15s;
+  z-index: 2;
+}
+.tool-card:hover .card-remove-btn { opacity: 1; }
+.card-remove-btn:hover { background: var(--red-light); color: var(--red); border-color: var(--red); }
 
 /* ═══════════════════════════════════════════════
    DRAG & DROP REORDER — grid-live
@@ -760,6 +876,31 @@ button { font-family: var(--font); }
 .card-category-wrap{position:relative;display:flex;align-items:center;gap:5px;}
 .cat-edit-btn{background:none;border:none;cursor:pointer;padding:2px 4px;border-radius:4px;color:var(--gray-3);font-size:12px;transition:all .15s;line-height:1;}
 .cat-edit-btn:hover{color:var(--red);background:var(--red-light);}
+.cat-ms{ min-width: 220px; max-height: 320px; overflow-y: auto; }
+.cat-ms-list{ display:flex; flex-direction:column; }
+.cat-ms-opt{
+  display:flex; align-items:center; gap:8px;
+  padding:6px 12px; cursor:pointer; font-family:'Inter',sans-serif;
+  transition: background .1s;
+}
+.cat-ms-opt:hover{ background: var(--red-light); }
+.cat-ms-opt input[type="checkbox"]{ flex-shrink:0; cursor:pointer; accent-color: var(--red); }
+.cat-ms-dot{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.cat-ms-lbl{ flex:1; font-size:12px; color:var(--dark); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cat-ms-ren{
+  flex-shrink:0; background:none; border:none; cursor:pointer;
+  padding:2px 4px; border-radius:4px; color:var(--gray-3); font-size:11px;
+  opacity:0; transition: all .15s;
+}
+.cat-ms-opt:hover .cat-ms-ren{ opacity:1; }
+.cat-ms-ren:hover{ color:var(--red); background:#fff; }
+.cat-ms-save{
+  display:block; width:calc(100% - 20px); margin:8px 10px 6px;
+  background:var(--red); color:#fff; border:none; border-radius:6px;
+  padding:8px; font-size:12px; font-weight:700; cursor:pointer;
+  font-family:'Inter',sans-serif;
+}
+.cat-ms-save:hover{ background:var(--red-dark); }
 
 /* ── EDITABLE CATEGORY LABELS ── */
 /* ── CREATE NEW CAT ── */
@@ -1016,7 +1157,7 @@ button { font-family: var(--font); }
           <div class="card-desc">Infografia de seguiment mensual de vendes: KPIs, bonos, objectius i evolució de l'agència Optimizarte 3.0.</div>
           <div id="seg-folder-info" style="font-size:10.5px;color:var(--gray-2);margin:2px 0;display:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#7c3aed;">Anàlisi</span>
+            <div class="card-tags"><span class="card-tag" style="color:#7c3aed;background:rgba(124,58,237,0.12);">Anàlisi</span></div>
             <div style="display:flex;gap:6px;align-items:center;">
               <button id="seg-folder-btn" onclick="pickSeguimentFolder(event)"
                 style="background:none;border:1.5px solid var(--border);border-radius:5px;padding:3px 8px;font-size:10.5px;font-weight:600;cursor:pointer;color:var(--gray);font-family:'Inter',sans-serif;white-space:nowrap;"
@@ -1055,7 +1196,7 @@ button { font-family: var(--font); }
           <div class="card-title">Calendari de Pagaments</div>
           <div class="card-desc">Generador de calendaris de venciments i fraccionament de primes per pòlisses. Visualització mensual i anual.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#d97706;">Pagaments</span>
+            <div class="card-tags"><span class="card-tag" style="color:#d97706;background:rgba(217,119,6,0.12);">Pagaments</span></div>
             <div class="card-arrow">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path d="m9 18 6-6-6-6"/>
@@ -1090,7 +1231,7 @@ button { font-family: var(--font); }
           <!-- Quick links mes anterior - filled by JS -->
           <div id="card-prev-links" style="margin:4px 0 2px;display:flex;flex-direction:column;gap:3px;font-size:10.5px;"></div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#1d4ed8;">Seguiment</span>
+            <div class="card-tags"><span class="card-tag" style="color:#1d4ed8;background:rgba(29,78,216,0.12);">Seguiment</span></div>
             <div class="card-arrow">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path d="m9 18 6-6-6-6"/>
@@ -1123,7 +1264,7 @@ button { font-family: var(--font); }
           <div class="card-title">Alta de Client</div>
           <div class="card-desc">Formulari d'alta de nous clients: particular, empresa o autònom. Recull totes les dades necessàries per a la gestió a l'agència.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#166534;">Formularis</span>
+            <div class="card-tags"><span class="card-tag" style="color:#166534;background:rgba(22,101,52,0.12);">Formularis</span></div>
             <div class="card-arrow">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
             </div>
@@ -1154,7 +1295,7 @@ button { font-family: var(--font); }
           <div class="card-title">Canvi de Mediador</div>
           <div class="card-desc">Generador de cartes de canvi de mediador a OPTIMIZARTE 3.0. Vista pr&#232;via d&#39;impressi&#243; i activitat Gestiona integrades.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#166534;">Formularis</span>
+            <div class="card-tags"><span class="card-tag" style="color:#166534;background:rgba(22,101,52,0.12);">Formularis</span></div>
             <div class="card-arrow">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
             </div>
@@ -1189,7 +1330,7 @@ button { font-family: var(--font); }
           <div class="card-title">No Renovació de Pòlissa</div>
           <div class="card-desc">Genera la comunicació formal de no renovació (Art. 22, Llei 50/1980). Arrossega el PDF de la pòlissa per extreure les dades automàticament.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#166534;">Formularis</span>
+            <div class="card-tags"><span class="card-tag" style="color:#166534;background:rgba(22,101,52,0.12);">Formularis</span></div>
             <div class="card-arrow">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
             </div>
@@ -1221,7 +1362,7 @@ button { font-family: var(--font); }
           <div class="card-title">Rehabilitació de Pòlissa</div>
           <div class="card-desc">Sol·licitud de rehabilitació i certificat d'inexistència de sinistres. Per a persona física, empresa i comunitat de propietaris.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#166534;">Formularis</span>
+            <div class="card-tags"><span class="card-tag" style="color:#166534;background:rgba(22,101,52,0.12);">Formularis</span></div>
             <div class="card-arrow">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
             </div>
@@ -1251,7 +1392,7 @@ button { font-family: var(--font); }
           <div class="card-title">Dashboard Mediador</div>
           <div class="card-desc">Tauler de control del mediador Occident: ingressos, comissions, resultats tècnics i bonos amb accés restringit per PIN.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#7c3aed;">Anàlisi</span>
+            <div class="card-tags"><span class="card-tag" style="color:#7c3aed;background:rgba(124,58,237,0.12);">Anàlisi</span></div>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1280,7 +1421,7 @@ button { font-family: var(--font); }
           <div class="card-title">Seguiment Vendes Excel</div>
           <div class="card-desc">Importa el full Excel de seguiment de vendes Occident i genera automàticament la infografia mensual de l’agència.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#1d4ed8;">Seguiment</span>
+            <div class="card-tags"><span class="card-tag" style="color:#1d4ed8;background:rgba(29,78,216,0.12);">Seguiment</span></div>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1309,7 +1450,7 @@ button { font-family: var(--font); }
           <div class="card-title">Sol·licitud TIREA / SIHSA</div>
           <div class="card-desc">Generador de sol·licituds d’informació TIREA i SIHSA per a consulta de dades de pòlisses al sistema Occident.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#166534;">Formularis</span>
+            <div class="card-tags"><span class="card-tag" style="color:#166534;background:rgba(22,101,52,0.12);">Formularis</span></div>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1339,7 +1480,7 @@ button { font-family: var(--font); }
           <div class="card-title">D.I.S. — Decl. Inexistència Sinistre</div>
           <div class="card-desc">Declaració responsable d'inexístència de sinistre. Generador de document oficial per al tràmit de polisses Occident.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#dc2626;">Sinistres</span>
+            <div class="card-tags"><span class="card-tag" style="color:#dc2626;background:rgba(220,38,38,0.12);">Sinistres</span></div>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1368,7 +1509,7 @@ button { font-family: var(--font); }
           <div class="card-title">Comparador de Propuestas</div>
           <div class="card-desc">Compara fins a 3 propostes de seguro en paral·lel: cobertures, primes i condicions. Generador d’informe comparatiu per al client.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#0891b2;">Cotitzacions</span>
+            <div class="card-tags"><span class="card-tag" style="color:#0891b2;background:rgba(8,145,178,0.12);">Cotitzacions</span></div>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1395,7 +1536,7 @@ button { font-family: var(--font); }
           <div class="card-title">Comparativo Vida</div>
           <div class="card-desc">Comparativa de productes de segur de vida: capitals, primes, cobertures i condicions. Informe personalitzat per al client.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#0891b2;">Cotitzacions</span>
+            <div class="card-tags"><span class="card-tag" style="color:#0891b2;background:rgba(8,145,178,0.12);">Cotitzacions</span></div>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1424,7 +1565,7 @@ button { font-family: var(--font); }
           <div class="card-title">Configurador de Accesorios</div>
           <div class="card-desc">Configurador d'accessoris per a vèhicles: seleccionador de peces, imports i generació de document per al client.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#0891b2;">Cotitzacions</span>
+            <div class="card-tags"><span class="card-tag" style="color:#0891b2;background:rgba(8,145,178,0.12);">Cotitzacions</span></div>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1453,7 +1594,7 @@ button { font-family: var(--font); }
           <div class="card-title">Comparativa Préstecs Hipotecaris</div>
           <div class="card-desc">Simulador banc (amb bonificació) vs. mediador col·legiat: quotes, primes d'assegurança, costos totals i estalvi net durant tota la vida del préstec.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#0891b2;">Cotitzacions</span>
+            <div class="card-tags"><span class="card-tag" style="color:#0891b2;background:rgba(8,145,178,0.12);">Cotitzacions</span></div>
             <div class="card-arrow">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
             </div>
@@ -1482,7 +1623,7 @@ button { font-family: var(--font); }
           <div class="card-title">Directori d'Assistència</div>
           <div class="card-desc">Directori de serveis d'assistència Occident: telèfons, cobertures i contactes per a sinistres i emergències.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#dc2626;">Sinistres</span>
+            <div class="card-tags"><span class="card-tag" style="color:#dc2626;background:rgba(220,38,38,0.12);">Sinistres</span></div>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1512,7 +1653,7 @@ button { font-family: var(--font); }
           <div class="card-title">Fusió de Contactes</div>
           <div class="card-desc">Eina per fusionar i gestionar contactes duplicats. Unifica registres de clients i neteja la base de dades de l'agència.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#166534;">Formularis</span>
+            <div class="card-tags"><span class="card-tag" style="color:#166534;background:rgba(22,101,52,0.12);">Formularis</span></div>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1539,7 +1680,7 @@ button { font-family: var(--font); }
           <div class="card-title">Seguiment Mensual · Bonos</div>
           <div class="card-desc">Seguiment mensual de bonos OPTIMIZARTE: objectius, assoliments i evolució dels bonos de producció per ram.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#1d4ed8;">Seguiment</span>
+            <div class="card-tags"><span class="card-tag" style="color:#1d4ed8;background:rgba(29,78,216,0.12);">Seguiment</span></div>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1569,7 +1710,7 @@ button { font-family: var(--font); }
           <div class="card-title">Analitzador ChatBot WhatsApp</div>
           <div class="card-desc">Visualitzador dels 8 mòduls SendPulse: prompts complets, versions i estat de sincronització.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#7c3aed;">Anàlisi</span>
+            <div class="card-tags"><span class="card-tag" style="color:#7c3aed;background:rgba(124,58,237,0.12);">Anàlisi</span></div>
             <div class="card-arrow">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
             </div>
@@ -1598,7 +1739,7 @@ button { font-family: var(--font); }
           <div class="card-title">Traductor IA</div>
           <div class="card-desc">Traductor intel·ligent amb IA: traduccions professionals multilingues adaptades al context d'assegurances i documents de l'agència.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#166534;">Formularis</span>
+            <div class="card-tags"><span class="card-tag" style="color:#166534;background:rgba(22,101,52,0.12);">Formularis</span></div>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1627,7 +1768,7 @@ button { font-family: var(--font); }
           <div class="card-title">Contacte WhatsApp · QR</div>
           <div class="card-desc">Codi QR de l'oficina (+34 972 426 665) i enllaços wa.me amb missatges predefinits: consultes, renovacions, pressupostos i sinistres.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#166534;">Formularis</span>
+            <div class="card-tags"><span class="card-tag" style="color:#166534;background:rgba(22,101,52,0.12);">Formularis</span></div>
             <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
           </div>
         </div>
@@ -1638,11 +1779,12 @@ button { font-family: var(--font); }
     <!-- EN DESENVOLUPAMENT -->
     <div class="section-title" id="title-dev">En desenvolupament</div>
     <div class="cards-grid" id="grid-dev">
-      <div class="card-add" onclick="showAddModal()">
+      <div class="card-add" id="cardAddBox" onclick="showAddModal()">
         <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
           <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
         <span>Afegir eina</span>
+        <span class="card-add-hint">arrossega un .html aquí</span>
       </div>
     </div>
 
@@ -1666,7 +1808,7 @@ button { font-family: var(--font); }
           <div class="card-title">Guia de Registre al Portal</div>
           <div class="card-desc">Instruccions pas a pas perquè el client es registri a l'àrea privada d'Occident.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:var(--gray-3)">Instruccions</span>
+            <div class="card-tags"><span class="card-tag" style="color:var(--gray-3);background:rgba(0,0,0,0.05);">Instruccions</span></div>
           </div>
         </div>
       </div>
@@ -1685,7 +1827,7 @@ button { font-family: var(--font); }
           <div class="card-title">Resolució de Sinistres</div>
           <div class="card-desc">Guia de tramitació i seguiment de l'estat de sinistres amb checklist de documentació.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:var(--gray-3)">Sinistres</span>
+            <div class="card-tags"><span class="card-tag" style="color:var(--gray-3);background:rgba(0,0,0,0.05);">Sinistres</span></div>
           </div>
         </div>
       </div>
@@ -1705,7 +1847,7 @@ button { font-family: var(--font); }
           <div class="card-title">Comparativa de Cotitzacions</div>
           <div class="card-desc">Comparador visual de preus i cobertures entre Occident i altres companyies del mercat.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:var(--gray-3)">Cotitzacions</span>
+            <div class="card-tags"><span class="card-tag" style="color:var(--gray-3);background:rgba(0,0,0,0.05);">Cotitzacions</span></div>
           </div>
         </div>
       </div>
@@ -1726,7 +1868,7 @@ button { font-family: var(--font); }
           <div class="card-title">Anàlisi de Pòlissa</div>
           <div class="card-desc">Revisió detallada de cobertures, exclusions i oportunitats de millora per a una pòlissa existent.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:var(--gray-3)">Anàlisi</span>
+            <div class="card-tags"><span class="card-tag" style="color:var(--gray-3);background:rgba(0,0,0,0.05);">Anàlisi</span></div>
           </div>
         </div>
       </div>
@@ -1800,6 +1942,33 @@ button { font-family: var(--font); }
   </div>
 </div>
 
+<!-- ═══════════════════════════════════════════════
+     AFEGIR EINA — overlay funcional (drag & drop / selector)
+═══════════════════════════════════════════════ -->
+<div class="add-tool-overlay" id="addToolOverlay">
+  <div class="add-tool-box">
+    <div class="add-tool-header">
+      <span>Afegir eina al Hub</span>
+      <button class="modal-close" onclick="closeAddToolOverlay()">✕</button>
+    </div>
+    <div class="add-tool-body">
+      <div class="add-dropzone" id="addDropzone">
+        <input type="file" id="addFileInput" accept=".html,.htm,text/html" multiple hidden>
+        <div class="adz-icon">📄</div>
+        <div class="adz-title">Arrossega l'HTML aquí</div>
+        <div class="adz-sub">o fes clic per seleccionar un fitxer .html</div>
+      </div>
+      <div id="addReviewPanel" style="display:none;">
+        <div id="addReviewItems"></div>
+        <div class="add-actions">
+          <button class="add-btn add-btn-ghost" type="button" onclick="cancelAddReview()">Cancel·lar</button>
+          <button class="add-btn add-btn-primary" type="button" onclick="confirmAddTools()">Afegir al Hub</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 // ═══════════════════════════════════════════════
 // DEVICE DETECTION
@@ -1856,30 +2025,12 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
 // ADD MODAL
 // ═══════════════════════════════════════════════
 function showAddModal() {
-  if (isMobile()) {
-    // Mobile: simple alert-style sheet
-    alert('Per afegir una nova eina, demana a Claude que la creï i la integri al hub.');
-    return;
+  // Real implementation lives further down (functional drag & drop overlay).
+  // Kept as a thin wrapper so the existing onclick="showAddModal()" on the
+  // "+" card keeps working regardless of script load order.
+  if (typeof openAddToolOverlay === 'function') {
+    openAddToolOverlay();
   }
-  document.getElementById('modalExtLink').style.display = 'none';
-  document.getElementById('modalTitle').textContent = 'Nova Eina';
-  document.getElementById('modalBody').innerHTML = `
-    <div class="modal-centered">
-      <div class="big-icon">➕</div>
-      <h3>Afegir eina</h3>
-      <p>Demana a Claude que creï l'HTML standalone i l'integri aquí automàticament.</p>
-      <div style="margin-top:20px;background:var(--bg);border-radius:8px;padding:16px;text-align:left;width:100%;max-width:400px;">
-        <p style="font-size:11px;color:var(--gray-2);font-weight:700;margin-bottom:10px;letter-spacing:1px">PROPERES EINES</p>
-        <ul style="font-size:13px;color:var(--gray);list-style:none;display:flex;flex-direction:column;gap:8px;">
-          <li>📋 Formulari d'Alta de Client</li>
-          <li>📖 Guia de Registre al Portal</li>
-          <li>🛡️ Resolució de Sinistres</li>
-          <li>💶 Comparativa de Cotitzacions</li>
-          <li>📄 Anàlisi de Pòlissa</li>
-        </ul>
-      </div>
-    </div>`;
-  document.getElementById('toolModal').classList.add('open');
 }
 
 // ═══════════════════════════════════════════════
@@ -1946,13 +2097,31 @@ function filterTools(query) {
   applyFilters();
 }
 
+// ═══════════════════════════════════════════════
+// MULTI-TAG HELPERS — a card can now carry several categories
+// (data-categories holds a JSON array; data-category is kept as
+// a legacy single value for cards that haven't been migrated yet)
+// ═══════════════════════════════════════════════
+function getCardCats(card) {
+  const raw = card.dataset.categories;
+  if (raw) {
+    try {
+      const arr = JSON.parse(raw);
+      if (Array.isArray(arr) && arr.length) return arr;
+    } catch (e) {}
+  }
+  return card.dataset.category ? [card.dataset.category] : [];
+}
+function cardHasCat(card, val) {
+  return getCardCats(card).indexOf(val) !== -1;
+}
+
 function applyFilters() {
   const cards = document.querySelectorAll('.tool-card');
   let visible = 0;
 
   cards.forEach(card => {
-    const cat    = card.dataset.category || '';
-    const status = card.dataset.status   || '';
+    const status = card.dataset.status || '';
     const text   = card.textContent.toLowerCase();
 
     let catMatch = true;
@@ -1965,7 +2134,7 @@ function applyFilters() {
     } else if (currentFilter === '_soon') {
       catMatch = status === 'soon';
     } else {
-      catMatch = cat === currentFilter;
+      catMatch = cardHasCat(card, currentFilter);
     }
 
     const show = catMatch && (currentSearch === '' || text.includes(currentSearch));
@@ -2292,7 +2461,7 @@ function rebuildSidebar(){
   container.innerHTML = '';
 
   CATS.forEach(function(cat){
-    var cnt = document.querySelectorAll('.tool-card[data-category="'+cat.val+'"]').length;
+    var cnt = countCardsWithCat(cat.val);
     var a   = document.createElement('a');
     a.className = 'nav-item';
     a.href = '#';
@@ -2329,9 +2498,19 @@ function rebuildChips(){
 }
 function escHtml(t){ return String(t).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];}); }
 
+/* Compta targetes que porten la categoria `val` entre les seves etiquetes
+   (una targeta pot tenir-ne més d'una des de la funcionalitat multi-selecció) */
+function countCardsWithCat(val){
+  var n = 0;
+  document.querySelectorAll('.tool-card').forEach(function(c){
+    if(typeof cardHasCat === 'function' && cardHasCat(c, val)) n++;
+  });
+  return n;
+}
+
 function updateBadges(){
   CATS.forEach(function(cat){
-    var cnt = document.querySelectorAll('.tool-card[data-category="'+cat.val+'"]').length;
+    var cnt = countCardsWithCat(cat.val);
     document.querySelectorAll('[data-badge-cat="'+cat.val+'"]').forEach(function(b){b.textContent=cnt;});
   });
   var allBadge = document.getElementById('badge-all');
@@ -2411,7 +2590,8 @@ window.handleCardClick = function(e, card){
   var isExternal = /^https?:\/\//.test(href) && !href.includes(location.hostname) && location.hostname !== 'localhost' && location.hostname !== '';
   if(isExternal){ e.preventDefault(); window.open(href,'_blank'); return; }
 
-  if((card.dataset.category||'')===SUPERV_VAL){
+  var cardCats = (typeof getCardCats === 'function') ? getCardCats(card) : [card.dataset.category||''];
+  if(cardCats.indexOf(SUPERV_VAL) !== -1){
     e.preventDefault(); e.stopPropagation();
     openPinModal(function(){
       if(isExternal){ window.open(href,'_blank'); }
@@ -2450,39 +2630,62 @@ window.applyFilters = function(){
   if(_origApply) _origApply();
 };
 
-/* ══ CARD CATEGORY UI ═══════════════════════════════════════ */
-function applyCatToCard(card, catSpan, cat){
-  catSpan.textContent = cat.lbl;
-  catSpan.style.color = cat.color;
-  card.dataset.category = cat.val;
-  var lockEl = card.querySelector('.cat-lock-icon');
-  if(cat.val===SUPERV_VAL){
-    if(!lockEl){ lockEl=document.createElement('span'); lockEl.className='cat-lock-icon'; lockEl.style.fontSize='10px'; lockEl.textContent=' \uD83D\uDD12'; catSpan.insertAdjacentElement('afterend',lockEl); }
-  } else { if(lockEl) lockEl.remove(); }
+/* ══ CARD TAGS UI (multi-selecció) ═══════════════════════════ */
+function hexToRgba(hex, alpha){
+  if(!hex || hex.charAt(0)!=='#') return 'rgba(0,0,0,'+alpha+')';
+  var h = hex.replace('#','');
+  var r = parseInt(h.substring(0,2),16), g = parseInt(h.substring(2,4),16), b = parseInt(h.substring(4,6),16);
+  return 'rgba('+r+','+g+','+b+','+alpha+')';
+}
+
+/* Etiquetes assignades a una targeta: sempre com a array.
+   Migra silenciosament les assignacions antigues (un sol string). */
+function cardTagVals(card, cardKey){
+  var stored = assigned[cardKey];
+  if(Array.isArray(stored) && stored.length) return stored.slice();
+  if(typeof stored === 'string' && stored) return [stored];
+  var baked = getCardCats(card);
+  return baked.length ? baked.slice() : (CATS[0] ? [CATS[0].val] : []);
 }
 
 function buildCatUI(card){
   var footer = card.querySelector('.card-footer-row');
   if(!footer) return;
-  var catSpan = footer.querySelector('.card-category');
-  if(!catSpan) return;
+  var tagsWrap = footer.querySelector('.card-tags');
+  if(!tagsWrap) return;
   var cardKey = card.getAttribute('href') || card.dataset.title || '';
 
-  /* Apply saved assignment, or the card's own category, so label + color always come from CATS */
-  var s = catByVal(assigned[cardKey] || card.dataset.category);
-  if(s) applyCatToCard(card,catSpan,s);
+  function renderTags(){
+    var vals = cardTagVals(card, cardKey);
+    card.dataset.categories = JSON.stringify(vals);
+    card.dataset.category   = vals[0] || '';   // manté compatibilitat amb codi antic
+    tagsWrap.innerHTML = '';
+    vals.forEach(function(val){
+      var c = catByVal(val);
+      if(!c) return;
+      var pill = document.createElement('span');
+      pill.className = 'card-tag';
+      pill.style.color = c.color;
+      pill.style.background = hexToRgba(c.color.charAt(0)==='#'?c.color:'#9CA3AF', 0.12);
+      pill.textContent = c.lbl + (val===SUPERV_VAL ? ' \uD83D\uDD12' : '');
+      tagsWrap.appendChild(pill);
+    });
+  }
+  renderTags();
+  card._refreshTags = renderTags;
 
   /* Wrap */
   var wrap = document.createElement('div');
   wrap.className = 'card-category-wrap';
   wrap.style.position = 'relative';
-  catSpan.parentNode.insertBefore(wrap, catSpan);
-  wrap.appendChild(catSpan);
+  wrap.style.minWidth = '0';
+  tagsWrap.parentNode.insertBefore(wrap, tagsWrap);
+  wrap.appendChild(tagsWrap);
 
   /* ✎ Pencil button */
   var btn = document.createElement('button');
   btn.className = 'cat-edit-btn';
-  btn.title = 'Canviar etiqueta';
+  btn.title = 'Etiquetes';
   btn.innerHTML = '&#9998;';
   ['mousedown','pointerdown','touchstart'].forEach(function(t){ btn.addEventListener(t,function(ev){ev.stopPropagation();},{passive:true}); });
   btn.setAttribute('draggable','false');
@@ -2491,72 +2694,103 @@ function buildCatUI(card){
     closeCatDD();
 
     var dd = document.createElement('div');
-    dd.className = 'cat-select-wrap open';
+    dd.className = 'cat-select-wrap open cat-ms';
 
-    /* — Rename current label row — */
-    var renRow = document.createElement('div');
-    renRow.className = 'cat-rename-row';
-    var renInp = document.createElement('input');
-    renInp.type='text'; renInp.className='cat-rename-inp';
-    renInp.value=catSpan.textContent; renInp.placeholder='Reanomenar etiqueta...';
-    renInp.onclick=function(ev){ev.stopPropagation();};
-    var renBtn = document.createElement('button');
-    renBtn.className='cat-rename-btn'; renBtn.textContent='Desar';
-    renBtn.addEventListener('click',function(ev){
-      ev.stopPropagation();
-      var newLbl=renInp.value.trim(); if(!newLbl) return;
-      var catObj=catByVal(card.dataset.category);
-      if(catObj){
-        catObj.lbl=newLbl; saveCats();
-        document.querySelectorAll('.tool-card[data-category="'+catObj.val+'"] .card-category').forEach(function(sp){sp.textContent=newLbl;});
-        rebuildSidebar();
-      }
-      dd.remove();
-    });
-    renRow.appendChild(renInp); renRow.appendChild(renBtn);
-    dd.appendChild(renRow);
+    var selected = cardTagVals(card, cardKey);
+    var listBox = document.createElement('div');
+    listBox.className = 'cat-ms-list';
 
-    /* — Category list — */
-    CATS.forEach(function(cat){
-      var opt=document.createElement('div');
-      opt.className='cat-opt'+(card.dataset.category===cat.val?' selected':'');
-      opt.style.color=cat.color;
-      opt.textContent=cat.lbl+(cat.val===SUPERV_VAL?' \uD83D\uDD12':'');
-      opt.addEventListener('click',function(ev){
-        ev.stopPropagation();
-        applyCatToCard(card,catSpan,cat);
-        assigned[cardKey]=cat.val; saveJSON(KEY_ASSIGN,assigned);
-        dd.remove();
-        rebuildSidebar(); updateBadges();
-        if(typeof applyFilters==='function') applyFilters();
+    function buildRow(cat){
+      var row = document.createElement('label');
+      row.className = 'cat-ms-opt';
+
+      var chk = document.createElement('input');
+      chk.type = 'checkbox';
+      chk.value = cat.val;
+      chk.checked = selected.indexOf(cat.val) !== -1;
+      chk.addEventListener('click', function(ev){ ev.stopPropagation(); });
+
+      var dot = document.createElement('span');
+      dot.className = 'cat-ms-dot';
+      dot.style.background = cat.color;
+
+      var lbl = document.createElement('span');
+      lbl.className = 'cat-ms-lbl';
+      lbl.textContent = cat.lbl + (cat.val===SUPERV_VAL ? ' \uD83D\uDD12' : '');
+
+      var ren = document.createElement('button');
+      ren.type = 'button'; ren.className = 'cat-ms-ren'; ren.innerHTML = '&#9998;'; ren.title = 'Reanomenar';
+      ren.addEventListener('click', function(ev){
+        ev.preventDefault(); ev.stopPropagation();
+        var inp = document.createElement('input');
+        inp.type = 'text'; inp.className = 'cat-rename-inp';
+        inp.value = cat.lbl;
+        lbl.replaceWith(inp);
+        inp.focus(); inp.select();
+        var committed = false;
+        function commit(){
+          if(committed) return;
+          committed = true;
+          var v = inp.value.trim();
+          if(v){
+            cat.lbl = v; saveCats();
+            document.querySelectorAll('.tool-card').forEach(function(c2){ if(typeof c2._refreshTags === 'function') c2._refreshTags(); });
+            rebuildSidebar();
+          }
+          var freshLbl = document.createElement('span');
+          freshLbl.className = 'cat-ms-lbl';
+          freshLbl.textContent = cat.lbl + (cat.val===SUPERV_VAL ? ' \uD83D\uDD12' : '');
+          if(inp.parentNode) inp.replaceWith(freshLbl);
+        }
+        inp.addEventListener('click', function(ev2){ ev2.stopPropagation(); });
+        inp.addEventListener('keydown', function(ev2){ ev2.stopPropagation(); if(ev2.key==='Enter'){ev2.preventDefault();commit();} if(ev2.key==='Escape'){commit();} });
+        inp.addEventListener('blur', commit);
       });
-      dd.appendChild(opt);
-    });
 
-    /* — Create new category — */
-    var newRow=document.createElement('div'); newRow.className='cat-new-row';
-    var newInp=document.createElement('input'); newInp.className='cat-new-inp'; newInp.placeholder='Nova etiqueta...';
-    newInp.onclick=function(ev){ev.stopPropagation();};
-    var newBtn=document.createElement('button'); newBtn.className='cat-new-btn'; newBtn.textContent='+ Crear';
-    newBtn.addEventListener('click',function(ev){
+      row.appendChild(chk); row.appendChild(dot); row.appendChild(lbl); row.appendChild(ren);
+      return row;
+    }
+
+    CATS.forEach(function(cat){ listBox.appendChild(buildRow(cat)); });
+    dd.appendChild(listBox);
+
+    /* — Crear nova etiqueta — */
+    var newRow = document.createElement('div'); newRow.className = 'cat-new-row';
+    var newInp = document.createElement('input'); newInp.className = 'cat-new-inp'; newInp.placeholder = 'Nova etiqueta...';
+    newInp.onclick = function(ev){ ev.stopPropagation(); };
+    var newBtn = document.createElement('button'); newBtn.className = 'cat-new-btn'; newBtn.textContent = '+ Crear';
+    newBtn.addEventListener('click', function(ev){
       ev.stopPropagation();
-      var lbl=newInp.value.trim(); if(!lbl) return;
-      var val=lbl.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-      if(!val||catByVal(val)) return;
-      var newCat={val:val,lbl:lbl,color:nextFreeColor()};
+      var lbl = newInp.value.trim(); if(!lbl) return;
+      var val = lbl.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+      if(!val || catByVal(val)) return;
+      var newCat = {val:val, lbl:lbl, color:nextFreeColor()};
       CATS.push(newCat); saveCats();
-      applyCatToCard(card,catSpan,newCat);
-      assigned[cardKey]=val; saveJSON(KEY_ASSIGN,assigned);
-      dd.remove();
-      rebuildSidebar(); updateBadges();
-      if(typeof applyFilters==='function') applyFilters();
+      var row = buildRow(newCat);
+      row.querySelector('input[type="checkbox"]').checked = true;
+      listBox.appendChild(row);
+      newInp.value = '';
+      rebuildSidebar();
     });
     newRow.appendChild(newInp); newRow.appendChild(newBtn);
     dd.appendChild(newRow);
+    newInp.addEventListener('keydown', function(ev){ ev.stopPropagation(); if(ev.key==='Enter'){ev.preventDefault();newBtn.click();} if(ev.key==='Escape'){dd.remove();} });
 
-    /* Enter crea / desa, Escape tanca */
-    newInp.addEventListener('keydown',function(ev){ ev.stopPropagation(); if(ev.key==='Enter'){ev.preventDefault();newBtn.click();} if(ev.key==='Escape'){dd.remove();} });
-    renInp.addEventListener('keydown',function(ev){ ev.stopPropagation(); if(ev.key==='Enter'){ev.preventDefault();renBtn.click();} if(ev.key==='Escape'){dd.remove();} });
+    /* — Desar — */
+    var saveBtn = document.createElement('button');
+    saveBtn.type = 'button'; saveBtn.className = 'cat-ms-save'; saveBtn.textContent = 'Desar etiquetes';
+    saveBtn.addEventListener('click', function(ev){
+      ev.stopPropagation();
+      var chosen = Array.prototype.map.call(listBox.querySelectorAll('input[type="checkbox"]:checked'), function(c){ return c.value; });
+      if(!chosen.length && CATS[0]) chosen = [CATS[0].val];
+      assigned[cardKey] = chosen;
+      saveJSON(KEY_ASSIGN, assigned);
+      renderTags();
+      dd.remove();
+      rebuildSidebar(); updateBadges();
+      if(typeof applyFilters === 'function') applyFilters();
+    });
+    dd.appendChild(saveBtn);
 
     /* El desplegable es col·loca al <body>, fora de la targeta: cap clic dins seu pot obrir l'eina */
     ['click','mousedown','pointerdown','touchstart','dragstart'].forEach(function(t){
@@ -2564,7 +2798,6 @@ function buildCatUI(card){
     });
     dd.style.position='fixed';
     dd.style.right='auto'; dd.style.bottom='auto';
-    dd.style.width='220px';
     dd.style.zIndex='2000';
     document.body.appendChild(dd);
     var r=btn.getBoundingClientRect();
@@ -2590,10 +2823,276 @@ window.addEventListener('resize', closeCatDD);
 document.addEventListener('scroll', function(e){ if(_openCatDD && !_openCatDD.dd.contains(e.target)) closeCatDD(); }, true);
 
 /* ══ INIT ════════════════════════════════════════════════════ */
-document.querySelectorAll('#grid-live .tool-card[data-status="live"]').forEach(buildCatUI);
+document.querySelectorAll('.tool-card[data-status="live"], .tool-card[data-status="dev"]').forEach(buildCatUI);
 initFavBtns();
 rebuildSidebar();
 updateBadges();
+
+/* ══ AFEGIR EINA (drag & drop HTML → nova targeta al Hub) ═══ */
+var HUB_DB_NAME = 'HubToolsDB', HUB_STORE = 'tools';
+function openHubDB(){
+  return new Promise(function(resolve,reject){
+    if(!window.indexedDB){ reject(new Error('no-idb')); return; }
+    var req = indexedDB.open(HUB_DB_NAME, 1);
+    req.onupgradeneeded = function(e){ e.target.result.createObjectStore(HUB_STORE, {keyPath:'id'}); };
+    req.onsuccess = function(e){ resolve(e.target.result); };
+    req.onerror   = function(){ reject(req.error); };
+  });
+}
+function dbPutTool(tool){
+  return openHubDB().then(function(db){
+    return new Promise(function(res,rej){
+      var tx = db.transaction(HUB_STORE,'readwrite');
+      tx.objectStore(HUB_STORE).put(tool);
+      tx.oncomplete = function(){ res(); };
+      tx.onerror    = function(){ rej(tx.error); };
+    });
+  });
+}
+function dbGetAllTools(){
+  return openHubDB().then(function(db){
+    return new Promise(function(res,rej){
+      var tx  = db.transaction(HUB_STORE,'readonly');
+      var req = tx.objectStore(HUB_STORE).getAll();
+      req.onsuccess = function(){ res(req.result || []); };
+      req.onerror   = function(){ rej(req.error); };
+    });
+  });
+}
+function dbDeleteTool(id){
+  return openHubDB().then(function(db){
+    return new Promise(function(res,rej){
+      var tx = db.transaction(HUB_STORE,'readwrite');
+      tx.objectStore(HUB_STORE)['delete'](id);
+      tx.oncomplete = function(){ res(); };
+      tx.onerror    = function(){ rej(tx.error); };
+    });
+  });
+}
+
+var _pendingAddItems = [];
+
+/* Exposades globalment perquè l'onclick="showAddModal()" del botó "+" i el
+   wrapper de l'script anterior hi puguin accedir sense dependre de l'ordre. */
+window.openAddToolOverlay = function(){
+  resetAddOverlay();
+  var ov = document.getElementById('addToolOverlay');
+  if(ov) ov.classList.add('open');
+};
+window.closeAddToolOverlay = function(){
+  var ov = document.getElementById('addToolOverlay');
+  if(ov) ov.classList.remove('open');
+  resetAddOverlay();
+};
+function resetAddOverlay(){
+  _pendingAddItems = [];
+  var dz = document.getElementById('addDropzone');
+  var rp = document.getElementById('addReviewPanel');
+  if(dz) dz.style.display = '';
+  if(rp) rp.style.display = 'none';
+  var fi = document.getElementById('addFileInput');
+  if(fi) fi.value = '';
+}
+window.cancelAddReview = function(){ resetAddOverlay(); };
+
+function readFileAsText(file){
+  return new Promise(function(resolve,reject){
+    var reader = new FileReader();
+    reader.onload  = function(){ resolve(reader.result); };
+    reader.onerror = function(){ reject(reader.error); };
+    reader.readAsText(file);
+  });
+}
+function humanizeFileName(name){
+  return name.replace(/\.(html?|htm)$/i,'').replace(/[-_]+/g,' ').trim();
+}
+
+function handleAddFiles(fileList){
+  var files = Array.prototype.filter.call(fileList, function(f){
+    return /\.(html?|htm)$/i.test(f.name) || f.type === 'text/html';
+  });
+  if(!files.length){ alert('Selecciona un fitxer HTML (.html).'); return; }
+  Promise.all(files.map(function(f){
+    return readFileAsText(f).then(function(content){
+      var m = content.match(/<title[^>]*>([^<]*)<\/title>/i);
+      var title = (m && m[1] && m[1].trim()) || humanizeFileName(f.name);
+      return { fileName: f.name, title: title, content: content };
+    });
+  })).then(renderAddReviewPanel).catch(function(){
+    alert("No s'ha pogut llegir el fitxer seleccionat.");
+  });
+}
+
+function renderAddReviewPanel(items){
+  _pendingAddItems = items;
+  var catOptions = CATS.map(function(c){
+    return '<option value="'+c.val+'">'+escHtml(c.lbl)+'</option>';
+  }).join('');
+  var html = items.map(function(item, i){
+    return '<div class="add-item">'
+      + "<label>Nom de l'eina</label>"
+      + '<input type="text" class="add-title-inp" data-idx="'+i+'" value="'+escHtml(item.title)+'">'
+      + '<label>Categoria</label>'
+      + '<select class="add-cat-sel" data-idx="'+i+'">'+catOptions+'</select>'
+      + '<div class="add-item-file">\uD83D\uDCCE '+escHtml(item.fileName)+'</div>'
+      + '</div>';
+  }).join('');
+  var itemsBox = document.getElementById('addReviewItems');
+  var dz = document.getElementById('addDropzone');
+  var rp = document.getElementById('addReviewPanel');
+  if(itemsBox) itemsBox.innerHTML = html;
+  if(dz) dz.style.display = 'none';
+  if(rp) rp.style.display = '';
+}
+
+window.confirmAddTools = function(){
+  var titleInps = document.querySelectorAll('.add-title-inp');
+  var catSels   = document.querySelectorAll('.add-cat-sel');
+  var jobs = [];
+  _pendingAddItems.forEach(function(item, i){
+    var title = (titleInps[i] && titleInps[i].value.trim()) || item.title;
+    var cat   = (catSels[i] && catSels[i].value) || (CATS[0] && CATS[0].val) || '';
+    jobs.push(addCustomTool(title, cat, item.content));
+  });
+  Promise.all(jobs).then(function(){
+    window.closeAddToolOverlay();
+  }).catch(function(){
+    alert("No s'ha pogut desar alguna de les eines.");
+  });
+};
+
+function addCustomTool(title, category, html){
+  var tool = {
+    id: 'custom_' + Date.now() + '_' + Math.random().toString(36).slice(2,8),
+    title: title,
+    category: category,
+    html: html,
+    status: 'dev',
+    addedAt: Date.now()
+  };
+  return dbPutTool(tool).then(function(){
+    renderCustomToolCard(tool);
+    rebuildSidebar(); updateBadges();
+    if(typeof updateCounts === 'function') updateCounts();
+    if(typeof applyFilters === 'function') applyFilters();
+  });
+}
+
+function renderCustomToolCard(tool){
+  var grid   = document.getElementById('grid-dev');
+  var addBox = document.getElementById('cardAddBox');
+  if(!grid) return;
+  var cat      = catByVal(tool.category);
+  var catLbl   = cat ? cat.lbl : tool.category;
+  var catColor = cat ? cat.color : '#9CA3AF';
+  var blobUrl  = URL.createObjectURL(new Blob([tool.html], {type:'text/html'}));
+
+  var card = document.createElement('div');
+  card.className = 'tool-card';
+  card.dataset.category   = tool.category;
+  card.dataset.categories = JSON.stringify(tool.category ? [tool.category] : []);
+  card.dataset.status   = 'dev';
+  card.dataset.title    = tool.title;
+  card.dataset.customId = tool.id;
+  card.setAttribute('href', blobUrl);
+  card.setAttribute('onclick', 'handleCardClick(event, this)');
+
+  card.innerHTML =
+      '<button class="card-remove-btn" type="button" title="Eliminar">&times;</button>'
+    + '<div class="card-stripe amber"></div>'
+    + '<div class="card-body">'
+    +   '<div class="card-header-row">'
+    +     '<div class="card-icon amber">'
+    +       '<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">'
+    +         '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>'
+    +       '</svg>'
+    +     '</div>'
+    +     '<span class="card-status status-dev">En desenvolupament</span>'
+    +   '</div>'
+    +   '<div class="card-title">' + escHtml(tool.title) + '</div>'
+    +   '<div class="card-desc">Eina afegida manualment al hub.</div>'
+    +   '<div class="card-footer-row">'
+    +     '<div class="card-tags"><span class="card-tag" style="color:'+catColor+';background:'+hexToRgba(catColor,0.12)+';">' + escHtml(catLbl) + '</span></div>'
+    +     '<div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>'
+    +   '</div>'
+    + '</div>';
+
+  card.querySelector('.card-remove-btn').addEventListener('click', function(e){
+    e.preventDefault(); e.stopPropagation();
+    if(!confirm('Vols eliminar «'+tool.title+'» del hub?')) return;
+    dbDeleteTool(tool.id).then(function(){
+      URL.revokeObjectURL(blobUrl);
+      card.remove();
+      rebuildSidebar(); updateBadges();
+      if(typeof updateCounts === 'function') updateCounts();
+      if(typeof applyFilters === 'function') applyFilters();
+    });
+  });
+
+  if(addBox) grid.insertBefore(card, addBox);
+  else grid.appendChild(card);
+  buildCatUI(card);
+}
+
+function loadCustomTools(){
+  if(!window.indexedDB) return;
+  dbGetAllTools().then(function(tools){
+    tools.forEach(renderCustomToolCard);
+    rebuildSidebar(); updateBadges();
+    if(typeof updateCounts === 'function') updateCounts();
+    if(typeof applyFilters === 'function') applyFilters();
+  }).catch(function(){});
+}
+
+/* Dropzone: clic per seleccionar + drag & drop real, funcional a la capsa "+"
+   i dins l'overlay. Funciona a desktop i mòbil (el clic obre el selector). */
+(function initAddDropzone(){
+  var dz  = document.getElementById('addDropzone');
+  var fi  = document.getElementById('addFileInput');
+  var box = document.getElementById('cardAddBox');
+  var ov  = document.getElementById('addToolOverlay');
+
+  if(dz && fi){
+    dz.addEventListener('click', function(){ fi.click(); });
+    fi.addEventListener('change', function(){
+      if(fi.files && fi.files.length) handleAddFiles(fi.files);
+    });
+    ['dragenter','dragover'].forEach(function(evt){
+      dz.addEventListener(evt, function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.add('drag-over'); });
+    });
+    ['dragleave','drop'].forEach(function(evt){
+      dz.addEventListener(evt, function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.remove('drag-over'); });
+    });
+    dz.addEventListener('drop', function(e){
+      var dt = e.dataTransfer;
+      if(dt && dt.files && dt.files.length) handleAddFiles(dt.files);
+    });
+  }
+
+  if(box){
+    ['dragenter','dragover'].forEach(function(evt){
+      box.addEventListener(evt, function(e){ e.preventDefault(); e.stopPropagation(); box.classList.add('drag-over'); });
+    });
+    box.addEventListener('dragleave', function(e){ e.preventDefault(); e.stopPropagation(); box.classList.remove('drag-over'); });
+    box.addEventListener('drop', function(e){
+      e.preventDefault(); e.stopPropagation();
+      box.classList.remove('drag-over');
+      var dt = e.dataTransfer;
+      if(dt && dt.files && dt.files.length){
+        window.openAddToolOverlay();
+        handleAddFiles(dt.files);
+      }
+    });
+  }
+
+  if(ov){
+    ov.addEventListener('click', function(e){
+      if(e.target === ov) window.closeAddToolOverlay();
+    });
+  }
+})();
+
+loadCustomTools();
 
 /* Restore last filter after all setup */
 (function restoreFilter(){

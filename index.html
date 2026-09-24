@@ -597,6 +597,16 @@ button { font-family: var(--font); }
 .tool-card:hover .card-remove-btn { opacity: 1; }
 .card-remove-btn:hover { background: var(--red-light); color: var(--red); border-color: var(--red); }
 
+.tool-card.link-broken { border-color: #dc2626; }
+.link-broken-badge {
+  position: absolute; top: 10px; left: 10px;
+  background: #dc2626; color: #fff;
+  font-size: 9.5px; font-weight: 700;
+  padding: 3px 8px; border-radius: 999px;
+  z-index: 2; pointer-events: none;
+  box-shadow: 0 2px 6px rgba(220,38,38,0.35);
+}
+
 /* ═══════════════════════════════════════════════
    DRAG & DROP REORDER — grid-live
 ═══════════════════════════════════════════════ */
@@ -1688,7 +1698,7 @@ button { font-family: var(--font); }
 
       <!-- ★ Analitzador ChatBot WhatsApp -->
       <a class="tool-card"
-         href="https://claude.ai/artifact/XcL2tbnfrsUzeJZ63wK8dD"
+         href="analitzador-chatbot-whatsapp.html"
          data-category="analisi"
          data-status="live"
          data-title="Analitzador · ChatBot WhatsApp"
@@ -1720,7 +1730,7 @@ button { font-family: var(--font); }
 
       <!-- ★ Traductor IA -->
       <a class="tool-card"
-         href="https://claude.ai/artifact/7PupRA7dTvHTdQLfpFfkHm"
+         href="traductor-ia.html"
          data-category="formularis"
          data-status="live"
          data-title="Traductor IA — OPTIMIZART€"
@@ -3094,10 +3104,66 @@ function loadCustomTools(){
 
 loadCustomTools();
 
-/* Restore last filter after all setup */
+/* ══ VERIFICADOR D'ENLLAÇOS ══════════════════════════════════
+   Comprova de veritat, targeta per targeta, si el fitxer del href
+   existeix (fetch real al servidor on estigui allotjat el hub).
+   Els enllaços externs (http/https a un altre domini) i els blob:
+   (eines afegides per drag&drop) no es comproven. Marca visualment
+   qualsevol card el destí de la qual no respongui correctament. */
+function checkCardLinks(){
+  var cards = document.querySelectorAll('.tool-card[data-status="live"]');
+  cards.forEach(function(card){
+    var href = card.getAttribute('href') || '';
+    if(!href || href==='#') return;
+    if(href.indexOf('blob:')===0) return;
+    var isExternal = /^https?:\/\//.test(href) && !href.includes(location.hostname);
+    if(isExternal) return; // no podem/hem de comprovar dominis externs des d'aquí
+
+    fetch(href, {method:'HEAD', cache:'no-store'})
+      .then(function(res){
+        if(!res.ok) throw new Error('status '+res.status);
+        markLinkOk(card);
+      })
+      .catch(function(){
+        // Alguns servidors no accepten HEAD: reintenta amb GET abans de donar-ho per trencat
+        fetch(href, {method:'GET', cache:'no-store'})
+          .then(function(res){ if(res.ok) markLinkOk(card); else markLinkBroken(card, href); })
+          .catch(function(){ markLinkBroken(card, href); });
+      });
+  });
+}
+function markLinkOk(card){
+  card.classList.remove('link-broken');
+  var b = card.querySelector('.link-broken-badge');
+  if(b) b.remove();
+}
+function markLinkBroken(card, href){
+  card.classList.add('link-broken');
+  if(card.querySelector('.link-broken-badge')) return;
+  var badge = document.createElement('div');
+  badge.className = 'link-broken-badge';
+  badge.title = 'No s\'ha trobat "'+href+'" en aquesta ubicació';
+  badge.textContent = '\u26A0 Enllaç no trobat';
+  card.appendChild(badge);
+  console.warn('[Hub] Enllaç trencat a la card "'+(card.dataset.title||href)+'": '+href);
+}
+/* Corre després que tot estigui muntat; a file:// els fetch relatius fallen
+   sempre per política del navegador (CORS de file://), així que la comprovació
+   només és fiable quan el hub s'obre des d'un servidor real (http/https). */
+if(location.protocol === 'http:' || location.protocol === 'https:'){
+  checkCardLinks();
+} else {
+  console.info('[Hub] El comprovador d\'enllaços només funciona servit per http(s) — obert com a file:// no es pot verificar.');
+}
+
+/* Restore last filter after all setup — si mai s'ha triat cap filtre
+   (primer cop que s'obre el hub en aquest navegador), es mostra la
+   vista Favorits per defecte. Si l'usuari ja ha triat un filtre abans
+   (Favorits inclòs, o qualsevol altre), es respecta aquesta elecció. */
 (function restoreFilter(){
   try{
     var saved = localStorage.getItem('hub-filter');
+    if(saved === null){ saved = '_fav'; }
     if(!saved || saved === 'all') return;
     currentFilter = saved;
     /* Activate matching nav-item */

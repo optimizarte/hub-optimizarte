@@ -607,6 +607,67 @@ button { font-family: var(--font); }
   box-shadow: 0 2px 6px rgba(220,38,38,0.35);
 }
 
+/* Idea tracker — graella de peticions pendents dins "En desenvolupament" */
+.idea-tracker {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+  margin-bottom: 22px;
+}
+.idea-tracker-head h3 { font-size: 14px; font-weight: 700; color: var(--dark); }
+.idea-tracker-head p  { font-size: 12px; color: var(--gray-2); margin-top: 2px; }
+.idea-table-wrap { margin-top: 14px; overflow-x: auto; }
+.idea-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.idea-table th {
+  text-align: left; font-size: 10.5px; font-weight: 700;
+  color: var(--gray-2); text-transform: uppercase; letter-spacing: .4px;
+  padding: 0 10px 8px; border-bottom: 1.5px solid var(--gray-4);
+  white-space: nowrap;
+}
+.idea-table td {
+  padding: 9px 10px; border-bottom: 1px solid var(--gray-4);
+  color: var(--dark); vertical-align: top;
+}
+.idea-table tbody tr:last-child td { border-bottom: none; }
+.idea-table td.idea-text-cell { word-break: break-word; }
+.idea-row-del {
+  background: none; border: none; cursor: pointer;
+  color: var(--gray-3); font-size: 14px; line-height: 1;
+  padding: 2px 4px; border-radius: 4px; transition: all .15s;
+}
+.idea-row-del:hover { color: var(--red); background: var(--red-light); }
+.idea-empty-msg { font-size: 12.5px; color: var(--gray-3); padding: 14px 4px; display: none; }
+.idea-add-row {
+  display: grid;
+  grid-template-columns: 150px 1fr 170px auto;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1.5px solid var(--gray-4);
+}
+.idea-add-row input {
+  border: 1.5px solid var(--gray-4);
+  border-radius: 7px;
+  padding: 8px 10px;
+  font-family: var(--font);
+  font-size: 12.5px;
+  color: var(--dark);
+  outline: none;
+  background: var(--white);
+}
+.idea-add-row input:focus { border-color: var(--red); }
+.idea-add-btn {
+  background: var(--red); color: #fff; border: none;
+  border-radius: 7px; padding: 8px 16px;
+  font-family: var(--font); font-size: 12.5px; font-weight: 700;
+  cursor: pointer; white-space: nowrap;
+}
+.idea-add-btn:hover { background: var(--red-dark); }
+@media (max-width: 768px) {
+  .idea-add-row { grid-template-columns: 1fr; }
+}
+
 /* ═══════════════════════════════════════════════
    DRAG & DROP REORDER — grid-live
 ═══════════════════════════════════════════════ */
@@ -1036,10 +1097,6 @@ button { font-family: var(--font); }
       <span style="width:9px;height:9px;border-radius:50%;background:#d97706;flex-shrink:0;display:block"></span>
       En desenvolupament
     </a>
-    <a class="nav-item" href="#" onclick="sidebarFilter('_soon',this);return false;">
-      <span style="width:9px;height:9px;border-radius:50%;background:var(--gray-3);flex-shrink:0;display:block"></span>
-      Pròximament
-    </a>
   </div>
   <!-- ESTAT badge removed per user request -->
 
@@ -1151,6 +1208,7 @@ button { font-family: var(--font); }
          data-status="live"
          data-title="Seguiment d'Agència · Optimizarte 3.0"
          id="card-seguiment"
+         data-key="seguiment-agencia"
          onclick="openSeguiment(event)">
         <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
         <div class="card-stripe"></div>
@@ -1185,6 +1243,7 @@ button { font-family: var(--font); }
 
             <!-- ★ Calendari de Pagaments -->
       <a class="tool-card"
+         data-key="calendari-pagaments"
          href="!!!APPS/CalendarioPagosPolizas_Occident.html"
          data-category="pagaments"
          data-status="live"
@@ -1218,6 +1277,7 @@ button { font-family: var(--font); }
 
       <!-- ★ Tancaments Mensuals -->
       <a class="tool-card"
+         data-key="tancaments-mensuals"
          href="!!!APPS/historics-seguiment.html"
          data-category="seguiment"
          data-status="live"
@@ -1253,6 +1313,7 @@ button { font-family: var(--font); }
 
       <!-- ★ Alta de Client -->
       <a class="tool-card"
+         data-key="alta-client"
          href="!!!APPS/alta-clientes.html"
          data-category="formularis"
          data-status="live"
@@ -1284,6 +1345,7 @@ button { font-family: var(--font); }
 
       <!-- ★ Canvi de Mediador -->
       <a class="tool-card"
+         data-key="canvi-mediador"
          href="!!!APPS/generador-cambio-mediador.html"
          data-category="formularis"
          data-status="live"
@@ -1316,6 +1378,7 @@ button { font-family: var(--font); }
 
       <!-- ★ No Renovació de Pòlissa -->
       <a class="tool-card"
+         data-key="no-renovacio-polissa"
          href="!!!APPS/no-renovacion-poliza.html"
          data-category="formularis"
          data-status="live"
@@ -1351,6 +1414,7 @@ button { font-family: var(--font); }
 
       <!-- ★ Rehabilitació de Pòlissa -->
       <a class="tool-card"
+         data-key="rehabilitacio-polissa"
          href="!!!APPS/rehabilitacion-poliza.html"
          data-category="formularis"
          data-status="live"
@@ -1382,6 +1446,7 @@ button { font-family: var(--font); }
 
       <!-- ★ Dashboard Mediador -->
       <a class="tool-card"
+         data-key="dashboard-mediador"
          href="!!!APPS/dashboard-app.html"
          data-category="analisi"
          data-status="live"
@@ -1410,6 +1475,7 @@ button { font-family: var(--font); }
 
       <!-- ★ Seguiment Vendes Excel -->
       <a class="tool-card"
+         data-key="seguiment-vendes-excel"
          href="!!!APPS/seguiment-excel.html"
          data-category="seguiment"
          data-status="live"
@@ -1439,6 +1505,7 @@ button { font-family: var(--font); }
 
       <!-- ★ Sol·licitud TIREA / SIHSA -->
       <a class="tool-card"
+         data-key="sollicitud-tirea-sihsa"
          href="!!!APPS/tirea-sihsa-v4.html"
          data-category="formularis"
          data-status="live"
@@ -1468,6 +1535,7 @@ button { font-family: var(--font); }
 
           <!-- ★ D.I.S. Declaración Inexistencia Siniestro -->
       <a class="tool-card"
+         data-key="dis-declaracio-inexistencia"
          href="!!!APPS/DIS_formulario_3.html"
          data-category="sinistres"
          data-status="live"
@@ -1498,6 +1566,7 @@ button { font-family: var(--font); }
 
           <!-- ★ Comparador de Propuestas -->
       <a class="tool-card"
+         data-key="comparador-propostes-assegurances"
          href="!!!APPS/comparador-propuestas_6.html"
          data-category="cotitzacions"
          data-status="live"
@@ -1527,6 +1596,7 @@ button { font-family: var(--font); }
 
           <!-- ★ Comparativo Vida -->
       <a class="tool-card"
+         data-key="comparatiu-vida"
          href="!!!APPS/comparativo-vida_4.html"
          data-category="cotitzacions"
          data-status="live"
@@ -1554,6 +1624,7 @@ button { font-family: var(--font); }
 
           <!-- ★ Configurador de Accesorios -->
       <a class="tool-card"
+         data-key="configurador-accessoris"
          href="!!!APPS/accesorios-config-github.html"
          data-category="cotitzacions"
          data-status="live"
@@ -1584,6 +1655,7 @@ button { font-family: var(--font); }
 
       <!-- ★ Comparativa Préstecs Hipotecaris -->
       <a class="tool-card"
+         data-key="comparativa-prestecs-hipotecaris"
          href="!!!APPS/comparativa-prestecs-optimizarte_2.html"
          data-category="cotitzacions"
          data-status="live"
@@ -1614,6 +1686,7 @@ button { font-family: var(--font); }
 
           <!-- ★ Directori d'Assistència -->
       <a class="tool-card"
+         data-key="directori-assistencia"
          href="!!!APPS/directorio_asistencia_1.html"
          data-category="sinistres"
          data-status="live"
@@ -1641,6 +1714,7 @@ button { font-family: var(--font); }
 
       <!-- ★ Fusió de Contactes -->
       <a class="tool-card"
+         data-key="fusio-contactes"
          href="!!!APPS/fusio-contactes_1.html"
          data-category="formularis"
          data-status="live"
@@ -1671,6 +1745,7 @@ button { font-family: var(--font); }
 
           <!-- ★ Seguiment Mensual · Bonos -->
       <a class="tool-card"
+         data-key="seguiment-mensual-bonos"
          href="!!!APPS/seguiment-mensual_3.html"
          data-category="seguiment"
          data-status="live"
@@ -1698,6 +1773,7 @@ button { font-family: var(--font); }
 
       <!-- ★ Analitzador ChatBot WhatsApp -->
       <a class="tool-card"
+         data-key="analitzador-chatbot-whatsapp"
          href="!!!APPS/analitzador-chatbot-whatsapp.html"
          data-category="analisi"
          data-status="live"
@@ -1730,6 +1806,7 @@ button { font-family: var(--font); }
 
       <!-- ★ Traductor IA -->
       <a class="tool-card"
+         data-key="traductor-ia"
          href="!!!APPS/Traductor_IA_OPTIMIZARTE.html"
          data-category="formularis"
          data-status="live"
@@ -1757,6 +1834,7 @@ button { font-family: var(--font); }
 
       <!-- ★ Contacte WhatsApp · QR -->
       <a class="tool-card"
+         data-key="contacte-whatsapp-qr"
          href="!!!APPS/whatsapp-links-qr.html"
          data-category="formularis"
          data-status="live"
@@ -1788,6 +1866,34 @@ button { font-family: var(--font); }
 
     <!-- EN DESENVOLUPAMENT -->
     <div class="section-title" id="title-dev">En desenvolupament</div>
+
+    <div class="idea-tracker" id="ideaTracker">
+      <div class="idea-tracker-head">
+        <h3>Idees pendents de desenvolupar</h3>
+        <p>Apunta aquí les peticions abans que es converteixin en una eina real.</p>
+      </div>
+      <div class="idea-table-wrap">
+        <table class="idea-table">
+          <thead>
+            <tr>
+              <th style="width:150px;">Data petició</th>
+              <th>Idea a desenvolupar</th>
+              <th style="width:170px;">Data estimada execució</th>
+              <th style="width:36px;"></th>
+            </tr>
+          </thead>
+          <tbody id="ideaTableBody"></tbody>
+        </table>
+        <div id="ideaEmptyMsg" class="idea-empty-msg">Encara no hi ha cap idea apuntada.</div>
+      </div>
+      <div class="idea-add-row">
+        <input type="date" id="ideaDateReq" title="Data petició (obligatori)">
+        <input type="text" id="ideaText" placeholder="Idea a desenvolupar... (obligatori)">
+        <input type="date" id="ideaDateEst" title="Data estimada d'execució (opcional)">
+        <button type="button" id="ideaAddBtn" class="idea-add-btn">+ Afegir idea</button>
+      </div>
+    </div>
+
     <div class="cards-grid" id="grid-dev">
       <div class="card-add" id="cardAddBox" onclick="showAddModal()">
         <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
@@ -2204,7 +2310,7 @@ updateCounts();
   }
 
   function cardKey(card) {
-    return card.getAttribute('href') || card.dataset.title || card.querySelector('.card-title')?.textContent || '';
+    return card.dataset.key || card.getAttribute('href') || card.dataset.title || card.querySelector('.card-title')?.textContent || '';
   }
 
   function swapWith(target) {
@@ -2534,7 +2640,7 @@ window.toggleFav = function(e, btn){
   e.preventDefault(); e.stopPropagation();
   var card = btn.closest('.tool-card');
   if(!card) return;
-  var key  = card.getAttribute('href') || card.dataset.title || '';
+  var key  = cardKeyOf(card);
   favs[key] = !favs[key];
   saveJSON(KEY_FAVS, favs);
   btn.textContent  = favs[key] ? '\u2B50' : '\u2606';
@@ -2547,8 +2653,9 @@ function initFavBtns(){
   document.querySelectorAll('.card-fav-btn').forEach(function(btn){
     var card = btn.closest('.tool-card');
     if(!card) return;
-    var key = card.getAttribute('href') || card.dataset.title || '';
-    if(favs[key]){ btn.textContent = '\u2B50'; btn.classList.add('is-fav'); }
+    var key = cardKeyOf(card);
+    btn.textContent = favs[key] ? '\u2B50' : '\u2606';
+    btn.classList.toggle('is-fav', !!favs[key]);
   });
 }
 
@@ -2620,7 +2727,7 @@ window.applyFilters = function(){
     var cards = document.querySelectorAll('.tool-card');
     var visible = 0;
     cards.forEach(function(card){
-      var key  = card.getAttribute('href') || card.dataset.title || '';
+      var key  = cardKeyOf(card);
       var show = !!favs[key] && (typeof currentSearch==='undefined'||currentSearch===''||card.textContent.toLowerCase().includes(currentSearch));
       card.style.display = show ? '' : 'none';
       if(show) visible++;
@@ -2658,12 +2765,20 @@ function cardTagVals(card, cardKey){
   return baked.length ? baked.slice() : (CATS[0] ? [CATS[0].val] : []);
 }
 
+/* Identificador estable d'una card: prefereix data-key (fix, no canvia mai);
+   si no n'hi ha, cau a l'href; si tampoc, al títol. Servir sempre aquesta
+   funció (mai llegir href directament) evita que favorits/etiquetes es
+   perdin quan un href canvia de lloc (p.ex. en moure els html a !!!APPS). */
+function cardKeyOf(card){
+  return card.dataset.key || card.getAttribute('href') || card.dataset.title || '';
+}
+
 function buildCatUI(card){
   var footer = card.querySelector('.card-footer-row');
   if(!footer) return;
   var tagsWrap = footer.querySelector('.card-tags');
   if(!tagsWrap) return;
-  var cardKey = card.getAttribute('href') || card.dataset.title || '';
+  var cardKey = cardKeyOf(card);
 
   function renderTags(){
     var vals = cardTagVals(card, cardKey);
@@ -2706,9 +2821,20 @@ function buildCatUI(card){
     var dd = document.createElement('div');
     dd.className = 'cat-select-wrap open cat-ms';
 
-    var selected = cardTagVals(card, cardKey);
     var listBox = document.createElement('div');
     listBox.className = 'cat-ms-list';
+
+    /* Desa a l'instant l'estat actual de tots els checkboxes marcats.
+       Sense això no hi ha cap pas de "Desar" que es pugui oblidar. */
+    function persistSelection(){
+      var chosen = Array.prototype.map.call(listBox.querySelectorAll('input[type="checkbox"]:checked'), function(c){ return c.value; });
+      if(!chosen.length && CATS[0]) chosen = [CATS[0].val];
+      assigned[cardKey] = chosen;
+      renderTags();
+      rebuildSidebar(); updateBadges();
+      if(typeof applyFilters === 'function') applyFilters();
+      saveJSON(KEY_ASSIGN, assigned);
+    }
 
     function buildRow(cat){
       var row = document.createElement('label');
@@ -2717,8 +2843,9 @@ function buildCatUI(card){
       var chk = document.createElement('input');
       chk.type = 'checkbox';
       chk.value = cat.val;
-      chk.checked = selected.indexOf(cat.val) !== -1;
+      chk.checked = cardTagVals(card, cardKey).indexOf(cat.val) !== -1;
       chk.addEventListener('click', function(ev){ ev.stopPropagation(); });
+      chk.addEventListener('change', function(){ persistSelection(); });
 
       var dot = document.createElement('span');
       dot.className = 'cat-ms-dot';
@@ -2777,30 +2904,21 @@ function buildCatUI(card){
       var newCat = {val:val, lbl:lbl, color:nextFreeColor()};
       CATS.push(newCat); saveCats();
       var row = buildRow(newCat);
-      row.querySelector('input[type="checkbox"]').checked = true;
+      var newChk = row.querySelector('input[type="checkbox"]');
+      newChk.checked = true;
       listBox.appendChild(row);
       newInp.value = '';
       rebuildSidebar();
+      persistSelection();
     });
     newRow.appendChild(newInp); newRow.appendChild(newBtn);
     dd.appendChild(newRow);
     newInp.addEventListener('keydown', function(ev){ ev.stopPropagation(); if(ev.key==='Enter'){ev.preventDefault();newBtn.click();} if(ev.key==='Escape'){dd.remove();} });
 
-    /* — Desar — */
-    var saveBtn = document.createElement('button');
-    saveBtn.type = 'button'; saveBtn.className = 'cat-ms-save'; saveBtn.textContent = 'Desar etiquetes';
-    saveBtn.addEventListener('click', function(ev){
-      ev.stopPropagation();
-      var chosen = Array.prototype.map.call(listBox.querySelectorAll('input[type="checkbox"]:checked'), function(c){ return c.value; });
-      if(!chosen.length && CATS[0]) chosen = [CATS[0].val];
-      assigned[cardKey] = chosen;
-      renderTags();
-      dd.remove();
-      rebuildSidebar(); updateBadges();
-      if(typeof applyFilters === 'function') applyFilters();
-      saveJSON(KEY_ASSIGN, assigned);
-    });
-    dd.appendChild(saveBtn);
+    var doneBtn = document.createElement('button');
+    doneBtn.type = 'button'; doneBtn.className = 'cat-ms-save'; doneBtn.textContent = 'Fet';
+    doneBtn.addEventListener('click', function(ev){ ev.stopPropagation(); dd.remove(); });
+    dd.appendChild(doneBtn);
 
     /* El desplegable es col·loca al <body>, fora de la targeta: cap clic dins seu pot obrir l'eina */
     ['click','mousedown','pointerdown','touchstart','dragstart'].forEach(function(t){
@@ -2834,6 +2952,34 @@ document.addEventListener('scroll', function(e){ if(_openCatDD && !_openCatDD.dd
 
 /* ══ INIT ════════════════════════════════════════════════════ */
 document.querySelectorAll('.tool-card[data-status="live"], .tool-card[data-status="dev"]').forEach(buildCatUI);
+
+/* Neteja favorits/etiquetes orfes: entrades desades amb una clau (href antic,
+   p.ex. un enllaç a claude.ai/artifact o un nom de fitxer sense !!!APPS/) que
+   ja no correspon a cap card actual. Sense això, el comptador de Favorits pot
+   mostrar-ne més dels que realment estan marcats. Les claus blob: (eines
+   afegides per drag&drop) es deixen intactes perquè canvien cada sessió. */
+function pruneOrphanedStorage(){
+  var liveKeys = {};
+  document.querySelectorAll('.tool-card').forEach(function(c){
+    var k = cardKeyOf(c);
+    if(k) liveKeys[k] = true;
+  });
+  var changedFavs = false;
+  Object.keys(favs).forEach(function(k){
+    if(k.indexOf('blob:') === 0) return;
+    if(!liveKeys[k]){ delete favs[k]; changedFavs = true; }
+  });
+  if(changedFavs) saveJSON(KEY_FAVS, favs);
+
+  var changedAssigned = false;
+  Object.keys(assigned).forEach(function(k){
+    if(k.indexOf('blob:') === 0) return;
+    if(!liveKeys[k]){ delete assigned[k]; changedAssigned = true; }
+  });
+  if(changedAssigned) saveJSON(KEY_ASSIGN, assigned);
+}
+pruneOrphanedStorage();
+
 initFavBtns();
 rebuildSidebar();
 updateBadges();
@@ -3103,6 +3249,75 @@ function loadCustomTools(){
 })();
 
 loadCustomTools();
+
+/* ══ IDEA TRACKER — peticions pendents a "En desenvolupament" ══ */
+var KEY_IDEAS = 'hub-dev-ideas-v1';
+var ideas = loadJSON(KEY_IDEAS, []);
+
+function fmtDate(iso){
+  if(!iso) return '\u2014';
+  var p = iso.split('-');
+  if(p.length !== 3) return iso;
+  return p[2]+'/'+p[1]+'/'+p[0];
+}
+
+function renderIdeas(){
+  var body = document.getElementById('ideaTableBody');
+  var empty = document.getElementById('ideaEmptyMsg');
+  var table = document.querySelector('.idea-table');
+  if(!body) return;
+  var sorted = ideas.slice().sort(function(a,b){ return (b.reqDate||'').localeCompare(a.reqDate||''); });
+  body.innerHTML = '';
+  if(!sorted.length){
+    if(table) table.style.display = 'none';
+    if(empty) empty.style.display = 'block';
+    return;
+  }
+  if(table) table.style.display = '';
+  if(empty) empty.style.display = 'none';
+  sorted.forEach(function(row){
+    var tr = document.createElement('tr');
+    var tdReq = document.createElement('td'); tdReq.textContent = fmtDate(row.reqDate);
+    var tdIdea = document.createElement('td'); tdIdea.className = 'idea-text-cell'; tdIdea.textContent = row.idea;
+    var tdEst = document.createElement('td'); tdEst.textContent = row.estDate ? fmtDate(row.estDate) : '\u2014';
+    var tdDel = document.createElement('td');
+    var delBtn = document.createElement('button');
+    delBtn.type = 'button'; delBtn.className = 'idea-row-del'; delBtn.innerHTML = '&times;'; delBtn.title = 'Eliminar';
+    delBtn.addEventListener('click', function(){
+      ideas = ideas.filter(function(i){ return i.id !== row.id; });
+      renderIdeas();
+      saveJSON(KEY_IDEAS, ideas);
+    });
+    tdDel.appendChild(delBtn);
+    tr.appendChild(tdReq); tr.appendChild(tdIdea); tr.appendChild(tdEst); tr.appendChild(tdDel);
+    body.appendChild(tr);
+  });
+}
+renderIdeas();
+
+(function initIdeaAdd(){
+  var btn = document.getElementById('ideaAddBtn');
+  var reqInp = document.getElementById('ideaDateReq');
+  var ideaInp = document.getElementById('ideaText');
+  var estInp = document.getElementById('ideaDateEst');
+  if(!btn) return;
+  btn.addEventListener('click', function(){
+    var reqDate = reqInp.value;
+    var ideaTxt = ideaInp.value.trim();
+    var estDate = estInp.value;
+    if(!reqDate){ reqInp.focus(); return; }
+    if(!ideaTxt){ ideaInp.focus(); return; }
+    ideas.push({
+      id: 'idea_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+      reqDate: reqDate, idea: ideaTxt, estDate: estDate || ''
+    });
+    saveJSON(KEY_IDEAS, ideas);
+    renderIdeas();
+    reqInp.value = ''; ideaInp.value = ''; estInp.value = '';
+    reqInp.focus();
+  });
+  ideaInp.addEventListener('keydown', function(ev){ if(ev.key === 'Enter'){ ev.preventDefault(); btn.click(); } });
+})();
 
 /* ══ VERIFICADOR D'ENLLAÇOS ══════════════════════════════════
    Comprova de veritat, targeta per targeta, si el fitxer del href

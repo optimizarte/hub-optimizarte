@@ -21,9 +21,12 @@
   "seguros": [
     "Comercio / Pyme",
     "Acc. Convenio",
-    "Transportes"
+    "Transportes",
+    "Vida",
+    "Salud",
+    "Mascotas"
   ],
-  "ramo_data": "{\"comercio-pyme-1\":{\"estado\":\"facilita\"},\"rc-1\":{\"estado\":\"no-necesita\"},\"acc-convenio-1\":{\"estado\":\"no-cambia-vto\"},\"transportes-1\":{\"estado\":\"vto-inmediato\"}}",
+  "ramo_data": "{\"comercio-pyme-1\":{\"estado\":\"facilita\"},\"rc-1\":{\"estado\":\"no-necesita\"},\"acc-convenio-1\":{\"estado\":\"no-cambia-vto\"},\"transportes-1\":{\"estado\":\"vto-inmediato\"},\"salud-1\":{\"modalidad\":\"Cuadro médico\",\"copago\":\"Si\",\"personas\":2,\"personasData\":[{\"fnac\":\"1972-09-12\",\"sexo\":\"H\",\"prof\":\"AGENTE DE SEGUROS \",\"deporte\":\"No\",\"deporteNombre\":\"\"},{\"fnac\":\"1978-09-26\",\"sexo\":\"M\",\"prof\":\"ENFERMERA\",\"deporte\":\"No\",\"deporteNombre\":\"\"}],\"observaciones\":\"No\",\"observacionesNota\":\"\",\"vto\":\"2026-12-31\",\"estado\":\"vto-inmediato\",\"_saved\":true},\"vida-1\":{\"personas\":1,\"profesion\":\"ENFERMERA\",\"capital\":\"100000\",\"deportes\":\"No\",\"deporteNombre\":\"\",\"personasData\":[{\"fnac\":\"1972-09-12\",\"sexo\":\"H\"}],\"destinoHipoteca\":true,\"destinoSucesiones\":false,\"destinoFamiliar\":false,\"observaciones\":\"No\",\"observacionesNota\":\"\",\"vto\":\"1972-09-12\",\"estado\":\"vto-inmediato\",\"_saved\":true},\"mascotas-1\":{\"estado\":\"vto-inmediato\"}}",
   "colab_recoge": "Dany Hernandez",
   "colab_recoge_racf": "M441819E",
   "colab_asigna": "Fadoua Khachach",
@@ -33,7 +36,7 @@
   "fecha_accion": "2026-04-05",
   "origen_sw": "recomendado",
   "origen_detalle": "Detalle del origen INVENADO",
-  "timestamp": "4/4/2026, 21:11:18",
+  "timestamp": "5/4/2026, 12:26:00",
   "par_nombre": "",
   "par_ap1": "",
   "par_ap2": "",
@@ -58,6 +61,6 @@
   "aut_empleados": "3",
   "vtos_per": true,
   "aut_emp": true,
-  "fechaCreacion": "2026-04-04T19:11:18.992Z",
-  "fechaModificacion": "2026-04-04T19:11:18.992Z"
+  "fechaCreacion": "2026-04-05T10:26:01.012Z",
+  "fechaModificacion": "2026-04-05T10:26:01.012Z"
 }

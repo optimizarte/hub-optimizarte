@@ -1,0 +1,4 @@
+
+# Backups creats pels patchers OPTICRM
+*.bak-pre-*
+_backup-*/

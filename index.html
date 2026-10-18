@@ -455,6 +455,19 @@ button { font-family: var(--font); }
   font-size: 10.5px; font-weight: 600;
   color: var(--red); text-transform: uppercase; letter-spacing: .5px;
 }
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  min-width: 0;
+}
+.card-tag {
+  font-size: 9.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .4px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
 .card-arrow {
   width: 26px; height: 26px; border-radius: 50%;
   background: var(--bg);
@@ -480,6 +493,180 @@ button { font-family: var(--font); }
 }
 .card-add:hover { border-color: var(--red); color: var(--red); background: var(--red-light); }
 .card-add span { font-size: 12.5px; font-weight: 600; }
+.card-add.drag-over {
+  border-color: var(--red);
+  background: var(--red-light);
+  color: var(--red);
+  box-shadow: 0 0 0 3px rgba(220,0,40,0.12) inset;
+}
+.card-add-hint { font-size: 10.5px; font-weight: 400; color: var(--gray-3); }
+
+/* Add-tool overlay — works on desktop AND mobile (not gated by the 768px modal rule) */
+.add-tool-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 500;
+  padding: 16px;
+}
+.add-tool-overlay.open { display: flex; }
+.add-tool-box {
+  background: var(--white);
+  border-radius: var(--radius);
+  width: 100%; max-width: 420px;
+  max-height: 88vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-md);
+}
+.add-tool-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--gray-4);
+  font-size: 14px; font-weight: 700; color: var(--dark);
+}
+.add-tool-body { padding: 18px; }
+.add-dropzone {
+  border: 2px dashed var(--gray-4);
+  border-radius: var(--radius-sm);
+  padding: 30px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .18s;
+}
+.add-dropzone:hover, .add-dropzone.drag-over {
+  border-color: var(--red);
+  background: var(--red-light);
+}
+.add-dropzone .adz-icon { font-size: 30px; line-height: 1; }
+.add-dropzone .adz-title { font-size: 13.5px; font-weight: 600; color: var(--dark); margin-top: 8px; }
+.add-dropzone .adz-sub { font-size: 12px; color: var(--gray-2); margin-top: 3px; }
+
+.add-item {
+  border: 1px solid var(--gray-4);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  margin-bottom: 10px;
+}
+.add-item label {
+  display: block; font-size: 10.5px; font-weight: 700;
+  color: var(--gray-2); text-transform: uppercase; letter-spacing: .5px;
+  margin: 8px 0 4px;
+}
+.add-item label:first-child { margin-top: 0; }
+.add-item input[type="text"], .add-item select {
+  width: 100%;
+  border: 1.5px solid var(--gray-4);
+  border-radius: 7px;
+  padding: 8px 10px;
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--dark);
+  outline: none;
+  background: var(--white);
+}
+.add-item input[type="text"]:focus, .add-item select:focus { border-color: var(--red); }
+.add-item-file { font-size: 11px; color: var(--gray-3); margin-top: 6px; word-break: break-all; }
+
+.add-actions { display: flex; gap: 10px; margin-top: 4px; }
+.add-btn {
+  flex: 1;
+  border: none; border-radius: 8px;
+  padding: 11px;
+  font-family: var(--font); font-size: 13.5px; font-weight: 700;
+  cursor: pointer;
+}
+.add-btn-primary { background: var(--red); color: white; }
+.add-btn-primary:hover { background: var(--red-dark); }
+.add-btn-ghost { background: var(--bg); color: var(--gray); }
+.add-btn-ghost:hover { background: var(--gray-4); }
+
+.card-remove-btn {
+  position: absolute; top: 10px; right: 10px;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.92);
+  border: 1px solid var(--gray-4);
+  color: var(--gray-2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; line-height: 1;
+  cursor: pointer;
+  opacity: 0; transition: opacity .15s;
+  z-index: 2;
+}
+.tool-card:hover .card-remove-btn { opacity: 1; }
+.card-remove-btn:hover { background: var(--red-light); color: var(--red); border-color: var(--red); }
+
+.tool-card.link-broken { border-color: #dc2626; }
+.link-broken-badge {
+  position: absolute; top: 10px; left: 10px;
+  background: #dc2626; color: #fff;
+  font-size: 9.5px; font-weight: 700;
+  padding: 3px 8px; border-radius: 999px;
+  z-index: 2; pointer-events: none;
+  box-shadow: 0 2px 6px rgba(220,38,38,0.35);
+}
+
+/* Idea tracker — graella de peticions pendents dins "En desenvolupament" */
+.idea-tracker {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+  margin-bottom: 22px;
+}
+.idea-tracker-head h3 { font-size: 14px; font-weight: 700; color: var(--dark); }
+.idea-tracker-head p  { font-size: 12px; color: var(--gray-2); margin-top: 2px; }
+.idea-table-wrap { margin-top: 14px; overflow-x: auto; }
+.idea-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.idea-table th {
+  text-align: left; font-size: 10.5px; font-weight: 700;
+  color: var(--gray-2); text-transform: uppercase; letter-spacing: .4px;
+  padding: 0 10px 8px; border-bottom: 1.5px solid var(--gray-4);
+  white-space: nowrap;
+}
+.idea-table td {
+  padding: 9px 10px; border-bottom: 1px solid var(--gray-4);
+  color: var(--dark); vertical-align: top;
+}
+.idea-table tbody tr:last-child td { border-bottom: none; }
+.idea-table td.idea-text-cell { word-break: break-word; }
+.idea-row-del {
+  background: none; border: none; cursor: pointer;
+  color: var(--gray-3); font-size: 14px; line-height: 1;
+  padding: 2px 4px; border-radius: 4px; transition: all .15s;
+}
+.idea-row-del:hover { color: var(--red); background: var(--red-light); }
+.idea-empty-msg { font-size: 12.5px; color: var(--gray-3); padding: 14px 4px; display: none; }
+.idea-add-row {
+  display: grid;
+  grid-template-columns: 150px 1fr 170px auto;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1.5px solid var(--gray-4);
+}
+.idea-add-row input {
+  border: 1.5px solid var(--gray-4);
+  border-radius: 7px;
+  padding: 8px 10px;
+  font-family: var(--font);
+  font-size: 12.5px;
+  color: var(--dark);
+  outline: none;
+  background: var(--white);
+}
+.idea-add-row input:focus { border-color: var(--red); }
+.idea-add-btn {
+  background: var(--red); color: #fff; border: none;
+  border-radius: 7px; padding: 8px 16px;
+  font-family: var(--font); font-size: 12.5px; font-weight: 700;
+  cursor: pointer; white-space: nowrap;
+}
+.idea-add-btn:hover { background: var(--red-dark); }
+@media (max-width: 768px) {
+  .idea-add-row { grid-template-columns: 1fr; }
+}
 
 /* ═══════════════════════════════════════════════
    DRAG & DROP REORDER — grid-live
@@ -760,6 +947,73 @@ button { font-family: var(--font); }
 .card-category-wrap{position:relative;display:flex;align-items:center;gap:5px;}
 .cat-edit-btn{background:none;border:none;cursor:pointer;padding:2px 4px;border-radius:4px;color:var(--gray-3);font-size:12px;transition:all .15s;line-height:1;}
 .cat-edit-btn:hover{color:var(--red);background:var(--red-light);}
+.cat-ms{ min-width: 220px; max-height: 320px; overflow-y: auto; }
+.cat-ms-list{ display:flex; flex-direction:column; }
+.cat-ms-opt{
+  display:flex; align-items:center; gap:8px;
+  padding:6px 12px; cursor:pointer; font-family:'Inter',sans-serif;
+  transition: background .1s;
+}
+.cat-ms-opt:hover{ background: var(--red-light); }
+.cat-ms-opt input[type="checkbox"]{ flex-shrink:0; cursor:pointer; accent-color: var(--red); }
+.cat-ms-dot{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.cat-ms-lbl{ flex:1; font-size:12px; color:var(--dark); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cat-ms-ren{
+  flex-shrink:0; background:none; border:none; cursor:pointer;
+  padding:2px 4px; border-radius:4px; color:var(--gray-3); font-size:11px;
+  opacity:0; transition: all .15s;
+}
+.cat-ms-opt:hover .cat-ms-ren{ opacity:1; }
+.cat-ms-ren:hover{ color:var(--red); background:#fff; }
+.cat-ms-save{
+  display:block; width:calc(100% - 20px); margin:8px 10px 6px;
+  background:var(--red); color:#fff; border:none; border-radius:6px;
+  padding:8px; font-size:12px; font-weight:700; cursor:pointer;
+  font-family:'Inter',sans-serif;
+}
+.cat-ms-save:hover{ background:var(--red-dark); }
+
+/* ── EDITABLE CATEGORY LABELS ── */
+/* ── CREATE NEW CAT ── */
+.cat-new-row{display:flex;align-items:center;gap:6px;padding:7px 10px;border-top:1px solid #F0F0F0;margin-top:4px;}
+.cat-new-inp{flex:1;border:none;border-bottom:1.5px solid var(--border);font-size:12px;font-family:'Inter',sans-serif;padding:2px 2px;outline:none;background:transparent;color:var(--dark);}
+.cat-new-inp:focus{border-bottom-color:var(--red);}
+.cat-new-btn{background:var(--red);color:#fff;border:none;border-radius:4px;padding:3px 8px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;}
+/* ── PIN MODAL ── */
+.pin-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:2000;align-items:center;justify-content:center;}
+.pin-overlay.open{display:flex;animation:pinIn .18s ease;}
+@keyframes pinIn{from{opacity:0;transform:scale(.94);}to{opacity:1;transform:none;}}
+.pin-box{background:#fff;border-radius:12px;padding:32px 28px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);min-width:280px;}
+.pin-icon{font-size:36px;margin-bottom:10px;}
+.pin-title{font-family:'Poppins',sans-serif;font-size:16px;font-weight:700;color:var(--dark);margin-bottom:4px;}
+.pin-sub{font-size:12px;color:var(--gray-2);margin-bottom:18px;}
+.pin-dots{display:flex;justify-content:center;gap:10px;margin-bottom:18px;}
+.pin-dot{width:12px;height:12px;border-radius:50%;background:var(--gray-4);transition:background .15s;}
+.pin-dot.filled{background:var(--red);}
+.pin-keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:200px;margin:0 auto 14px;}
+.pin-key{padding:12px;border:1.5px solid var(--border);border-radius:8px;font-size:16px;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;background:#fff;transition:all .12s;}
+.pin-key:hover{border-color:var(--red);color:var(--red);}
+.pin-key:active{background:var(--red-light);}
+.pin-err{font-size:12px;color:#dc2626;min-height:16px;margin-top:4px;}
+.pin-cancel{font-size:12px;color:var(--gray-2);background:none;border:none;cursor:pointer;text-decoration:underline;margin-top:4px;}
+/* ── SUPERVISIÓ BADGE ── */
+.cat-superv{color:#7c3aed!important;}
+.nav-item .superv-lock{font-size:10px;opacity:.6;margin-left:2px;}
+
+/* ── STAR FAV BUTTON ── */
+.card-fav-btn{background:none;border:none;cursor:pointer;font-size:17px;line-height:1;padding:0;transition:transform .15s;flex-shrink:0;color:#d97706;}
+.card-fav-btn:hover{transform:scale(1.25);}
+.card-fav-btn.is-fav{color:#f59e0b;}
+
+/* ── CAT RENAME ROW ── */
+.cat-rename-row{display:flex;align-items:center;gap:6px;padding:6px 10px 4px;border-bottom:1px solid #F0F0F0;}
+.cat-rename-inp{flex:1;border:none;border-bottom:1.5px solid var(--border);font-size:12px;font-family:'Inter',sans-serif;padding:2px;outline:none;background:transparent;color:var(--dark);}
+.cat-rename-inp:focus{border-bottom-color:var(--red);}
+.cat-rename-btn{background:var(--red);color:#fff;border:none;border-radius:4px;padding:3px 7px;font-size:10.5px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.cat-new-row{display:flex;align-items:center;gap:6px;padding:7px 10px;border-top:1px solid #F0F0F0;margin-top:2px;}
+.cat-new-inp{flex:1;border:none;border-bottom:1.5px solid var(--border);font-size:12px;font-family:'Inter',sans-serif;padding:2px;outline:none;background:transparent;color:var(--dark);}
+.cat-new-inp:focus{border-bottom-color:var(--red);}
+.cat-new-btn{background:var(--red);color:#fff;border:none;border-radius:4px;padding:3px 7px;font-size:10.5px;font-weight:600;cursor:pointer;white-space:nowrap;}
 </style>
 </head>
 <body>
@@ -769,35 +1023,11 @@ button { font-family: var(--font); }
 ═══════════════════════════════════════════════ -->
 <header class="header">
   <a href="#" class="header-logo">
-    <!--
-      Logo OPTIMIZARTE by Occident — recreació SVG fidel
-      Tipografia serif bold caps + "by Occident" cursiva+negreta + anagrama trisquel
-      Tot en blanc, fons transparent.
-    -->
-    <svg class="logo-svg" viewBox="0 0 460 85" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- OPTIMIZARTE€ — serif bold uppercase -->
-      <text x="4" y="38"
-        font-family="Georgia, 'Times New Roman', serif"
-        font-size="40" font-weight="900" fill="white" letter-spacing="-1">OPTIMIZART€</text>
-      <!-- "by" italic -->
-      <text x="42" y="65"
-        font-family="Georgia, 'Times New Roman', serif"
-        font-size="21" font-weight="400" font-style="italic" fill="white">by</text>
-      <!-- "Occident" bold -->
-      <text x="76" y="65"
-        font-family="Georgia, 'Times New Roman', serif"
-        font-size="21" font-weight="700" fill="white">Occident</text>
-      <!-- Anagrama trisquel / Y amb tres braços arrodonits — blanc -->
-      <g transform="translate(427,56) scale(0.52)">
-        <path d="M0,0 C-10,-6 -34,-10 -46,-2 C-60,8 -60,24 -50,32 C-40,40 -24,34 -12,20 Z"
-              fill="white" stroke="white" stroke-width="0.5" stroke-linejoin="round"/>
-        <path d="M0,0 C12,-4 26,-20 24,-38 C22,-54 8,-62 -6,-56 C-20,-50 -20,-34 -12,-20 Z"
-              fill="white" stroke="white" stroke-width="0.5" stroke-linejoin="round"/>
-        <path d="M0,0 C2,12 16,26 34,28 C50,30 62,18 60,4 C58,-10 42,-16 26,-10 Z"
-              fill="white" stroke="white" stroke-width="0.5" stroke-linejoin="round"/>
-        <circle cx="0" cy="0" r="9" fill="white"/>
-      </g>
-    </svg>
+    <div style="font-family:system-ui,sans-serif;font-size:15px;font-weight:700;letter-spacing:-.01em;color:#fff">
+      Optimizarte
+      <span style="font-family:Arial,sans-serif;font-size:9.5px;font-weight:500;color:#999;margin:0 3px;letter-spacing:0">by</span>
+      <span style="font-weight:700;color:#DC0028">Occident</span>
+    </div>
   </a>
 
   <div class="header-divider"></div>
@@ -843,60 +1073,16 @@ button { font-family: var(--font); }
         <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
       </svg>
       Totes les eines
-      <span class="nav-badge" id="badge-all">7</span>
+      <span class="nav-badge" id="badge-all">8</span>
     </a>
 
-    <a class="nav-item" href="#" onclick="sidebarFilter('formularis',this);return false;">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-        <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
-        <rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/>
-      </svg>
-      Formularis
-      <span class="nav-badge gray">0</span>
+    <a class="nav-item" href="#" id="nav-favorits" onclick="sidebarFilter('_fav',this);return false;">
+      <span style="font-size:15px;line-height:1;">⭐</span>
+      Favorits
+      <span class="nav-badge gray" id="badge-fav">0</span>
     </a>
 
-    <a class="nav-item" href="#" onclick="sidebarFilter('instruccions',this);return false;">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/>
-      </svg>
-      Instruccions
-      <span class="nav-badge gray">0</span>
-    </a>
-
-    <a class="nav-item" href="#" onclick="sidebarFilter('analisi',this);return false;">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-      </svg>
-      Anàlisi de Pòlisses
-      <span class="nav-badge gray">1</span>
-    </a>
-
-    <a class="nav-item" href="#" onclick="sidebarFilter('sinistres',this);return false;">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-      </svg>
-      Sinistres
-      <span class="nav-badge gray">0</span>
-    </a>
-
-    <a class="nav-item" href="#" onclick="sidebarFilter('pagaments',this);return false;">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-        <rect x="3" y="4" width="18" height="18" rx="2"/>
-        <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
-        <line x1="3" y1="10" x2="21" y2="10"/>
-      </svg>
-      Pagaments
-      <span class="nav-badge gray">1</span>
-    </a>
-
-    <a class="nav-item" href="#" onclick="sidebarFilter('cotitzacions',this);return false;">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-        <line x1="12" y1="1" x2="12" y2="23"/>
-        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-      </svg>
-      Cotitzacions
-      <span class="nav-badge gray">0</span>
-    </a>
+    <div id="sidebar-dyn-cats"></div>
   </div>
 
   <div class="sidebar-sep"></div>
@@ -911,11 +1097,8 @@ button { font-family: var(--font); }
       <span style="width:9px;height:9px;border-radius:50%;background:#d97706;flex-shrink:0;display:block"></span>
       En desenvolupament
     </a>
-    <a class="nav-item" href="#" onclick="sidebarFilter('_soon',this);return false;">
-      <span style="width:9px;height:9px;border-radius:50%;background:var(--gray-3);flex-shrink:0;display:block"></span>
-      Pròximament
-    </a>
   </div>
+  <!-- ESTAT badge removed per user request -->
 
   <div class="sidebar-footer">
     <div class="occ-badge">
@@ -1002,13 +1185,8 @@ button { font-family: var(--font); }
   <!-- Filter chips -->
   <div class="filter-bar">
     <span class="filter-label">Filtrar:</span>
-    <div class="chip active" onclick="chipFilter('all',this)">Totes</div>
-    <div class="chip" onclick="chipFilter('formularis',this)">Formularis</div>
-    <div class="chip" onclick="chipFilter('instruccions',this)">Instruccions</div>
-    <div class="chip" onclick="chipFilter('analisi',this)">Anàlisi</div>
-    <div class="chip" onclick="chipFilter('sinistres',this)">Sinistres</div>
-    <div class="chip" onclick="chipFilter('pagaments',this)">Pagaments</div>
-    <div class="chip" onclick="chipFilter('cotitzacions',this)">Cotitzacions</div>
+    <div class="chip active" data-cat="all" onclick="chipFilter('all',this)">Totes</div>
+    <span id="chips-dyn-cats" style="display:contents"></span>
   </div>
 
   <!-- ─── Cards container ─── -->
@@ -1030,6 +1208,7 @@ button { font-family: var(--font); }
          data-status="live"
          data-title="Seguiment d'Agència · Optimizarte 3.0"
          id="card-seguiment"
+         data-key="seguiment-agencia"
          onclick="openSeguiment(event)">
         <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
         <div class="card-stripe"></div>
@@ -1040,13 +1219,13 @@ button { font-family: var(--font); }
                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
               </svg>
             </div>
-            <span class="card-status status-live">● Disponible</span>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">☆</button>
           </div>
           <div class="card-title">Seguiment d'Agència</div>
           <div class="card-desc">Infografia de seguiment mensual de vendes: KPIs, bonos, objectius i evolució de l'agència Optimizarte 3.0.</div>
           <div id="seg-folder-info" style="font-size:10.5px;color:var(--gray-2);margin:2px 0;display:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
           <div class="card-footer-row">
-            <span class="card-category">Anàlisi</span>
+            <div class="card-tags"><span class="card-tag" style="color:#7c3aed;background:rgba(124,58,237,0.12);">Anàlisi</span></div>
             <div style="display:flex;gap:6px;align-items:center;">
               <button id="seg-folder-btn" onclick="pickSeguimentFolder(event)"
                 style="background:none;border:1.5px solid var(--border);border-radius:5px;padding:3px 8px;font-size:10.5px;font-weight:600;cursor:pointer;color:var(--gray);font-family:'Inter',sans-serif;white-space:nowrap;"
@@ -1064,7 +1243,8 @@ button { font-family: var(--font); }
 
             <!-- ★ Calendari de Pagaments -->
       <a class="tool-card"
-         href="CalendarioPagosPolizas_Occident.html"
+         data-key="calendari-pagaments"
+         href="!!!APPS/CalendarioPagosPolizas_Occident.html"
          data-category="pagaments"
          data-status="live"
          data-title="Calendari de Pagaments de Pòlisses"
@@ -1080,12 +1260,12 @@ button { font-family: var(--font); }
                 <line x1="3" y1="10" x2="21" y2="10"/>
               </svg>
             </div>
-            <span class="card-status status-live">● Disponible</span>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">☆</button>
           </div>
           <div class="card-title">Calendari de Pagaments</div>
           <div class="card-desc">Generador de calendaris de venciments i fraccionament de primes per pòlisses. Visualització mensual i anual.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#d97706">Pagaments</span>
+            <div class="card-tags"><span class="card-tag" style="color:#d97706;background:rgba(217,119,6,0.12);">Pagaments</span></div>
             <div class="card-arrow">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path d="m9 18 6-6-6-6"/>
@@ -1097,7 +1277,8 @@ button { font-family: var(--font); }
 
       <!-- ★ Tancaments Mensuals -->
       <a class="tool-card"
-         href="historics-seguiment.html"
+         data-key="tancaments-mensuals"
+         href="!!!APPS/historics-seguiment.html"
          data-category="seguiment"
          data-status="live"
          data-title="Tancaments Mensuals"
@@ -1113,14 +1294,14 @@ button { font-family: var(--font); }
                 <line x1="12" y1="17" x2="12" y2="21"/>
               </svg>
             </div>
-            <span class="card-status status-live">&#9679; Disponible</span>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">☆</button>
           </div>
           <div class="card-title">Tancaments Mensuals</div>
           <div class="card-desc" id="card-tancaments-desc">Hist&#242;rics de DAFOs, Tancaments i Fitxes Mediador. Desa i cerca per mes.</div>
           <!-- Quick links mes anterior - filled by JS -->
           <div id="card-prev-links" style="margin:4px 0 2px;display:flex;flex-direction:column;gap:3px;font-size:10.5px;"></div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:#1d4ed8;">Seguiment</span>
+            <div class="card-tags"><span class="card-tag" style="color:#1d4ed8;background:rgba(29,78,216,0.12);">Seguiment</span></div>
             <div class="card-arrow">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path d="m9 18 6-6-6-6"/>
@@ -1132,7 +1313,8 @@ button { font-family: var(--font); }
 
       <!-- ★ Alta de Client -->
       <a class="tool-card"
-         href="alta-clientes.html"
+         data-key="alta-client"
+         href="!!!APPS/alta-clientes.html"
          data-category="formularis"
          data-status="live"
          data-title="Alta de Client"
@@ -1148,12 +1330,12 @@ button { font-family: var(--font); }
                 <line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/>
               </svg>
             </div>
-            <span class="card-status status-live">● Disponible</span>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">☆</button>
           </div>
           <div class="card-title">Alta de Client</div>
           <div class="card-desc">Formulari d'alta de nous clients: particular, empresa o autònom. Recull totes les dades necessàries per a la gestió a l'agència.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:var(--green)">Formularis</span>
+            <div class="card-tags"><span class="card-tag" style="color:#166534;background:rgba(22,101,52,0.12);">Formularis</span></div>
             <div class="card-arrow">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
             </div>
@@ -1161,16 +1343,648 @@ button { font-family: var(--font); }
         </div>
       </a>
 
-    </div><!-- /grid-live -->
+      <!-- ★ Canvi de Mediador -->
+      <a class="tool-card"
+         data-key="canvi-mediador"
+         href="!!!APPS/generador-cambio-mediador.html"
+         data-category="formularis"
+         data-status="live"
+         data-title="Canvi de Mediador"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+                <rect x="9" y="3" width="6" height="4" rx="1"/>
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </div>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">☆</button>
+          </div>
+          <div class="card-title">Canvi de Mediador</div>
+          <div class="card-desc">Generador de cartes de canvi de mediador a OPTIMIZARTE 3.0. Vista pr&#232;via d&#39;impressi&#243; i activitat Gestiona integrades.</div>
+          <div class="card-footer-row">
+            <div class="card-tags"><span class="card-tag" style="color:#166534;background:rgba(22,101,52,0.12);">Formularis</span></div>
+            <div class="card-arrow">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </div>
+        </div>
+      </a>
+
+
+      <!-- ★ No Renovació de Pòlissa -->
+      <a class="tool-card"
+         data-key="no-renovacio-polissa"
+         href="!!!APPS/no-renovacion-poliza.html"
+         data-category="formularis"
+         data-status="live"
+         data-title="No Renovació de Pòlissa"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="9" y1="13" x2="15" y2="13"/>
+                <line x1="9" y1="17" x2="12" y2="17"/>
+                <line x1="14" y1="15" x2="18" y2="19"/>
+                <line x1="18" y1="15" x2="14" y2="19"/>
+              </svg>
+            </div>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">☆</button>
+          </div>
+          <div class="card-title">No Renovació de Pòlissa</div>
+          <div class="card-desc">Genera la comunicació formal de no renovació (Art. 22, Llei 50/1980). Arrossega el PDF de la pòlissa per extreure les dades automàticament.</div>
+          <div class="card-footer-row">
+            <div class="card-tags"><span class="card-tag" style="color:#166534;background:rgba(22,101,52,0.12);">Formularis</span></div>
+            <div class="card-arrow">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </div>
+        </div>
+      </a>
+
+
+      <!-- ★ Rehabilitació de Pòlissa -->
+      <a class="tool-card"
+         data-key="rehabilitacio-polissa"
+         href="!!!APPS/rehabilitacion-poliza.html"
+         data-category="formularis"
+         data-status="live"
+         data-title="Rehabilitació de Pòlissa"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+                <rect x="9" y="3" width="6" height="4" rx="1"/>
+                <path d="M12 12v5M9.5 14.5l2.5-2.5 2.5 2.5"/>
+              </svg>
+            </div>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">☆</button>
+          </div>
+          <div class="card-title">Rehabilitació de Pòlissa</div>
+          <div class="card-desc">Sol·licitud de rehabilitació i certificat d'inexistència de sinistres. Per a persona física, empresa i comunitat de propietaris.</div>
+          <div class="card-footer-row">
+            <div class="card-tags"><span class="card-tag" style="color:#166534;background:rgba(22,101,52,0.12);">Formularis</span></div>
+            <div class="card-arrow">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- ★ Dashboard Mediador -->
+      <a class="tool-card"
+         data-key="dashboard-mediador"
+         href="!!!APPS/dashboard-app.html"
+         data-category="analisi"
+         data-status="live"
+         data-title="Dashboard Mediador"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe" style="background:#7c3aed;"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon" style="background:#f3e8ff;color:#7c3aed;">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+              </svg>
+            </div>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">☆</button>
+          </div>
+          <div class="card-title">Dashboard Mediador</div>
+          <div class="card-desc">Tauler de control del mediador Occident: ingressos, comissions, resultats tècnics i bonos amb accés restringit per PIN.</div>
+          <div class="card-footer-row">
+            <div class="card-tags"><span class="card-tag" style="color:#7c3aed;background:rgba(124,58,237,0.12);">Anàlisi</span></div>
+            <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+      <!-- ★ Seguiment Vendes Excel -->
+      <a class="tool-card"
+         data-key="seguiment-vendes-excel"
+         href="!!!APPS/seguiment-excel.html"
+         data-category="seguiment"
+         data-status="live"
+         data-title="Seguiment Vendes Excel"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe" style="background:#166534;"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon" style="background:#dcfce7;color:#166534;">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="12" y2="17"/>
+              </svg>
+            </div>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">☆</button>
+          </div>
+          <div class="card-title">Seguiment Vendes Excel</div>
+          <div class="card-desc">Importa el full Excel de seguiment de vendes Occident i genera automàticament la infografia mensual de l’agència.</div>
+          <div class="card-footer-row">
+            <div class="card-tags"><span class="card-tag" style="color:#1d4ed8;background:rgba(29,78,216,0.12);">Seguiment</span></div>
+            <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+      <!-- ★ Sol·licitud TIREA / SIHSA -->
+      <a class="tool-card"
+         data-key="sollicitud-tirea-sihsa"
+         href="!!!APPS/tirea-sihsa-v4.html"
+         data-category="formularis"
+         data-status="live"
+         data-title="Sol·licitud TIREA / SIHSA"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe" style="background:#0891b2;"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon" style="background:#cffafe;color:#0891b2;">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+                <rect x="9" y="3" width="6" height="4" rx="1"/>
+                <path d="M9 12h6M9 16h4"/>
+              </svg>
+            </div>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">☆</button>
+          </div>
+          <div class="card-title">Sol·licitud TIREA / SIHSA</div>
+          <div class="card-desc">Generador de sol·licituds d’informació TIREA i SIHSA per a consulta de dades de pòlisses al sistema Occident.</div>
+          <div class="card-footer-row">
+            <div class="card-tags"><span class="card-tag" style="color:#166534;background:rgba(22,101,52,0.12);">Formularis</span></div>
+            <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+          <!-- ★ D.I.S. Declaración Inexistencia Siniestro -->
+      <a class="tool-card"
+         data-key="dis-declaracio-inexistencia"
+         href="!!!APPS/DIS_formulario_3.html"
+         data-category="sinistres"
+         data-status="live"
+         data-title="D.I.S. · Declaración de Inexistencia de Siniestro"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe" style="background:#dc2626;"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon" style="background:#fee2e2;color:#dc2626;">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+                <rect x="9" y="3" width="6" height="4" rx="1"/>
+                <line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="12" y2="16"/>
+                <path d="M16 19l2 2 4-4" stroke-width="2"/>
+              </svg>
+            </div>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">☆</button>
+          </div>
+          <div class="card-title">D.I.S. — Decl. Inexistència Sinistre</div>
+          <div class="card-desc">Declaració responsable d'inexístència de sinistre. Generador de document oficial per al tràmit de polisses Occident.</div>
+          <div class="card-footer-row">
+            <div class="card-tags"><span class="card-tag" style="color:#dc2626;background:rgba(220,38,38,0.12);">Sinistres</span></div>
+            <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+          <!-- ★ Comparador de Propuestas -->
+      <a class="tool-card"
+         data-key="comparador-propostes-assegurances"
+         href="!!!APPS/comparador-propuestas_6.html"
+         data-category="cotitzacions"
+         data-status="live"
+         data-title="Comparador de Propuestas de Seguro"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe" style="background:#0891b2;"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon" style="background:#cffafe;color:#0891b2;">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="14"/>
+                <line x1="2" y1="20" x2="22" y2="20"/>
+              </svg>
+            </div>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">☆</button>
+          </div>
+          <div class="card-title">Comparador de Propuestas</div>
+          <div class="card-desc">Compara fins a 3 propostes de seguro en paral·lel: cobertures, primes i condicions. Generador d’informe comparatiu per al client.</div>
+          <div class="card-footer-row">
+            <div class="card-tags"><span class="card-tag" style="color:#0891b2;background:rgba(8,145,178,0.12);">Cotitzacions</span></div>
+            <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+          <!-- ★ Comparativo Vida -->
+      <a class="tool-card"
+         data-key="comparatiu-vida"
+         href="!!!APPS/comparativo-vida_4.html"
+         data-category="cotitzacions"
+         data-status="live"
+         data-title="Comparativo Vida"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe" style="background:#DC0028;"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon" style="background:#fff0f2;color:#DC0028;">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </div>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">☆</button>
+          </div>
+          <div class="card-title">Comparativo Vida</div>
+          <div class="card-desc">Comparativa de productes de segur de vida: capitals, primes, cobertures i condicions. Informe personalitzat per al client.</div>
+          <div class="card-footer-row">
+            <div class="card-tags"><span class="card-tag" style="color:#0891b2;background:rgba(8,145,178,0.12);">Cotitzacions</span></div>
+            <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+          <!-- ★ Configurador de Accesorios -->
+      <a class="tool-card"
+         data-key="configurador-accessoris"
+         href="!!!APPS/accesorios-config-github.html"
+         data-category="cotitzacions"
+         data-status="live"
+         data-title="Configurador de Accesorios"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe" style="background:#d97706;"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon" style="background:#fef3c7;color:#d97706;">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/>
+              </svg>
+            </div>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">☆</button>
+          </div>
+          <div class="card-title">Configurador de Accesorios</div>
+          <div class="card-desc">Configurador d'accessoris per a vèhicles: seleccionador de peces, imports i generació de document per al client.</div>
+          <div class="card-footer-row">
+            <div class="card-tags"><span class="card-tag" style="color:#0891b2;background:rgba(8,145,178,0.12);">Cotitzacions</span></div>
+            <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+
+      <!-- ★ Comparativa Préstecs Hipotecaris -->
+      <a class="tool-card"
+         data-key="comparativa-prestecs-hipotecaris"
+         href="!!!APPS/comparativa-prestecs-optimizarte_2.html"
+         data-category="cotitzacions"
+         data-status="live"
+         data-title="Comparativa Préstecs Hipotecaris"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe blue"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon" style="background:#deeeff;color:#0563C1;">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+            </div>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">☆</button>
+          </div>
+          <div class="card-title">Comparativa Préstecs Hipotecaris</div>
+          <div class="card-desc">Simulador banc (amb bonificació) vs. mediador col·legiat: quotes, primes d'assegurança, costos totals i estalvi net durant tota la vida del préstec.</div>
+          <div class="card-footer-row">
+            <div class="card-tags"><span class="card-tag" style="color:#0891b2;background:rgba(8,145,178,0.12);">Cotitzacions</span></div>
+            <div class="card-arrow">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </div>
+        </div>
+      </a>
+
+          <!-- ★ Comparador de Plans de Pensions -->
+      <a class="tool-card"
+         data-key="comparador-plans-pensions"
+         href="!!!APPS/comparador_plans_pensions.html"
+         data-category="cotitzacions"
+         data-status="live"
+         data-title="Comparador de Plans de Pensions"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe" style="background:#DC0028;"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon" style="background:#fff0f2;color:#DC0028;">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+              </svg>
+            </div>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">☆</button>
+          </div>
+          <div class="card-title">Comparador de Plans de Pensions</div>
+          <div class="card-desc">Compara els 5 plans de pensions Occident amb els 762 plans d'INVERCO: rendibilitats a 30, 20, 15, 10, 5 i 1 any. Dades a 31 d'agost de 2026.</div>
+          <div class="card-footer-row">
+            <div class="card-tags"><span class="card-tag" style="color:#0891b2;background:rgba(8,145,178,0.12);">Cotitzacions</span></div>
+            <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+          <!-- ★ Directori d'Assistència -->
+      <a class="tool-card"
+         data-key="directori-assistencia"
+         href="!!!APPS/directorio_asistencia_1.html"
+         data-category="sinistres"
+         data-status="live"
+         data-title="Directori d'Assistència"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe" style="background:#0891b2;"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon" style="background:#cffafe;color:#0891b2;">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.28h3a2 2 0 0 1 2 1.72c.13.97.36 1.92.7 2.84a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.92.34 1.87.57 2.84.7a2 2 0 0 1 1.72 2.03z"/>
+              </svg>
+            </div>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">☆</button>
+          </div>
+          <div class="card-title">Directori d'Assistència</div>
+          <div class="card-desc">Directori de serveis d'assistència Occident: telèfons, cobertures i contactes per a sinistres i emergències.</div>
+          <div class="card-footer-row">
+            <div class="card-tags"><span class="card-tag" style="color:#dc2626;background:rgba(220,38,38,0.12);">Sinistres</span></div>
+            <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+      <!-- ★ Fusió de Contactes -->
+      <a class="tool-card"
+         data-key="fusio-contactes"
+         href="!!!APPS/fusio-contactes_1.html"
+         data-category="formularis"
+         data-status="live"
+         data-title="Fusió de Contactes"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe" style="background:#7c3aed;"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon" style="background:#f3e8ff;color:#7c3aed;">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">☆</button>
+          </div>
+          <div class="card-title">Fusió de Contactes</div>
+          <div class="card-desc">Eina per fusionar i gestionar contactes duplicats. Unifica registres de clients i neteja la base de dades de l'agència.</div>
+          <div class="card-footer-row">
+            <div class="card-tags"><span class="card-tag" style="color:#166534;background:rgba(22,101,52,0.12);">Formularis</span></div>
+            <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+          <!-- ★ Seguiment Mensual · Bonos -->
+      <a class="tool-card"
+         data-key="seguiment-mensual-bonos"
+         href="!!!APPS/seguiment-mensual_3.html"
+         data-category="seguiment"
+         data-status="live"
+         data-title="Seguiment Mensual · Bonos OPTIMIZARTE"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe" style="background:#DC0028;"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon" style="background:#fff0f2;color:#DC0028;">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+            </div>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">☆</button>
+          </div>
+          <div class="card-title">Seguiment Mensual · Bonos</div>
+          <div class="card-desc">Seguiment mensual de bonos OPTIMIZARTE: objectius, assoliments i evolució dels bonos de producció per ram.</div>
+          <div class="card-footer-row">
+            <div class="card-tags"><span class="card-tag" style="color:#1d4ed8;background:rgba(29,78,216,0.12);">Seguiment</span></div>
+            <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+      <!-- ★ Analitzador ChatBot WhatsApp -->
+      <a class="tool-card"
+         data-key="analitzador-chatbot-whatsapp"
+         href="!!!APPS/analitzador-chatbot-whatsapp.html"
+         data-category="analisi"
+         data-status="live"
+         data-title="Analitzador · ChatBot WhatsApp"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe" style="background:#25a56a;"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon" style="background:#dcfce7;color:#16a34a;">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                <circle cx="8.5" cy="11" r="1.2" fill="currentColor" stroke="none"/>
+                <circle cx="12" cy="11" r="1.2" fill="currentColor" stroke="none"/>
+                <circle cx="15.5" cy="11" r="1.2" fill="currentColor" stroke="none"/>
+              </svg>
+            </div>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">☆</button>
+          </div>
+          <div class="card-title">Analitzador ChatBot WhatsApp</div>
+          <div class="card-desc">Visualitzador dels 8 mòduls SendPulse: prompts complets, versions i estat de sincronització.</div>
+          <div class="card-footer-row">
+            <div class="card-tags"><span class="card-tag" style="color:#7c3aed;background:rgba(124,58,237,0.12);">Anàlisi</span></div>
+            <div class="card-arrow">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- ★ Traductor IA -->
+      <a class="tool-card"
+         data-key="traductor-ia"
+         href="!!!APPS/Traductor_IA_OPTIMIZARTE.html"
+         data-category="formularis"
+         data-status="live"
+         data-title="Traductor IA — OPTIMIZART€"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe" style="background:#0891b2;"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon" style="background:#cffafe;color:#0891b2;">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M5 8l6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6"/>
+              </svg>
+            </div>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">&#9734;</button>
+          </div>
+          <div class="card-title">Traductor IA</div>
+          <div class="card-desc">Traductor intel·ligent amb IA: traduccions professionals multilingues adaptades al context d'assegurances i documents de l'agència.</div>
+          <div class="card-footer-row">
+            <div class="card-tags"><span class="card-tag" style="color:#166534;background:rgba(22,101,52,0.12);">Formularis</span></div>
+            <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+      <!-- ★ Contacte WhatsApp · QR -->
+      <a class="tool-card"
+         data-key="contacte-whatsapp-qr"
+         href="!!!APPS/whatsapp-links-qr.html"
+         data-category="formularis"
+         data-status="live"
+         data-title="Contacte WhatsApp · QR"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe" style="background:#25D366;"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon" style="background:#dcfce7;color:#15803d;">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                <rect x="3" y="14" width="7" height="7" rx="1"/>
+                <path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/>
+              </svg>
+            </div>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">&#9734;</button>
+          </div>
+          <div class="card-title">Contacte WhatsApp · QR</div>
+          <div class="card-desc">Codi QR de l'oficina (+34 972 426 665) i enllaços wa.me amb missatges predefinits: consultes, renovacions, pressupostos i sinistres.</div>
+          <div class="card-footer-row">
+            <div class="card-tags"><span class="card-tag" style="color:#166534;background:rgba(22,101,52,0.12);">Formularis</span></div>
+            <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+          <!-- ★ Seguimiento Cartera Anagan -->
+      <a class="tool-card"
+         href="seguimiento-cartera-anagan.html"
+         data-category="analisi"
+         data-status="live"
+         data-title="Seguimiento Cartera · OPTIMIZART€"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe" style="background:#DC0028;"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon" style="background:#fff0f2;color:#DC0028;">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M3 3h18v18H3z" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>
+              </svg>
+            </div>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">&#9734;</button>
+          </div>
+          <div class="card-title">Seguimiento Cartera</div>
+          <div class="card-desc">Seguiment i anàlisi de la cartera Anagan: pòlisses, primes, renovacions i estat de la cartera per ram i companyia.</div>
+          <div class="card-footer-row">
+            <span class="card-category" style="color:#DC0028;">Anàlisi</span>
+            <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+      <!-- ★ Control de Deutes -->
+      <a class="tool-card"
+         data-key="control-deutes"
+         href="https://claude.ai/artifact/XA69bcSHeparBYBBjciBfC"
+         data-category="pagaments"
+         data-status="live"
+         data-title="Control de Deutes · Optimizarte"
+         onclick="handleCardClick(event, this)">
+        <div class="drag-handle"><svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="5" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="6" cy="10" r="1.8"/><circle cx="14" cy="10" r="1.8"/><circle cx="6" cy="15" r="1.8"/><circle cx="14" cy="15" r="1.8"/></svg></div>
+        <div class="card-stripe amber"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-icon amber">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M4 10h12"/><path d="M4 14h9"/>
+                <path d="M19 6a7.7 7.7 0 0 0-5.2-2A7.9 7.9 0 0 0 6 12c0 4.4 3.5 8 7.8 8 2 0 3.8-.8 5.2-2"/>
+              </svg>
+            </div>
+            <button class="card-fav-btn" onclick="toggleFav(event,this)" title="Afegir a Favorits">&#9734;</button>
+          </div>
+          <div class="card-title">Control de Deutes</div>
+          <div class="card-desc">Gestió de deutes de clients: imports avançats, dates de compensació, estats (pendent / vençut / pròxim) i recordatori setmanal automàtic per correu.</div>
+          <div class="card-footer-row">
+            <div class="card-tags"><span class="card-tag" style="color:#d97706;background:rgba(217,119,6,0.12);">Pagaments</span></div>
+            <div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+        </div><!-- /grid-live -->
 
     <!-- EN DESENVOLUPAMENT -->
     <div class="section-title" id="title-dev">En desenvolupament</div>
+
+    <div class="idea-tracker" id="ideaTracker">
+      <div class="idea-tracker-head">
+        <h3>Idees pendents de desenvolupar</h3>
+        <p>Apunta aquí les peticions abans que es converteixin en una eina real.</p>
+      </div>
+      <div class="idea-table-wrap">
+        <table class="idea-table">
+          <thead>
+            <tr>
+              <th style="width:150px;">Data petició</th>
+              <th>Idea a desenvolupar</th>
+              <th style="width:170px;">Data estimada execució</th>
+              <th style="width:36px;"></th>
+            </tr>
+          </thead>
+          <tbody id="ideaTableBody"></tbody>
+        </table>
+        <div id="ideaEmptyMsg" class="idea-empty-msg">Encara no hi ha cap idea apuntada.</div>
+      </div>
+      <div class="idea-add-row">
+        <input type="date" id="ideaDateReq" title="Data petició (obligatori)">
+        <input type="text" id="ideaText" placeholder="Idea a desenvolupar... (obligatori)">
+        <input type="date" id="ideaDateEst" title="Data estimada d'execució (opcional)">
+        <button type="button" id="ideaAddBtn" class="idea-add-btn">+ Afegir idea</button>
+      </div>
+    </div>
+
     <div class="cards-grid" id="grid-dev">
-      <div class="card-add" onclick="showAddModal()">
+      <div class="card-add" id="cardAddBox" onclick="showAddModal()">
         <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
           <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
         <span>Afegir eina</span>
+        <span class="card-add-hint">arrossega un .html aquí</span>
       </div>
     </div>
 
@@ -1194,7 +2008,7 @@ button { font-family: var(--font); }
           <div class="card-title">Guia de Registre al Portal</div>
           <div class="card-desc">Instruccions pas a pas perquè el client es registri a l'àrea privada d'Occident.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:var(--gray-3)">Instruccions</span>
+            <div class="card-tags"><span class="card-tag" style="color:var(--gray-3);background:rgba(0,0,0,0.05);">Instruccions</span></div>
           </div>
         </div>
       </div>
@@ -1213,7 +2027,7 @@ button { font-family: var(--font); }
           <div class="card-title">Resolució de Sinistres</div>
           <div class="card-desc">Guia de tramitació i seguiment de l'estat de sinistres amb checklist de documentació.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:var(--gray-3)">Sinistres</span>
+            <div class="card-tags"><span class="card-tag" style="color:var(--gray-3);background:rgba(0,0,0,0.05);">Sinistres</span></div>
           </div>
         </div>
       </div>
@@ -1233,7 +2047,7 @@ button { font-family: var(--font); }
           <div class="card-title">Comparativa de Cotitzacions</div>
           <div class="card-desc">Comparador visual de preus i cobertures entre Occident i altres companyies del mercat.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:var(--gray-3)">Cotitzacions</span>
+            <div class="card-tags"><span class="card-tag" style="color:var(--gray-3);background:rgba(0,0,0,0.05);">Cotitzacions</span></div>
           </div>
         </div>
       </div>
@@ -1254,7 +2068,7 @@ button { font-family: var(--font); }
           <div class="card-title">Anàlisi de Pòlissa</div>
           <div class="card-desc">Revisió detallada de cobertures, exclusions i oportunitats de millora per a una pòlissa existent.</div>
           <div class="card-footer-row">
-            <span class="card-category" style="color:var(--gray-3)">Anàlisi</span>
+            <div class="card-tags"><span class="card-tag" style="color:var(--gray-3);background:rgba(0,0,0,0.05);">Anàlisi</span></div>
           </div>
         </div>
       </div>
@@ -1328,6 +2142,33 @@ button { font-family: var(--font); }
   </div>
 </div>
 
+<!-- ═══════════════════════════════════════════════
+     AFEGIR EINA — overlay funcional (drag & drop / selector)
+═══════════════════════════════════════════════ -->
+<div class="add-tool-overlay" id="addToolOverlay">
+  <div class="add-tool-box">
+    <div class="add-tool-header">
+      <span>Afegir eina al Hub</span>
+      <button class="modal-close" onclick="closeAddToolOverlay()">✕</button>
+    </div>
+    <div class="add-tool-body">
+      <div class="add-dropzone" id="addDropzone">
+        <input type="file" id="addFileInput" accept=".html,.htm,text/html" multiple hidden>
+        <div class="adz-icon">📄</div>
+        <div class="adz-title">Arrossega l'HTML aquí</div>
+        <div class="adz-sub">o fes clic per seleccionar un fitxer .html</div>
+      </div>
+      <div id="addReviewPanel" style="display:none;">
+        <div id="addReviewItems"></div>
+        <div class="add-actions">
+          <button class="add-btn add-btn-ghost" type="button" onclick="cancelAddReview()">Cancel·lar</button>
+          <button class="add-btn add-btn-primary" type="button" onclick="confirmAddTools()">Afegir al Hub</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 // ═══════════════════════════════════════════════
 // DEVICE DETECTION
@@ -1384,30 +2225,12 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
 // ADD MODAL
 // ═══════════════════════════════════════════════
 function showAddModal() {
-  if (isMobile()) {
-    // Mobile: simple alert-style sheet
-    alert('Per afegir una nova eina, demana a Claude que la creï i la integri al hub.');
-    return;
+  // Real implementation lives further down (functional drag & drop overlay).
+  // Kept as a thin wrapper so the existing onclick="showAddModal()" on the
+  // "+" card keeps working regardless of script load order.
+  if (typeof openAddToolOverlay === 'function') {
+    openAddToolOverlay();
   }
-  document.getElementById('modalExtLink').style.display = 'none';
-  document.getElementById('modalTitle').textContent = 'Nova Eina';
-  document.getElementById('modalBody').innerHTML = `
-    <div class="modal-centered">
-      <div class="big-icon">➕</div>
-      <h3>Afegir eina</h3>
-      <p>Demana a Claude que creï l'HTML standalone i l'integri aquí automàticament.</p>
-      <div style="margin-top:20px;background:var(--bg);border-radius:8px;padding:16px;text-align:left;width:100%;max-width:400px;">
-        <p style="font-size:11px;color:var(--gray-2);font-weight:700;margin-bottom:10px;letter-spacing:1px">PROPERES EINES</p>
-        <ul style="font-size:13px;color:var(--gray);list-style:none;display:flex;flex-direction:column;gap:8px;">
-          <li>📋 Formulari d'Alta de Client</li>
-          <li>📖 Guia de Registre al Portal</li>
-          <li>🛡️ Resolució de Sinistres</li>
-          <li>💶 Comparativa de Cotitzacions</li>
-          <li>📄 Anàlisi de Pòlissa</li>
-        </ul>
-      </div>
-    </div>`;
-  document.getElementById('toolModal').classList.add('open');
 }
 
 // ═══════════════════════════════════════════════
@@ -1436,6 +2259,7 @@ let currentSearch = '';
 
 function sidebarFilter(cat, el) {
   currentFilter = cat;
+  try{ localStorage.setItem('hub-filter', cat); }catch(e){}
   document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
   el.classList.add('active');
   // Sync chips
@@ -1445,8 +2269,10 @@ function sidebarFilter(cat, el) {
 
 function chipFilter(cat, el) {
   currentFilter = cat;
+  try{ localStorage.setItem('hub-filter', cat); }catch(e){}
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.toggle('active', (i.dataset.dynCat || '') === cat));
   applyFilters();
 }
 
@@ -1462,7 +2288,7 @@ function bnavFilter(cat, el) {
 function syncChips(cat) {
   const cleanCat = cat.startsWith('_') ? 'all' : cat;
   document.querySelectorAll('.chip').forEach(c => {
-    c.classList.toggle('active', c.textContent.trim().toLowerCase().includes(cleanCat) || (cleanCat === 'all' && c.textContent.includes('Totes')));
+    c.classList.toggle('active', (c.dataset.cat || '') === cleanCat);
   });
 }
 
@@ -1471,13 +2297,31 @@ function filterTools(query) {
   applyFilters();
 }
 
+// ═══════════════════════════════════════════════
+// MULTI-TAG HELPERS — a card can now carry several categories
+// (data-categories holds a JSON array; data-category is kept as
+// a legacy single value for cards that haven't been migrated yet)
+// ═══════════════════════════════════════════════
+function getCardCats(card) {
+  const raw = card.dataset.categories;
+  if (raw) {
+    try {
+      const arr = JSON.parse(raw);
+      if (Array.isArray(arr) && arr.length) return arr;
+    } catch (e) {}
+  }
+  return card.dataset.category ? [card.dataset.category] : [];
+}
+function cardHasCat(card, val) {
+  return getCardCats(card).indexOf(val) !== -1;
+}
+
 function applyFilters() {
   const cards = document.querySelectorAll('.tool-card');
   let visible = 0;
 
   cards.forEach(card => {
-    const cat    = card.dataset.category || '';
-    const status = card.dataset.status   || '';
+    const status = card.dataset.status || '';
     const text   = card.textContent.toLowerCase();
 
     let catMatch = true;
@@ -1490,7 +2334,7 @@ function applyFilters() {
     } else if (currentFilter === '_soon') {
       catMatch = status === 'soon';
     } else {
-      catMatch = cat === currentFilter;
+      catMatch = cardHasCat(card, currentFilter);
     }
 
     const show = catMatch && (currentSearch === '' || text.includes(currentSearch));
@@ -1550,7 +2394,7 @@ updateCounts();
   }
 
   function cardKey(card) {
-    return card.getAttribute('href') || card.dataset.title || card.querySelector('.card-title')?.textContent || '';
+    return card.dataset.key || card.getAttribute('href') || card.dataset.title || card.querySelector('.card-title')?.textContent || '';
   }
 
   function swapWith(target) {
@@ -1752,81 +2596,888 @@ updateCounts();
 </script>
 
 <script>
-// ── CATEGORY SELECTOR ─────────────────────────────────────────────────────
 (function(){
-  const CATS = [
-    {val:'pagaments',   lbl:'Pagaments',   color:'#d97706'},
-    {val:'seguiment',   lbl:'Seguiment',   color:'#1d4ed8'},
-    {val:'formularis',  lbl:'Formularis',  color:'var(--green)'},
-    {val:'analisi',     lbl:'Anàlisi',      color:'#7c3aed'},
-    {val:'instruccions',lbl:'Instruccions',color:'var(--gray-3)'},
-    {val:'sinistres',   lbl:'Sinistres',   color:'#dc2626'},
-    {val:'cotitzacions',lbl:'Cotitzacions',color:'#0891b2'},
-  ];
-  const STORAGE = 'card-categories';
-  let saved = {};
-  try{ saved = JSON.parse(localStorage.getItem(STORAGE)||'{}'); }catch(e){}
+'use strict';
 
-  function saveAll(){ localStorage.setItem(STORAGE, JSON.stringify(saved)); }
+/* ══ CONSTANTS ══════════════════════════════════════════════ */
+const PIN_CORRECT = '79500318';
+const SUPERV_VAL  = 'supervisio';
+const KEY_CATS    = 'hub-cats-v4';
+const KEY_ASSIGN  = 'card-categories';
+const KEY_FAVS    = 'hub-favs-v1';
 
-  function buildCatUI(card){
-    const footer = card.querySelector('.card-footer-row');
-    if(!footer) return;
-    const catSpan = footer.querySelector('.card-category');
-    if(!catSpan) return;
-    const cardKey = card.getAttribute('href') || card.dataset.title || '';
-    // Apply saved category if any
-    if(saved[cardKey]){
-      const s = CATS.find(c=>c.val===saved[cardKey]);
-      if(s){ catSpan.textContent=s.lbl; catSpan.style.color=s.color; card.dataset.category=s.val; }
+const DEFAULT_CATS = [
+  {val:'pagaments',    lbl:'Pagaments',    color:'#d97706'},
+  {val:'seguiment',    lbl:'Seguiment',    color:'#1d4ed8'},
+  {val:'formularis',   lbl:'Formularis',   color:'#166534'},
+  {val:'analisi',      lbl:'An\u00e0lisi',   color:'#7c3aed'},
+  {val:'instruccions', lbl:'Instruccions', color:'#9CA3AF'},
+  {val:'sinistres',    lbl:'Sinistres',    color:'#dc2626'},
+  {val:'cotitzacions', lbl:'Cotitzacions', color:'#0891b2'},
+  {val:SUPERV_VAL,     lbl:'Supervisi\u00f3', color:'#581c87'},
+];
+
+/* ══ STATE ══════════════════════════════════════════════════ */
+var CATS     = loadCats();
+var assigned = loadJSON(KEY_ASSIGN, {});
+var favs     = loadJSON(KEY_FAVS, {});   // {href: true}
+
+function loadCats(){
+  var s = loadJSON(KEY_CATS, null);
+  if(!s||!s.length) return DEFAULT_CATS.map(function(d){return Object.assign({},d);});
+  var map = {};
+  s.forEach(function(x){map[x.val]=x;});
+  var merged = DEFAULT_CATS.map(function(d){ return map[d.val]?Object.assign({},d,{lbl:map[d.val].lbl}):Object.assign({},d); });
+  s.filter(function(x){return !DEFAULT_CATS.find(function(d){return d.val===x.val;});}).forEach(function(x){merged.push(Object.assign({},x));});
+  return merged;
+}
+function saveCats(){ saveJSON(KEY_CATS, CATS); }
+function loadJSON(k,def){ try{var v=localStorage.getItem(k);return v?JSON.parse(v):def;}catch(e){return def;} }
+function saveJSON(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){ console.warn('No s\'ha pogut desar a localStorage:', k, e); } }
+function catByVal(v){ return CATS.find(function(c){return c.val===v;}); }
+
+/* Colors per a etiquetes noves: cap coincideix amb els de DEFAULT_CATS */
+var NEW_CAT_PALETTE = ['#db2777','#ea580c','#0d9488','#4f46e5','#65a30d','#c026d3','#854d0e','#0369a1','#be123c','#475569'];
+function nextFreeColor(){
+  var used = CATS.map(function(c){return (c.color||'').toLowerCase();});
+  var free = NEW_CAT_PALETTE.find(function(c){return used.indexOf(c.toLowerCase())===-1;});
+  return free || NEW_CAT_PALETTE[CATS.length % NEW_CAT_PALETTE.length];
+}
+/* Repara etiquetes personalitzades antigues que compartien color amb una altra */
+(function dedupeColors(){
+  var changed=false, seen={};
+  CATS.forEach(function(c){
+    var k=(c.color||'').toLowerCase();
+    if(seen[k] && !DEFAULT_CATS.find(function(d){return d.val===c.val;})){ c.color=nextFreeColor(); changed=true; }
+    seen[(c.color||'').toLowerCase()]=true;
+  });
+  if(changed) saveCats();
+})();
+
+/* ══ SIDEBAR REBUILD ═══════════════════════════════════════ */
+function rebuildSidebar(){
+  var container = document.getElementById('sidebar-dyn-cats');
+  if(!container) return;
+  container.innerHTML = '';
+
+  CATS.forEach(function(cat){
+    var cnt = countCardsWithCat(cat.val);
+    var a   = document.createElement('a');
+    a.className = 'nav-item';
+    a.href = '#';
+    a.style.cssText = 'display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;cursor:pointer;color:var(--gray);font-size:13px;font-family:Inter,sans-serif;text-decoration:none;transition:all .15s;';
+    a.dataset.dynCat = cat.val;
+    a.onclick = function(e){ e.preventDefault(); sidebarFilter(cat.val, this); };
+
+    var dot   = '<span style="width:9px;height:9px;border-radius:50%;background:'+cat.color+';flex-shrink:0;display:block;"></span>';
+    var lock  = cat.val===SUPERV_VAL ? '<span style="font-size:11px;opacity:.7;">\uD83D\uDD12</span>' : '';
+    var badge = '<span class="nav-badge gray" data-badge-cat="'+cat.val+'" style="margin-left:auto;">'+cnt+'</span>';
+    a.innerHTML = dot + '<span style="flex:1;">'+escHtml(cat.lbl)+'</span>' + lock + badge;
+    if(typeof currentFilter!=='undefined' && currentFilter===cat.val) a.classList.add('active');
+    container.appendChild(a);
+  });
+  rebuildChips();
+}
+
+/* Chips (mòbil): generades a partir de CATS, igual que el sidebar */
+function rebuildChips(){
+  var box = document.getElementById('chips-dyn-cats');
+  if(!box) return;
+  box.innerHTML = '';
+  var cur = (typeof currentFilter!=='undefined') ? currentFilter : 'all';
+  CATS.forEach(function(cat){
+    var c = document.createElement('div');
+    c.className = 'chip' + (cur===cat.val ? ' active' : '');
+    c.dataset.cat = cat.val;
+    c.textContent = cat.lbl + (cat.val===SUPERV_VAL ? ' \uD83D\uDD12' : '');
+    c.onclick = function(){ chipFilter(cat.val, this); };
+    box.appendChild(c);
+  });
+  var all = document.querySelector('.chip[data-cat="all"]');
+  if(all) all.classList.toggle('active', cur==='all' || cur.charAt(0)==='_');
+}
+function escHtml(t){ return String(t).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];}); }
+
+/* Compta targetes que porten la categoria `val` entre les seves etiquetes
+   (una targeta pot tenir-ne més d'una des de la funcionalitat multi-selecció) */
+function countCardsWithCat(val){
+  var n = 0;
+  document.querySelectorAll('.tool-card').forEach(function(c){
+    if(typeof cardHasCat === 'function' && cardHasCat(c, val)) n++;
+  });
+  return n;
+}
+
+function updateBadges(){
+  CATS.forEach(function(cat){
+    var cnt = countCardsWithCat(cat.val);
+    document.querySelectorAll('[data-badge-cat="'+cat.val+'"]').forEach(function(b){b.textContent=cnt;});
+  });
+  var allBadge = document.getElementById('badge-all');
+  if(allBadge) allBadge.textContent = document.querySelectorAll('.tool-card').length;
+  var favBadge = document.getElementById('badge-fav');
+  if(favBadge) favBadge.textContent = Object.keys(favs).filter(function(k){return favs[k];}).length;
+}
+
+/* ══ FAVOURITES ═════════════════════════════════════════════ */
+window.toggleFav = function(e, btn){
+  e.preventDefault(); e.stopPropagation();
+  var card = btn.closest('.tool-card');
+  if(!card) return;
+  var key  = cardKeyOf(card);
+  favs[key] = !favs[key];
+  saveJSON(KEY_FAVS, favs);
+  btn.textContent  = favs[key] ? '\u2B50' : '\u2606';
+  btn.classList.toggle('is-fav', !!favs[key]);
+  updateBadges();
+  if(typeof applyFilters === 'function') applyFilters();
+};
+
+function initFavBtns(){
+  document.querySelectorAll('.card-fav-btn').forEach(function(btn){
+    var card = btn.closest('.tool-card');
+    if(!card) return;
+    var key = cardKeyOf(card);
+    btn.textContent = favs[key] ? '\u2B50' : '\u2606';
+    btn.classList.toggle('is-fav', !!favs[key]);
+  });
+}
+
+/* ══ PIN MODAL ══════════════════════════════════════════════ */
+var _pinEntry = '', _pinCb = null;
+
+function buildPinModal(){
+  if(document.getElementById('pinOverlay')) return;
+  var el = document.createElement('div');
+  el.className = 'pin-overlay'; el.id = 'pinOverlay';
+  var keys = [1,2,3,4,5,6,7,8,9].map(function(k){return '<button class="pin-key" onclick="pinKey(\''+k+'\')">'+k+'</button>';}).join('');
+  keys += '<button class="pin-key" onclick="pinKey(\'\u232B\')">\u232B</button>';
+  keys += '<button class="pin-key" onclick="pinKey(\'0\')">0</button>';
+  keys += '<button class="pin-key" onclick="pinKey(\'C\')">C</button>';
+  var dots = '';
+  for(var i=0;i<8;i++) dots += '<div class="pin-dot" id="pd'+i+'"></div>';
+  el.innerHTML = '<div class="pin-box">'
+    + '<div class="pin-icon">\uD83D\uDD12</div>'
+    + '<div class="pin-title">Supervisi\u00f3 \u2014 Acc\u00e9s restringit</div>'
+    + '<div class="pin-sub">Introdueix el PIN per continuar</div>'
+    + '<div class="pin-dots">'+dots+'</div>'
+    + '<div class="pin-keypad">'+keys+'</div>'
+    + '<div class="pin-err" id="pinErr"></div>'
+    + '<button class="pin-cancel" onclick="pinCancel()">Cancel\u00b7lar</button>'
+    + '</div>';
+  document.body.appendChild(el);
+}
+
+window.pinKey = function(k){
+  if(k==='\u232B') _pinEntry=_pinEntry.slice(0,-1);
+  else if(k==='C') _pinEntry='';
+  else if(_pinEntry.length<8) _pinEntry+=k;
+  for(var i=0;i<8;i++){var d=document.getElementById('pd'+i);if(d)d.classList.toggle('filled',i<_pinEntry.length);}
+  document.getElementById('pinErr').textContent='';
+  if(_pinEntry.length===PIN_CORRECT.length){
+    if(_pinEntry===PIN_CORRECT){ closePinModal(); if(_pinCb){var cb=_pinCb;_pinCb=null;cb();} }
+    else{ document.getElementById('pinErr').textContent='PIN incorrecte.'; _pinEntry=''; for(var j=0;j<8;j++){var d2=document.getElementById('pd'+j);if(d2)d2.classList.remove('filled');} }
+  }
+};
+window.pinCancel = function(){ closePinModal(); _pinCb=null; };
+function closePinModal(){ _pinEntry=''; var o=document.getElementById('pinOverlay'); if(o)o.classList.remove('open'); }
+function openPinModal(cb){ buildPinModal(); _pinCb=cb; _pinEntry=''; for(var i=0;i<8;i++){var d=document.getElementById('pd'+i);if(d)d.classList.remove('filled');} document.getElementById('pinErr').textContent=''; document.getElementById('pinOverlay').classList.add('open'); }
+
+/* ══ INTERCEPT handleCardClick for Supervisió + Favs filter ═ */
+var _origClick = window.handleCardClick;
+window.handleCardClick = function(e, card){
+  /* External URLs (http/https to other domains) always open in new tab */
+  var href = card.getAttribute('href')||'';
+  var isExternal = /^https?:\/\//.test(href) && !href.includes(location.hostname) && location.hostname !== 'localhost' && location.hostname !== '';
+  if(isExternal){ e.preventDefault(); window.open(href,'_blank'); return; }
+
+  var cardCats = (typeof getCardCats === 'function') ? getCardCats(card) : [card.dataset.category||''];
+  if(cardCats.indexOf(SUPERV_VAL) !== -1){
+    e.preventDefault(); e.stopPropagation();
+    openPinModal(function(){
+      if(isExternal){ window.open(href,'_blank'); }
+      else if(_origClick){ _origClick(e,card); }
+      else if(href){ window.open(href,'_blank'); }
+    });
+    return;
+  }
+  if(_origClick) _origClick(e,card);
+};
+
+/* ══ Patch applyFilters to handle _fav filter ═══════════════ */
+var _origApply = window.applyFilters;
+window.applyFilters = function(){
+  if(typeof currentFilter !== 'undefined' && currentFilter === '_fav'){
+    var cards = document.querySelectorAll('.tool-card');
+    var visible = 0;
+    cards.forEach(function(card){
+      var key  = cardKeyOf(card);
+      var show = !!favs[key] && (typeof currentSearch==='undefined'||currentSearch===''||card.textContent.toLowerCase().includes(currentSearch));
+      card.style.display = show ? '' : 'none';
+      if(show) visible++;
+    });
+    var nr = document.getElementById('no-results');
+    if(nr) nr.style.display = visible===0 ? 'block' : 'none';
+    ['live','dev','soon'].forEach(function(s){
+      var grid=document.getElementById('grid-'+s);
+      var title=document.getElementById('title-'+s);
+      if(!grid) return;
+      var hasVisible=[].slice.call(grid.querySelectorAll('.tool-card,.card-add')).some(function(c){return c.style.display!=='none';});
+      grid.style.display=hasVisible?'':'none';
+      if(title) title.style.display=hasVisible?'':'none';
+    });
+    return;
+  }
+  if(_origApply) _origApply();
+};
+
+/* ══ CARD TAGS UI (multi-selecció) ═══════════════════════════ */
+function hexToRgba(hex, alpha){
+  if(!hex || hex.charAt(0)!=='#') return 'rgba(0,0,0,'+alpha+')';
+  var h = hex.replace('#','');
+  var r = parseInt(h.substring(0,2),16), g = parseInt(h.substring(2,4),16), b = parseInt(h.substring(4,6),16);
+  return 'rgba('+r+','+g+','+b+','+alpha+')';
+}
+
+/* Etiquetes assignades a una targeta: sempre com a array.
+   Migra silenciosament les assignacions antigues (un sol string). */
+function cardTagVals(card, cardKey){
+  var stored = assigned[cardKey];
+  if(Array.isArray(stored) && stored.length) return stored.slice();
+  if(typeof stored === 'string' && stored) return [stored];
+  var baked = getCardCats(card);
+  return baked.length ? baked.slice() : (CATS[0] ? [CATS[0].val] : []);
+}
+
+/* Identificador estable d'una card: prefereix data-key (fix, no canvia mai);
+   si no n'hi ha, cau a l'href; si tampoc, al títol. Servir sempre aquesta
+   funció (mai llegir href directament) evita que favorits/etiquetes es
+   perdin quan un href canvia de lloc (p.ex. en moure els html a !!!APPS). */
+function cardKeyOf(card){
+  return card.dataset.key || card.getAttribute('href') || card.dataset.title || '';
+}
+
+function buildCatUI(card){
+  var footer = card.querySelector('.card-footer-row');
+  if(!footer) return;
+  var tagsWrap = footer.querySelector('.card-tags');
+  if(!tagsWrap) return;
+  var cardKey = cardKeyOf(card);
+
+  function renderTags(){
+    var vals = cardTagVals(card, cardKey);
+    card.dataset.categories = JSON.stringify(vals);
+    card.dataset.category   = vals[0] || '';   // manté compatibilitat amb codi antic
+    tagsWrap.innerHTML = '';
+    vals.forEach(function(val){
+      var c = catByVal(val);
+      if(!c) return;
+      var pill = document.createElement('span');
+      pill.className = 'card-tag';
+      pill.style.color = c.color;
+      pill.style.background = hexToRgba(c.color.charAt(0)==='#'?c.color:'#9CA3AF', 0.12);
+      pill.textContent = c.lbl + (val===SUPERV_VAL ? ' \uD83D\uDD12' : '');
+      tagsWrap.appendChild(pill);
+    });
+  }
+  renderTags();
+  card._refreshTags = renderTags;
+
+  /* Wrap */
+  var wrap = document.createElement('div');
+  wrap.className = 'card-category-wrap';
+  wrap.style.position = 'relative';
+  wrap.style.minWidth = '0';
+  tagsWrap.parentNode.insertBefore(wrap, tagsWrap);
+  wrap.appendChild(tagsWrap);
+
+  /* ✎ Pencil button */
+  var btn = document.createElement('button');
+  btn.className = 'cat-edit-btn';
+  btn.title = 'Etiquetes';
+  btn.innerHTML = '&#9998;';
+  ['mousedown','pointerdown','touchstart'].forEach(function(t){ btn.addEventListener(t,function(ev){ev.stopPropagation();},{passive:true}); });
+  btn.setAttribute('draggable','false');
+  btn.addEventListener('click', function(e){
+    e.preventDefault(); e.stopPropagation();
+    closeCatDD();
+
+    var dd = document.createElement('div');
+    dd.className = 'cat-select-wrap open cat-ms';
+
+    var listBox = document.createElement('div');
+    listBox.className = 'cat-ms-list';
+
+    /* Desa a l'instant l'estat actual de tots els checkboxes marcats.
+       Sense això no hi ha cap pas de "Desar" que es pugui oblidar. */
+    function persistSelection(){
+      var chosen = Array.prototype.map.call(listBox.querySelectorAll('input[type="checkbox"]:checked'), function(c){ return c.value; });
+      if(!chosen.length && CATS[0]) chosen = [CATS[0].val];
+      assigned[cardKey] = chosen;
+      renderTags();
+      rebuildSidebar(); updateBadges();
+      if(typeof applyFilters === 'function') applyFilters();
+      saveJSON(KEY_ASSIGN, assigned);
     }
-    // Wrap in relative container
-    const wrap = document.createElement('div');
-    wrap.className='card-category-wrap';
-    catSpan.parentNode.insertBefore(wrap, catSpan);
-    wrap.appendChild(catSpan);
-    // Pencil button
-    const btn = document.createElement('button');
-    btn.className='cat-edit-btn';
-    btn.title='Canviar categoria';
-    btn.innerHTML='&#9998;';
-    btn.onclick = function(e){
-      e.preventDefault(); e.stopPropagation();
-      const existing = wrap.querySelector('.cat-select-wrap');
-      if(existing){ existing.remove(); return; }
-      // Close others
-      document.querySelectorAll('.cat-select-wrap').forEach(el=>el.remove());
-      const dd = document.createElement('div');
-      dd.className='cat-select-wrap open';
-      CATS.forEach(function(cat){
-        const opt = document.createElement('div');
-        opt.className='cat-opt'+(card.dataset.category===cat.val?' selected':'');
-        opt.style.color = cat.color;
-        opt.textContent = cat.lbl;
-        opt.onclick=function(ev){
-          ev.stopPropagation();
-          catSpan.textContent=cat.lbl;
-          catSpan.style.color=cat.color;
-          card.dataset.category=cat.val;
-          saved[cardKey]=cat.val;
-          saveAll();
-          dd.remove();
-          // Re-apply filters
-          if(typeof applyFilters==='function') applyFilters();
-        };
-        dd.appendChild(opt);
+
+    function buildRow(cat){
+      var row = document.createElement('label');
+      row.className = 'cat-ms-opt';
+
+      var chk = document.createElement('input');
+      chk.type = 'checkbox';
+      chk.value = cat.val;
+      chk.checked = cardTagVals(card, cardKey).indexOf(cat.val) !== -1;
+      chk.addEventListener('click', function(ev){ ev.stopPropagation(); });
+      chk.addEventListener('change', function(){ persistSelection(); });
+
+      var dot = document.createElement('span');
+      dot.className = 'cat-ms-dot';
+      dot.style.background = cat.color;
+
+      var lbl = document.createElement('span');
+      lbl.className = 'cat-ms-lbl';
+      lbl.textContent = cat.lbl + (cat.val===SUPERV_VAL ? ' \uD83D\uDD12' : '');
+
+      var ren = document.createElement('button');
+      ren.type = 'button'; ren.className = 'cat-ms-ren'; ren.innerHTML = '&#9998;'; ren.title = 'Reanomenar';
+      ren.addEventListener('click', function(ev){
+        ev.preventDefault(); ev.stopPropagation();
+        var inp = document.createElement('input');
+        inp.type = 'text'; inp.className = 'cat-rename-inp';
+        inp.value = cat.lbl;
+        lbl.replaceWith(inp);
+        inp.focus(); inp.select();
+        var committed = false;
+        function commit(){
+          if(committed) return;
+          committed = true;
+          var v = inp.value.trim();
+          if(v){
+            cat.lbl = v; saveCats();
+            document.querySelectorAll('.tool-card').forEach(function(c2){ if(typeof c2._refreshTags === 'function') c2._refreshTags(); });
+            rebuildSidebar();
+          }
+          var freshLbl = document.createElement('span');
+          freshLbl.className = 'cat-ms-lbl';
+          freshLbl.textContent = cat.lbl + (cat.val===SUPERV_VAL ? ' \uD83D\uDD12' : '');
+          if(inp.parentNode) inp.replaceWith(freshLbl);
+        }
+        inp.addEventListener('click', function(ev2){ ev2.stopPropagation(); });
+        inp.addEventListener('keydown', function(ev2){ ev2.stopPropagation(); if(ev2.key==='Enter'){ev2.preventDefault();commit();} if(ev2.key==='Escape'){commit();} });
+        inp.addEventListener('blur', commit);
       });
-      wrap.appendChild(dd);
-    };
-    wrap.appendChild(btn);
-    // Close on outside click
-    document.addEventListener('click',function handler(e){
-      if(!wrap.contains(e.target)){ wrap.querySelector('.cat-select-wrap')?.remove(); }
-    },{passive:true});
+
+      row.appendChild(chk); row.appendChild(dot); row.appendChild(lbl); row.appendChild(ren);
+      return row;
+    }
+
+    CATS.forEach(function(cat){ listBox.appendChild(buildRow(cat)); });
+    dd.appendChild(listBox);
+
+    /* — Crear nova etiqueta — */
+    var newRow = document.createElement('div'); newRow.className = 'cat-new-row';
+    var newInp = document.createElement('input'); newInp.className = 'cat-new-inp'; newInp.placeholder = 'Nova etiqueta...';
+    newInp.onclick = function(ev){ ev.stopPropagation(); };
+    var newBtn = document.createElement('button'); newBtn.className = 'cat-new-btn'; newBtn.textContent = '+ Crear';
+    newBtn.addEventListener('click', function(ev){
+      ev.stopPropagation();
+      var lbl = newInp.value.trim(); if(!lbl) return;
+      var val = lbl.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+      if(!val || catByVal(val)) return;
+      var newCat = {val:val, lbl:lbl, color:nextFreeColor()};
+      CATS.push(newCat); saveCats();
+      var row = buildRow(newCat);
+      var newChk = row.querySelector('input[type="checkbox"]');
+      newChk.checked = true;
+      listBox.appendChild(row);
+      newInp.value = '';
+      rebuildSidebar();
+      persistSelection();
+    });
+    newRow.appendChild(newInp); newRow.appendChild(newBtn);
+    dd.appendChild(newRow);
+    newInp.addEventListener('keydown', function(ev){ ev.stopPropagation(); if(ev.key==='Enter'){ev.preventDefault();newBtn.click();} if(ev.key==='Escape'){dd.remove();} });
+
+    var doneBtn = document.createElement('button');
+    doneBtn.type = 'button'; doneBtn.className = 'cat-ms-save'; doneBtn.textContent = 'Fet';
+    doneBtn.addEventListener('click', function(ev){ ev.stopPropagation(); dd.remove(); });
+    dd.appendChild(doneBtn);
+
+    /* El desplegable es col·loca al <body>, fora de la targeta: cap clic dins seu pot obrir l'eina */
+    ['click','mousedown','pointerdown','touchstart','dragstart'].forEach(function(t){
+      dd.addEventListener(t,function(ev){ ev.stopPropagation(); },{passive:true});
+    });
+    dd.style.position='fixed';
+    dd.style.right='auto'; dd.style.bottom='auto';
+    dd.style.zIndex='2000';
+    document.body.appendChild(dd);
+    var r=btn.getBoundingClientRect();
+    var h=dd.offsetHeight, w=dd.offsetWidth;
+    var top = (r.top - h - 6 >= 8) ? (r.top - h - 6) : Math.min(r.bottom + 6, window.innerHeight - h - 8);
+    var left = Math.max(8, Math.min(r.left - 8, window.innerWidth - w - 8));
+    dd.style.top = Math.max(8, top) + 'px';
+    dd.style.left = left + 'px';
+    _openCatDD = { dd: dd, btn: btn };
+  });
+  wrap.appendChild(btn);
+}
+
+/* Tancar el desplegable en clicar fora, fer scroll o redimensionar */
+var _openCatDD = null;
+function closeCatDD(){ document.querySelectorAll('.cat-select-wrap').forEach(function(el){el.remove();}); _openCatDD=null; }
+document.addEventListener('click',function(e){
+  if(!_openCatDD) return;
+  if(_openCatDD.dd.contains(e.target) || _openCatDD.btn.contains(e.target)) return;
+  closeCatDD();
+});
+window.addEventListener('resize', closeCatDD);
+document.addEventListener('scroll', function(e){ if(_openCatDD && !_openCatDD.dd.contains(e.target)) closeCatDD(); }, true);
+
+/* ══ INIT ════════════════════════════════════════════════════ */
+document.querySelectorAll('.tool-card[data-status="live"], .tool-card[data-status="dev"]').forEach(buildCatUI);
+
+/* Neteja favorits/etiquetes orfes: entrades desades amb una clau (href antic,
+   p.ex. un enllaç a claude.ai/artifact o un nom de fitxer sense !!!APPS/) que
+   ja no correspon a cap card actual. Sense això, el comptador de Favorits pot
+   mostrar-ne més dels que realment estan marcats. Les claus blob: (eines
+   afegides per drag&drop) es deixen intactes perquè canvien cada sessió. */
+function pruneOrphanedStorage(){
+  var liveKeys = {};
+  document.querySelectorAll('.tool-card').forEach(function(c){
+    var k = cardKeyOf(c);
+    if(k) liveKeys[k] = true;
+  });
+  var changedFavs = false;
+  Object.keys(favs).forEach(function(k){
+    if(k.indexOf('blob:') === 0) return;
+    if(!liveKeys[k]){ delete favs[k]; changedFavs = true; }
+  });
+  if(changedFavs) saveJSON(KEY_FAVS, favs);
+
+  var changedAssigned = false;
+  Object.keys(assigned).forEach(function(k){
+    if(k.indexOf('blob:') === 0) return;
+    if(!liveKeys[k]){ delete assigned[k]; changedAssigned = true; }
+  });
+  if(changedAssigned) saveJSON(KEY_ASSIGN, assigned);
+}
+pruneOrphanedStorage();
+
+initFavBtns();
+rebuildSidebar();
+updateBadges();
+
+/* ══ AFEGIR EINA (drag & drop HTML → nova targeta al Hub) ═══ */
+var HUB_DB_NAME = 'HubToolsDB', HUB_STORE = 'tools';
+function openHubDB(){
+  return new Promise(function(resolve,reject){
+    if(!window.indexedDB){ reject(new Error('no-idb')); return; }
+    var req = indexedDB.open(HUB_DB_NAME, 1);
+    req.onupgradeneeded = function(e){ e.target.result.createObjectStore(HUB_STORE, {keyPath:'id'}); };
+    req.onsuccess = function(e){ resolve(e.target.result); };
+    req.onerror   = function(){ reject(req.error); };
+  });
+}
+function dbPutTool(tool){
+  return openHubDB().then(function(db){
+    return new Promise(function(res,rej){
+      var tx = db.transaction(HUB_STORE,'readwrite');
+      tx.objectStore(HUB_STORE).put(tool);
+      tx.oncomplete = function(){ res(); };
+      tx.onerror    = function(){ rej(tx.error); };
+    });
+  });
+}
+function dbGetAllTools(){
+  return openHubDB().then(function(db){
+    return new Promise(function(res,rej){
+      var tx  = db.transaction(HUB_STORE,'readonly');
+      var req = tx.objectStore(HUB_STORE).getAll();
+      req.onsuccess = function(){ res(req.result || []); };
+      req.onerror   = function(){ rej(req.error); };
+    });
+  });
+}
+function dbDeleteTool(id){
+  return openHubDB().then(function(db){
+    return new Promise(function(res,rej){
+      var tx = db.transaction(HUB_STORE,'readwrite');
+      tx.objectStore(HUB_STORE)['delete'](id);
+      tx.oncomplete = function(){ res(); };
+      tx.onerror    = function(){ rej(tx.error); };
+    });
+  });
+}
+
+var _pendingAddItems = [];
+
+/* Exposades globalment perquè l'onclick="showAddModal()" del botó "+" i el
+   wrapper de l'script anterior hi puguin accedir sense dependre de l'ordre. */
+window.openAddToolOverlay = function(){
+  resetAddOverlay();
+  var ov = document.getElementById('addToolOverlay');
+  if(ov) ov.classList.add('open');
+};
+window.closeAddToolOverlay = function(){
+  var ov = document.getElementById('addToolOverlay');
+  if(ov) ov.classList.remove('open');
+  resetAddOverlay();
+};
+function resetAddOverlay(){
+  _pendingAddItems = [];
+  var dz = document.getElementById('addDropzone');
+  var rp = document.getElementById('addReviewPanel');
+  if(dz) dz.style.display = '';
+  if(rp) rp.style.display = 'none';
+  var fi = document.getElementById('addFileInput');
+  if(fi) fi.value = '';
+}
+window.cancelAddReview = function(){ resetAddOverlay(); };
+
+function readFileAsText(file){
+  return new Promise(function(resolve,reject){
+    var reader = new FileReader();
+    reader.onload  = function(){ resolve(reader.result); };
+    reader.onerror = function(){ reject(reader.error); };
+    reader.readAsText(file);
+  });
+}
+function humanizeFileName(name){
+  return name.replace(/\.(html?|htm)$/i,'').replace(/[-_]+/g,' ').trim();
+}
+
+function handleAddFiles(fileList){
+  var files = Array.prototype.filter.call(fileList, function(f){
+    return /\.(html?|htm)$/i.test(f.name) || f.type === 'text/html';
+  });
+  if(!files.length){ alert('Selecciona un fitxer HTML (.html).'); return; }
+  Promise.all(files.map(function(f){
+    return readFileAsText(f).then(function(content){
+      var m = content.match(/<title[^>]*>([^<]*)<\/title>/i);
+      var title = (m && m[1] && m[1].trim()) || humanizeFileName(f.name);
+      return { fileName: f.name, title: title, content: content };
+    });
+  })).then(renderAddReviewPanel).catch(function(){
+    alert("No s'ha pogut llegir el fitxer seleccionat.");
+  });
+}
+
+function renderAddReviewPanel(items){
+  _pendingAddItems = items;
+  var catOptions = CATS.map(function(c){
+    return '<option value="'+c.val+'">'+escHtml(c.lbl)+'</option>';
+  }).join('');
+  var html = items.map(function(item, i){
+    return '<div class="add-item">'
+      + "<label>Nom de l'eina</label>"
+      + '<input type="text" class="add-title-inp" data-idx="'+i+'" value="'+escHtml(item.title)+'">'
+      + '<label>Categoria</label>'
+      + '<select class="add-cat-sel" data-idx="'+i+'">'+catOptions+'</select>'
+      + '<div class="add-item-file">\uD83D\uDCCE '+escHtml(item.fileName)+'</div>'
+      + '</div>';
+  }).join('');
+  var itemsBox = document.getElementById('addReviewItems');
+  var dz = document.getElementById('addDropzone');
+  var rp = document.getElementById('addReviewPanel');
+  if(itemsBox) itemsBox.innerHTML = html;
+  if(dz) dz.style.display = 'none';
+  if(rp) rp.style.display = '';
+}
+
+window.confirmAddTools = function(){
+  var titleInps = document.querySelectorAll('.add-title-inp');
+  var catSels   = document.querySelectorAll('.add-cat-sel');
+  var jobs = [];
+  _pendingAddItems.forEach(function(item, i){
+    var title = (titleInps[i] && titleInps[i].value.trim()) || item.title;
+    var cat   = (catSels[i] && catSels[i].value) || (CATS[0] && CATS[0].val) || '';
+    jobs.push(addCustomTool(title, cat, item.content));
+  });
+  Promise.all(jobs).then(function(){
+    window.closeAddToolOverlay();
+  }).catch(function(){
+    alert("No s'ha pogut desar alguna de les eines.");
+  });
+};
+
+function addCustomTool(title, category, html){
+  var tool = {
+    id: 'custom_' + Date.now() + '_' + Math.random().toString(36).slice(2,8),
+    title: title,
+    category: category,
+    html: html,
+    status: 'dev',
+    addedAt: Date.now()
+  };
+  return dbPutTool(tool).then(function(){
+    renderCustomToolCard(tool);
+    rebuildSidebar(); updateBadges();
+    if(typeof updateCounts === 'function') updateCounts();
+    if(typeof applyFilters === 'function') applyFilters();
+  });
+}
+
+function renderCustomToolCard(tool){
+  var grid   = document.getElementById('grid-dev');
+  var addBox = document.getElementById('cardAddBox');
+  if(!grid) return;
+  var cat      = catByVal(tool.category);
+  var catLbl   = cat ? cat.lbl : tool.category;
+  var catColor = cat ? cat.color : '#9CA3AF';
+  var blobUrl  = URL.createObjectURL(new Blob([tool.html], {type:'text/html'}));
+
+  var card = document.createElement('div');
+  card.className = 'tool-card';
+  card.dataset.category   = tool.category;
+  card.dataset.categories = JSON.stringify(tool.category ? [tool.category] : []);
+  card.dataset.status   = 'dev';
+  card.dataset.title    = tool.title;
+  card.dataset.customId = tool.id;
+  card.setAttribute('href', blobUrl);
+  card.setAttribute('onclick', 'handleCardClick(event, this)');
+
+  card.innerHTML =
+      '<button class="card-remove-btn" type="button" title="Eliminar">&times;</button>'
+    + '<div class="card-stripe amber"></div>'
+    + '<div class="card-body">'
+    +   '<div class="card-header-row">'
+    +     '<div class="card-icon amber">'
+    +       '<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">'
+    +         '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>'
+    +       '</svg>'
+    +     '</div>'
+    +     '<span class="card-status status-dev">En desenvolupament</span>'
+    +   '</div>'
+    +   '<div class="card-title">' + escHtml(tool.title) + '</div>'
+    +   '<div class="card-desc">Eina afegida manualment al hub.</div>'
+    +   '<div class="card-footer-row">'
+    +     '<div class="card-tags"><span class="card-tag" style="color:'+catColor+';background:'+hexToRgba(catColor,0.12)+';">' + escHtml(catLbl) + '</span></div>'
+    +     '<div class="card-arrow"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>'
+    +   '</div>'
+    + '</div>';
+
+  card.querySelector('.card-remove-btn').addEventListener('click', function(e){
+    e.preventDefault(); e.stopPropagation();
+    if(!confirm('Vols eliminar «'+tool.title+'» del hub?')) return;
+    dbDeleteTool(tool.id).then(function(){
+      URL.revokeObjectURL(blobUrl);
+      card.remove();
+      rebuildSidebar(); updateBadges();
+      if(typeof updateCounts === 'function') updateCounts();
+      if(typeof applyFilters === 'function') applyFilters();
+    });
+  });
+
+  if(addBox) grid.insertBefore(card, addBox);
+  else grid.appendChild(card);
+  buildCatUI(card);
+}
+
+function loadCustomTools(){
+  if(!window.indexedDB) return;
+  dbGetAllTools().then(function(tools){
+    tools.forEach(renderCustomToolCard);
+    rebuildSidebar(); updateBadges();
+    if(typeof updateCounts === 'function') updateCounts();
+    if(typeof applyFilters === 'function') applyFilters();
+  }).catch(function(){});
+}
+
+/* Dropzone: clic per seleccionar + drag & drop real, funcional a la capsa "+"
+   i dins l'overlay. Funciona a desktop i mòbil (el clic obre el selector). */
+(function initAddDropzone(){
+  var dz  = document.getElementById('addDropzone');
+  var fi  = document.getElementById('addFileInput');
+  var box = document.getElementById('cardAddBox');
+  var ov  = document.getElementById('addToolOverlay');
+
+  if(dz && fi){
+    dz.addEventListener('click', function(){ fi.click(); });
+    fi.addEventListener('change', function(){
+      if(fi.files && fi.files.length) handleAddFiles(fi.files);
+    });
+    ['dragenter','dragover'].forEach(function(evt){
+      dz.addEventListener(evt, function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.add('drag-over'); });
+    });
+    ['dragleave','drop'].forEach(function(evt){
+      dz.addEventListener(evt, function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.remove('drag-over'); });
+    });
+    dz.addEventListener('drop', function(e){
+      var dt = e.dataTransfer;
+      if(dt && dt.files && dt.files.length) handleAddFiles(dt.files);
+    });
   }
 
-  // Init all live tool cards
-  document.querySelectorAll('#grid-live .tool-card[data-status="live"]').forEach(buildCatUI);
+  if(box){
+    ['dragenter','dragover'].forEach(function(evt){
+      box.addEventListener(evt, function(e){ e.preventDefault(); e.stopPropagation(); box.classList.add('drag-over'); });
+    });
+    box.addEventListener('dragleave', function(e){ e.preventDefault(); e.stopPropagation(); box.classList.remove('drag-over'); });
+    box.addEventListener('drop', function(e){
+      e.preventDefault(); e.stopPropagation();
+      box.classList.remove('drag-over');
+      var dt = e.dataTransfer;
+      if(dt && dt.files && dt.files.length){
+        window.openAddToolOverlay();
+        handleAddFiles(dt.files);
+      }
+    });
+  }
+
+  if(ov){
+    ov.addEventListener('click', function(e){
+      if(e.target === ov) window.closeAddToolOverlay();
+    });
+  }
+})();
+
+loadCustomTools();
+
+/* ══ IDEA TRACKER — peticions pendents a "En desenvolupament" ══ */
+var KEY_IDEAS = 'hub-dev-ideas-v1';
+var ideas = loadJSON(KEY_IDEAS, []);
+
+function fmtDate(iso){
+  if(!iso) return '\u2014';
+  var p = iso.split('-');
+  if(p.length !== 3) return iso;
+  return p[2]+'/'+p[1]+'/'+p[0];
+}
+
+function renderIdeas(){
+  var body = document.getElementById('ideaTableBody');
+  var empty = document.getElementById('ideaEmptyMsg');
+  var table = document.querySelector('.idea-table');
+  if(!body) return;
+  var sorted = ideas.slice().sort(function(a,b){ return (b.reqDate||'').localeCompare(a.reqDate||''); });
+  body.innerHTML = '';
+  if(!sorted.length){
+    if(table) table.style.display = 'none';
+    if(empty) empty.style.display = 'block';
+    return;
+  }
+  if(table) table.style.display = '';
+  if(empty) empty.style.display = 'none';
+  sorted.forEach(function(row){
+    var tr = document.createElement('tr');
+    var tdReq = document.createElement('td'); tdReq.textContent = fmtDate(row.reqDate);
+    var tdIdea = document.createElement('td'); tdIdea.className = 'idea-text-cell'; tdIdea.textContent = row.idea;
+    var tdEst = document.createElement('td'); tdEst.textContent = row.estDate ? fmtDate(row.estDate) : '\u2014';
+    var tdDel = document.createElement('td');
+    var delBtn = document.createElement('button');
+    delBtn.type = 'button'; delBtn.className = 'idea-row-del'; delBtn.innerHTML = '&times;'; delBtn.title = 'Eliminar';
+    delBtn.addEventListener('click', function(){
+      ideas = ideas.filter(function(i){ return i.id !== row.id; });
+      renderIdeas();
+      saveJSON(KEY_IDEAS, ideas);
+    });
+    tdDel.appendChild(delBtn);
+    tr.appendChild(tdReq); tr.appendChild(tdIdea); tr.appendChild(tdEst); tr.appendChild(tdDel);
+    body.appendChild(tr);
+  });
+}
+renderIdeas();
+
+(function initIdeaAdd(){
+  var btn = document.getElementById('ideaAddBtn');
+  var reqInp = document.getElementById('ideaDateReq');
+  var ideaInp = document.getElementById('ideaText');
+  var estInp = document.getElementById('ideaDateEst');
+  if(!btn) return;
+  btn.addEventListener('click', function(){
+    var reqDate = reqInp.value;
+    var ideaTxt = ideaInp.value.trim();
+    var estDate = estInp.value;
+    if(!reqDate){ reqInp.focus(); return; }
+    if(!ideaTxt){ ideaInp.focus(); return; }
+    ideas.push({
+      id: 'idea_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+      reqDate: reqDate, idea: ideaTxt, estDate: estDate || ''
+    });
+    saveJSON(KEY_IDEAS, ideas);
+    renderIdeas();
+    reqInp.value = ''; ideaInp.value = ''; estInp.value = '';
+    reqInp.focus();
+  });
+  ideaInp.addEventListener('keydown', function(ev){ if(ev.key === 'Enter'){ ev.preventDefault(); btn.click(); } });
+})();
+
+/* ══ VERIFICADOR D'ENLLAÇOS ══════════════════════════════════
+   Comprova de veritat, targeta per targeta, si el fitxer del href
+   existeix (fetch real al servidor on estigui allotjat el hub).
+   Els enllaços externs (http/https a un altre domini) i els blob:
+   (eines afegides per drag&drop) no es comproven. Marca visualment
+   qualsevol card el destí de la qual no respongui correctament. */
+function checkCardLinks(){
+  var cards = document.querySelectorAll('.tool-card[data-status="live"]');
+  cards.forEach(function(card){
+    var href = card.getAttribute('href') || '';
+    if(!href || href==='#') return;
+    if(href.indexOf('blob:')===0) return;
+    var isExternal = /^https?:\/\//.test(href) && !href.includes(location.hostname);
+    if(isExternal) return; // no podem/hem de comprovar dominis externs des d'aquí
+
+    fetch(href, {method:'HEAD', cache:'no-store'})
+      .then(function(res){
+        if(!res.ok) throw new Error('status '+res.status);
+        markLinkOk(card);
+      })
+      .catch(function(){
+        // Alguns servidors no accepten HEAD: reintenta amb GET abans de donar-ho per trencat
+        fetch(href, {method:'GET', cache:'no-store'})
+          .then(function(res){ if(res.ok) markLinkOk(card); else markLinkBroken(card, href); })
+          .catch(function(){ markLinkBroken(card, href); });
+      });
+  });
+}
+function markLinkOk(card){
+  card.classList.remove('link-broken');
+  var b = card.querySelector('.link-broken-badge');
+  if(b) b.remove();
+}
+function markLinkBroken(card, href){
+  card.classList.add('link-broken');
+  if(card.querySelector('.link-broken-badge')) return;
+  var badge = document.createElement('div');
+  badge.className = 'link-broken-badge';
+  badge.title = 'No s\'ha trobat "'+href+'" en aquesta ubicació';
+  badge.textContent = '\u26A0 Enllaç no trobat';
+  card.appendChild(badge);
+  console.warn('[Hub] Enllaç trencat a la card "'+(card.dataset.title||href)+'": '+href);
+}
+/* Corre després que tot estigui muntat; a file:// els fetch relatius fallen
+   sempre per política del navegador (CORS de file://), així que la comprovació
+   només és fiable quan el hub s'obre des d'un servidor real (http/https). */
+if(location.protocol === 'http:' || location.protocol === 'https:'){
+  checkCardLinks();
+} else {
+  console.info('[Hub] El comprovador d\'enllaços només funciona servit per http(s) — obert com a file:// no es pot verificar.');
+}
+
+/* Restore last filter after all setup — si mai s'ha triat cap filtre
+   (primer cop que s'obre el hub en aquest navegador), es mostra la
+   vista Favorits per defecte. Si l'usuari ja ha triat un filtre abans
+   (Favorits inclòs, o qualsevol altre), es respecta aquesta elecció. */
+(function restoreFilter(){
+  try{
+    var saved = localStorage.getItem('hub-filter');
+    if(saved === null){ saved = '_fav'; }
+    if(!saved || saved === 'all') return;
+    currentFilter = saved;
+    /* Activate matching nav-item */
+    var matchNav = null;
+    if(saved === '_fav') matchNav = document.getElementById('nav-favorits');
+    else matchNav = document.querySelector('.nav-item[data-dyn-cat="'+saved+'"]');
+    if(matchNav){
+      document.querySelectorAll('.nav-item').forEach(function(i){i.classList.remove('active');});
+      matchNav.classList.add('active');
+    }
+    syncChips(saved);
+    applyFilters();
+  }catch(e){}
+})();
+
 })();
 </script>
 <script>

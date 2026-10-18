@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comparativa Préstecs Hipotecaris · OPTIMIZART€</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#DC0028;--red2:#b8001f;--red3:#D20A28;
+  --dark:#1e1e1e;--txt:#202020;--gray:#414141;
+  --gray2:#BEBEBE;--gray3:#E7E6E6;--border:#E0E0E0;
+  --bg:#F0F0F0;--white:#fff;
+  --blue:#0563C1;--green:#1b7a3e;--green-l:#e6f4ec;
+  --med-b:#0563C1;--med-bl:#deeeff;
+  --shadow:0 2px 8px rgba(0,0,0,.10);--shadow-md:0 4px 16px rgba(0,0,0,.12);
+  --r:8px;--rs:5px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gray);font-size:13px;line-height:1.5}
+
+/* ===== TOPBAR ===== */
+.topbar{
+  height:52px;background:var(--dark);display:flex;align-items:center;
+  justify-content:space-between;padding:0 22px;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 10px rgba(0,0,0,.35);
+}
+.brand{display:flex;align-items:baseline;gap:3px}
+.brand-opt{font-family:'Poppins',Arial,sans-serif;font-weight:800;font-size:.92rem;color:#fff}
+.brand-by{font-size:.62rem;color:rgba(255,255,255,.38);font-style:italic;margin:0 3px}
+.brand-occ{font-family:'Poppins',Arial,sans-serif;font-weight:800;font-size:.92rem;color:var(--red)}
+.tb-right{text-align:right}
+.tb-title{font-family:'Poppins',Arial,sans-serif;font-size:.78rem;font-weight:700;color:#fff}
+.tb-sub{font-size:.6rem;color:rgba(255,255,255,.42);margin-top:1px}
+
+/* ===== NAV TABS ===== */
+.nav{background:var(--white);border-bottom:2px solid var(--border);padding:0 22px;
+  display:flex;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.ntab{padding:11px 16px;font-family:Arial,sans-serif;font-size:12px;font-weight:700;
+  color:var(--gray2);cursor:pointer;border:none;background:none;
+  border-bottom:3px solid transparent;margin-bottom:-2px;
+  transition:color .15s,border-color .15s;display:flex;align-items:center;gap:5px;
+  text-transform:uppercase;letter-spacing:.05em}
+.ntab:hover{color:var(--gray)}
+.ntab.on{color:var(--red);border-bottom-color:var(--red)}
+
+/* ===== PAGES ===== */
+.pg{display:none}.pg.on{display:block}
+
+/* ===== CONTAINER ===== */
+.wrap{max-width:1080px;margin:0 auto;padding:20px 18px 56px}
+
+/* ===== SECTION PILL ===== */
+.sec-pill{
+  display:inline-block;background:var(--red);color:#fff;
+  padding:3px 10px;border-radius:4px;font-size:.6rem;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px
+}
+.sec-pill.blue{background:var(--blue)}
+.sec-pill.gray{background:var(--gray)}
+.sec-pill.green{background:var(--green)}
+
+/* ===== FORM CARD ===== */
+.fc{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:var(--r);padding:14px 16px 16px;
+  margin-bottom:14px;box-shadow:var(--shadow);
+}
+.fc-head{
+  display:flex;align-items:center;gap:8px;
+  padding-bottom:11px;margin-bottom:14px;
+  border-bottom:1px solid var(--border);
+}
+.fc-head h2{font-family:'Poppins',Arial,sans-serif;font-size:13px;font-weight:700;color:var(--txt);flex:1}
+.fc-num{
+  width:22px;height:22px;border-radius:50%;
+  background:var(--red);color:#fff;
+  font-family:'Poppins',Arial,sans-serif;font-size:11px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0
+}
+
+/* ===== GRID ===== */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:660px){.g2,.g3,.g4{grid-template-columns:1fr 1fr}}
+@media(max-width:400px){.g2,.g3,.g4{grid-template-columns:1fr}}
+
+/* ===== FIELDS ===== */
+.f{display:flex;flex-direction:column;gap:4px}
+.f label{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray)}
+.f label .tip{font-size:.58rem;font-weight:400;letter-spacing:0;text-transform:none;color:var(--gray2)}
+.f input,.f select{
+  height:34px;padding:0 10px;
+  border:1.5px solid var(--border);border-radius:var(--rs);
+  font-family:Arial,sans-serif;font-size:13px;color:var(--txt);
+  background:var(--white);transition:border-color .15s,box-shadow .15s;outline:none;
+  -webkit-appearance:none
+}
+.f input:focus,.f select:focus{border-color:var(--red);box-shadow:0 0 0 2px rgba(220,0,40,.12)}
+.uw{position:relative}.uw input{padding-right:32px;width:100%}
+.uw .u{position:absolute;right:9px;top:50%;transform:translateY(-50%);
+  font-size:12px;color:var(--gray2);pointer-events:none}
+
+/* ===== DIV ===== */
+.div{height:1px;background:var(--border);margin:13px 0}
+
+/* ===== INFO BOX ===== */
+.ib{padding:8px 12px;border-radius:var(--rs);font-size:11.5px;
+  background:#fff7e6;border-left:3px solid #cc6600;color:#945200;margin-top:10px;display:none}
+.ib.show{display:block}
+
+/* ===== ASSEG TABLE ===== */
+.at{width:100%;border-collapse:collapse;font-size:12px}
+.at th{padding:5px 7px;font-size:.58rem;font-weight:700;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--gray);text-align:left;
+  background:var(--bg);border-bottom:1.5px solid var(--border)}
+.at td{padding:4px 6px;border-bottom:1px solid var(--border);vertical-align:middle}
+.at tr:last-child td{border-bottom:none}
+.at input[type=text],.at input[type=number]{
+  width:100%;height:29px;padding:0 7px;
+  border:1px solid var(--border);border-radius:4px;
+  font-family:Arial,sans-serif;font-size:12px;color:var(--txt);background:#fff;outline:none}
+.at input:focus{border-color:var(--red)}
+.at select{width:100%;height:29px;padding:0 5px;border:1px solid var(--border);
+  border-radius:4px;font-family:Arial,sans-serif;font-size:11.5px;background:#fff;outline:none;color:var(--txt)}
+.delbtn{background:none;border:none;color:var(--gray2);cursor:pointer;font-size:14px;
+  padding:2px 4px;border-radius:4px;transition:color .15s,background .15s}
+.delbtn:hover{color:var(--red);background:#fff0f0}
+.addbtn{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:var(--rs);
+  font-family:Arial,sans-serif;font-size:11.5px;font-weight:700;cursor:pointer;
+  border:1.5px dashed var(--border);background:transparent;color:var(--gray);
+  transition:all .12s;margin-top:7px;text-transform:uppercase;letter-spacing:.06em}
+.addbtn.r:hover{border-color:var(--red);color:var(--red);background:#fff0f0}
+.addbtn.b:hover{border-color:var(--blue);color:var(--blue);background:var(--med-bl)}
+
+/* ===== BTN PRIMARY ===== */
+.btn-p{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:13px;background:var(--red);color:#fff;
+  border:none;border-radius:var(--rs);
+  font-family:'Poppins',Arial,sans-serif;font-size:.72rem;font-weight:700;
+  letter-spacing:.07em;text-transform:uppercase;cursor:pointer;
+  box-shadow:0 4px 16px rgba(220,0,40,.30);transition:background .15s,transform .12s
+}
+.btn-p:hover{background:var(--red2);transform:translateY(-1px)}
+.btn-p:active{transform:translateY(0)}
+
+/* ===== WINNER BANNER ===== */
+.wb{
+  border-radius:var(--r);padding:18px 22px;margin-bottom:16px;
+  display:flex;align-items:center;gap:16px;
+  box-shadow:var(--shadow-md);position:relative;overflow:hidden;color:#fff;
+  border-top:4px solid rgba(255,255,255,.3)
+}
+.wb::after{content:'';position:absolute;right:-25px;top:-35px;width:160px;height:160px;
+  border-radius:50%;background:rgba(255,255,255,.07)}
+.wb.bwb{background:linear-gradient(135deg,#900018,var(--red))}
+.wb.mwb{background:linear-gradient(135deg,#03437d,var(--blue))}
+.wb.twb{background:linear-gradient(135deg,#12572c,var(--green))}
+.wbi{font-size:38px;flex-shrink:0}
+.wbt h2{font-family:'Poppins',Arial,sans-serif;font-size:16px;font-weight:800;line-height:1.15}
+.wbt p{font-size:12px;opacity:.85;margin-top:3px}
+.wbs{margin-left:auto;flex-shrink:0;text-align:right;position:relative;z-index:1}
+.wbs .am{font-family:'Poppins',Arial,sans-serif;font-size:26px;font-weight:700;line-height:1}
+.wbs .lb{font-size:10px;opacity:.7;margin-top:3px}
+@media(max-width:560px){.wb{flex-wrap:wrap}.wbs{margin-left:0;text-align:left}}
+
+/* ===== KPI ROW ===== */
+.kr{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:560px){.kr{grid-template-columns:1fr 1fr}}
+.kpi{background:var(--white);border-radius:var(--r);padding:12px 14px;
+  box-shadow:var(--shadow);border-left:4px solid var(--border)}
+.kpi.kb{border-left-color:var(--red)}.kpi.km{border-left-color:var(--blue)}.kpi.kd{border-left-color:var(--green)}
+.kl{font-size:.58rem;font-weight:700;color:var(--gray2);text-transform:uppercase;letter-spacing:.06em}
+.kv{font-family:'Poppins',Arial,sans-serif;font-size:17px;font-weight:700;color:var(--txt);margin-top:4px}
+.ks{font-size:11px;color:var(--gray2);margin-top:2px}
+
+/* ===== RESULT TABLE ===== */
+.rt{width:100%;border-collapse:collapse;font-size:12.5px}
+.rt th{padding:8px 12px;font-size:.6rem;font-weight:700;text-align:left;
+  letter-spacing:.06em;text-transform:uppercase}
+.rt th:first-child{background:var(--bg);color:var(--gray);border-bottom:2px solid var(--border);width:190px}
+.rt .thb{background:#fff0f0;color:var(--red);border-bottom:2px solid var(--red)}
+.rt .thm{background:var(--med-bl);color:var(--blue);border-bottom:2px solid var(--blue)}
+.rt td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+.rt td:first-child{font-size:12px;color:var(--gray);background:var(--bg)}
+.rt tr:last-child td{border-bottom:none}
+.rt .sr td{border-top:2px solid var(--border);font-weight:700;background:var(--white)}
+.rt .win{color:var(--green);font-weight:700}.rt .lose{color:var(--gray2)}
+
+/* ===== ANNUAL TABLE ===== */
+.tw{overflow-x:auto}
+.at2{width:100%;border-collapse:collapse;font-size:11.5px;min-width:680px}
+.at2 th{padding:6px 9px;background:var(--bg);font-size:.58rem;font-weight:700;
+  text-align:right;color:var(--gray);border-bottom:2px solid var(--border);
+  text-transform:uppercase;letter-spacing:.06em}
+.at2 th:first-child{text-align:center}
+.at2 td{padding:5px 9px;text-align:right;font-size:11.5px;
+  border-bottom:1px solid var(--border);color:var(--txt)}
+.at2 td:first-child{text-align:center;font-weight:700;font-size:11.5px;color:var(--gray);background:var(--bg)}
+.at2 tr:hover td{background:#fafafa}
+.gp{color:var(--green);font-weight:700}.rp{color:var(--red);font-weight:700}
+.at2 tfoot td{background:var(--bg);font-weight:700;border-top:2px solid var(--border);border-bottom:none}
+
+/* ===== SUBTABS ===== */
+.stabs{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap}
+.stab{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;
+  border:1.5px solid var(--border);background:var(--white);color:var(--gray);
+  cursor:pointer;transition:all .12s;text-transform:uppercase;letter-spacing:.05em}
+.stab.on{background:var(--red);border-color:var(--red);color:#fff}
+
+/* ===== LEGAL ===== */
+.legal{font-size:11px;color:var(--gray2);line-height:1.65;
+  padding:12px 14px;background:var(--bg);border-radius:var(--rs);border-left:3px solid var(--border)}
+.legal strong{color:var(--gray)}
+
+/* ===== DASHBOARD ===== */
+.cg2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.cg2{grid-template-columns:1fr}}
+.cc{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);
+  padding:14px;border-top:3px solid var(--border)}
+.cc.red-top{border-top-color:var(--red)}.cc.blue-top{border-top-color:var(--blue)}
+.cc.gray-top{border-top-color:var(--gray2)}
+.cc h3{font-family:'Poppins',Arial,sans-serif;font-size:12px;font-weight:700;
+  color:var(--txt);margin-bottom:2px}
+.cc .cs{font-size:10.5px;color:var(--gray2);margin-bottom:11px;letter-spacing:.02em}
+.cc canvas{width:100%!important}
+
+.dsr{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:640px){.dsr{grid-template-columns:1fr 1fr}}
+.ds{background:var(--white);border-radius:var(--r);padding:13px;
+  box-shadow:var(--shadow);text-align:center;border-top:3px solid var(--border)}
+.ds .dv{font-family:'Poppins',Arial,sans-serif;font-size:20px;font-weight:700;margin-bottom:3px}
+.ds .dl{font-size:10.5px;color:var(--gray2);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.dsr .ds:nth-child(1){border-top-color:var(--red)}.dsr .ds:nth-child(1) .dv{color:var(--red)}
+.dsr .ds:nth-child(2){border-top-color:var(--blue)}.dsr .ds:nth-child(2) .dv{color:var(--blue)}
+.dsr .ds:nth-child(3){border-top-color:var(--green)}.dsr .ds:nth-child(3) .dv{color:var(--green)}
+.dsr .ds:nth-child(4){border-top-color:var(--gray2)}.dsr .ds:nth-child(4) .dv{color:var(--gray)}
+
+/* EMPTY */
+.emp{text-align:center;padding:50px 20px;color:var(--gray2)}
+.emp .ei{font-size:44px;margin-bottom:12px}
+.emp p{font-size:12px}.emp strong{color:var(--gray)}
+
+/* ASSEG COLS */
+.ac{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:540px){.ac{grid-template-columns:1fr}}
+
+/* FOOTER */
+.footer-bar{background:var(--dark);color:rgba(255,255,255,.38);font-size:.63rem;
+  text-align:center;padding:8px 22px;letter-spacing:.04em}
+
+@media print{
+  .topbar,.nav,.footer-bar,.btn-p,.addbtn,.delbtn{display:none!important}
+  body{background:#fff}.fc{box-shadow:none;border:1px solid #ddd}
+  .pg{display:block!important}
+  .wb{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR OPTIMIZARTE -->
+<div class="topbar">
+  <div class="brand">
+    <span class="brand-opt">Optimizarte</span>
+    <span class="brand-by">by</span>
+    <span class="brand-occ">Occident</span>
+  </div>
+  <div class="tb-right">
+    <div class="tb-title">Comparativa de Préstecs Hipotecaris</div>
+    <div class="tb-sub">Banc/Caixa amb bonificació vs. Mediació professional col·legiada</div>
+  </div>
+</div>
+
+<!-- NAV TABS -->
+<div class="nav">
+  <button class="ntab on" onclick="navTo('p-sim',this)">⚙ Simulador</button>
+  <button class="ntab" onclick="navTo('p-res',this)">📊 Resultats</button>
+  <button class="ntab" onclick="navTo('p-dash',this)">📈 Dashboard</button>
+</div>
+
+<!-- ===== SIMULADOR ===== -->
+<div id="p-sim" class="pg on">
+<div class="wrap">
+
+  <!-- 1. DADES PRÉSTEC -->
+  <div class="fc">
+    <div class="fc-head"><div class="fc-num">1</div><h2>Dades del Préstec i del Client</h2></div>
+    <div class="g4">
+      <div class="f"><label>Client <span class="tip">(opcional)</span></label><input type="text" id="client" placeholder="Nom del client"></div>
+      <div class="f"><label>Import del préstec</label><div class="uw"><input type="number" id="import" placeholder="200.000" min="1000" step="1000"><span class="u">€</span></div></div>
+      <div class="f"><label>Anys restants</label><div class="uw"><input type="number" id="anys" placeholder="25" min="1" max="40"><span class="u">anys</span></div></div>
+      <div class="f"><label>Entitat bancària</label><input type="text" id="entitat" placeholder="CaixaBank, Sabadell..."></div>
+    </div>
+    <div class="div"></div>
+    <div class="sec-pill">Tipus d'interès</div>
+    <div class="g3" style="margin-top:8px">
+      <div class="f"><label>Tipus de referència <span class="tip">(Euríbor, fix…)</span></label><div class="uw"><input type="number" id="ref" placeholder="3.000" step="0.001" min="0"><span class="u">%</span></div></div>
+      <div class="f"><label>Diferencial banc <span class="tip">(sense bonif.)</span></label><div class="uw"><input type="number" id="difb" placeholder="1.50" step="0.01" min="0"><span class="u">%</span></div></div>
+      <div class="f"><label>Bonificació per vinculació assegurances</label><div class="uw"><input type="number" id="bon" placeholder="0.50" step="0.01" min="0"><span class="u">%</span></div></div>
+    </div>
+    <div class="div"></div>
+    <div class="sec-pill blue">Préstec via mediador</div>
+    <div class="g3" style="margin-top:8px">
+      <div class="f"><label>Diferencial mediador <span class="tip">(pot diferir del banc)</span></label><div class="uw"><input type="number" id="difm" placeholder="2.00" step="0.01" min="0"><span class="u">%</span></div></div>
+    </div>
+    <div class="ib" id="ib">
+      ⚡ <strong>Banc amb bonif.:</strong> <span id="it1">—</span> &nbsp;·&nbsp;
+      <strong>Banc sense bonif.:</strong> <span id="it2">—</span> &nbsp;·&nbsp;
+      <strong>Mediador:</strong> <span id="it3">—</span>
+    </div>
+  </div>
+
+  <!-- 2. ASSEGURANCES BANC -->
+  <div class="fc">
+    <div class="fc-head">
+      <div class="fc-num">2</div>
+      <h2>Assegurances Banc/Caixa &nbsp;<span style="font-size:11px;font-weight:400;color:var(--gray2)">(exigides per obtenir la bonificació)</span></h2>
+    </div>
+    <div class="sec-pill">Assegurances vinculades al banc</div>
+    <div style="margin-top:8px">
+      <table class="at" id="tb-b">
+        <thead><tr><th style="width:36%">Producte</th><th style="width:18%">Prima any 1 (€)</th><th style="width:23%">Tipus de prima</th><th style="width:16%">Increment anual %</th><th style="width:7%"></th></tr></thead>
+        <tbody id="tbd-b"></tbody>
+      </table>
+      <button class="addbtn r" onclick="addR('b')">＋ Afegir assegurança</button>
+    </div>
+  </div>
+
+  <!-- 3. ASSEGURANCES MEDIADOR -->
+  <div class="fc">
+    <div class="fc-head">
+      <div class="fc-num" style="background:var(--blue)">3</div>
+      <h2>Assegurances Mediador Professional &nbsp;<span style="font-size:11px;font-weight:400;color:var(--gray2)">(equivalents, via mediació col·legiada)</span></h2>
+    </div>
+    <div class="sec-pill blue">Assegurances via mediador</div>
+    <div style="margin-top:8px">
+      <table class="at" id="tb-m">
+        <thead><tr><th style="width:36%">Producte</th><th style="width:18%">Prima any 1 (€)</th><th style="width:23%">Tipus de prima</th><th style="width:16%">Increment anual %</th><th style="width:7%"></th></tr></thead>
+        <tbody id="tbd-m"></tbody>
+      </table>
+      <button class="addbtn b" onclick="addR('m')">＋ Afegir assegurança</button>
+    </div>
+  </div>
+
+  <button class="btn-p" onclick="calcular()">🔍 Calcular Comparativa Completa</button>
+
+</div>
+</div>
+
+<!-- ===== RESULTATS ===== -->
+<div id="p-res" class="pg">
+<div class="wrap">
+  <div id="er" class="emp"><div class="ei">⚙️</div><p>Omple el <strong>Simulador</strong> i prem "Calcular" per veure els resultats.</p></div>
+  <div id="rc" style="display:none">
+
+    <div class="wb" id="wbann">
+      <div class="wbi" id="wbi">🏆</div>
+      <div class="wbt"><h2 id="wbt">—</h2><p id="wbd">—</p></div>
+      <div class="wbs"><div class="am" id="wbam">—</div><div class="lb">Estalvi total durant el préstec</div></div>
+    </div>
+
+    <div class="kr">
+      <div class="kpi kb"><div class="kl">🏦 Quota mensual · Banc</div><div class="kv" id="kqb">—</div><div class="ks">Tipus: <span id="kib">—</span></div></div>
+      <div class="kpi km"><div class="kl">🤝 Quota mensual · Mediador</div><div class="kv" id="kqm">—</div><div class="ks">Tipus: <span id="kim">—</span></div></div>
+      <div class="kpi kd"><div class="kl">📊 Diferència total préstec</div><div class="kv" id="kdif">—</div><div class="ks" id="kdifs">—</div></div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head"><div class="fc-num" style="background:var(--green)">✓</div><h2>Resum de Costos Totals</h2></div>
+      <table class="rt">
+        <thead><tr><th></th><th class="thb">🏦 Banc (amb bonificació)</th><th class="thm">🤝 Mediador professional</th></tr></thead>
+        <tbody>
+          <tr><td>Tipus d'interès aplicat</td><td id="ri-b">—</td><td id="ri-m">—</td></tr>
+          <tr><td>Quota mensual préstec</td><td id="rq-b">—</td><td id="rq-m">—</td></tr>
+          <tr><td>Primes any 1 (totes assegurances)</td><td id="rp1-b">—</td><td id="rp1-m">—</td></tr>
+          <tr><td>Despesa total anual (any 1)</td><td id="ra1-b">—</td><td id="ra1-m">—</td></tr>
+          <tr class="sr"><td>Total quotes préstec (durada)</td><td id="rtq-b">—</td><td id="rtq-m">—</td></tr>
+          <tr class="sr"><td>Total primes assegurança</td><td id="rtp-b">—</td><td id="rtp-m">—</td></tr>
+          <tr class="sr"><td><strong>TOTAL DESPESA HIPOTECÀRIA</strong></td><td id="rtt-b" style="font-size:14px">—</td><td id="rtt-m" style="font-size:14px">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head"><div class="fc-num" style="background:var(--gray)">📋</div><h2>Detall primes per producte (any 1)</h2></div>
+      <div class="ac">
+        <div>
+          <div class="sec-pill" style="margin-bottom:8px">🏦 Banc / Caixa</div>
+          <table class="rt" id="det-b" style="font-size:12px"><thead><tr><th>Producte</th><th class="thb">Prima any 1</th></tr></thead><tbody></tbody><tfoot></tfoot></table>
+        </div>
+        <div>
+          <div class="sec-pill blue" style="margin-bottom:8px">🤝 Mediador</div>
+          <table class="rt" id="det-m" style="font-size:12px"><thead><tr><th>Producte</th><th class="thm">Prima any 1</th></tr></thead><tbody></tbody><tfoot></tfoot></table>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc">
+      <div class="fc-head"><div class="fc-num" style="background:var(--blue)">📅</div><h2>Detall Anual</h2></div>
+      <div class="stabs">
+        <button class="stab on" onclick="showSt('st-c',this)">Costos anuals</button>
+        <button class="stab" onclick="showSt('st-a',this)">Amortització</button>
+        <button class="stab" onclick="showSt('st-p',this)">Evolució primes</button>
+      </div>
+      <div id="st-c">
+        <div class="tw"><table class="at2">
+          <thead><tr><th>Any</th><th>Quota Banc</th><th>Primes Banc</th><th>Total Banc</th><th>Quota Med.</th><th>Primes Med.</th><th>Total Med.</th><th>Diferència</th></tr></thead>
+          <tbody id="st-c-b"></tbody><tfoot id="st-c-f"></tfoot>
+        </table></div>
+      </div>
+      <div id="st-a" style="display:none">
+        <div class="tw"><table class="at2">
+          <thead><tr><th>Any</th><th>Cap. pend. Banc</th><th>Interessos Banc</th><th>Amort. Banc</th><th>Cap. pend. Med.</th><th>Interessos Med.</th><th>Amort. Med.</th></tr></thead>
+          <tbody id="st-a-b"></tbody>
+        </table></div>
+      </div>
+      <div id="st-p" style="display:none">
+        <div class="tw"><table class="at2">
+          <thead><tr id="st-p-h"></tr></thead>
+          <tbody id="st-p-b"></tbody><tfoot id="st-p-f"></tfoot>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="fc"><p class="legal">
+      <strong>Avís legal:</strong> No existeix obligació legal de contractar assegurances per obtenir un préstec hipotecari. Les entitats de crèdit molt sovint supediten les condicions a la contractació d'una o diverses assegurances vinculades.<br><br>
+      <strong>Prima única:</strong> calculada per a la primera anualitat; pot ser superior si es finança amb capital del préstec. · <strong>Prima nivellada:</strong> import constant tota la durada. · <strong>Prima renovable:</strong> increment geomètric anual estimat sobre la prima de l'any anterior.<br><br>
+      Dades amb <strong>valor merament orientador</strong>. OPTIMIZART€ · Agència Exclusiva Occident #17167 · mediadorsdassegurances.cat
+    </p></div>
+
+  </div>
+</div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div id="p-dash" class="pg">
+<div class="wrap">
+  <div id="ed" class="emp"><div class="ei">📊</div><p>Omple el <strong>Simulador</strong> i prem "Calcular" per veure el dashboard.</p></div>
+  <div id="dc" style="display:none">
+    <div class="dsr">
+      <div class="ds"><div class="dv" id="ds1">—</div><div class="dl">Cost total Banc</div></div>
+      <div class="ds"><div class="dv" id="ds2">—</div><div class="dl">Cost total Mediador</div></div>
+      <div class="ds"><div class="dv" id="ds3">—</div><div class="dl">Estalvi net</div></div>
+      <div class="ds"><div class="dv" id="ds4">—</div><div class="dl">Anys simulats</div></div>
+    </div>
+    <div class="cg2">
+      <div class="cc red-top"><h3>Costos totals anuals</h3><div class="cs">Quota préstec + primes per any</div><canvas id="ch1" height="220"></canvas></div>
+      <div class="cc blue-top"><h3>Cost acumulat total</h3><div class="cs">Evolució acumulada Banc vs. Mediador</div><canvas id="ch2" height="220"></canvas></div>
+      <div class="cc red-top"><h3>Composició · Banc</h3><div class="cs">Quotes vs. primes totals</div><canvas id="ch3" height="220"></canvas></div>
+      <div class="cc blue-top"><h3>Composició · Mediador</h3><div class="cs">Quotes vs. primes totals</div><canvas id="ch4" height="220"></canvas></div>
+      <div class="cc red-top"><h3>Primes Banc per producte</h3><div class="cs">Evolució anual per assegurança</div><canvas id="ch5" height="220"></canvas></div>
+      <div class="cc blue-top"><h3>Primes Mediador per producte</h3><div class="cs">Evolució anual per assegurança</div><canvas id="ch6" height="220"></canvas></div>
+      <div class="cc gray-top" style="grid-column:span 2"><h3>Diferència anual Banc − Mediador</h3><div class="cs">Vermell = banc és més car · Blau = mediador és més car</div><canvas id="ch7" height="160"></canvas></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer-bar">OPTIMIZART€ · Agència Exclusiva Occident #17167 · RACF M441819E · Eina d'ús intern · Document generat localment, sense enviament de dades</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+// ===== STATE =====
+let rB=[],rM=[],G=null,chts={};
+const PRODS=['Vida risc','Llar / Multirisc','Responsabilitat Civil','Salut','Protecció pagaments','Decesos','AutoPresto','Altra'];
+const CB=['#DC0028','#c62828','#e53935','#ef5350','#e57373','#ef9a9a','#ffcdd2','#d32f2f'];
+const CM=['#0563C1','#1976d2','#1e88e5','#42a5f5','#90caf9','#bbdefb','#0d47a1','#1565c0'];
+
+function mR(who){return{who,nom:who==='b'?'Vida risc':'Llar / Multirisc',prima:who==='b'?800:600,tipus:'renovable',incr:2.5}}
+
+function renderT(who){
+  const rows=who==='b'?rB:rM;
+  document.getElementById('tbd-'+who).innerHTML='';
+  rows.forEach((r,i)=>{
+    document.getElementById('tbd-'+who).insertAdjacentHTML('beforeend',`<tr>
+      <td><input type="text" value="${r.nom}" onchange="upd('${who}',${i},'nom',this.value)" list="pl-${who}-${i}">
+        <datalist id="pl-${who}-${i}">${PRODS.map(p=>`<option value="${p}">`).join('')}</datalist></td>
+      <td><input type="number" value="${r.prima}" min="0" step="1" onchange="upd('${who}',${i},'prima',+this.value)"></td>
+      <td><select onchange="upd('${who}',${i},'tipus',this.value)">
+        <option value="unica" ${r.tipus==='unica'?'selected':''}>Prima única</option>
+        <option value="nivellada" ${r.tipus==='nivellada'?'selected':''}>Nivellada</option>
+        <option value="renovable" ${r.tipus==='renovable'?'selected':''}>Anual renovable</option>
+      </select></td>
+      <td><input type="number" value="${r.incr}" min="0" step="0.1" ${r.tipus!=='renovable'?'disabled':''} onchange="upd('${who}',${i},'incr',+this.value)" style="${r.tipus!=='renovable'?'opacity:.35':''}"></td>
+      <td><button class="delbtn" onclick="delR('${who}',${i})">✕</button></td>
+    </tr>`);
+  });
+}
+function upd(who,i,f,v){const r=who==='b'?rB:rM;r[i][f]=v;if(f==='tipus')renderT(who);}
+function delR(who,i){const r=who==='b'?rB:rM;r.splice(i,1);renderT(who);}
+function addR(who){const r=who==='b'?rB:rM;r.push(mR(who));renderT(who);}
+
+rB.push(mR('b'));rM.push(mR('m'));
+renderT('b');renderT('m');
+
+function navTo(id,btn){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');btn.classList.add('on');
+}
+function showSt(id,btn){
+  ['st-c','st-a','st-p'].forEach(s=>document.getElementById(s).style.display=s===id?'':'none');
+  document.querySelectorAll('.stab').forEach(s=>s.classList.remove('on'));btn.classList.add('on');
+}
+
+function fmt(n,d=2){if(isNaN(n)||n===null)return'—';return new Intl.NumberFormat('ca-ES',{minimumFractionDigits:d,maximumFractionDigits:d}).format(n)+' €';}
+function fmtk(n){return Math.abs(n)>=1000?(n/1000).toFixed(1).replace('.',',')+' k€':fmt(n,0);}
+function pct(n){return(n*100).toFixed(3).replace('.',',')+' %';}
+
+['ref','difb','bon','difm'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',()=>{
+    const ref=+document.getElementById('ref').value||0;
+    const db=+document.getElementById('difb').value||0;
+    const bon=+document.getElementById('bon').value||0;
+    const dm=+document.getElementById('difm').value||0;
+    const el=document.getElementById('ib');
+    el.classList.toggle('show',!!(ref||db||bon||dm));
+    document.getElementById('it1').textContent=pct((ref+db-bon)/100);
+    document.getElementById('it2').textContent=pct((ref+db)/100);
+    document.getElementById('it3').textContent=pct((ref+dm)/100);
+  });
+});
+
+function cF(cap,ta,mes){
+  if(mes<=0||cap<=0)return{q:0,rows:[]};
+  const r=ta/12;
+  const q=r===0?cap/mes:cap*r*Math.pow(1+r,mes)/(Math.pow(1+r,mes)-1);
+  const rows=[];let p=cap;
+  for(let m=1;m<=mes;m++){const int=p*r;const am=q-int;p=Math.max(0,p-am);rows.push({pi:p+am,q,int,am,pf:p});}
+  return{q,rows};
+}
+function cP(pb,t,inc,n){
+  return Array.from({length:n},(_,a)=>{
+    if(t==='unica')return a===0?pb:0;
+    if(t==='nivellada')return pb;
+    return pb*Math.pow(1+inc/100,a);
+  });
+}
+
+function calcular(){
+  const cap=+document.getElementById('import').value||0;
+  const anys=+document.getElementById('anys').value||0;
+  if(!cap||!anys){alert('Cal introduir import del préstec i anys restants.');return;}
+  const ref=+document.getElementById('ref').value||0;
+  const db=+document.getElementById('difb').value||0;
+  const bon=+document.getElementById('bon').value||0;
+  const dm=+document.getElementById('difm').value||0;
+  const mes=anys*12;
+  const tb=Math.max(0,(ref+db-bon)/100);
+  const tm=Math.max(0,(ref+dm)/100);
+  const banc=cF(cap,tb,mes);const med=cF(cap,tm,mes);
+  const pB=rB.map(r=>cP(r.prima,r.tipus,r.incr,anys));
+  const pM=rM.map(r=>cP(r.prima,r.tipus,r.incr,anys));
+  const tpBA=Array.from({length:anys},(_,a)=>pB.reduce((s,p)=>s+p[a],0));
+  const tpMA=Array.from({length:anys},(_,a)=>pM.reduce((s,p)=>s+p[a],0));
+  const tqb=banc.q*mes,tqm=med.q*mes;
+  const tpb=tpBA.reduce((a,b)=>a+b,0),tpm=tpMA.reduce((a,b)=>a+b,0);
+  const ttb=tqb+tpb,ttm=tqm+tpm,est=ttb-ttm;
+  G={cap,anys,mes,tb,tm,banc,med,pB,pM,tpBA,tpMA,tqb,tqm,tpb,tpm,ttb,ttm,est};
+  renderRes();renderDash();
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('p-res').classList.add('on');
+  document.querySelectorAll('.ntab')[1].classList.add('on');
+  window.scrollTo({top:0});
+}
+
+function renderRes(){
+  const{anys,tb,tm,banc,med,tqb,tqm,tpb,tpm,ttb,ttm,est,pB,pM,tpBA,tpMA}=G;
+  document.getElementById('er').style.display='none';
+  document.getElementById('rc').style.display='';
+  const cl=document.getElementById('client').value.trim();
+  const cs=cl?` per a ${cl}`:'';
+  const wb=document.getElementById('wbann');
+  if(Math.abs(est)<1){
+    wb.className='wb twb';document.getElementById('wbi').textContent='🤝';
+    document.getElementById('wbt').textContent='Empat tècnic';
+    document.getElementById('wbd').textContent=`Ambdues opcions presenten un cost pràcticament idèntic${cs}.`;
+    document.getElementById('wbam').textContent=fmt(0);
+  }else if(est>0){
+    wb.className='wb mwb';document.getElementById('wbi').textContent='🏆';
+    document.getElementById('wbt').textContent="L'opció del Mediador Professional és la més avantatjosa";
+    document.getElementById('wbd').textContent=`Via mediació col·legiada s'estalvia ${fmt(est)} respecte al banc${cs}.`;
+    document.getElementById('wbam').textContent=fmt(est);
+  }else{
+    wb.className='wb bwb';document.getElementById('wbi').textContent='🏆';
+    document.getElementById('wbt').textContent="L'opció del Banc (amb bonificació) és la més avantatjosa";
+    document.getElementById('wbd').textContent=`La bonificació del banc supera el cost de les assegurances del mediador. Estalvi: ${fmt(-est)}${cs}.`;
+    document.getElementById('wbam').textContent=fmt(-est);
+  }
+  document.getElementById('kqb').textContent=fmt(banc.q)+'/mes';
+  document.getElementById('kqm').textContent=fmt(med.q)+'/mes';
+  document.getElementById('kib').textContent=pct(tb);
+  document.getElementById('kim').textContent=pct(tm);
+  document.getElementById('kdif').textContent=fmt(ttb)+' vs '+fmt(ttm);
+  document.getElementById('kdifs').textContent=est>0?`Mediador: ${fmt(est)} menys`:est<0?`Banc: ${fmt(-est)} menys`:'Costos iguals';
+  document.getElementById('ri-b').textContent=pct(tb);document.getElementById('ri-m').textContent=pct(tm);
+  document.getElementById('rq-b').textContent=fmt(banc.q)+' / mes';document.getElementById('rq-m').textContent=fmt(med.q)+' / mes';
+  document.getElementById('rp1-b').textContent=fmt(tpBA[0]);document.getElementById('rp1-m').textContent=fmt(tpMA[0]);
+  document.getElementById('ra1-b').textContent=fmt(banc.q*12+tpBA[0]);document.getElementById('ra1-m').textContent=fmt(med.q*12+tpMA[0]);
+  document.getElementById('rtq-b').textContent=fmt(tqb);document.getElementById('rtq-m').textContent=fmt(tqm);
+  document.getElementById('rtp-b').textContent=fmt(tpb);document.getElementById('rtp-m').textContent=fmt(tpm);
+  const eb=document.getElementById('rtt-b');eb.textContent=fmt(ttb);eb.className=ttb<=ttm?'win':'lose';
+  const em=document.getElementById('rtt-m');em.textContent=fmt(ttm);em.className=ttm<=ttb?'win':'lose';
+  // detall asseg
+  const db2=document.querySelector('#det-b tbody');const dbf=document.querySelector('#det-b tfoot');
+  db2.innerHTML='';rB.forEach((r,i)=>db2.insertAdjacentHTML('beforeend',`<tr><td>${r.nom}</td><td class="thb">${fmt(pB[i][0])}</td></tr>`));
+  dbf.innerHTML=`<tr><td><strong>Total</strong></td><td><strong>${fmt(tpBA[0])}</strong></td></tr>`;
+  const dm2=document.querySelector('#det-m tbody');const dmf=document.querySelector('#det-m tfoot');
+  dm2.innerHTML='';rM.forEach((r,i)=>dm2.insertAdjacentHTML('beforeend',`<tr><td>${r.nom}</td><td class="thm">${fmt(pM[i][0])}</td></tr>`));
+  dmf.innerHTML=`<tr><td><strong>Total</strong></td><td><strong>${fmt(tpMA[0])}</strong></td></tr>`;
+  // costos anuals
+  const tcb=document.getElementById('st-c-b');const tcf=document.getElementById('st-c-f');
+  tcb.innerHTML='';let sb=0,sm=0;
+  for(let a=0;a<anys;a++){
+    const qb=banc.q*12,pb=tpBA[a],tb2=qb+pb;
+    const qm=med.q*12,pm=tpMA[a],tm2=qm+pm;
+    const dif=tb2-tm2;sb+=tb2;sm+=tm2;
+    tcb.insertAdjacentHTML('beforeend',`<tr><td>${a+1}</td><td>${fmt(banc.q)}</td><td>${fmt(pb)}</td><td>${fmt(tb2)}</td><td>${fmt(med.q)}</td><td>${fmt(pm)}</td><td>${fmt(tm2)}</td><td class="${dif>0.01?'gp':dif<-0.01?'rp':''}">${dif>=0?'+':''}${fmt(dif)}</td></tr>`);
+  }
+  const dt=sb-sm;
+  tcf.innerHTML=`<tr><td>TOTAL</td><td>—</td><td>${fmt(tpb)}</td><td>${fmt(sb)}</td><td>—</td><td>${fmt(tpm)}</td><td>${fmt(sm)}</td><td class="${dt>0.01?'gp':dt<-0.01?'rp':''}">${dt>=0?'+':''}${fmt(dt)}</td></tr>`;
+  // amortització
+  const tab=document.getElementById('st-a-b');tab.innerHTML='';
+  for(let a=0;a<anys;a++){
+    const rb=banc.rows.slice(a*12,(a+1)*12);const rm=med.rows.slice(a*12,(a+1)*12);
+    if(!rb.length)break;
+    tab.insertAdjacentHTML('beforeend',`<tr><td>${a+1}</td><td>${fmt(rb[0].pi)}</td><td>${fmt(rb.reduce((s,r)=>s+r.int,0))}</td><td>${fmt(rb.reduce((s,r)=>s+r.am,0))}</td><td>${fmt(rm[0]?rm[0].pi:0)}</td><td>${fmt(rm.reduce((s,r)=>s+r.int,0))}</td><td>${fmt(rm.reduce((s,r)=>s+r.am,0))}</td></tr>`);
+  }
+  // primes per producte
+  const ph=document.getElementById('st-p-h');const tpb2=document.getElementById('st-p-b');const tpf=document.getElementById('st-p-f');
+  ph.innerHTML=`<th>Any</th>${rB.map(r=>`<th style="color:var(--red)">B: ${r.nom}</th>`).join('')}<th>Total B</th>${rM.map(r=>`<th style="color:var(--blue)">M: ${r.nom}</th>`).join('')}<th>Total M</th>`;
+  tpb2.innerHTML='';
+  const sB=new Array(rB.length).fill(0),sM=new Array(rM.length).fill(0);
+  for(let a=0;a<anys;a++){
+    const pb=rB.map((_,i)=>pB[i][a]);const pm=rM.map((_,i)=>pM[i][a]);
+    pb.forEach((v,i)=>sB[i]+=v);pm.forEach((v,i)=>sM[i]+=v);
+    tpb2.insertAdjacentHTML('beforeend',`<tr><td>${a+1}</td>${pb.map(v=>`<td>${fmt(v)}</td>`).join('')}<td><strong>${fmt(tpBA[a])}</strong></td>${pm.map(v=>`<td>${fmt(v)}</td>`).join('')}<td><strong>${fmt(tpMA[a])}</strong></td></tr>`);
+  }
+  tpf.innerHTML=`<tr><td>TOTAL</td>${sB.map(v=>`<td>${fmt(v)}</td>`).join('')}<td>${fmt(tpb)}</td>${sM.map(v=>`<td>${fmt(v)}</td>`).join('')}<td>${fmt(tpm)}</td></tr>`;
+}
+
+function renderDash(){
+  const{anys,banc,med,ttb,ttm,est,tpBA,tpMA,tqb,tqm,tpb,tpm,pB,pM}=G;
+  document.getElementById('ed').style.display='none';document.getElementById('dc').style.display='';
+  document.getElementById('ds1').textContent=fmtk(ttb);document.getElementById('ds2').textContent=fmtk(ttm);
+  document.getElementById('ds3').textContent=(est>=0?'+':'')+fmtk(Math.abs(est));
+  document.getElementById('ds4').textContent=anys+' anys';
+  Object.values(chts).forEach(c=>c.destroy());chts={};
+  const lbs=Array.from({length:anys},(_,i)=>`Any ${i+1}`);
+  const tBA=lbs.map((_,a)=>banc.q*12+tpBA[a]);
+  const tMA=lbs.map((_,a)=>med.q*12+tpMA[a]);
+  const gr={color:'rgba(0,0,0,.05)'};
+  const bo={responsive:true,plugins:{legend:{labels:{font:{family:'Arial,sans-serif',size:11}}}},scales:{x:{grid:gr},y:{grid:gr}}};
+  const tc={callbacks:{label:ctx=>` ${fmt(ctx.raw)}`}};
+  // 1 barres
+  chts.c1=new Chart(document.getElementById('ch1'),{type:'bar',data:{labels:lbs,datasets:[
+    {label:'Banc',data:tBA,backgroundColor:'rgba(220,0,40,0.82)',borderRadius:3},
+    {label:'Mediador',data:tMA,backgroundColor:'rgba(5,99,193,0.82)',borderRadius:3}
+  ]},options:{...bo,plugins:{...bo.plugins,tooltip:{callbacks:tc}}}});
+  // 2 línia acumulat
+  let ab=0,am=0;const acB=[],acM=[];
+  for(let a=0;a<anys;a++){ab+=tBA[a];acB.push(ab);am+=tMA[a];acM.push(am);}
+  chts.c2=new Chart(document.getElementById('ch2'),{type:'line',data:{labels:lbs,datasets:[
+    {label:'Acumulat Banc',data:acB,borderColor:'#DC0028',backgroundColor:'rgba(220,0,40,0.12)',fill:true,tension:.35,borderWidth:2,pointRadius:2},
+    {label:'Acumulat Mediador',data:acM,borderColor:'#0563C1',backgroundColor:'rgba(5,99,193,0.12)',fill:true,tension:.35,borderWidth:2,pointRadius:2}
+  ]},options:{...bo,plugins:{...bo.plugins,tooltip:{callbacks:tc}}}});
+  // 3 donut banc
+  chts.c3=new Chart(document.getElementById('ch3'),{type:'doughnut',data:{labels:['Quotes préstec','Primes assegurança'],datasets:[{data:[tqb,tpb],backgroundColor:['#DC0028','#BEBEBE'],hoverOffset:6}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{family:'Arial,sans-serif',size:11}}},tooltip:{callbacks:tc}}}});
+  // 4 donut mediador
+  chts.c4=new Chart(document.getElementById('ch4'),{type:'doughnut',data:{labels:['Quotes préstec','Primes assegurança'],datasets:[{data:[tqm,tpm],backgroundColor:['#0563C1','#BEBEBE'],hoverOffset:6}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{family:'Arial,sans-serif',size:11}}},tooltip:{callbacks:tc}}}});
+  // 5 stacked banc
+  chts.c5=new Chart(document.getElementById('ch5'),{type:'bar',data:{labels:lbs,datasets:rB.map((r,i)=>({label:r.nom,data:pB[i],backgroundColor:CB[i%CB.length],borderRadius:2}))},options:{...bo,scales:{x:{...bo.scales.x,stacked:true},y:{...bo.scales.y,stacked:true}},plugins:{...bo.plugins,tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmt(ctx.raw)}`}}}}});
+  // 6 stacked mediador
+  chts.c6=new Chart(document.getElementById('ch6'),{type:'bar',data:{labels:lbs,datasets:rM.map((r,i)=>({label:r.nom,data:pM[i],backgroundColor:CM[i%CM.length],borderRadius:2}))},options:{...bo,scales:{x:{...bo.scales.x,stacked:true},y:{...bo.scales.y,stacked:true}},plugins:{...bo.plugins,tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmt(ctx.raw)}`}}}}});
+  // 7 diff
+  const dA=tBA.map((v,i)=>v-tMA[i]);
+  chts.c7=new Chart(document.getElementById('ch7'),{type:'bar',data:{labels:lbs,datasets:[{label:'Diferència',data:dA,backgroundColor:dA.map(d=>d>0?'rgba(220,0,40,0.78)':'rgba(5,99,193,0.78)'),borderRadius:3}]},options:{...bo,plugins:{...bo.plugins,legend:{display:false},tooltip:{callbacks:tc}}}});
+}
+</script>
+</body>
+</html>

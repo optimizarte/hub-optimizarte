@@ -177,3 +177,13 @@ Write-Host ""
 Write-Host "DONE! $($allClients.Count) clients injectats a l'app." -ForegroundColor Green
 Write-Host "Refresca el navegador per veure les dades." -ForegroundColor Cyan
 Write-Host ""
+
+# Copiar a l'extensió OPTICRM perquè ANAGAN sigui accessible des del CRM
+$ExtPath = "C:\Users\primo\OneDrive - OPTIMIZARTE 3.0 - SCO\!!IA\!!!PortalOccident\!!OPTICRM\extension\seguimiento-cartera-anagan.html"
+try {
+    Copy-Item $HtmlPath $ExtPath -Force
+    Write-Host "Copiat a l'extensió OPTICRM: $ExtPath" -ForegroundColor Green
+} catch {
+    Write-Host "AVIS: no s'ha pogut copiar a l'extensió: $_" -ForegroundColor Yellow
+}
+Write-Host ""

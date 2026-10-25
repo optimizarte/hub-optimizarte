@@ -308,12 +308,12 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gra
         <span data-i18n="pillAnulMesCurs">Anul·lacions Mes en Curs</span>
       </div>
       <div class="form-card" style="margin-bottom:0;border:2px solid var(--red);background:rgba(220,0,40,.03);">
-        <div class="fields-row">
-          <div class="field" style="min-width:110px;max-width:130px;">
+        <div class="fields-row" style="flex-wrap:nowrap;">
+          <div class="field" style="flex:0 0 110px;">
             <label data-i18n="lblOpsAnul">Ops. Anul·lades</label>
             <input type="number" id="refOpsAnul" min="0" max="999" step="1" placeholder="0" style="color:var(--red);">
           </div>
-          <div class="field" style="min-width:155px;">
+          <div class="field" style="flex:0 0 150px;">
             <label data-i18n="lblPrimasAnul">Primes Anul·lades Corr. (€)</label>
             <input type="text" id="refPrimasAnul" inputmode="decimal" placeholder="0" style="color:var(--red);">
           </div>
@@ -339,7 +339,7 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gra
         <svg width="10" height="10" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
         <span>&nbsp;</span>
       </div>
-      <div style="flex:1;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;">
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;">
         <button class="btn-dash-lg" id="btnDash">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
           Dashboard

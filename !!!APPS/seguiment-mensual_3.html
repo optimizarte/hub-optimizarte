@@ -178,6 +178,11 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gra
       <button class="btn-lang active" id="btnLangES">ES</button>
       <button class="btn-lang" id="btnLangCA">CA</button>
     </div>
+    <div id="vsSyncBadge" style="display:none;align-items:center;gap:5px;font-size:.58rem;color:rgba(255,255,255,.5);">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
+      <span id="vsSyncTs">—</span>
+      <button id="btnVSSync" title="Sincronitzar dades del Portal BI" onclick="manualVSSync()" style="background:none;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.5);border-radius:3px;padding:2px 6px;font-size:.55rem;cursor:pointer;font-family:inherit;">Sync</button>
+    </div>
     <button class="btn-pdf" id="btnPDF">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
       <span data-i18n="btnPDF">Exportar PDF</span>
@@ -214,13 +219,18 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gra
         <label data-i18n="lblPrimasCorr">Primas Corregidas (€)</label>
         <input type="text" id="refPrimas" inputmode="decimal" placeholder="0">
       </div>
-      <div class="field" style="min-width:110px;max-width:130px;">
-        <label data-i18n="lblOpsAnul">Ops. Anuladas</label>
-        <input type="number" id="refOpsAnul" min="0" max="999" step="1" placeholder="0">
-      </div>
-      <div class="field" style="min-width:155px;">
-        <label data-i18n="lblPrimasAnul">Primas Anuladas Corr. (€)</label>
-        <input type="text" id="refPrimasAnul" inputmode="decimal" placeholder="0">
+      <div style="display:flex;flex-direction:column;gap:0;">
+        <div class="sec-pill" style="margin-bottom:6px;font-size:.55rem;padding:3px 8px;" data-i18n="pillAnulMesCurs">ANULACIONS MES EN CURS</div>
+        <div style="display:flex;gap:12px 18px;align-items:flex-end;">
+          <div class="field" style="min-width:110px;max-width:130px;">
+            <label data-i18n="lblOpsAnul">Ops. Anuladas</label>
+            <input type="number" id="refOpsAnul" min="0" max="999" step="1" placeholder="0">
+          </div>
+          <div class="field" style="min-width:155px;">
+            <label data-i18n="lblPrimasAnul">Primas Anuladas Corr. (€)</label>
+            <input type="text" id="refPrimasAnul" inputmode="decimal" placeholder="0">
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1192,6 +1202,85 @@ ${chartPrincipal(bim)}${chartExtraBono(curr,ref)}${chartHogar(curr)}${chartTempo
 }
 
 /* ══════════════════════════════════════
+   VS SYNC — Portal BI Ventas y Anulaciones
+══════════════════════════════════════ */
+const VS_KEY='oag_vs_data';
+
+function updateVSSyncBadge(dateStr){
+  const badge=document.getElementById('vsSyncBadge');
+  const ts=document.getElementById('vsSyncTs');
+  if(!badge)return;
+  if(!dateStr){badge.style.display='none';return;}
+  badge.style.display='flex';
+  const today=new Date().toISOString().slice(0,10);
+  const isToday=dateStr===today;
+  const d=new Date(dateStr+'T00:00:00');
+  const fmt=d.toLocaleDateString('ca-ES',{day:'2-digit',month:'2-digit',year:'numeric'});
+  ts.textContent=fmt;
+  ts.style.color=isToday?'rgba(16,185,129,.8)':'rgba(255,255,255,.35)';
+}
+
+function manualVSSync(){
+  window.open('https://portalbi.gco.global/MicroStrategyLibrary/app/DFC644FC4F5F1DE3DEC13EB4728ADBE5/W1A78231EF1B84FA192167D9AB4CDB44D--K46','_blank');
+}
+
+function setNumVal(id,v){const el=document.getElementById(id);if(el&&v!=null)el.value=v;}
+
+function applyVSData(rec){
+  if(rec.mesCurs){
+    const mc=rec.mesCurs;
+    setNumVal('currOps',mc.ops);
+    setCurrencyVal('currSsgg',mc.ssgg);
+    setCurrencyVal('currVida',mc.vida);
+    setCurrencyVal('currPrimas',mc.primes);
+    setNumVal('currHogar',mc.hogar);
+    setNumVal('currTemporal',mc.temporal);
+  }
+  if(rec.anyAnterior){
+    const aa=rec.anyAnterior;
+    setNumVal('refMes',aa.mes);
+    setNumVal('refAnyo',aa.any);
+    setNumVal('refOps',aa.ops);
+    setCurrencyVal('refPrimas',aa.primes);
+    setNumVal('refOpsAnul',aa.opsAnul);
+    setCurrencyVal('refPrimasAnul',aa.primesAnul);
+  }
+  if(rec.mesAnterior){
+    const mp=rec.mesAnterior;
+    setNumVal('prevMes',mp.mes);
+    setNumVal('prevAnyo',mp.any);
+    setCurrencyVal('prevSsgg',mp.ssgg);
+    setCurrencyVal('prevVida',mp.vida);
+    setCurrencyVal('prevPrimas',mp.primes);
+    setNumVal('prevOps',mp.ops);
+  }
+  saveDataFull();updateBimCalc();liveRefresh();
+}
+
+function tryLoadVSData(){
+  try{
+    const raw=localStorage.getItem(VS_KEY);
+    if(!raw){updateVSSyncBadge(null);return;}
+    const rec=JSON.parse(raw);
+    updateVSSyncBadge(rec.date);
+    const today=new Date().toISOString().slice(0,10);
+    if(rec.date!==today)return;
+    applyVSData(rec);
+  }catch(e){console.warn('VS data load:',e);}
+}
+
+/* Receptor de postMessage des del bookmarklet (cross-origin) */
+window.addEventListener('message',function(e){
+  if(!e.data||e.data.type!=='VS_SYNC_DATA')return;
+  const rec=e.data.data;
+  if(!rec||!rec.date)return;
+  try{localStorage.setItem(VS_KEY,JSON.stringify(rec));}catch(err){}
+  updateVSSyncBadge(rec.date);
+  const today=new Date().toISOString().slice(0,10);
+  if(rec.date===today)applyVSData(rec);
+});
+
+/* ══════════════════════════════════════
    INIT — DOMContentLoaded
 ══════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded',async function(){
@@ -1235,6 +1324,9 @@ document.addEventListener('DOMContentLoaded',async function(){
   /* Load saved data (file first, localStorage fallback) */
   await loadData();
   updateBimCalc();
+
+  /* Try to auto-populate from Portal BI VS sync (if synced today) */
+  tryLoadVSData();
 
   /* Input listeners */
   ['refSection','prevSection','currSection'].forEach(sId=>{

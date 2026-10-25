@@ -423,11 +423,17 @@ const OAGStorage=(function(){
       if(!h)return'no_handle';
       const perm=await h.queryPermission({mode:'readwrite'});
       if(perm==='granted'){
-        _root=h;
-        _dir=await _getSubdir(h,true);
-        _pending=null;
+        _root=h;_dir=await _getSubdir(h,true);_pending=null;
         return'granted';
       }
+      // Attempt auto-grant without user gesture (Chrome allows this for file:// + previously-granted handles)
+      try{
+        const p=await h.requestPermission({mode:'readwrite'});
+        if(p==='granted'){
+          _root=h;_dir=await _getSubdir(h,true);_pending=null;
+          return'granted';
+        }
+      }catch(autoE){}
       _pending=h;_root=null;_dir=null;
       return'prompt';
     }catch(e){return'error';}
@@ -451,9 +457,13 @@ const OAGStorage=(function(){
   async function pickFolder(){
     if(!isSupported())return null;
     try{
-      const parent=await window.showDirectoryPicker({mode:'readwrite'});
+      // Use stored root as startIn hint so the picker opens in the right folder
+      const opts={mode:'readwrite'};
+      const stored=await _loadRoot();
+      if(stored)opts.startIn=stored;
+      const parent=await window.showDirectoryPicker(opts);
       _root=parent;
-      try{await _saveRoot(parent);}catch(e){} // best-effort — session still works if IDB fails
+      try{await _saveRoot(parent);}catch(e){}
       _dir=await _getSubdir(parent,true);
       _pending=null;
       return _dir.name;

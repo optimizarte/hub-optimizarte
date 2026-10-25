@@ -197,79 +197,113 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gra
 <!-- ═══ MAIN ═══ -->
 <div class="main">
 
-  <!-- ─── GRID 2 COLUMNES IGUALS ─── -->
-  <div style="display:grid;grid-template-columns:1fr 330px;column-gap:40px;row-gap:18px;align-items:start;">
-
-    <!-- ── Fila 1, Col 1: Any Anterior ── -->
-    <div>
-      <div class="sec-pill">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        <span data-i18n="pillRef">Any Anterior — Referència Extra Bono</span>
-      </div>
-      <div class="form-card" id="refSection" style="margin-bottom:0;">
-        <div class="fields-row">
-          <div class="field" style="min-width:210px;">
-            <label data-i18n="lblMesRef">Mes / Any de referència</label>
-            <div class="select-row">
-              <div class="field"><select id="refMes"></select></div>
-              <div class="field" style="max-width:82px;"><input type="number" id="refAnyo" min="2020" max="2035" placeholder="2025" style="text-align:center;"></div>
-            </div>
-          </div>
-          <div class="field" style="min-width:110px;max-width:130px;">
-            <label data-i18n="lblOpsCorr">Ops. Corregides</label>
-            <input type="number" id="refOps" min="0" max="999" step="1" placeholder="0">
-          </div>
-          <div class="field" style="min-width:145px;">
-            <label data-i18n="lblPrimasCorr">Primes Corregides (€)</label>
-            <input type="text" id="refPrimas" inputmode="decimal" placeholder="0">
-          </div>
+  <!-- ── Fila 1: Any Anterior (amplada completa) ── -->
+  <div class="sec-pill">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    <span data-i18n="pillRef">Any Anterior — Referència Extra Bono</span>
+  </div>
+  <div class="form-card" id="refSection">
+    <div class="fields-row">
+      <div class="field" style="min-width:210px;">
+        <label data-i18n="lblMesRef">Mes / Any de referència</label>
+        <div class="select-row">
+          <div class="field"><select id="refMes"></select></div>
+          <div class="field" style="max-width:82px;"><input type="number" id="refAnyo" min="2020" max="2035" placeholder="2025" style="text-align:center;"></div>
         </div>
+      </div>
+      <div class="field" style="min-width:110px;max-width:130px;">
+        <label data-i18n="lblOpsCorr">Ops. Corregides</label>
+        <input type="number" id="refOps" min="0" max="999" step="1" placeholder="0">
+      </div>
+      <div class="field" style="min-width:145px;">
+        <label data-i18n="lblPrimasCorr">Primes Corregides (€)</label>
+        <input type="text" id="refPrimas" inputmode="decimal" placeholder="0">
       </div>
     </div>
+  </div>
 
-    <!-- ── Fila 1, Col 2: buit (Anulacions ha passat a Fila 2) ── -->
-    <div></div>
-
-    <!-- ── Fila 2, Col 1: Mes Anterior ── -->
-    <div>
-      <div class="sec-pill">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-        <span data-i18n="pillPrev">Mes Anterior — Referencia Bono Base</span>
+  <!-- ── Fila 2: Mes Anterior (amplada completa) ── -->
+  <div class="sec-pill">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+    <span data-i18n="pillPrev">Mes Anterior — Referencia Bono Base</span>
+  </div>
+  <div class="form-card" id="prevSection">
+    <div class="fields-row">
+      <div class="field" style="min-width:210px;">
+        <label data-i18n="lblMesPrev">Mes / Año anterior</label>
+        <div class="select-row">
+          <div class="field"><select id="prevMes"></select></div>
+          <div class="field" style="max-width:82px;"><input type="number" id="prevAnyo" min="2020" max="2035" placeholder="2026" style="text-align:center;"></div>
+        </div>
       </div>
-      <div class="form-card" id="prevSection" style="margin-bottom:0;">
-        <div class="fields-row">
-          <div class="field" style="min-width:210px;">
-            <label data-i18n="lblMesPrev">Mes / Año anterior</label>
-            <div class="select-row">
-              <div class="field"><select id="prevMes"></select></div>
-              <div class="field" style="max-width:82px;"><input type="number" id="prevAnyo" min="2020" max="2035" placeholder="2026" style="text-align:center;"></div>
-            </div>
-          </div>
-          <div class="field" style="min-width:110px;max-width:130px;">
-            <label data-i18n="lblOps">Operaciones</label>
-            <input type="number" id="prevOps" min="0" step="1" placeholder="0">
-          </div>
-          <div class="field" style="min-width:145px;">
-            <label data-i18n="lblPrimasCorr">Primas Corregidas (€)</label>
-            <input type="text" id="prevPrimas" inputmode="decimal" placeholder="0">
-          </div>
-          <div class="field" style="min-width:155px;">
-            <label>Total SS.GG. (€)</label>
-            <input type="text" id="prevSsgg" inputmode="decimal" placeholder="0">
-          </div>
-          <div class="field" style="min-width:145px;">
-            <label>Total Vida (€)</label>
-            <input type="text" id="prevVida" inputmode="decimal" placeholder="0">
-          </div>
-        </div>
-        <div class="bim-row" id="bimRow">
-          <span data-i18n="bimLabel">Media bimestral:</span> SS.GG. <strong id="bimSsgg">—</strong> · Vida <strong id="bimVida">—</strong> · Total <strong id="bimTotal">—</strong>
-        </div>
+      <div class="field" style="min-width:110px;max-width:130px;">
+        <label data-i18n="lblOps">Operaciones</label>
+        <input type="number" id="prevOps" min="0" step="1" placeholder="0">
+      </div>
+      <div class="field" style="min-width:145px;">
+        <label data-i18n="lblPrimasCorr">Primas Corregidas (€)</label>
+        <input type="text" id="prevPrimas" inputmode="decimal" placeholder="0">
+      </div>
+      <div class="field" style="min-width:155px;">
+        <label>Total SS.GG. (€)</label>
+        <input type="text" id="prevSsgg" inputmode="decimal" placeholder="0">
+      </div>
+      <div class="field" style="min-width:145px;">
+        <label>Total Vida (€)</label>
+        <input type="text" id="prevVida" inputmode="decimal" placeholder="0">
       </div>
     </div>
+    <div class="bim-row" id="bimRow">
+      <span data-i18n="bimLabel">Media bimestral:</span> SS.GG. <strong id="bimSsgg">—</strong> · Vida <strong id="bimVida">—</strong> · Total <strong id="bimTotal">—</strong>
+    </div>
+  </div>
 
-    <!-- ── Fila 2, Col 2: Anulacions Mes en Curs ── -->
-    <div>
+  <!-- ── Fila 3: Mes en Curs (amplada completa) ── -->
+  <div class="sec-pill">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    <span data-i18n="pillCurr">Mes en Curso</span>
+  </div>
+  <div class="form-card" id="currSection">
+    <div class="fields-row">
+      <div class="field" style="min-width:140px;">
+        <label data-i18n="lblMesCurr">Mes en Curso</label>
+        <div class="curr-badge" id="currMesDisplay">—</div>
+      </div>
+      <div class="field" style="min-width:110px;max-width:130px;">
+        <label data-i18n="lblOps">Operaciones</label>
+        <input type="number" id="currOps" min="0" step="1" placeholder="0">
+      </div>
+      <div class="field" style="min-width:145px;">
+        <label data-i18n="lblPrimasCorr">Primas Corregidas (€)</label>
+        <input type="text" id="currPrimas" inputmode="decimal" placeholder="0">
+      </div>
+      <div class="field" style="min-width:145px;">
+        <label>Total SS.GG. (€)</label>
+        <input type="text" id="currSsgg" inputmode="decimal" placeholder="0">
+      </div>
+      <div class="field" style="min-width:140px;">
+        <label>Total Vida (€)</label>
+        <input type="text" id="currVida" inputmode="decimal" placeholder="0">
+      </div>
+      <div class="field" style="min-width:100px;max-width:120px;">
+        <label data-i18n="lblHogar">Ops. Hogar</label>
+        <input type="number" id="currHogar" min="0" max="99" step="1" placeholder="0">
+      </div>
+      <div class="field" style="min-width:100px;max-width:120px;">
+        <label data-i18n="lblTemporal">Ops. Temporal</label>
+        <input type="number" id="currTemporal" min="0" step="1" placeholder="0">
+      </div>
+      <button class="btn-dash-lg" id="btnDash">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Fila 4: Anulacions + Vendes Líquides (dues columnes iguals) ── -->
+  <div style="display:flex;gap:40px;align-items:flex-start;">
+
+    <div style="flex:1;min-width:0;">
       <div class="sec-pill">
         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
         <span data-i18n="pillAnulMesCurs">Anul·lacions Mes en Curs</span>
@@ -288,52 +322,7 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gra
       </div>
     </div>
 
-    <!-- ── Fila 3, Col 1: Mes en Curs ── -->
-    <div>
-      <div class="sec-pill">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        <span data-i18n="pillCurr">Mes en Curso</span>
-      </div>
-      <div class="form-card" id="currSection" style="margin-bottom:0;">
-        <div class="fields-row">
-          <div class="field" style="min-width:140px;">
-            <label data-i18n="lblMesCurr">Mes en Curso</label>
-            <div class="curr-badge" id="currMesDisplay">—</div>
-          </div>
-          <div class="field" style="min-width:110px;max-width:130px;">
-            <label data-i18n="lblOps">Operaciones</label>
-            <input type="number" id="currOps" min="0" step="1" placeholder="0">
-          </div>
-          <div class="field" style="min-width:145px;">
-            <label data-i18n="lblPrimasCorr">Primas Corregidas (€)</label>
-            <input type="text" id="currPrimas" inputmode="decimal" placeholder="0">
-          </div>
-          <div class="field" style="min-width:145px;">
-            <label>Total SS.GG. (€)</label>
-            <input type="text" id="currSsgg" inputmode="decimal" placeholder="0">
-          </div>
-          <div class="field" style="min-width:140px;">
-            <label>Total Vida (€)</label>
-            <input type="text" id="currVida" inputmode="decimal" placeholder="0">
-          </div>
-          <div class="field" style="min-width:100px;max-width:120px;">
-            <label data-i18n="lblHogar">Ops. Hogar</label>
-            <input type="number" id="currHogar" min="0" max="99" step="1" placeholder="0">
-          </div>
-          <div class="field" style="min-width:100px;max-width:120px;">
-            <label data-i18n="lblTemporal">Ops. Temporal</label>
-            <input type="number" id="currTemporal" min="0" step="1" placeholder="0">
-          </div>
-          <button class="btn-dash-lg" id="btnDash">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-            Dashboard
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── Fila 3, Col 2: Vendes Líquides (nou) ── -->
-    <div>
+    <div style="flex:1;min-width:0;">
       <div class="sec-pill" id="vendesLiquidesPill">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
         <span data-i18n="pillVendesLiquides">VENDES LÍQUIDES</span>
@@ -346,7 +335,7 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gra
       </div>
     </div>
 
-  </div><!-- /grid -->
+  </div><!-- /fila 4 -->
 
 </div><!-- /main -->
 
@@ -1146,8 +1135,15 @@ function chartPrincipal(bim){
     <div class="bar-label-row"><span class="bar-section-lbl">${T('c4LblTotal')}</span><span class="bar-cur-val" style="color:${cT}">${fmtEur(bim.bimTotal)}</span></div>
     <div class="bar-track slim">${`<div class="bar-fill" style="width:${bp(bim.bimTotal,MAX_T)}%;background:${anulWarn?'#9CA3AF':fT};"></div>`}${mkrs(TOT_TH,MAX_T)}</div>
 
-    <div class="status-msg ${anulWarn?'sms-nt':achieved<0?'sms-nt':'sms-ok'}" style="margin-top:6px;${anulWarn?'background:rgba(220,100,0,.08);color:#b45309;border-color:#f59e0b;':''}">${lvlMsg}</div>
-    ${!anulWarn&&nextIdx<=2?`<div class="status-sub">${T('c4NextLvl')} SS.GG.≥${fmtEur(SSGG_TH[nextIdx])} · Vida≥${fmtEur(VIDA_TH[nextIdx])} · Tot.≥${fmtEur(TOT_TH[nextIdx])}</div>`:''}
+    ${anulWarn
+      ? `<div style="display:flex;justify-content:center;margin-top:10px;">
+           <div style="width:250px;height:75px;border:2px solid #f59e0b;border-radius:10px;background:rgba(245,158,11,.1);display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;">
+             <span style="font-size:.78rem;font-weight:800;color:#b45309;line-height:1.3;">${T('c4LvlAnulWarn')}</span>
+           </div>
+         </div>`
+      : `<div class="status-msg ${achieved<0?'sms-nt':'sms-ok'}" style="margin-top:6px;">${lvlMsg}</div>
+         ${nextIdx<=2?`<div class="status-sub">${T('c4NextLvl')} SS.GG.≥${fmtEur(SSGG_TH[nextIdx])} · Vida≥${fmtEur(VIDA_TH[nextIdx])} · Tot.≥${fmtEur(TOT_TH[nextIdx])}</div>`:''}`
+    }
   </div>`;
 }
 

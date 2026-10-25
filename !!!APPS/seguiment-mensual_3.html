@@ -1359,7 +1359,7 @@ document.addEventListener('DOMContentLoaded',async function(){
 
   /* Build month selects */
   const months=getMeses();
-  ['refMes','prevMes'].forEach(selId=>{
+  ['refMes','prevMes','currMes'].forEach(selId=>{
     const sel=document.getElementById(selId);
     months.forEach((m,i)=>{const opt=document.createElement('option');opt.value=i+1;opt.textContent=m;sel.appendChild(opt);});
   });

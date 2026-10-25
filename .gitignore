@@ -2,3 +2,9 @@
 # Backups creats pels patchers OPTICRM
 *.bak-pre-*
 _backup-*/
+
+# Dades personals de clients: només en local, mai al repo públic
+seguimiento-cartera-*.html
+fusio-contactes*.html
+AltaClientes/
+JUSTIFICANTE*.pdf

@@ -198,38 +198,51 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gra
 <div class="main">
 
   <!-- ─── CARD 1: AÑO ANTERIOR ─── -->
-  <div class="sec-pill">
-    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-    <span data-i18n="pillRef">Año Anterior — Referencia Extra Bono</span>
+  <div style="display:flex;align-items:flex-end;gap:0;margin-bottom:0;">
+    <!-- Pill esquerra -->
+    <div class="sec-pill" style="border-radius:4px 4px 0 0;margin-bottom:0;padding:5px 14px;">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span data-i18n="pillRef">Any Anterior — Referència Extra Bono</span>
+    </div>
+    <!-- Separador -->
+    <div style="flex:1;min-width:12px;"></div>
+    <!-- Pill dreta -->
+    <div class="sec-pill" style="border-radius:4px 4px 0 0;margin-bottom:0;padding:5px 14px;background:var(--red-dark,#a8001e);">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      <span data-i18n="pillAnulMesCurs">Anul·lacions Mes en Curs</span>
+    </div>
   </div>
-  <div class="form-card" id="refSection">
-    <div class="fields-row">
-      <div class="field" style="min-width:210px;">
-        <label data-i18n="lblMesRef">Mes / Año de referencia</label>
-        <div class="select-row">
-          <div class="field"><select id="refMes"></select></div>
-          <div class="field" style="max-width:82px;"><input type="number" id="refAnyo" min="2020" max="2035" placeholder="2025" style="text-align:center;"></div>
+  <div class="form-card" id="refSection" style="display:flex;gap:0;padding:0;overflow:hidden;margin-bottom:18px;">
+    <!-- Bloc esquerra: Any Anterior -->
+    <div style="flex:1;padding:16px 18px 18px;border-right:2px solid var(--border);">
+      <div class="fields-row">
+        <div class="field" style="min-width:210px;">
+          <label data-i18n="lblMesRef">Mes / Any de referència</label>
+          <div class="select-row">
+            <div class="field"><select id="refMes"></select></div>
+            <div class="field" style="max-width:82px;"><input type="number" id="refAnyo" min="2020" max="2035" placeholder="2025" style="text-align:center;"></div>
+          </div>
+        </div>
+        <div class="field" style="min-width:110px;max-width:130px;">
+          <label data-i18n="lblOpsCorr">Ops. Corregides</label>
+          <input type="number" id="refOps" min="0" max="999" step="1" placeholder="0">
+        </div>
+        <div class="field" style="min-width:145px;">
+          <label data-i18n="lblPrimasCorr">Primes Corregides (€)</label>
+          <input type="text" id="refPrimas" inputmode="decimal" placeholder="0">
         </div>
       </div>
-      <div class="field" style="min-width:110px;max-width:130px;">
-        <label data-i18n="lblOpsCorr">Ops. Corregidas</label>
-        <input type="number" id="refOps" min="0" max="999" step="1" placeholder="0">
-      </div>
-      <div class="field" style="min-width:145px;">
-        <label data-i18n="lblPrimasCorr">Primas Corregidas (€)</label>
-        <input type="text" id="refPrimas" inputmode="decimal" placeholder="0">
-      </div>
-      <div style="display:flex;flex-direction:column;gap:0;align-items:flex-start;">
-        <div class="sec-pill" style="margin-bottom:6px;font-size:.55rem;padding:3px 8px;" data-i18n="pillAnulMesCurs">ANULACIONS MES EN CURS</div>
-        <div style="display:flex;gap:12px 18px;align-items:flex-end;">
-          <div class="field" style="min-width:110px;max-width:130px;">
-            <label data-i18n="lblOpsAnul">Ops. Anuladas</label>
-            <input type="number" id="refOpsAnul" min="0" max="999" step="1" placeholder="0">
-          </div>
-          <div class="field" style="min-width:155px;">
-            <label data-i18n="lblPrimasAnul">Primas Anuladas Corr. (€)</label>
-            <input type="text" id="refPrimasAnul" inputmode="decimal" placeholder="0">
-          </div>
+    </div>
+    <!-- Bloc dreta: Anul·lacions -->
+    <div style="padding:16px 18px 18px;background:rgba(168,0,30,.03);">
+      <div class="fields-row">
+        <div class="field" style="min-width:110px;max-width:130px;">
+          <label data-i18n="lblOpsAnul">Ops. Anul·lades</label>
+          <input type="number" id="refOpsAnul" min="0" max="999" step="1" placeholder="0">
+        </div>
+        <div class="field" style="min-width:155px;">
+          <label data-i18n="lblPrimasAnul">Primes Anul·lades Corr. (€)</label>
+          <input type="text" id="refPrimasAnul" inputmode="decimal" placeholder="0">
         </div>
       </div>
     </div>

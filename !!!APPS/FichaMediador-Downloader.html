@@ -114,11 +114,36 @@ function log(msg,type){
 }
 
 mkOverlay();
-log('Auth OK. ProjectID: '+PROJECT,'info');
-log('Dossier: '+DOSSIER,'info');
+log('Auth OK. Descobrint ProjectID...','info');
 
-const hdrsJson={'X-MSTR-AuthToken':AUTH,'X-MSTR-ProjectID':PROJECT,'Content-Type':'application/json','Accept':'application/json'};
-const hdrsGet={'X-MSTR-AuthToken':AUTH,'X-MSTR-ProjectID':PROJECT,'Accept':'application/json'};
+/* Descobrir Project ID real via GET /api/projects */
+let PROJECT_REAL=null;
+{
+  const r=await fetch(BASE+'/projects',{headers:{'X-MSTR-AuthToken':AUTH,'Accept':'application/json'}});
+  log('GET /api/projects → '+r.status,'info');
+  if(r.ok){
+    const projs=await r.json();
+    log('Projectes: '+JSON.stringify((projs||[]).map(p=>({id:p.id,n:p.name}))).slice(0,400),'info');
+    /* Preferim el que conté "occident" o "portal" o "gco", fallback al primer */
+    const match=(projs||[]).find(p=>(p.name||'').match(/occident|portal|gco|ventas|seguros/i));
+    PROJECT_REAL=(match||projs?.[0])?.id||null;
+    if(PROJECT_REAL)log('ProjectID: '+PROJECT_REAL,'ok');
+    else log('Cap projecte trobat a /api/projects','err');
+  }else{
+    const t=await r.text().catch(()=>'');
+    log('Error /api/projects: '+t.slice(0,200),'err');
+  }
+}
+if(!PROJECT_REAL){
+  /* Fallback: intentar amb els dos candidats de la URL */
+  const candidates=['F5D4D904C24CC4DB9DF5EC9B3AD5D402',PROJECT].filter(Boolean);
+  log('Fallback candidates: '+candidates.join(', '),'warn');
+  PROJECT_REAL=candidates[0];
+}
+
+const hdrsJson={'X-MSTR-AuthToken':AUTH,'X-MSTR-ProjectID':PROJECT_REAL,'Content-Type':'application/json','Accept':'application/json'};
+const hdrsGet={'X-MSTR-AuthToken':AUTH,'X-MSTR-ProjectID':PROJECT_REAL,'Accept':'application/json'};
+log('Dossier: '+DOSSIER,'info');
 
 /* Intenta crear instancia del dossier */
 async function createInstance(){
@@ -131,7 +156,7 @@ async function createInstance(){
     if(iid){log('instanceId: '+iid,'info');return {type:'dossier',iid};}
   }
   const err1=await r.text().catch(()=>'');
-  log('Error cos: '+err1.slice(0,200),'warn');
+  log('Error cos 1: '+err1.slice(0,300),'warn');
 
   /* Prova 2: POST /api/v2/dossiers/{id}/instances */
   r=await fetch(BASE+'/v2/dossiers/'+DOSSIER+'/instances',{method:'POST',headers:hdrsJson,body:'{}'});
@@ -150,6 +175,8 @@ async function createInstance(){
     const iid=j.mid||j.instanceId||j.id||r.headers.get('X-MSTR-MS-Instance');
     if(iid){log('instanceId (doc): '+iid,'info');return {type:'document',iid};}
   }
+  const err3=await r.text().catch(()=>'');
+  log('Error cos 3: '+err3.slice(0,300),'warn');
   return null;
 }
 
@@ -210,29 +237,80 @@ async function setMonth(inst,yearMonth){
   return r.ok;
 }
 
-/* Lectura DOM de la taula visible (fallback si API no funciona) */
+/* Lectura DOM — MicroStrategy Library usa Angular, no <tr> simples.
+   Les cel·les son divs amb classe mstrGridCell / mstr-grid-cell o similars.
+   Estrategia: recollir TOTS els textos visibles del grid i buscar patrons. */
 function readFromDOM(label){
-  function pn(t){if(!t)return 0;return parseFloat(String(t).replace(/[.\s]/g,'').replace(',','.'))||0;}
+  function pn(t){if(!t)return 0;return parseFloat(String(t).replace(/[.\s.]/g,'').replace(',','.'))||0;}
   const r={ssgg_pr_corr:0,vida_pr_corr:0,total_op_vtas:0,total_pr_corr:0,total_op_anu:0,total_pr_anu:0,hogar_op_vtas:0,temporal_op_vtas:0};
-  /* Buscar taula o grid */
-  const rows=Array.from(document.querySelectorAll('tr,[class*="grid-row"],[class*="gridRow"]'));
-  if(!rows.length){log('[DOM] Cap fila trobada','warn');return null;}
-  let pg1='',found=0;
-  for(const row of rows){
-    const cells=Array.from(row.querySelectorAll('td,[class*="cell"],[class*="Cell"]'));
-    if(cells.length<4)continue;
-    const texts=cells.map(c=>(c.textContent||'').trim());
-    const nm=texts[0].toLowerCase();
-    /* Columnes: 0=PG1, 1=PG2, 2=PG3, 3=OpVtas, 4=VtasPr, 5=PrCorr, 6=OpAnu, 7=PrAnuSusp, 8=PrAnuCorrSusp */
-    const opVtas=pn(texts[3]),prCorr=pn(texts[5]),opAnu=pn(texts[6]),prAnu=pn(texts[8]);
-    if(nm.includes('seguros generales')||nm.includes('ss.gg')){pg1='ssgg';r.ssgg_pr_corr=prCorr;found++;}
-    else if(nm==='vida'||nm.includes('vida')&&!nm.includes('temporal')&&!nm.includes('prevista')){pg1='vida';r.vida_pr_corr=prCorr;found++;}
-    else if(nm.includes('hogar')){r.hogar_op_vtas=opVtas;found++;}
-    else if(nm.includes('temporal')&&pg1==='vida'){r.temporal_op_vtas=opVtas;found++;}
-    /* Grand Total: última fila, cap text de dimensió */
-    if(nm===''||nm==='total'||nm.includes('grand total')){if(opVtas>0||prCorr>0){r.total_op_vtas=opVtas;r.total_pr_corr=prCorr;r.total_op_anu=opAnu;r.total_pr_anu=prAnu;found++;}}
+
+  /* Prova 1: <tr> i <td> (per si hi hagués una taula HTML) */
+  const trs=Array.from(document.querySelectorAll('tr'));
+  let found=0,pg1='';
+  if(trs.length>2){
+    for(const row of trs){
+      const cells=Array.from(row.querySelectorAll('td,th'));
+      if(cells.length<4)continue;
+      const texts=cells.map(c=>(c.textContent||'').trim());
+      const nm=texts[0].toLowerCase();
+      const opVtas=pn(texts[3]),prCorr=pn(texts[5]),opAnu=pn(texts[6]),prAnu=pn(texts[8]);
+      if(nm.includes('seguros')||nm.includes('ss.gg')){pg1='ssgg';r.ssgg_pr_corr=prCorr;found++;}
+      else if((nm==='vida'||nm.startsWith('vida'))&&!nm.includes('temporal')){pg1='vida';r.vida_pr_corr=prCorr;found++;}
+      else if(nm.includes('hogar')){r.hogar_op_vtas=opVtas;found++;}
+      else if(nm.includes('temporal')){r.temporal_op_vtas=opVtas;found++;}
+      if((nm===''||nm==='total')&&(opVtas>0||prCorr>0)){r.total_op_vtas=opVtas;r.total_pr_corr=prCorr;r.total_op_anu=opAnu;r.total_pr_anu=prAnu;found++;}
+    }
   }
-  if(!found){log('[DOM] No s\'han trobat files reconegudes','warn');return null;}
+
+  /* Prova 2: grid Angular MSTR Library — divs amb classe que conté "cell" */
+  if(!found){
+    /* Buscar el contenidor del grid: mstr-viz-container, vi-container, etc. */
+    const gridRoot=document.querySelector('[class*="mstr-viz"],[class*="vi-container"],[class*="grid-container"],[class*="mstrGrid"],[id*="grid"],[class*="crosstab"]')
+      ||document.querySelector('mstr-report,mstr-grid,mstr-dossier-page');
+    const root=gridRoot||document.body;
+
+    /* Recollir totes les cel·les ordenades per posició vertical */
+    const cellSel='[class*="mstrGridCell"],[class*="grid-cell"],[class*="gridCell"],[class*="mstr-grid-cell"],[class*="cell-content"],[class*="cellContent"]';
+    const allCells=Array.from(root.querySelectorAll(cellSel));
+    log('[DOM] cel·les trobades: '+allCells.length,'info');
+
+    if(allCells.length>0){
+      /* Agrupar per fila basant-se en la posició Y (getBoundingClientRect) */
+      const byRow=new Map();
+      for(const c of allCells){
+        const rect=c.getBoundingClientRect();
+        const rowKey=Math.round(rect.top/4)*4; /* tolerar 4px de diferència */
+        if(!byRow.has(rowKey))byRow.set(rowKey,[]);
+        byRow.get(rowKey).push({x:rect.left,txt:(c.textContent||'').trim()});
+      }
+      const sortedRows=[...byRow.entries()].sort((a,b)=>a[0]-b[0]);
+      log('[DOM] files per Y: '+sortedRows.length,'info');
+
+      for(const [,cells] of sortedRows){
+        cells.sort((a,b)=>a.x-b.x);
+        const texts=cells.map(c=>c.txt);
+        if(texts.length<4)continue;
+        const nm=texts[0].toLowerCase();
+        const opVtas=pn(texts[3]),prCorr=pn(texts[5]),opAnu=pn(texts[6]),prAnu=pn(texts[8]||'');
+        if(nm.includes('seguros')||nm.includes('ss.gg')){pg1='ssgg';r.ssgg_pr_corr=prCorr;found++;}
+        else if((nm==='vida'||nm.startsWith('vida'))&&!nm.includes('temporal')){pg1='vida';r.vida_pr_corr=prCorr;found++;}
+        else if(nm.includes('hogar')){r.hogar_op_vtas=opVtas;found++;}
+        else if(nm.includes('temporal')){r.temporal_op_vtas=opVtas;found++;}
+        if((nm===''||nm==='total')&&(opVtas>0||prCorr>0)){r.total_op_vtas=opVtas;r.total_pr_corr=prCorr;r.total_op_anu=opAnu;r.total_pr_anu=prAnu;found++;}
+      }
+    }
+  }
+
+  /* Prova 3: text pla de tot el document — extreu números associats a keywords */
+  if(!found){
+    log('[DOM] Prova text pla...','warn');
+    const body=document.body.innerText||'';
+    /* Mostra les primeres 1000 chars del body per diagnòstic */
+    const gridSnippet=body.replace(/\s+/g,' ').slice(0,600);
+    log('[DOM TEXT] '+gridSnippet,'warn');
+  }
+
+  if(!found){log('[DOM] No s\'han trobat files. Estructura no reconeguda.','err');return null;}
   log('[DOM '+label+'] SSGG:'+r.ssgg_pr_corr+' Vida:'+r.vida_pr_corr+' Ops:'+r.total_op_vtas+' Pr:'+r.total_pr_corr,'ok');
   return r;
 }

@@ -537,6 +537,8 @@ const STRINGS={
     c4LvlL2:'🥈 Nivel 2 · +30% base',
     c4LvlL1:'🥉 Nivel 1 · +10% base',
     c4NextLvl:'Sig. nivel:',
+    c4LvlAnulWarn:'⚠️ OJO ANULACIONES SUPERIORES A VENTAS',
+    pillAnulMesCurs:'ANUL·LACIONS MES EN CURS',
     modalOps:'Ops.:',modalPrimas:'Primas:',modalSsgg:'SS.GG.:',
     modalVida:'Vida:',modalHogar:'Hogar:',modalTemporal:'Temporal:',
   },
@@ -603,6 +605,8 @@ const STRINGS={
     c4LvlL2:'🥈 Nivell 2 · +30% base',
     c4LvlL1:'🥉 Nivell 1 · +10% base',
     c4NextLvl:'Seg. nivell:',
+    c4LvlAnulWarn:'⚠️ OJO ANUL·LACIONS SUPERIORS A VENDES',
+    pillAnulMesCurs:'ANUL·LACIONS MES EN CURS',
     modalOps:'Ops.:',modalPrimas:'Primes:',modalSsgg:'SS.GG.:',
     modalVida:'Vida:',modalHogar:'Llar:',modalTemporal:'Temporal:',
   }
@@ -1081,7 +1085,11 @@ function chartPrincipal(bim){
   const cV=bim.bimVida>=VIDA_TH[0]?'var(--red)':'var(--gray-2)';
   const cT=bim.bimTotal>=TOT_TH[0]?'var(--red)':'var(--gray-2)';
 
-  const lvlMsg=achieved<0?T('c4LvlNone'):achieved===2?T('c4LvlL3'):achieved===1?T('c4LvlL2'):T('c4LvlL1');
+  /* Regla: si Primes Anul·lades Mes en Curs >= Primes Corregides Mes en Curs → anulem Bono-Base */
+  const curr=getCurr();
+  const anulWarn=getCurrencyVal('refPrimasAnul')>=getCurrencyVal('currPrimas')+1;
+
+  const lvlMsg=anulWarn?T('c4LvlAnulWarn'):achieved<0?T('c4LvlNone'):achieved===2?T('c4LvlL3'):achieved===1?T('c4LvlL2'):T('c4LvlL1');
   const nextIdx=achieved+1;
 
   return `<div class="chart-card">
@@ -1090,16 +1098,16 @@ function chartPrincipal(bim){
     <div class="bonus-pills">${pillsHTML}</div>
 
     <div class="bar-label-row"><span class="bar-section-lbl">${T('c4LblSsgg')}</span><span class="bar-cur-val" style="color:${cS}">${fmtEur(bim.bimSsgg)}</span></div>
-    <div class="bar-track slim">${`<div class="bar-fill" style="width:${bp(bim.bimSsgg,MAX_S)}%;background:${fS};"></div>`}${mkrs(SSGG_TH,MAX_S)}</div>
+    <div class="bar-track slim">${`<div class="bar-fill" style="width:${bp(bim.bimSsgg,MAX_S)}%;background:${anulWarn?'#9CA3AF':fS};"></div>`}${mkrs(SSGG_TH,MAX_S)}</div>
 
     <div class="bar-label-row"><span class="bar-section-lbl">${T('c4LblVida')}</span><span class="bar-cur-val" style="color:${cV}">${fmtEur(bim.bimVida)}</span></div>
-    <div class="bar-track slim">${`<div class="bar-fill" style="width:${bp(bim.bimVida,MAX_V)}%;background:${fV};"></div>`}${mkrs(VIDA_TH,MAX_V)}</div>
+    <div class="bar-track slim">${`<div class="bar-fill" style="width:${bp(bim.bimVida,MAX_V)}%;background:${anulWarn?'#9CA3AF':fV};"></div>`}${mkrs(VIDA_TH,MAX_V)}</div>
 
     <div class="bar-label-row"><span class="bar-section-lbl">${T('c4LblTotal')}</span><span class="bar-cur-val" style="color:${cT}">${fmtEur(bim.bimTotal)}</span></div>
-    <div class="bar-track slim">${`<div class="bar-fill" style="width:${bp(bim.bimTotal,MAX_T)}%;background:${fT};"></div>`}${mkrs(TOT_TH,MAX_T)}</div>
+    <div class="bar-track slim">${`<div class="bar-fill" style="width:${bp(bim.bimTotal,MAX_T)}%;background:${anulWarn?'#9CA3AF':fT};"></div>`}${mkrs(TOT_TH,MAX_T)}</div>
 
-    <div class="status-msg ${achieved<0?'sms-nt':'sms-ok'}" style="margin-top:6px;">${lvlMsg}</div>
-    ${nextIdx<=2?`<div class="status-sub">${T('c4NextLvl')} SS.GG.≥${fmtEur(SSGG_TH[nextIdx])} · Vida≥${fmtEur(VIDA_TH[nextIdx])} · Tot.≥${fmtEur(TOT_TH[nextIdx])}</div>`:''}
+    <div class="status-msg ${anulWarn?'sms-nt':achieved<0?'sms-nt':'sms-ok'}" style="margin-top:6px;${anulWarn?'background:rgba(220,100,0,.08);color:#b45309;border-color:#f59e0b;':''}">${lvlMsg}</div>
+    ${!anulWarn&&nextIdx<=2?`<div class="status-sub">${T('c4NextLvl')} SS.GG.≥${fmtEur(SSGG_TH[nextIdx])} · Vida≥${fmtEur(VIDA_TH[nextIdx])} · Tot.≥${fmtEur(TOT_TH[nextIdx])}</div>`:''}
   </div>`;
 }
 

@@ -203,19 +203,19 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gra
     <span data-i18n="pillRef">Any Anterior — Referència Extra Bono</span>
   </div>
   <div class="form-card" id="refSection">
-    <div class="fields-row">
-      <div class="field" style="min-width:210px;">
+    <div class="fields-row" style="flex-wrap:nowrap;">
+      <div class="field" style="flex:0 0 230px;">
         <label data-i18n="lblMesRef">Mes / Any de referència</label>
         <div class="select-row">
           <div class="field"><select id="refMes"></select></div>
           <div class="field" style="max-width:82px;"><input type="number" id="refAnyo" min="2020" max="2035" placeholder="2025" style="text-align:center;"></div>
         </div>
       </div>
-      <div class="field" style="min-width:110px;max-width:130px;">
+      <div class="field" style="flex:0 0 110px;">
         <label data-i18n="lblOpsCorr">Ops. Corregides</label>
         <input type="number" id="refOps" min="0" max="999" step="1" placeholder="0">
       </div>
-      <div class="field" style="min-width:145px;">
+      <div class="field" style="flex:0 0 150px;">
         <label data-i18n="lblPrimasCorr">Primes Corregides (€)</label>
         <input type="text" id="refPrimas" inputmode="decimal" placeholder="0">
       </div>
@@ -228,27 +228,27 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gra
     <span data-i18n="pillPrev">Mes Anterior — Referencia Bono Base</span>
   </div>
   <div class="form-card" id="prevSection">
-    <div class="fields-row">
-      <div class="field" style="min-width:210px;">
+    <div class="fields-row" style="flex-wrap:nowrap;">
+      <div class="field" style="flex:0 0 230px;">
         <label data-i18n="lblMesPrev">Mes / Año anterior</label>
         <div class="select-row">
           <div class="field"><select id="prevMes"></select></div>
           <div class="field" style="max-width:82px;"><input type="number" id="prevAnyo" min="2020" max="2035" placeholder="2026" style="text-align:center;"></div>
         </div>
       </div>
-      <div class="field" style="min-width:110px;max-width:130px;">
+      <div class="field" style="flex:0 0 110px;">
         <label data-i18n="lblOps">Operaciones</label>
         <input type="number" id="prevOps" min="0" step="1" placeholder="0">
       </div>
-      <div class="field" style="min-width:145px;">
+      <div class="field" style="flex:0 0 150px;">
         <label data-i18n="lblPrimasCorr">Primas Corregidas (€)</label>
         <input type="text" id="prevPrimas" inputmode="decimal" placeholder="0">
       </div>
-      <div class="field" style="min-width:155px;">
+      <div class="field" style="flex:0 0 150px;">
         <label>Total SS.GG. (€)</label>
         <input type="text" id="prevSsgg" inputmode="decimal" placeholder="0">
       </div>
-      <div class="field" style="min-width:145px;">
+      <div class="field" style="flex:0 0 145px;">
         <label>Total Vida (€)</label>
         <input type="text" id="prevVida" inputmode="decimal" placeholder="0">
       </div>
@@ -264,44 +264,43 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gra
     <span data-i18n="pillCurr">Mes en Curso</span>
   </div>
   <div class="form-card" id="currSection">
-    <div class="fields-row">
-      <div class="field" style="min-width:140px;">
-        <label data-i18n="lblMesCurr">Mes en Curso</label>
-        <div class="curr-badge" id="currMesDisplay">—</div>
+    <div class="fields-row" style="flex-wrap:nowrap;">
+      <div class="field" style="flex:0 0 230px;">
+        <label data-i18n="lblMesCurr">Mes en Curso / Any</label>
+        <div class="select-row">
+          <div class="field"><select id="currMes"></select></div>
+          <div class="field" style="max-width:82px;"><input type="number" id="currAnyo" min="2020" max="2035" style="text-align:center;"></div>
+        </div>
       </div>
-      <div class="field" style="min-width:110px;max-width:130px;">
+      <div class="field" style="flex:0 0 110px;">
         <label data-i18n="lblOps">Operaciones</label>
         <input type="number" id="currOps" min="0" step="1" placeholder="0">
       </div>
-      <div class="field" style="min-width:145px;">
+      <div class="field" style="flex:0 0 150px;">
         <label data-i18n="lblPrimasCorr">Primas Corregidas (€)</label>
         <input type="text" id="currPrimas" inputmode="decimal" placeholder="0">
       </div>
-      <div class="field" style="min-width:145px;">
+      <div class="field" style="flex:0 0 150px;">
         <label>Total SS.GG. (€)</label>
         <input type="text" id="currSsgg" inputmode="decimal" placeholder="0">
       </div>
-      <div class="field" style="min-width:140px;">
+      <div class="field" style="flex:0 0 145px;">
         <label>Total Vida (€)</label>
         <input type="text" id="currVida" inputmode="decimal" placeholder="0">
       </div>
-      <div class="field" style="min-width:100px;max-width:120px;">
+      <div class="field" style="flex:0 0 110px;">
         <label data-i18n="lblHogar">Ops. Hogar</label>
         <input type="number" id="currHogar" min="0" max="99" step="1" placeholder="0">
       </div>
-      <div class="field" style="min-width:100px;max-width:120px;">
+      <div class="field" style="flex:0 0 110px;">
         <label data-i18n="lblTemporal">Ops. Temporal</label>
         <input type="number" id="currTemporal" min="0" step="1" placeholder="0">
       </div>
-      <button class="btn-dash-lg" id="btnDash">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        Dashboard
-      </button>
     </div>
   </div>
 
-  <!-- ── Fila 4: Anulacions + Vendes Líquides (dues columnes iguals) ── -->
-  <div style="display:flex;gap:40px;align-items:flex-start;">
+  <!-- ── Fila 4: Anulacions + Vendes Líquides + Dashboard (3 columnes iguals) ── -->
+  <div style="display:flex;gap:40px;">
 
     <div style="flex:1;min-width:0;">
       <div class="sec-pill">
@@ -332,6 +331,19 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--gra
           <div id="vendesLiquidesVal" style="font-size:1.6rem;font-weight:700;color:#111;letter-spacing:-.5px;">—</div>
           <div style="font-size:.72rem;color:#888;margin-top:4px;" data-i18n="lblVendesLiquidesHint">Primes Corr. − Primes Anul·lades</div>
         </div>
+      </div>
+    </div>
+
+    <div style="flex:1;min-width:0;display:flex;flex-direction:column;">
+      <div class="sec-pill" style="visibility:hidden;">
+        <svg width="10" height="10" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+        <span>&nbsp;</span>
+      </div>
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;">
+        <button class="btn-dash-lg" id="btnDash">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Dashboard
+        </button>
       </div>
     </div>
 
@@ -635,15 +647,13 @@ function applyLang(lang){
   document.getElementById('btnLangCA').classList.toggle('active',lang==='ca');
   document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=T(el.dataset.i18n);});
   const months=getMeses();
-  ['refMes','prevMes'].forEach(selId=>{
+  ['refMes','prevMes','currMes'].forEach(selId=>{
     const sel=document.getElementById(selId);if(!sel)return;
     const val=sel.value;
     while(sel.options.length)sel.remove(0);
     months.forEach((m,i)=>{const opt=document.createElement('option');opt.value=i+1;opt.textContent=m;sel.appendChild(opt);});
     sel.value=val;
   });
-  const now=new Date();
-  document.getElementById('currMesDisplay').textContent=months[now.getMonth()]+' '+now.getFullYear();
   try{localStorage.setItem('oag_lang',lang);}catch(e){}
   liveRefresh();
 }
@@ -754,6 +764,7 @@ function collectData(){
     prevMes:numVal('prevMes'),prevAnyo:numVal('prevAnyo'),
     prevOps:numVal('prevOps'),prevPrimas:getCurrencyVal('prevPrimas'),
     prevSsgg:getCurrencyVal('prevSsgg'),prevVida:getCurrencyVal('prevVida'),
+    currMes:numVal('currMes'),currAnyo:numVal('currAnyo'),
     currOps:numVal('currOps'),currPrimas:getCurrencyVal('currPrimas'),
     currSsgg:getCurrencyVal('currSsgg'),currVida:getCurrencyVal('currVida'),
     currHogar:numVal('currHogar'),currTemporal:numVal('currTemporal'),
@@ -768,6 +779,7 @@ function applyData(d){
   sn('prevOps',d.prevOps);
   setCurrencyVal('prevPrimas',d.prevPrimas);
   setCurrencyVal('prevSsgg',d.prevSsgg);setCurrencyVal('prevVida',d.prevVida);
+  if(d.currMes)sn('currMes',d.currMes);if(d.currAnyo)sn('currAnyo',d.currAnyo);
   sn('currOps',d.currOps);sn('currHogar',d.currHogar);sn('currTemporal',d.currTemporal);
   setCurrencyVal('currPrimas',d.currPrimas);
   setCurrencyVal('currSsgg',d.currSsgg);setCurrencyVal('currVida',d.currVida);
@@ -860,12 +872,13 @@ function renderDashboard(){
   const curr=getCurr();
   const ref=getRef();
   const bim=getBim();
-  const now=new Date();
-  const mesNombre=getMeses()[now.getMonth()];
+  const currMoVal=numVal('currMes')||new Date().getMonth()+1;
+  const currYrVal=numVal('currAnyo')||new Date().getFullYear();
+  const mesNombre=getMeses()[currMoVal-1];
   document.getElementById('modalTitle').innerHTML=
-    ICON_DASH+' Dashboard · '+mesNombre+' '+now.getFullYear();
+    ICON_DASH+' Dashboard · '+mesNombre+' '+currYrVal;
   document.getElementById('modalInfo').innerHTML=`
-    <span>📅 <strong>${mesNombre} ${now.getFullYear()}</strong></span>
+    <span>📅 <strong>${mesNombre} ${currYrVal}</strong></span>
     <span>📦 ${T('modalOps')} <strong>${fmtOps(curr.ops)}</strong></span>
     <span>💶 ${T('modalPrimas')} <strong>${fmtEur(curr.primas)}</strong></span>
     <span>📊 ${T('modalSsgg')} <strong>${fmtEur(curr.ssgg)}</strong></span>
@@ -927,7 +940,7 @@ function chartTemporal(curr){
     <div class="chart-sub">${T('c2Sub')}</div>
     <div class="val-big" style="color:${cur.c}">${cur.pct}</div>
     <div class="val-lbl">${t} ${T('c2ValLbl')}</div>
-    <div class="steps">
+    <div class="steps" style="padding-bottom:22px;">
       ${steps.map((s,i)=>`
         <div class="step-col ${s.active?'active':''}" style="${s.active?'color:'+s.c+';':''}">
           <div class="step-pct">${s.pct}</div>
@@ -1121,7 +1134,7 @@ function chartPrincipal(bim){
   const lvlMsg=anulWarn?T('c4LvlAnulWarn'):achieved<0?T('c4LvlNone'):achieved===2?T('c4LvlL3'):achieved===1?T('c4LvlL2'):T('c4LvlL1');
   const nextIdx=achieved+1;
 
-  return `<div class="chart-card">
+  return `<div class="chart-card" style="display:flex;flex-direction:column;">
     <div class="chart-title">${T('c4Title')}</div>
     <div class="chart-sub">${T('c4Sub')}</div>
     <div class="bonus-pills">${pillsHTML}</div>
@@ -1136,9 +1149,10 @@ function chartPrincipal(bim){
     <div class="bar-track slim">${`<div class="bar-fill" style="width:${bp(bim.bimTotal,MAX_T)}%;background:${anulWarn?'#9CA3AF':fT};"></div>`}${mkrs(TOT_TH,MAX_T)}</div>
 
     ${anulWarn
-      ? `<div style="display:flex;justify-content:center;margin-top:10px;">
-           <div style="width:250px;height:75px;border:2px solid #f59e0b;border-radius:10px;background:rgba(245,158,11,.1);display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;">
+      ? `<div style="flex:1;display:flex;align-items:center;justify-content:center;margin-top:10px;">
+           <div style="width:250px;border:2px solid #f59e0b;border-radius:10px;background:rgba(245,158,11,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px 8px;gap:6px;">
              <span style="font-size:.78rem;font-weight:800;color:#b45309;line-height:1.3;">${T('c4LvlAnulWarn')}</span>
+             ${(()=>{const vl=getCurrencyVal('currPrimas')-getCurrencyVal('refPrimasAnul');const vlc=vl>0?'#16a34a':vl<0?'var(--red)':'#111';return `<span style="font-size:.85rem;font-weight:700;color:${vlc};">${fmtEur(vl)}</span>`;})()}
            </div>
          </div>`
       : `<div class="status-msg ${achieved<0?'sms-nt':'sms-ok'}" style="margin-top:6px;">${lvlMsg}</div>
@@ -1374,7 +1388,8 @@ document.addEventListener('DOMContentLoaded',async function(){
   const prevMo=curMo===1?12:curMo-1,prevYr=curMo===1?curYr-1:curYr;
   document.getElementById('prevMes').value=prevMo;
   document.getElementById('prevAnyo').value=prevYr;
-  document.getElementById('currMesDisplay').textContent=getMeses()[curMo-1]+' '+curYr;
+  document.getElementById('currMes').value=curMo;
+  document.getElementById('currAnyo').value=curYr;
 
   /* Init storage (silently activates if permission already granted) */
   await initStorage();

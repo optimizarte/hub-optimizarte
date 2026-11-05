@@ -213,6 +213,9 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
 
 
 /* ===== extras AUTOS ===== */
+.htx{min-width:0}
+.optb{flex-wrap:wrap}.optb .ofr{flex:0 0 100%}.optb .ofr small{margin-top:1px}
+@media(max-width:430px){.hero .kpi{display:grid;grid-template-columns:44px minmax(0,1fr);gap:4px 10px;align-items:center;padding:10px 12px}.hero .kpi>.ic{width:44px;height:44px}.hero .kb{display:contents}.hero .kl{grid-column:2}.hero .kv,.hero .ks{grid-column:1/-1}.hero .kpi #kpiLg{display:none}}
 .plw{display:flex;justify-content:center;margin-top:14px}
 .plate{display:inline-flex;align-items:stretch;height:31px;border:1.5px solid #15161A;border-radius:4px;overflow:hidden;background:#fff;color:#15161A;font-weight:700}
 .plate svg{height:100%;width:auto;display:block}.plate span{display:flex;align-items:center;padding:0 10px;font-size:22px;letter-spacing:1.7px;line-height:1;white-space:nowrap}
@@ -311,12 +314,13 @@ button.kpi{width:100%;max-width:520px;margin:14px auto 0;text-align:left;cursor:
   </header>
   <main>
     <section class="hero rv full">
-      <div class="heroin"><i class="ic i-autos"></i><div>
+      <div class="heroin"><i class="ic i-autos"></i><div class="htx">
         <div class="kick" id="heroKick"></div>
         <h1 id="hi"></h1>
-        <p id="lead"></p></div></div>
-      <div class="plw" id="plw"></div>
-      <button class="kpi" id="kpi"><i class="ic i-ahorro"></i><div class="kb"><div class="kl" id="kpiL"></div><div class="kv" style="margin:4px 0 2px"><b class="cos" id="kpiV"></b></div><div class="ks" id="kpiS"></div></div><span id="kpiLg"></span></button>
+        <p id="lead"></p>
+        <div class="plw" id="plw"></div>
+        <button class="kpi" id="kpi"><i class="ic i-ahorro"></i><div class="kb"><div class="kl" id="kpiL"></div><div class="kv" style="margin:4px 0 2px"><b class="cos" id="kpiV"></b></div><div class="ks" id="kpiS"></div></div><span id="kpiLg"></span></button>
+      </div></div>
     </section>
 
     <section class="card rv full" id="optsCard">
@@ -328,6 +332,7 @@ button.kpi{width:100%;max-width:520px;margin:14px auto 0;text-align:left;cursor:
     <section class="card rv full" id="cmpCard">
       <div class="st"><i class="ic i-nota"></i><h2><span id="cmpH"></span><small data-t="cmpS"></small></h2></div>
       <div class="cmpw"><table class="cmp" id="cmp"></table></div>
+      <div class="fn" id="cmpFn"></div>
     </section>
 
     <section class="card rv full">
@@ -354,6 +359,11 @@ button.kpi{width:100%;max-width:520px;margin:14px auto 0;text-align:left;cursor:
     <section class="card rv full" id="otherCard">
       <div class="st"><i class="ic i-escudo"></i><h2><span data-t="covH"></span></h2></div>
       <div class="note" id="otherNote"></div>
+    </section>
+
+    <section class="card rv full" id="endCard">
+      <div class="st"><i class="ic i-polissa"></i><h2><span id="endH"></span><small id="endS"></small></h2></div>
+      <div class="lvs" id="lvsEnd"></div>
     </section>
 
   </main>
@@ -401,7 +411,7 @@ const TEL='34972426665', MAIL='optimizarte@occident.com';
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const nf=new Intl.NumberFormat(LOC,{useGrouping:'always',maximumFractionDigits:2});
-const cap=v=>nf.format(v)+' €';
+const cap=v=>nf.format(v)+' €';
 const eur=v=>new Intl.NumberFormat(LOC,{style:'currency',currency:'EUR',minimumFractionDigits:2,maximumFractionDigits:2,useGrouping:'always'}).format(v);
 
 /* ---------- catalogo de Occident: filas, modalidades y coberturas ---------- */
@@ -512,34 +522,34 @@ const T={
 es:{brand:'Seguro de automóvil',hi:'Hola',lead1:v=>`Aquí tienes la mejor propuesta de seguro para ${v}.`,leadN:v=>`Aquí tienes las mejores propuestas de seguro para ${v}.`,tuV:'tu vehículo',tu:v=>`tu <b>${v}</b>`,
  kickE:'Ejemplo',kpiL:'Prima total anual',recT:'Nuestra recomendación',recB:'Recomendada',
  optsH1:'Tu opción',optsH:'Tus opciones',optsS1:'La propuesta que hemos preparado para ti',optsS:'Toca una opción para ver qué incluye',
- cmpH:l=>`Comparativa · ${l}`,cmpS:'Solo se comparan opciones equivalentes. Toca una columna para elegirla',lv:{t:'Terceros',a:'Terceros ampliado',r:'Todo riesgo'},from:'desde',kpiLd:'Prima total anual desde',pend:'Pendiente de confirmar',nc:'No consta',first:v=>`Primer recibo: ${v}`,opt:'Opcional',fnAP2:'(*) Franquicia si se repara en taller AutoPresto.',fn3:'(3) La indemnización no podrá superar a la correspondiente por siniestro total.',med:' Las ofertas de otras compañías se gestionan a través de ANAGAN Correduría de Seguros. La comparativa es orientativa: el detalle está en el condicionado de cada compañía.',cmpVal:'Valoración',cmpFr:'Franquicia',noFr:'Sin franquicia',
+ cmpH:l=>`Comparativa · ${l}`,cmpS:'Solo se comparan opciones equivalentes. Toca una columna para elegirla',lv:{t:'Terceros',a:'Terceros ampliado',r:'Todo riesgo'},from:'desde',kpiLd:'Prima total anual desde',pend:'Pendiente de confirmar',nc:'No consta',first:v=>`Primer recibo: ${v}`,opt:'Opcional',fnAP2:'(*) Franquicia si se repara en taller concertado AutoPresto.',fn3:'(1) La indemnización no podrá superar a la correspondiente por siniestro total.',med:' Las ofertas de otras compañías se gestionan a través de ANAGAN Correduría de Seguros. La comparativa es orientativa: el detalle está en el condicionado de cada compañía.',cmpVal:'Valoración',cmpFr:'Franquicia',noFr:'Sin franquicia',
  val:{m:'Valor de mercado',v:'Valor venal'},
  valM:'<b>Valor de mercado:</b> lo que costaría comprar en el mercado un vehículo equivalente al tuyo.',valV:'<b>Valor venal:</b> lo que se obtendría por vender el vehículo justo antes del siniestro. Suele ser inferior al valor de mercado.',
  mcH:'La protección de tu vehículo',incl:'Incluida',no:'No incluida',upto:v=>`Hasta ${v}`,perS:v=>`${v} / siniestro`,fr:v=>`Franquicia ${v}`,
- fnAP:v=>`(*) Si se repara en taller AutoPresto. En otros talleres, franquicia ${v}.`,fn1:'(1) Aplicable solo en las garantías de incendio, robo o daños propios, si están contratadas.',fn2:'(2) Si los daños superan los 12.000 €, el exceso lo cubre daños propios, aplicando su franquicia si existe.',
+ fnAP:'(*) Talleres de libre elección / talleres concertados AutoPresto.',frC:v=>`Franquicia en talleres concertados: ${v}`,frL:v=>`Franquicia en talleres de libre elección: ${v}`,
  vehH:'Tu vehículo',vehS:'Los datos con los que hemos preparado la propuesta. Si algo no es correcto, dínoslo',
  vk:{mt:'Matrícula',ma:'Marca',mo:'Modelo',ve:'Versión',us:'Uso',pl:'Plazas',co:'Combustible',fm:'1ª matriculación',cm:'Compra',pk:'Aparcamiento',km:'Kilómetros al año',al:'Localizador antirrobo',re:'Rematriculado',pu:'Circula por puertos o aeropuertos',ca:'Compañía anterior',si:'Siniestros en el historial',an:'Años asegurado',as:'Años sin siniestros'},
  yes:'Sí',nope:'No',
  vc:{us:{p:'Particular',r:'Profesional'},co:{g:'Gasolina',d:'Diésel',h:'Híbrido',e:'Eléctrico',l:'GLP'},cm:{n:'No, ya era suyo',z:'Sí, nuevo',c:'Sí, de 2ª mano a concesionario',t:'Sí, de 2ª mano a particular',r:'Comprado recientemente'},pk:{i:'Garaje individual',c:'Garaje colectivo',s:'En la calle'}},
  pplH:'Las personas',pplS:'Quién interviene en el seguro',role:{t:'Tomador',p:'Propietario',h:'Conductor habitual',o:'Conductor ocasional'},pk:{po:'Población',cp:'Código postal',fn:'Nacimiento',fc:'Carné'},yrs:n=>n===1?'1 año':n+' años',
- covH:'Otras coberturas',covS:'Toca cada bloque para ver el detalle',otherN:c=>`El detalle del resto de coberturas está en la oferta de ${c}.`,apH:'Ventajas en talleres AutoPresto',stH:'Indemnización en caso de siniestro total (1)',
+ covH:'Otras coberturas',covS:'Toca cada bloque para ver el detalle',otherN:c=>`El detalle del resto de coberturas está en la oferta de ${c}.`,apH:'Ventajas en talleres AutoPresto',stH:'Indemnización en caso de siniestro total',endH1:'Recuerda tu opción',endH:'Recuerda tus opciones',endS1:'Cuando quieras, te ayudamos a contratarla',endS:'Elige la que prefieras y te ayudamos a contratarla',
  foot:'Este documento es informativo y carece de validez contractual. Coberturas, límites y prima definitivos: los de la póliza, previa validación de la aseguradora. Consulta con nosotros tu caso personalizado.',footO:' Los precios de otras compañías son los de las ofertas que nos han facilitado.',
  cta:'Me interesa esta opción',shH:'Te ayudamos a contratarlo',shP:'Te confirmamos el precio y las condiciones, sin compromiso.',shCall:'<span>Llamar ahora<small>972 42 66 65</small></span>',shMail:'Escribir un email',shClose:'Cerrar',
  wa:n=>`Hola, he visto el simulador del seguro de automóvil (${n}). Me interesa.`,mailSub:'Seguro de automóvil',exV:'Tu vehículo'},
 ca:{brand:'Assegurança d\'automòbil',hi:'Hola',lead1:v=>`Aquí tens la millor proposta d'assegurança per ${v}.`,leadN:v=>`Aquí tens les millors propostes d'assegurança per ${v}.`,tuV:'al teu vehicle',tu:v=>`al teu <b>${v}</b>`,
  kickE:'Exemple',kpiL:'Prima total anual',recT:'La nostra recomanació',recB:'Recomanada',
  optsH1:'La teva opció',optsH:'Les teves opcions',optsS1:'La proposta que t\'hem preparat',optsS:'Toca una opció per veure què inclou',
- cmpH:l=>`Comparativa · ${l}`,cmpS:'Només es comparen opcions equivalents. Toca una columna per triar-la',lv:{t:'Tercers',a:'Tercers ampliat',r:'Tot risc'},from:'des de',kpiLd:'Prima total anual des de',pend:'Pendent de confirmar',nc:'No consta',first:v=>`Primer rebut: ${v}`,opt:'Opcional',fnAP2:'(*) Franquícia si es repara en un taller AutoPresto.',fn3:'(3) La indemnització no podrà superar la corresponent per sinistre total.',med:' Les ofertes d\'altres companyies es gestionen a través d\'ANAGAN Correduria d\'Assegurances. La comparativa és orientativa: el detall és al condicionat de cada companyia.',cmpVal:'Valoració',cmpFr:'Franquícia',noFr:'Sense franquícia',
+ cmpH:l=>`Comparativa · ${l}`,cmpS:'Només es comparen opcions equivalents. Toca una columna per triar-la',lv:{t:'Tercers',a:'Tercers ampliat',r:'Tot risc'},from:'des de',kpiLd:'Prima total anual des de',pend:'Pendent de confirmar',nc:'No consta',first:v=>`Primer rebut: ${v}`,opt:'Opcional',fnAP2:'(*) Franquícia si es repara en un taller concertat AutoPresto.',fn3:'(1) La indemnització no podrà superar la corresponent per sinistre total.',med:' Les ofertes d\'altres companyies es gestionen a través d\'ANAGAN Correduria d\'Assegurances. La comparativa és orientativa: el detall és al condicionat de cada companyia.',cmpVal:'Valoració',cmpFr:'Franquícia',noFr:'Sense franquícia',
  val:{m:'Valor de mercat',v:'Valor venal'},
  valM:'<b>Valor de mercat:</b> el que costaria comprar al mercat un vehicle equivalent al teu.',valV:'<b>Valor venal:</b> el que s\'obtindria per vendre el vehicle just abans del sinistre. Sol ser inferior al valor de mercat.',
  mcH:'La protecció del teu vehicle',incl:'Inclosa',no:'No inclosa',upto:v=>`Fins a ${v}`,perS:v=>`${v} / sinistre`,fr:v=>`Franquícia ${v}`,
- fnAP:v=>`(*) Si es repara en un taller AutoPresto. En altres tallers, franquícia ${v}.`,fn1:'(1) Aplicable només a les garanties d\'incendi, robatori o danys propis, si estan contractades.',fn2:'(2) Si els danys superen els 12.000 €, l\'excés el cobreix danys propis, aplicant-hi la franquícia si n\'hi ha.',
+ fnAP:'(*) Tallers de lliure elecció / tallers concertats AutoPresto.',frC:v=>`Franquícia en tallers concertats: ${v}`,frL:v=>`Franquícia en tallers de lliure elecció: ${v}`,
  vehH:'El teu vehicle',vehS:'Les dades amb què hem preparat la proposta. Si alguna no és correcta, digues-nos-ho',
  vk:{mt:'Matrícula',ma:'Marca',mo:'Model',ve:'Versió',us:'Ús',pl:'Places',co:'Combustible',fm:'1a matriculació',cm:'Compra',pk:'Aparcament',km:'Quilòmetres l\'any',al:'Localitzador antirobatori',re:'Rematriculat',pu:'Circula per ports o aeroports',ca:'Companyia anterior',si:'Sinistres a l\'historial',an:'Anys assegurat',as:'Anys sense sinistres'},
  yes:'Sí',nope:'No',
  vc:{us:{p:'Particular',r:'Professional'},co:{g:'Gasolina',d:'Dièsel',h:'Híbrid',e:'Elèctric',l:'GLP'},cm:{n:'No, ja era seu',z:'Sí, nou',c:'Sí, de 2a mà a concessionari',t:'Sí, de 2a mà a particular',r:'Comprat recentment'},pk:{i:'Garatge individual',c:'Garatge col·lectiu',s:'Al carrer'}},
  pplH:'Les persones',pplS:'Qui intervé en l\'assegurança',role:{t:'Prenedor',p:'Propietari',h:'Conductor habitual',o:'Conductor ocasional'},pk:{po:'Població',cp:'Codi postal',fn:'Naixement',fc:'Carnet'},yrs:n=>n===1?'1 any':n+' anys',
- covH:'Altres cobertures',covS:'Toca cada bloc per veure\'n el detall',otherN:c=>`El detall de la resta de cobertures és a l'oferta de ${c}.`,apH:'Avantatges als tallers AutoPresto',stH:'Indemnització en cas de sinistre total (1)',
+ covH:'Altres cobertures',covS:'Toca cada bloc per veure\'n el detall',otherN:c=>`El detall de la resta de cobertures és a l'oferta de ${c}.`,apH:'Avantatges als tallers AutoPresto',stH:'Indemnització en cas de sinistre total',endH1:'Recorda la teva opció',endH:'Recorda les teves opcions',endS1:'Quan vulguis, t\'ajudem a contractar-la',endS:'Tria la que prefereixis i t\'ajudem a contractar-la',
  foot:'Aquest document és informatiu i no té validesa contractual. Cobertures, límits i prima definitius: els de la pòlissa, amb la validació prèvia de l\'asseguradora. Consulta amb nosaltres el teu cas personalitzat.',footO:' Els preus d\'altres companyies són els de les ofertes que ens han facilitat.',
  cta:'M\'interessa aquesta opció',shH:'T\'ajudem a contractar-la',shP:'Et confirmem el preu i les condicions, sense compromís.',shCall:'<span>Truca ara<small>972 42 66 65</small></span>',shMail:'Escriu un correu',shClose:'Tancar',
  wa:n=>`Hola, he vist el simulador de l'assegurança d'automòbil (${n}). M'interessa.`,mailSub:'Assegurança d\'automòbil',exV:'El teu vehicle'}
@@ -580,15 +590,17 @@ function limitOf(c,o,i){
   if(c.occ&&o.cat){if(k==='asi'&&o.am)return lim(CAT.c.l.asi);return lim(CAT[o.cat].l[k]);}
   return '';
 }
+/* Occident: libre eleccion / concertado, si el proyecto trae las dos */
+const frText=(c,o)=>c.occ&&isFinite(o.g)?`${cap(o.g)} / ${cap(o.f)}`:cap(o.f);
+const frNote=o=>isFinite(o.g)?T.fnAP:T.fnAP2;
 function mainVal(c,o,i){
   const s=state(o,i),k=ROWS[i].k;
   if(s==='u'||s==='n')return null;
   if(s==='o')return T.opt;
-  if(k==='dp')return isFinite(o.f)?T.fr(cap(o.f))+(c.occ?' (*)':''):T.noFr;
+  if(k==='dp')return isFinite(o.f)?T.fr(frText(c,o))+(c.occ?' (*)':''):T.noFr;
   const v=limitOf(c,o,i);
   if(c.occ){
-    if(k==='ani')return T.upto(v||cap(12000))+(o.cat==='r'?' (2)':' (3)');
-    if(k==='rep')return (v||T.incl)+' (1)';
+    if(k==='ani')return T.upto(v||cap(12000))+(o.cat==='r'?'':' (1)');
   }
   if(k==='ani'&&v)return T.upto(v);
   return v||T.incl;
@@ -605,6 +617,7 @@ function paintCompare(){
   const group=FLAT.filter(x=>x.lv===cur.lv);
   const si=group.indexOf(cur);
   $('cmpCard').style.display=group.length>1?'':'none';
+  $('cmpFn').innerHTML='';
   if(group.length<2)return;
   $('cmpH').textContent=T.cmpH(T.lv[cur.lv]);
   const td=(i,h)=>`<td data-f="${FLAT.indexOf(group[i])}" class="${i===si?'sel':''}">${h}</td>`;
@@ -617,11 +630,13 @@ function paintCompare(){
       if(s==='u')return td(i,`<small class="nc">${T.nc}</small>`);
       if(s==='n')return td(i,'<span class="n">—</span>');
       if(s==='o')return td(i,`<span class="o">!</span><small>${T.opt}</small>`);
-      if(m.k==='dp')return td(i,`<span class="y">✓</span><small>${esc(isFinite(x.o.f)?cap(x.o.f):T.noFr)}</small>`);
+      if(m.k==='dp')return td(i,`<span class="y">✓</span><small>${esc(isFinite(x.o.f)?frText(x.c,x.o)+(x.c.occ?' (*)':''):T.noFr)}</small>`);
       const v=limitOf(x.c,x.o,mi);
       return td(i,`<span class="y">✓</span>${v?`<small>${esc(v)}</small>`:''}`);}).join('')}</tr>`;
   }).join('');
   $('cmp').innerHTML=h+'</tbody>';
+  const fo=group.find(x=>x.c.occ&&x.o.st[RI.dp]==='y'&&isFinite(x.o.f));
+  if(fo)$('cmpFn').textContent=frNote(fo.o);
 }
 function paint(){
   const {c,o}=cur,nm=optName(o);
@@ -633,9 +648,8 @@ function paint(){
     const v=mainVal(c,o,i);
     return `<div class="r${v?'':' no'}${s==='o'?' op':''}"><span><i class="ic i-${v&&s!=='o'?'ok':'ko'}"></i>${esc(m.t[LI])}</span><b class="${v&&s!=='o'?'inc':''}">${esc(v||T.no)}</b></div>`;}).join('');
   const fn=[];
-  if(c.occ&&state(o,RI.dp)==='y'&&isFinite(o.f))fn.push(isFinite(o.g)?T.fnAP(cap(o.g)):T.fnAP2);
-  if(c.occ&&state(o,RI.rep)==='y')fn.push(T.fn1);
-  if(c.occ&&state(o,RI.ani)==='y')fn.push(o.cat==='r'?T.fn2:T.fn3);
+  if(c.occ&&state(o,RI.dp)==='y'&&isFinite(o.f))fn.push(frNote(o));
+  if(c.occ&&state(o,RI.ani)==='y'&&o.cat!=='r')fn.push(T.fn3);
   $('mcFn').innerHTML=fn.map(x=>`<div>${esc(x)}</div>`).join('');
   /* detalle: solo tenemos el de Occident (catalogo + IPID) */
   $('covCard').style.display=c.occ?'':'none';
@@ -644,7 +658,7 @@ function paint(){
     const cat=CAT[o.cat||'r'];
     $('covs').innerHTML=occGroups(o.am||cat.am,cat.puntos).map(g=>grp(g.ic,g.t[LI],rows(g.r),g.open)).join('')
       +(state(o,RI.dp)==='y'?grp('obrero',T.apH,list(AP)):'')
-      +grp('candau',state(o,RI.rob)==='y'?T.stH:T.stH.replace(' (1)',''),list(ST));
+      +grp('candau',T.stH,list(ST));
   }else $('otherNote').textContent=T.otherN(c.name);
   const wa=T.wa(`${c.name}, ${nm}`);
   $('aWa').href=`https://wa.me/${TEL}?text=${encodeURIComponent(wa)}`;
@@ -670,7 +684,7 @@ function render(){
   $('kpi').style.display=REC&&isFinite(REC.o.q)?'':'none';
   if(REC&&isFinite(REC.o.q)){
     const o=REC.o,c=REC.c;
-    $('kpiL').textContent=`${T.recT} · ${o.d?T.kpiLd:T.kpiL}`;$('kpiV').textContent=eur(o.q);
+    $('kpiL').innerHTML=`${T.recT}<br>${o.d?T.kpiLd:T.kpiL}`;$('kpiV').textContent=eur(o.q);
     $('kpiS').textContent=`${c.name} · ${optName(o)} · ${T.val[c.val]}`+(isFinite(o.pq)?` · ${T.first(eur(o.pq))}`:'')+(o.p?` · ${T.pend}`:'');
     $('kpiLg').innerHTML=c.k?`<i class="lg lg-${c.k}"></i>`:'';
     $('kpi').onclick=()=>{cur=REC;paint();$('optsCard').scrollIntoView({behavior:'smooth',block:'start'});};
@@ -693,20 +707,25 @@ function render(){
   const one=FLAT.length===1;
   $('optsH').textContent=one?T.optsH1:T.optsH;$('optsS').textContent=one?T.optsS1:T.optsS;
   /* mantiene el orden del equipo: un encabezado cada vez que cambia la modalidad */
-  const blocks=[];FLAT.forEach(x=>{const b=blocks[blocks.length-1];if(b&&b.l===x.lv)b.it.push(x);else blocks.push({l:x.lv,it:[x]});});
-  $('lvs').innerHTML=blocks.map(({l,it})=>`<div class="lv">${!one?`<h3 class="lvh">${esc(T.lv[l])}</h3>`:''}<div class="opts">${it.map(x=>{
-    const o=x.o,sub=[T.val[x.c.val]];
-    if(state(o,RI.dp)==='y'||isFinite(o.f))sub.unshift(isFinite(o.f)?T.fr(cap(o.f)):T.noFr);
-    if(o.nt)sub.push(o.nt);
-    return `<button class="optb" data-f="${FLAT.indexOf(x)}"><span class="ol">${logo(x.c)}</span><span class="om">${o.r?`<small class="rb">★ ${T.recB}</small>`:''}${esc(optName(o))}<small>${esc(sub.join(' · '))}</small>${o.p?`<small class="pd">${T.pend}</small>`:''}</span><b>${priceHtml(o)}</b></button>`;
-  }).join('')}</div></div>`).join('');
   const vals=[...new Set(CC.map(c=>c.val))];
+  const optCard=x=>{
+    const o=x.o,sub=[],two=x.c.occ&&isFinite(o.f)&&isFinite(o.g);
+    if(!two&&(state(o,RI.dp)==='y'||isFinite(o.f)))sub.push(isFinite(o.f)?T.fr(cap(o.f)):T.noFr);
+    /* el valor solo se indica si distingue unas ofertas de otras; en la recomendada, nunca */
+    if(!o.r&&vals.length>1)sub.push(T.val[x.c.val]);
+    if(o.nt)sub.push(o.nt);
+    return `<button class="optb" data-f="${FLAT.indexOf(x)}"><span class="ol">${logo(x.c)}</span><span class="om">${o.r?`<small class="rb">★ ${T.recB}</small>`:''}${esc(optName(o))}${sub.length?`<small>${esc(sub.join(' · '))}</small>`:''}${o.p?`<small class="pd">${T.pend}</small>`:''}</span><b>${priceHtml(o)}</b>${two?`<span class="ofr"><small>${esc(T.frC(cap(o.f)))}</small><small>${esc(T.frL(cap(o.g)))}</small></span>`:''}</button>`;
+  };
+  const blocks=[];FLAT.forEach(x=>{const b=blocks[blocks.length-1];if(b&&b.l===x.lv)b.it.push(x);else blocks.push({l:x.lv,it:[x]});});
+  const optsHtml=blocks.map(({l,it})=>`<div class="lv">${!one?`<h3 class="lvh">${esc(T.lv[l])}</h3>`:''}<div class="opts">${it.map(optCard).join('')}</div></div>`).join('');
+  $('lvs').innerHTML=optsHtml;$('lvsEnd').innerHTML=optsHtml;
+  $('endH').textContent=one?T.endH1:T.endH;$('endS').textContent=one?T.endS1:T.endS;
   $('valNote').innerHTML=(vals.includes('m')?`<p>${T.valM}</p>`:'')+(vals.includes('v')?`<p>${T.valV}</p>`:'');
   $('foot').textContent=T.foot+(CC.some(c=>!c.occ)?T.footO+T.med:'');
   paint();
 }
 render();
-$('lvs').addEventListener('click',e=>{const b=e.target.closest('.optb');if(b){cur=FLAT[+b.dataset.f];paint();}});
+['lvs','lvsEnd'].forEach(id=>$(id).addEventListener('click',e=>{const b=e.target.closest('.optb');if(b){cur=FLAT[+b.dataset.f];paint();}}));
 $('cmp').addEventListener('click',e=>{const t=e.target.closest('[data-f]');if(t){cur=FLAT[+t.dataset.f];paint();}});
 $('open').onclick=()=>$('sheet').classList.add('open');
 $('close').onclick=()=>$('sheet').classList.remove('open');

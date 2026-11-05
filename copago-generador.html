@@ -119,6 +119,15 @@ textarea{min-height:92px;resize:vertical;line-height:1.45}
       <div class="link"><input type="text" id="url" readonly><button class="btn pri" id="cu">Copiar</button><a class="btn" id="open" target="_blank" rel="noopener">Obrir</a></div>
       <span class="lbl" style="margin-top:12px">Versió PC (web) · per ensenyar-la a pantalla gran o enviar per mail</span>
       <div class="link"><input type="text" id="urlpc" readonly><button class="btn" id="cupc">Copiar</button><a class="btn" id="openpc" target="_blank" rel="noopener">Obrir</a></div>
+      <span class="lbl" style="margin-top:12px">Vídeo animat (40 s) · personalitzat amb les mateixes dades (opció addicional)</span>
+      <div class="link"><input type="text" id="urlvid" readonly><button class="btn" id="cuvid">Copiar</button><a class="btn" id="openvid" target="_blank" rel="noopener">Obrir</a></div>
+      <span class="lbl" style="margin-top:12px">Vídeos MP4 de la família d'exemple (per enviar com a fitxer)</span>
+      <div class="actions" style="margin-top:0">
+        <a class="btn" href="copago-video-es-v.mp4" target="_blank" rel="noopener">Castellà · vertical (Whats)</a>
+        <a class="btn" href="copago-video-es-h.mp4" target="_blank" rel="noopener">Castellà · horitzontal (PC)</a>
+        <a class="btn" href="copago-video-ca-v.mp4" target="_blank" rel="noopener">Català · vertical (Whats)</a>
+        <a class="btn" href="copago-video-ca-h.mp4" target="_blank" rel="noopener">Català · horitzontal (PC)</a>
+      </div>
       <span class="lbl" style="margin-top:14px">Missatge preparat (editable)</span>
       <textarea id="msg"></textarea>
       <div class="actions"><button class="btn" id="cm">Copiar missatge</button><a class="btn wa" id="wa" target="_blank" rel="noopener"><i class="ic i-whatsapp-verd"></i>Enviar per WhatsApp</a></div>
@@ -163,8 +172,10 @@ function build(){
    if(S.people.some(p=>(p.name||'').trim()))u.searchParams.set('n',S.people.map(p=>encodeURIComponent((p.name||'').trim().slice(0,18))).join(','));
    const r=parseFloat($('rent').value);if(isFinite(r)&&r!==3)u.searchParams.set('r',r);
   }
+  const uv=new URL('copago-video.html',location.href);u.searchParams.forEach((val,k)=>uv.searchParams.set(k,val));const urlvid=uv.toString();
   u.searchParams.set('v','wa');const url=u.toString();u.searchParams.set('v','pc');const urlpc=u.toString();
   $('url').value=w.length?'':url;$('open').href=w.length?'#':url;$('urlpc').value=w.length?'':urlpc;$('openpc').href=w.length?'#':urlpc;
+  $('urlvid').value=w.length?'':urlvid;$('openvid').href=w.length?'#':urlvid;
   if($('pv').dataset.u!==url&&!w.length){$('pv').dataset.u=url;$('pv').src=url;}
   const nm=$('cli').value.trim();
   const M={es:`Hola${nm?' '+nm:''}, te preparo esta simulación de seguro de salud: compara con y sin copago y ve cuánto podrías ahorrar. Se ve desde el móvil, sin registrarte: ${url}`,
@@ -187,7 +198,7 @@ $('addP').onclick=()=>{if(S.people.length>=8){toast('Màxim 8 persones');return;
 $('ex').onclick=()=>{S.people=[{sex:'H',age:50,name:'Papá'},{sex:'M',age:42,name:'Mamá'},{sex:'M',age:5,name:'Niña'},{sex:'H',age:1,name:'Bebé'}];$('p0').value='3629,02';$('pA').value='2529,10';$('p20').value='1481,60';S.t='a';[...$('segT').children].forEach((b,i)=>b.classList.toggle('on',i===0));drawPeople();build();};
 ['p0','pA','p20','rent','cli'].forEach(id=>$(id).addEventListener('input',()=>{if(id==='cli')$('msg').dataset.edited='';build();}));
 $('msg').addEventListener('input',()=>{$('msg').dataset.edited='1';$('wa').href='https://wa.me/?text='+encodeURIComponent($('msg').value);});
-$('cu').onclick=()=>copy($('url').value);$('cupc').onclick=()=>copy($('urlpc').value);$('cm').onclick=()=>copy($('msg').value);
+$('cu').onclick=()=>copy($('url').value);$('cupc').onclick=()=>copy($('urlpc').value);$('cuvid').onclick=()=>copy($('urlvid').value);$('cm').onclick=()=>copy($('msg').value);
 drawPeople();build();
 </script>
 </body>

@@ -186,6 +186,8 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
 .pc .team{max-width:520px}
 .pc #cta{max-width:420px}
 .pc .footer-bar{padding:16px 40px}
+
+.vbtn{display:inline-flex;align-items:center;gap:10px;margin-top:14px;border:1.5px solid var(--brand);border-radius:999px;background:var(--bg2);color:var(--brand);font-weight:700;font-size:13.5px;padding:7px 18px 7px 7px;text-decoration:none}.vbtn .pi{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--brand);color:#fff;font-size:11px;padding-left:2px}
 </style>
 </head>
 <body>
@@ -201,7 +203,8 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
         <div class="kick" id="heroKick"></div>
         <h1 data-t="h1"></h1>
         <p data-t="lead"></p></div></div>
-      <svg class="ecg" viewBox="0 0 360 46" preserveAspectRatio="none"><path d="M0 26H70L82 26 92 6 104 42 116 15 124 26H200L212 26 222 6 234 42 246 15 254 26H360"/></svg></div>
+      <svg class="ecg" viewBox="0 0 360 46" preserveAspectRatio="none"><path d="M0 26H70L82 26 92 6 104 42 116 15 124 26H200L212 26 222 6 234 42 246 15 254 26H360"/></svg>
+      <a class="vbtn" id="vbtn" href="#"><span class="pi">&#9654;</span><span data-t="vid"></span></a></div>
       <div class="heroR">
       <div class="kick" style="margin-top:16px" id="famLbl"></div>
       <div class="fam" id="fam"></div>
@@ -344,7 +347,7 @@ es:{
  onceT:'Un único copago de 20 € por centro y día', onceD:'<b>Ejemplo:</b> consulta, análisis y ecografía el mismo día en el mismo centro: pagas <b>una sola vez</b>, no por cada prueba.',
  pTran:'Año tranquilo', pTranS:n=>`${n} visitas`, pNorm:'Año normal', pNormS:'15 + 1 especialista c/u',
  pPed:'Año de pediatra', pAlto:'Año de mucho uso', pAltoS:n=>`${n} visitas`, pFrac:'Fractura', pFracS:n=>`${n} visitas + operación e ingreso`,
- remind:'Recuerda los precios de las 3 modalidades (por mes)',lblN:'Visitas al año', hintN:'<b>Cada visita = un centro y un día</b>, aunque incluya varias pruebas.',
+ vid:'Ver el vídeo · 40 s',remind:'Recuerda los precios de las 3 modalidades (por mes)',lblN:'Visitas al año', hintN:'<b>Cada visita = un centro y un día</b>, aunque incluya varias pruebas.',
  lblH:'Operaciones, ingresos, resonancias', hintH:'Actos de 100 € (cirugía, hospitalización, pruebas avanzadas).',
  lgP:'Prima anual', lgC:'Copagos pagados',
  vOk:(s,e)=>`Solo en este año, <b>Copago 20 te ahorra <span class="hl">${s}</span></b> frente a sin copago. Para que el seguro sin copago saliera a cuenta, habría que ir <span class="hl">${e}</span> veces al médico en un año.`,
@@ -384,7 +387,7 @@ ca:{
  onceT:'Un únic copagament de 20 € per centre i dia', onceD:'<b>Exemple:</b> consulta, anàlisi i ecografia el mateix dia al mateix centre: pagues <b>una sola vegada</b>, no per cada prova.',
  pTran:'Any tranquil', pTranS:n=>`${n} visites`, pNorm:'Any normal', pNormS:'15 + 1 especialista cadascú',
  pPed:'Any de pediatra', pAlto:'Any de molt ús', pAltoS:n=>`${n} visites`, pFrac:'Fractura', pFracS:n=>`${n} visites + operació i ingrés`,
- remind:'Recorda els preus de les 3 modalitats (per mes)',lblN:'Visites a l\'any', hintN:'<b>Cada visita = un centre i un dia</b>, encara que inclogui diverses proves.',
+ vid:'Veure el vídeo · 40 s',remind:'Recorda els preus de les 3 modalitats (per mes)',lblN:'Visites a l\'any', hintN:'<b>Cada visita = un centre i un dia</b>, encara que inclogui diverses proves.',
  lblH:'Operacions, ingressos, ressonàncies', hintH:'Actes de 100 € (cirurgia, hospitalització, proves avançades).',
  lgP:'Prima anual', lgC:'Copagaments pagats',
  vOk:(s,e)=>`Només en aquest any, <b>Copagament 20 t'estalvia <span class="hl">${s}</span></b> respecte a sense copagament. Perquè l'assegurança sense copagament sortís a compte, caldria anar <span class="hl">${e}</span> vegades al metge en un any.`,
@@ -438,6 +441,7 @@ function renderStatic(){
   document.documentElement.lang=L;document.title=T.title;
   document.querySelectorAll('[data-t]').forEach(e=>{const v=T[e.dataset.t];e.innerHTML=typeof v==='function'?v():v;});
   $('heroKick').textContent=MODE==='c'?T.kickC:T.kickE;
+  {const q=new URLSearchParams(location.search);q.delete('v');$('vbtn').href='copago-video.html'+(q.toString()?'?'+q.toString():'');}
   $('famLbl').textContent=(MODE==='c'?T.famC:T.famE)(NP);
   $('fam').style.setProperty('--c',Math.min(NP,4));
   $('fam').innerHTML=people.map((p,i)=>{const q=persona(p,i);return `<div><i class="ic i-${q.ic}"></i>${esc(q.lb)}<small>${T.ageTxt(q.age)}</small></div>`;}).join('');

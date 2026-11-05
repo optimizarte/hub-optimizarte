@@ -370,7 +370,7 @@ button.kpi{width:100%;max-width:520px;margin:14px auto 0;text-align:left;cursor:
   </div></div>
 </div>
 
-<script>
+<script type="text/plain" id="engine">
 /* =====================================================================
    SEGURO DE AUTOMOVIL · pagina del cliente (ES / CA)
    Los datos viajan DESPUES del # para que no lleguen a los registros del servidor.
@@ -389,10 +389,11 @@ button.kpi{width:100%;max-width:520px;margin:14px auto 0;text-align:left;cursor:
    Solo llega al enlace lo que el equipo marca como visible.
    Coberturas de Occident: occident_catalogo.js. Las de otras companias vienen del proyecto de AVANT.
    ===================================================================== */
-const Q=new URLSearchParams(location.hash.slice(1)||location.search);
+const SH=window.__SHORT||null; /* enlace corto: los datos ya vienen descifrados */
+const Q=new URLSearchParams(SH?'':(location.hash.slice(1)||location.search));
 addEventListener('hashchange',()=>location.reload());
-const L=Q.get('l')==='ca'?'ca':'es', V=Q.get('v');
-let MODE=Q.get('m')==='c'?'c':'e';
+const L=(SH?SH.l:Q.get('l'))==='ca'?'ca':'es', V=SH?null:Q.get('v');
+let MODE=SH||Q.get('m')==='c'?'c':'e';
 function layout(){document.body.classList.toggle('pc',V==='pc'||(V!=='wa'&&innerWidth>=900));}
 layout();addEventListener('resize',layout);
 const LI=L==='ca'?1:0, LOC=L==='ca'?'ca-ES':'es-ES';
@@ -546,7 +547,7 @@ ca:{brand:'Assegurança d\'automòbil',hi:'Hola',lead1:v=>`Aquí tens la millor 
 
 /* ---------- datos ---------- */
 function decode(s){try{const b=atob(s.replace(/-/g,'+').replace(/_/g,'/'));return JSON.parse(new TextDecoder().decode(Uint8Array.from(b,c=>c.charCodeAt(0))));}catch(e){return null;}}
-const D=decode(Q.get('d')||'')||{};
+const D=SH?SH.d:(decode(Q.get('d')||'')||{});
 const txt=(s,n)=>typeof s==='string'?s.slice(0,n||60):'';
 const money=v=>{v=parseFloat(v);return isFinite(v)&&v>0?Math.round(v*100)/100:NaN;};
 const VH=D.v&&typeof D.v==='object'?D.v:{};
@@ -565,14 +566,13 @@ if(!CC.length){const r=CAT.r;CC=[{k:'occident',occ:true,name:'Occident',val:'m',
 const FLAT=[];CC.forEach(c=>c.o.forEach(o=>FLAT.push({c,o,lv:MOD[o.m].lv})));
 const ORDERED=FLAT.some(x=>x.o.i>0);
 FLAT.sort((a,b)=>ORDERED?(a.o.i-b.o.i):(LVORD.indexOf(a.lv)-LVORD.indexOf(b.lv)));
-const MANY_CIA=CC.length>1;
 const REC=FLAT.find(x=>x.o.r);
 let cur=REC?REC:ORDERED?FLAT[0]:(FLAT.find(x=>x.c.occ&&!x.o.d)||FLAT.find(x=>!x.o.d)||FLAT[0]);
 
 /* ---------- pintado ---------- */
 const optName=o=>o.n||MOD[o.m].n[LI];
 const state=(o,i)=>o.st[i];
-const logo=c=>{const show=c.k&&(MANY_CIA||!c.occ);return show?`<span class="lgw"><i class="lg lg-${c.k}" role="img" aria-label="${esc(c.name)}"></i></span>`:`<span class="cname">${esc(c.name)}</span>`;};
+const logo=c=>{return c.k?`<span class="lgw"><i class="lg lg-${c.k}" role="img" aria-label="${esc(c.name)}"></i></span>`:`<span class="cname">${esc(c.name)}</span>`;};
 const lim=v=>v===undefined||v===''?'':typeof v==='number'?cap(v):Array.isArray(v)?v[LI]:String(v);
 function limitOf(c,o,i){
   const k=ROWS[i].k;
@@ -714,6 +714,44 @@ $('sheet').onclick=e=>{if(e.target.id==='sheet')$('sheet').classList.remove('ope
 addEventListener('scroll',()=>{const h=document.documentElement;$('prog').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';},{passive:true});
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.05});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+</script>
+<script>
+/* Enlace corto: /x7Kd2mQ9#clave o /c/x7Kd2mQ9#clave. Baja los datos cifrados y los descifra aqui mismo.
+   La clave va tras el #, asi que nunca llega al servidor. Los enlaces largos de siempre siguen funcionando. */
+(function(){
+  const run=()=>{const s=document.createElement('script');s.textContent=document.getElementById('engine').textContent;document.body.appendChild(s);};
+  const m=/^\/(c\/)?([A-Za-z0-9]{8})\/?$/.exec(location.pathname);
+  if(!m){run();return;}
+  const ca=!!m[1],id=m[2],key=location.hash.slice(1);
+  const TX=ca?{t:'Aquest enllaç no està disponible',p:'Pot haver caducat o estar incomplet. Escriu-nos i te\'l tornem a enviar.',r:'No s\'ha pogut carregar la proposta',q:'Comprova la connexió i torna-ho a provar.',b:'Torna-ho a provar',c:'Escriu-nos per WhatsApp'}
+    :{t:'Este enlace no está disponible',p:'Puede haber caducado o estar incompleto. Escríbenos y te lo volvemos a enviar.',r:'No se ha podido cargar la propuesta',q:'Comprueba la conexión y vuelve a intentarlo.',b:'Volver a intentarlo',c:'Escríbenos por WhatsApp'};
+  const fail=retry=>{
+    const main=document.querySelector('main'),cta=document.getElementById('cta');
+    if(cta)cta.style.display='none';
+    main.innerHTML=`<section class="card full" style="text-align:center;padding:32px 20px"><h2 style="font-size:20px;font-weight:600;margin-bottom:8px">${retry?TX.r:TX.t}</h2><p style="color:var(--t2);margin-bottom:18px">${retry?TX.q:TX.p}</p>${retry?`<button class="pbtn" style="position:static;margin:0 auto" onclick="location.reload()"><span>${TX.b}</span></button>`:`<a href="https://wa.me/34972426665" style="color:var(--brand);font-weight:600">${TX.c}</a>`}</section>`;
+  };
+  const hi=document.getElementById('hi');if(hi)hi.textContent='…';
+  const bytes=s=>Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
+  const utf8=s=>new TextEncoder().encode(s);
+  (async()=>{
+    if(!key||!window.crypto||!crypto.subtle){fail(false);return;}
+    let r;
+    try{r=await fetch('/api/o/'+id,{cache:'no-store'});}catch(e){fail(true);return;}
+    if(r.status>=500){fail(true);return;}
+    if(!r.ok){fail(false);return;}
+    try{
+      const {c,iv}=await r.json();
+      const k=await crypto.subtle.importKey('raw',bytes(key),'HKDF',false,['deriveKey']);
+      const aes=await crypto.subtle.deriveKey({name:'HKDF',hash:'SHA-256',salt:new Uint8Array(0),info:utf8('oferta-v1')},k,{name:'AES-GCM',length:256},false,['decrypt']);
+      const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes(iv),additionalData:utf8(id)},aes,bytes(c));
+      const o=JSON.parse(new TextDecoder().decode(pt));
+      if(!o||typeof o.d!=='object')throw new Error('datos');
+      window.__SHORT={l:o.l==='ca'?'ca':'es',d:o.d};
+    }catch(e){fail(false);return;}
+    run();
+  })();
+})();
+
 </script>
 </body>
 </html>

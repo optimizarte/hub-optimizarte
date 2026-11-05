@@ -150,7 +150,12 @@ textarea{min-height:92px;resize:vertical;line-height:1.45}
 
     <section class="card">
       <div class="st"><i class="ic i-whatsapp-verd"></i><h2>5 · Enllaç i missatge<small>Es publica a GitHub Pages: el client no s'ha de registrar ni identificar</small></h2></div>
-      <span class="lbl">Versió WhatsApp (mòbil) · és la que s'envia al client</span>
+      <div id="shortBox" style="display:none;margin-bottom:14px">
+        <span class="lbl">Enllaç curt · és el que s'envia al client</span>
+        <div class="link"><input type="text" id="shorturl" readonly placeholder="Encara no l'has creat"><button class="btn pri" id="mkShort">Crear enllaç curt</button><button class="btn" id="cushort">Copiar</button></div>
+        <div class="hint" id="shortHint">Les dades es xifren en aquest navegador i caduquen als 75 dies. Si canvies alguna dada, caldrà crear-lo de nou.</div>
+      </div>
+      <span class="lbl" id="urlLbl">Versió WhatsApp (mòbil) · és la que s'envia al client</span>
       <div class="link"><input type="text" id="url" readonly><button class="btn pri" id="cu">Copiar</button><a class="btn" id="open" target="_blank" rel="noopener">Obrir</a></div>
       <span class="lbl" style="margin-top:12px">Versió PC (web) · per ensenyar-la a pantalla gran o enviar per mail</span>
       <div class="link"><input type="text" id="urlpc" readonly><button class="btn" id="cupc">Copiar</button><a class="btn" id="openpc" target="_blank" rel="noopener">Obrir</a></div>
@@ -270,6 +275,7 @@ function occGroups(am,puntos){
 const AP=[['20% de descuento o reducción mínima de 60 € en la franquicia','20% de descompte o reducció mínima de 60 € en la franquícia'],['Una sola franquicia por plano del vehículo','Una sola franquícia per plànol del vehicle'],['Vehículo de cortesía','Vehicle de cortesia'],['Recogida y entrega gratuita','Recollida i lliurament gratuïts'],['Peritación y reparación preferente','Peritatge i reparació preferents'],['Limpieza gratuita','Neteja gratuïta'],['Reparación exprés: menos de 48 horas en pequeñas reparaciones','Reparació exprés: menys de 48 hores en petites reparacions'],['Verificación general del vehículo','Verificació general del vehicle'],['Garantía de reparación durante 3 años','Garantia de reparació durant 3 anys'],['Adelanto de franquicia en siniestros con culpa contraria','Avançament de franquícia en sinistres amb culpa contrària'],['Mantenimiento de la bonificación en siniestros de las garantías de daños','Manteniment de la bonificació en sinistres de les garanties de danys']];
 const ST=[['100% del valor a nuevo si el vehículo tiene menos de 2 años y se adquirió nuevo','100% del valor a nou si el vehicle té menys de 2 anys i es va adquirir nou'],['100% del valor de compra (sin exceder el valor a nuevo) si tiene menos de 2 años y se adquirió de ocasión','100% del valor de compra (sense superar el valor a nou) si té menys de 2 anys i es va adquirir d\'ocasió'],['80% del valor de nuevo o de compra durante el 3er año','80% del valor de nou o de compra durant el 3r any'],['100% del valor de mercado el resto de años','100% del valor de mercat la resta d\'anys']];
 
+const SHORT_API=/*SHORT_API*/'';
 const $=id=>document.getElementById(id);
 const eh=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
 const norm=s=>String(s==null?'':s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();
@@ -297,7 +303,7 @@ const LVN={t:'Tercers',a:'Tercers ampliat',r:'Tot risc'};
 const stOf=c=>c.split('');
 let nextId=1;
 const newOffer=x=>Object.assign({id:nextId++,k:'occident',n:'',val:'m',m:'f',name:'',q:'',pq:'',d:0,p:0,f:'',g:'',st:stOf(CAT.r.st),l:{},cat:'r',am:0,nt:'',show:true,ord:0,rec:false,flags:[],sig:'',src:'',open:false},x);
-const S={l:'es',v:{us:'p'},p:[{r:{t:true,p:true,h:true,o:false},n:'',po:'',cp:'',fn:'',fc:'',doc:''}],offers:[],files:[],conf:[],alerts:[],tel:''};
+const S={l:'es',v:{us:'p'},p:[{r:{t:true,p:true,h:true,o:false},n:'',po:'',cp:'',fn:'',fc:'',doc:''}],offers:[],files:[],conf:[],alerts:[],tel:'',short:''};
 const num=s=>{s=String(s==null?'':s).replace(/[\s€]/g,'');if(s.includes(','))s=s.replace(/\./g,'').replace(',','.');const v=parseFloat(s);return isFinite(v)&&v>0?v:NaN;};
 const fm=(v,l)=>new Intl.NumberFormat(l==='ca'?'ca-ES':'es-ES',{style:'currency',currency:'EUR',minimumFractionDigits:2,maximumFractionDigits:2,useGrouping:'always'}).format(v);
 const nStr=v=>{if(!isFinite(v))return '';return String(v).replace('.',',');};
@@ -728,6 +734,34 @@ function payload(){
   groups.forEach(g=>delete g.key);
   return {v,p,c:groups};
 }
+/* ================= ENLLAÇ CURT ================= */
+const b64u=by=>{let s='';by.forEach(x=>s+=String.fromCharCode(x));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');};
+const randId=()=>{const A='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';let s='';while(s.length<8){const v=crypto.getRandomValues(new Uint8Array(1))[0];if(v<248)s+=A[v%62];}return s;};
+async function seal(obj,id,keyBytes){
+  const utf8=x=>new TextEncoder().encode(x);
+  const k=await crypto.subtle.importKey('raw',keyBytes,'HKDF',false,['deriveKey']);
+  const aes=await crypto.subtle.deriveKey({name:'HKDF',hash:'SHA-256',salt:new Uint8Array(0),info:utf8('oferta-v1')},k,{name:'AES-GCM',length:256},false,['encrypt']);
+  const iv=crypto.getRandomValues(new Uint8Array(12));
+  const c=await crypto.subtle.encrypt({name:'AES-GCM',iv,additionalData:utf8(id)},aes,utf8(JSON.stringify(obj)));
+  return {c:b64u(new Uint8Array(c)),iv:b64u(iv)};
+}
+async function makeShort(){
+  const btn=$('mkShort');
+  if($('warn').textContent){toast('Primer corregeix el que falta');return;}
+  btn.disabled=true;btn.textContent='Creant…';
+  try{
+    const key=crypto.getRandomValues(new Uint8Array(12));
+    for(let i=0;i<3;i++){
+      const id=randId();
+      const r=await fetch(SHORT_API+'/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(await seal({l:S.l,d:payload()},id,key)),redirect:'manual'});
+      if(r.status===409)continue;
+      if(r.status===201){S.short=`${location.origin}/${S.l==='ca'?'c/':''}${id}#${b64u(key)}`;$('msg').dataset.edited='';build();toast('Enllaç curt creat ✓');return;}
+      throw new Error(r.status===403?'Aquest compte no pot crear enllaços':r.status===401||r.type==='opaqueredirect'?'Cal tornar a iniciar sessió':'Error '+r.status);
+    }
+    throw new Error('Torna-ho a provar');
+  }catch(e){toast((e.message||'Error')+'. Pots enviar l\'enllaç llarg.');}
+  finally{btn.disabled=false;btn.textContent='Crear enllaç curt';}
+}
 let pvT=0;
 function build(){
   const err=[];
@@ -748,13 +782,15 @@ function build(){
   const url=mk('wa'),urlpc=mk('pc'),bl=err.length>0;
   $('url').value=bl?'':url;$('open').href=bl?'#':url;$('urlpc').value=bl?'':urlpc;$('openpc').href=bl?'#':urlpc;
   clearTimeout(pvT);pvT=setTimeout(()=>{if($('pv').dataset.u!==url){$('pv').dataset.u=url;$('pv').src=url;}},350);
+  const link=S.short||url;
+  if(SHORT_API){$('shortBox').style.display='';$('shorturl').value=S.short||'';$('mkShort').textContent=S.short?'Tornar a crear':'Crear enllaç curt';$('urlLbl').textContent='Enllaç llarg · per si falla el curt';}
   let M='';
   if(!bl){
     const nm0=(S.p.find(x=>x.r.t&&x.n.trim())||S.p.find(x=>x.n.trim())).n.trim().split(/\s+/)[0];const nm=nm0.charAt(0).toUpperCase()+nm0.slice(1).toLowerCase();
     const qs=shown.map(o=>num(o.q)),low=Math.min(...qs),many=shown.length>1,fromAny=many||shown[0].d;
     const veh=[S.v.ma,S.v.mo].map(s=>String(s).toUpperCase()).join(' ');
-    M={es:`Hola ${nm}, te preparo la propuesta del seguro de tu ${veh}: ${many?`${shown.length} opciones, desde ${fm(low,'es')} al año`:`${fromAny?'desde ':''}${fm(low,'es')} al año`}. Se ve desde el móvil, sin registrarte: ${url}`,
-       ca:`Hola ${nm}, et preparo la proposta de l'assegurança del teu ${veh}: ${many?`${shown.length} opcions, des de ${fm(low,'ca')} l'any`:`${fromAny?'des de ':''}${fm(low,'ca')} l'any`}. Es veu des del mòbil, sense registrar-te: ${url}`}[S.l];
+    M={es:`Hola ${nm}, te preparo la propuesta del seguro de tu ${veh}: ${many?`${shown.length} opciones, desde ${fm(low,'es')} al año`:`${fromAny?'desde ':''}${fm(low,'es')} al año`}. Se ve desde el móvil, sin registrarte: ${link}`,
+       ca:`Hola ${nm}, et preparo la proposta de l'assegurança del teu ${veh}: ${many?`${shown.length} opcions, des de ${fm(low,'ca')} l'any`:`${fromAny?'des de ':''}${fm(low,'ca')} l'any`}. Es veu des del mòbil, sense registrar-te: ${link}`}[S.l];
   }
   if(!$('msg').dataset.edited)$('msg').value=M;
   setWa(bl);
@@ -766,7 +802,7 @@ function setWa(bl){
 }
 function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),1800);}
 async function copy(t){if(!t){toast('Encara no hi ha res per copiar');return;}try{await navigator.clipboard.writeText(t);}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();}toast('Copiat ✓');}
-const dirty=()=>{$('msg').dataset.edited='';build();};
+const dirty=()=>{S.short='';$('msg').dataset.edited='';build();};
 
 /* ================= ESDEVENIMENTS ================= */
 async function addFiles(list){
@@ -823,6 +859,7 @@ $('offers').addEventListener('click',e=>{const t=e.target,o=offerOf(t);if(!o)ret
 $('addO').onclick=()=>{S.offers.push(newOffer({k:'',n:'',val:'v',m:'f',cat:'',st:stOf(CAT.r.st).map((c,i)=>ROWS[i].k==='rep'||ROWS[i].k==='sus'?'u':c),ord:shownSorted().length+1}));drawOffers();dirty();};
 $('tel').addEventListener('input',e=>{S.tel=e.target.value;setWa($('url').value==='');});
 $('msg').addEventListener('input',()=>{$('msg').dataset.edited='1';setWa($('url').value==='');});
+if(SHORT_API){$('mkShort').onclick=makeShort;$('cushort').onclick=()=>copy($('shorturl').value);}
 $('cu').onclick=()=>copy($('url').value);$('cupc').onclick=()=>copy($('urlpc').value);$('cm').onclick=()=>copy($('msg').value);
 drawFiles();drawConf();drawVeh();drawPeople();drawOffers();build();
 </script>

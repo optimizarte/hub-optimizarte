@@ -281,9 +281,10 @@ const chartAt=(y)=>{
    `<path d="${P} L${X(y)} ${Y(0)} L${X(0)} ${Y(0)}Z" style="fill:var(--brand-dim)"/><path d="${P}" style="stroke:var(--brand)" stroke-width="3.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>`+
    `<circle cx="${X(e[0])}" cy="${Y(e[1])}" r="6" style="fill:var(--brand);stroke:var(--bg2)" stroke-width="2.5"/>`;
 };
-window.__total=TOTAL;
-window.__render=function(t){
-  t=clamp(t,0,TOTAL);
+const K=1.1, TT=TOTAL*K;   // K = 1,10 → todo el vídeo un 10 % más lento
+window.__total=TT;
+window.__render=function(T){
+  T=clamp(T,0,TT);const t=Math.min(T/K,TOTAL-0.0001);   // al final se queda en la pantalla de precios y contacto
   SC.forEach(([id,a,b])=>{const el=$(id),on=t>=a&&t<b;el.style.display=on?'flex':'none';if(on){const o=Math.min(clamp((t-a)/.35),clamp((b-t)/.35));el.style.opacity=id==='sc5'&&t>=b-.35?1:o;}});
   anim.forEach(o=>{const lt=t-ST[o.sc],p=prog(lt,o.d,o.pop?.45:.55);o.el.style.opacity=p;o.el.style.transform=o.pop?`scale(${.6+.4*p})`:`translateY(${(1-p)*26}px)`;});
   // 1
@@ -305,8 +306,8 @@ window.__render=function(t){
   $('slots').innerHTML=Array.from({length:12},(_,i)=>{const full=(i+1)*2<=yi,half=!full&&i*2<yi;return `<i class="ic i-ahorro${full?'':half?' half':' off'}"></i>`;}).join('');
   $('eq4').innerHTML=TX.eq(eur(fv(A20,y)),dec1(fv(A20,y)/PRIMA.c20));
   // progreso
-  $('prog').style.width=(t/TOTAL*100)+'%';$('seekf').style.width=(t/TOTAL*100)+'%';
-  const s=Math.floor(t);$('tm').textContent=`0:${String(s).padStart(2,'0')} / 0:${String(Math.floor(TOTAL)).padStart(2,'0')}`;
+  $('prog').style.width=(T/TT*100)+'%';$('seekf').style.width=(T/TT*100)+'%';
+  const s=Math.floor(T);$('tm').textContent=`0:${String(s).padStart(2,'0')} / 0:${String(Math.floor(TT)).padStart(2,'0')}`;
 };
 
 /* ---------- formato, escalado y reproducción ---------- */
@@ -317,9 +318,9 @@ if(REC)document.body.classList.add('rec');
 addEventListener('resize',fit);fit();
 const th=getComputedStyle(document.documentElement);
 let cur=0,playing=!REC,last=0;
-function loop(ts){if(playing){if(!last)last=ts;cur+=(ts-last)/1000;last=ts;if(cur>=TOTAL){cur=TOTAL;playing=false;$('pp').textContent='↻';}window.__render(cur);}else last=0;requestAnimationFrame(loop);}
-$('pp').onclick=()=>{if(cur>=TOTAL)cur=0;playing=!playing;last=0;$('pp').textContent=playing?'❚❚':'▶';};
-$('seek').onclick=e=>{const r=$('seek').getBoundingClientRect();cur=clamp((e.clientX-r.left)/r.width)*TOTAL;window.__render(cur);};
+function loop(ts){if(playing){if(!last)last=ts;cur+=(ts-last)/1000;last=ts;if(cur>=TT){cur=TT;playing=false;$('pp').textContent='↻';}window.__render(cur);}else last=0;requestAnimationFrame(loop);}
+$('pp').onclick=()=>{if(cur>=TT)cur=0;playing=!playing;last=0;$('pp').textContent=playing?'❚❚':'▶';};
+$('seek').onclick=e=>{const r=$('seek').getBoundingClientRect();cur=clamp((e.clientX-r.left)/r.width)*TT;window.__render(cur);};
 window.__render(0);if(!REC)requestAnimationFrame(loop);
 window.__ready=(document.fonts&&document.fonts.ready)||Promise.resolve();
 </script>

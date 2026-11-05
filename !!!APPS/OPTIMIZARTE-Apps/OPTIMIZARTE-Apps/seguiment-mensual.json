@@ -1,0 +1,22 @@
+{
+  "refMes": 10,
+  "refAnyo": 2025,
+  "refOps": 33,
+  "refPrimas": 15901,
+  "refOpsAnul": 20,
+  "refPrimasAnul": 12159,
+  "prevMes": 9,
+  "prevAnyo": 2026,
+  "prevOps": 53,
+  "prevPrimas": 29737,
+  "prevSsgg": 15359,
+  "prevVida": 14378,
+  "currMes": 10,
+  "currAnyo": 2026,
+  "currOps": 19,
+  "currPrimas": 7682,
+  "currSsgg": 4792,
+  "currVida": 2890,
+  "currHogar": 8,
+  "currTemporal": 1
+}

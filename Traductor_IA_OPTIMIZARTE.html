@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traductor IA — OPTIMIZART€</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#DC0028;--dark:#202020;--gray:#414141;--gray-lt:#757575;
+  --bg:#F2F3F5;--card:#FFFFFF;--border:#DCDFE4;--text:#202020;
+  --muted:#888;--blue:#0078D4;--green:#107C10;--orange:#D47500;
+  --radius:10px;--shadow:0 2px 14px rgba(0,0,0,0.08);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* HEADER */
+header{background:var(--dark);color:#fff;padding:13px 24px;display:flex;align-items:center;gap:14px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.logo{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.35rem;letter-spacing:-.5px;color:#fff;white-space:nowrap}
+.logo .euro{color:var(--red)}
+.hdiv{width:1px;height:22px;background:rgba(255,255,255,.22)}
+.htitle{font-size:.95rem;font-weight:500;color:rgba(255,255,255,.82)}
+.hbadge{margin-left:auto;background:var(--red);color:#fff;font-size:.65rem;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.6px;text-transform:uppercase}
+
+/* CONFIG PANEL */
+.cfg-wrap{background:#fff;border-bottom:1px solid var(--border)}
+.cfg-toggle{display:flex;align-items:center;gap:8px;padding:11px 24px;cursor:pointer;font-size:.82rem;font-weight:600;color:var(--gray);user-select:none;transition:color .15s}
+.cfg-toggle:hover{color:var(--dark)}
+.cfg-chevron{margin-left:auto;transition:transform .2s;color:var(--gray-lt)}
+.cfg-toggle.open .cfg-chevron{transform:rotate(180deg)}
+.cfg-body{display:none;padding:4px 24px 16px;border-top:1px solid var(--border)}
+.cfg-body.vis{display:block}
+.cfg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;padding-top:12px}
+.cfg-field label{display:block;font-size:.71rem;font-weight:700;color:var(--gray-lt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.cfg-field input,.cfg-field select{width:100%;padding:7px 11px;border:1.5px solid var(--border);border-radius:6px;font-family:'Inter',sans-serif;font-size:.84rem;color:var(--text);background:#fff;outline:none;transition:border-color .15s}
+.cfg-field input:focus,.cfg-field select:focus{border-color:var(--red)}
+.api-info{padding:7px 11px;background:#F0F7FF;border:1px solid #C5DFFF;border-radius:6px;font-size:.78rem;line-height:1.5;color:#004A90}
+.api-info a{color:var(--blue);font-weight:600;text-decoration:none}
+.api-info a:hover{text-decoration:underline}
+.api-info .tag-free{display:inline-block;background:#DFFCDB;color:var(--green);font-size:.68rem;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:4px}
+.api-info .tag-cheap{display:inline-block;background:#FFF3CD;color:var(--orange);font-size:.68rem;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:4px}
+.cfg-foot{display:flex;align-items:center;gap:10px;padding-top:10px}
+.btn-test{padding:7px 16px;background:var(--dark);color:#fff;border:none;border-radius:6px;font-size:.8rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.btn-test:hover{background:var(--gray)}
+.api-st{font-size:.79rem;font-weight:600}
+.api-st.ok{color:var(--green)}.api-st.err{color:var(--red)}.api-st.testing{color:var(--blue)}
+
+/* MAIN */
+.wrap{max-width:1120px;margin:0 auto;padding:20px 16px}
+
+/* GRID */
+.tgrid{display:grid;grid-template-columns:1fr 52px 1fr;gap:12px;align-items:start}
+@media(max-width:660px){.tgrid{grid-template-columns:1fr}.swap-col{flex-direction:row;justify-content:center;padding-top:0;gap:10px}.btn-xlate{writing-mode:horizontal-tb;width:auto;min-height:auto;padding:10px 28px}}
+
+/* PANELS */
+.panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1.5px solid var(--border);overflow:hidden}
+.p-head{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1px solid var(--border);background:#FAFAFA;gap:8px;flex-wrap:wrap}
+.p-tag{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--gray-lt);padding-top:2px;flex-shrink:0}
+.lang-btns{display:flex;gap:4px;flex-wrap:wrap;flex:1;justify-content:flex-end}
+
+/* LANGUAGE PILLS */
+.lbtn{display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border:1.5px solid var(--border);border-radius:6px;background:#fff;font-size:.74rem;font-weight:600;color:var(--gray);cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif;white-space:nowrap;line-height:1}
+.lbtn:hover{border-color:var(--red);color:var(--red)}
+.lbtn.active{background:var(--red);border-color:var(--red);color:#fff}
+.lbtn svg{flex-shrink:0;border-radius:1px;display:block}
+
+/* TEXTAREA / OUTPUT */
+textarea#srcText{width:100%;min-height:220px;padding:13px;border:none;outline:none;font-family:'Inter',sans-serif;font-size:.93rem;line-height:1.65;color:var(--text);resize:vertical;background:#fff}
+textarea#srcText::placeholder{color:#BBBBBB}
+.out-area{min-height:220px;padding:13px;font-family:'Inter',sans-serif;font-size:.93rem;line-height:1.65;color:var(--text);white-space:pre-wrap;word-break:break-word;background:#fff}
+.out-area.rtl{direction:rtl;text-align:right;font-size:1.05rem}
+.out-ph{color:#BBBBBB;font-style:italic}
+
+/* PANEL FOOTER */
+.p-foot{display:flex;align-items:center;gap:7px;padding:7px 13px;border-top:1px solid var(--border);background:#FAFAFA;flex-wrap:wrap}
+.ccount{font-size:.73rem;color:var(--muted);margin-right:auto}
+.ccount.warn{color:var(--red);font-weight:700}
+.btn-sm{padding:4px 10px;border:1px solid var(--border);border-radius:5px;background:#fff;font-size:.74rem;font-weight:500;color:var(--gray);cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;white-space:nowrap}
+.btn-sm:hover{background:var(--bg);border-color:var(--gray)}
+.file-lbl{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border:1px solid var(--border);border-radius:5px;background:#fff;font-size:.74rem;font-weight:500;color:var(--gray);cursor:pointer;transition:all .15s;white-space:nowrap}
+.file-lbl:hover{background:var(--bg);border-color:var(--gray)}
+.file-lbl input{display:none}
+
+/* SWAP COL */
+.swap-col{display:flex;flex-direction:column;align-items:center;padding-top:44px;gap:8px}
+.btn-xlate{background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 8px;font-family:'Poppins',sans-serif;font-weight:700;font-size:.68rem;text-transform:uppercase;letter-spacing:.5px;cursor:pointer;writing-mode:vertical-rl;width:44px;min-height:100px;display:flex;align-items:center;justify-content:center;transition:background .15s;line-height:1.2}
+.btn-xlate:hover{background:#B5001F}
+.btn-xlate:disabled{background:#ccc;cursor:default}
+.btn-swap{background:#fff;border:1.5px solid var(--border);border-radius:6px;width:36px;height:36px;font-size:1rem;cursor:pointer;color:var(--gray);transition:all .15s;line-height:1}
+.btn-swap:hover{border-color:var(--dark);color:var(--dark)}
+
+/* SPINNER */
+.spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .6s linear infinite;vertical-align:middle}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* STATUS */
+.status{margin-top:10px;padding:9px 14px;border-radius:8px;font-size:.81rem;font-weight:500;display:none}
+.status.vis{display:block}
+.status.ok{background:#EBF5EB;color:#0B5E0B}
+.status.err{background:#FDECEC;color:#B00020}
+.status.warn{background:#FFF8E1;color:#7A5800}
+
+/* COPILOT */
+.cop-sec{margin-top:14px;background:var(--card);border-radius:var(--radius);border:1.5px solid var(--border);padding:13px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.btn-cop{display:flex;align-items:center;gap:8px;padding:9px 18px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-weight:600;font-size:.84rem;cursor:pointer;transition:background .15s;white-space:nowrap}
+.btn-cop:hover{background:#005EA3}
+.cop-desc{font-size:.79rem;color:var(--muted)}
+
+footer{text-align:center;padding:16px;font-size:.73rem;color:var(--muted);margin-top:20px;border-top:1px solid var(--border)}
+
+@media print{
+  header,.cfg-wrap,.swap-col,.p-foot,.cop-sec,footer,.status{display:none!important}
+  body{background:#fff}.wrap{padding:0;max-width:none}
+  .tgrid{grid-template-columns:1fr 1fr}
+  .panel{box-shadow:none;border:1px solid #ccc}
+  .out-area,textarea#srcText{min-height:auto}
+  @page{size:A4 landscape;margin:10mm 8mm}
+}
+@media(max-width:480px){.lbtn .ln{display:none}.hbadge{display:none}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">OPTIMIZART<span class="euro">€</span></div>
+  <div class="hdiv"></div>
+  <span class="htitle">Traductor Intel·ligent</span>
+  <span class="hbadge">IA</span>
+</header>
+
+<!-- CONFIG PANEL -->
+<div class="cfg-wrap">
+  <div class="cfg-toggle" id="cfgTog" onclick="toggleCfg()">
+    <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
+    Configuració API
+    <svg class="cfg-chevron" width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+  </div>
+  <div class="cfg-body" id="cfgBody">
+    <div class="cfg-grid">
+      <div class="cfg-field">
+        <label>Proveïdor d’IA</label>
+        <select id="apiType" onchange="onApiType()">
+          <option value="deepseek">DeepSeek — Recomanat (molt barat)</option>
+          <option value="groq">Groq — Gratuït</option>
+          <option value="openai">OpenAI (GPT-4o)</option>
+          <option value="azure">Azure OpenAI</option>
+          <option value="custom">Personalitzat (URL pròpia)</option>
+        </select>
+      </div>
+      <div class="cfg-field">
+        <label>Clau API</label>
+        <input type="password" id="apiKey" placeholder="Enganxa la teva clau API aquí" autocomplete="off">
+      </div>
+      <div class="cfg-field" id="mdlField">
+        <label>Model</label>
+        <input type="text" id="mdlName" value="deepseek-chat" placeholder="deepseek-chat · gpt-4o · llama-3.3-70b-versatile">
+      </div>
+      <div class="cfg-field" id="urlField" style="display:none">
+        <label>URL Endpoint (Azure / Personalitzat)</label>
+        <input type="text" id="apiUrl" placeholder="https://xxx.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-02-01">
+      </div>
+      <div class="cfg-field" style="grid-column:1/-1">
+        <label>On aconseguir la clau API</label>
+        <div class="api-info" id="apiInfo"></div>
+      </div>
+    </div>
+    <div class="cfg-foot">
+      <button class="btn-test" onclick="testApi()">Provar connexió</button>
+      <span class="api-st" id="apiSt"></span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="wrap">
+  <div class="tgrid">
+
+    <!-- SOURCE PANEL -->
+    <div class="panel">
+      <div class="p-head">
+        <span class="p-tag">Original</span>
+        <div id="srcBtns" class="lang-btns"></div>
+      </div>
+      <textarea id="srcText" placeholder="Escriu o enganxa el text a traduir…" oninput="onSrcInput()"></textarea>
+      <div class="p-foot">
+        <span class="ccount" id="srcCnt">0 / 3 000</span>
+        <label class="file-lbl" title="Carrega un fitxer de text pla">
+          <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/></svg>
+          Pujar .txt
+          <input type="file" id="fileIn" accept=".txt" onchange="loadFile()">
+        </label>
+        <button class="btn-sm" onclick="clearSrc()">🗑 Netejar</button>
+        <button class="btn-sm" onclick="copySrc()">📋 Copiar</button>
+      </div>
+    </div>
+
+    <!-- SWAP / TRANSLATE -->
+    <div class="swap-col">
+      <button class="btn-xlate" id="btnXlate" onclick="doTranslate()" title="Ctrl+Enter">TRADUIR</button>
+      <button class="btn-swap" onclick="swapLangs()" title="Intercanviar idiomes">⇄</button>
+    </div>
+
+    <!-- TARGET PANEL -->
+    <div class="panel">
+      <div class="p-head">
+        <span class="p-tag">Traducció</span>
+        <div id="tgtBtns" class="lang-btns"></div>
+      </div>
+      <div class="out-area" id="outArea"><span class="out-ph">La traducció apareixeran aquí…</span></div>
+      <div class="p-foot">
+        <span class="ccount" id="tgtCnt">—</span>
+        <button class="btn-sm" onclick="copyOut()">📋 Copiar traducció</button>
+      </div>
+    </div>
+
+  </div><!-- /tgrid -->
+
+  <div class="status" id="statusBar"></div>
+
+  <!-- COPILOT FALLBACK -->
+  <div class="cop-sec">
+    <button class="btn-cop" onclick="openCopilot()">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      Traduir amb Microsoft Copilot
+    </button>
+    <span class="cop-desc">Copia automàticament el prompt i obre Copilot — sense clau API</span>
+  </div>
+</div>
+
+<footer>OPTIMIZART€ — Mediador Occident #17167 — Traductor Intel·ligent v2.0 — 2026</footer>
+
+<script>
+// =============================================
+// LANGUAGE DEFINITIONS
+// =============================================
+const LANGS = {
+  es:     { name:'Español',             abbr:'ES', api:'Spanish',                      dir:'ltr' },
+  ca:     { name:'Català',               abbr:'CA', api:'Catalan',                      dir:'ltr' },
+  fr:     { name:'Français',             abbr:'FR', api:'French',                       dir:'ltr' },
+  en:     { name:'English',               abbr:'EN', api:'English',                      dir:'ltr' },
+  de:     { name:'Deutsch',               abbr:'DE', api:'German',                       dir:'ltr' },
+  it:     { name:'Italiano',              abbr:'IT', api:'Italian',                      dir:'ltr' },
+  'ar-MA':{ name:'Darija مغربي',     abbr:'MA', api:'Moroccan Arabic Darija',    dir:'rtl' }
+};
+
+const SRC_LANGS = ['es','ca','fr','en','de','it','ar-MA'];
+const TGT_LANGS = ['ca','fr','en','de','it','ar-MA'];
+
+// =============================================
+// SVG FLAGS
+// =============================================
+function mkFlag(body) {
+  return `<svg width="18" height="12" viewBox="0 0 18 12" xmlns="http://www.w3.org/2000/svg" style="border-radius:1px;flex-shrink:0">${body}</svg>`;
+}
+
+const FLAGS = {
+  // Spain: red-yellow-red
+  es: mkFlag('<rect width="18" height="12" fill="#AA151B"/><rect y="3" width="18" height="6" fill="#F1BF00"/>'),
+
+  // Catalonia: Senyera (4 red bars on gold)
+  ca: mkFlag('<rect width="18" height="12" fill="#FCDD09"/><rect y="1.33" width="18" height="1.33" fill="#DA121A"/><rect y="4" width="18" height="1.33" fill="#DA121A"/><rect y="6.67" width="18" height="1.33" fill="#DA121A"/><rect y="9.33" width="18" height="1.33" fill="#DA121A"/>'),
+
+  // France: blue-white-red vertical
+  fr: mkFlag('<rect width="6" height="12" fill="#0055A4"/><rect x="6" width="6" height="12" fill="#FFFFFF"/><rect x="12" width="6" height="12" fill="#EF4135"/>'),
+
+  // UK: Union Jack simplified
+  en: mkFlag('<rect width="18" height="12" fill="#012169"/><polygon points="0,0 3,0 18,9.5 18,12 15,12 0,2.5" fill="#FFFFFF"/><polygon points="15,0 18,0 18,2.5 3,12 0,12 0,9.5" fill="#FFFFFF"/><polygon points="0,0 2,0 18,10.5 18,12 16,12 0,1.5" fill="#C8102E"/><polygon points="16,0 18,0 18,1.5 2,12 0,12 0,10.5" fill="#C8102E"/><rect x="7" width="4" height="12" fill="#FFFFFF"/><rect y="4" width="18" height="4" fill="#FFFFFF"/><rect x="8" width="2" height="12" fill="#C8102E"/><rect y="5" width="18" height="2" fill="#C8102E"/>'),
+
+  // Germany: black-red-gold
+  de: mkFlag('<rect width="18" height="4" fill="#000000"/><rect y="4" width="18" height="4" fill="#DD0000"/><rect y="8" width="18" height="4" fill="#FFCE00"/>'),
+
+  // Italy: green-white-red vertical
+  it: mkFlag('<rect width="6" height="12" fill="#009246"/><rect x="6" width="6" height="12" fill="#FFFFFF"/><rect x="12" width="6" height="12" fill="#CE2B37"/>'),
+
+  // Morocco: red field + green pentagram outline
+  'ar-MA': mkFlag('<rect width="18" height="12" fill="#C1272D"/><polygon points="9,2.8 9.82,5.37 12.33,5.42 10.33,6.93 11.06,9.33 9,7.88 6.94,9.33 7.67,6.93 5.67,5.42 8.18,5.37" fill="none" stroke="#006233" stroke-width="0.7" stroke-linejoin="round"/>')
+};
+
+// =============================================
+// API CONFIGURATION
+// =============================================
+const API_DEFAULTS = {
+  deepseek: { model:'deepseek-chat',            url:'https://api.deepseek.com/v1/chat/completions',        azureAuth:false },
+  groq:     { model:'llama-3.3-70b-versatile',  url:'https://api.groq.com/openai/v1/chat/completions',     azureAuth:false },
+  openai:   { model:'gpt-4o',                   url:'https://api.openai.com/v1/chat/completions',          azureAuth:false },
+  azure:    { model:'',                          url:'',                                                    azureAuth:true  },
+  custom:   { model:'gpt-4o',                   url:'',                                                    azureAuth:false }
+};
+
+const API_INFO_HTML = {
+  deepseek: `Registra’t a <a href="https://platform.deepseek.com/api_keys" target="_blank">platform.deepseek.com</a> → API Keys <span class="tag-cheap">Molt barat $0.07/1M tokens</span><br>Ideal per a traduccions professionals. Suporta Darija molt bé.`,
+  groq:     `Registra’t a <a href="https://console.groq.com/keys" target="_blank">console.groq.com</a> → API Keys <span class="tag-free">Gratuït</span><br>Límit diari de tokens. Ultra ràpid (Llama 3.3 70B). Perfect per proves.`,
+  openai:   `Registra’t a <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a> → API Keys<br>GPT-4o: qualitat premium. Des de $0.15/1M tokens d’entrada.`,
+  azure:    `Accedeix al <a href="https://portal.azure.com" target="_blank">portal.azure.com</a> → Azure OpenAI Service<br>Pot estar inclòs en alguns plans Microsoft 365 Enterprise. Consulta amb el teu administrador IT.`,
+  custom:   `Qualsevol endpoint compatible amb l’API d’OpenAI. Introdueix la URL completa i la clau d’autorització.`
+};
+
+// =============================================
+// STATE
+// =============================================
+let curSrc = 'es';
+let curTgt = 'ca';
+let xlated = '';
+let busy = false;
+
+// =============================================
+// INIT
+// =============================================
+document.addEventListener('DOMContentLoaded', () => {
+  loadCfg();
+  document.getElementById('srcText').addEventListener('keydown', e => {
+    if (e.ctrlKey && e.key === 'Enter') doTranslate();
+  });
+});
+
+// =============================================
+// RENDER LANGUAGE BUTTONS
+// =============================================
+function mkLBtn(code, isActive, onclick) {
+  const l = LANGS[code];
+  const btn = document.createElement('button');
+  btn.className = 'lbtn' + (isActive ? ' active' : '');
+  btn.onclick = onclick;
+  btn.title = l.name;
+  btn.innerHTML = FLAGS[code] + `<span class="ln"> ${l.abbr}</span>`;
+  return btn;
+}
+
+function renderSrcBtns() {
+  const wrap = document.getElementById('srcBtns');
+  wrap.innerHTML = '';
+  SRC_LANGS.forEach(code => wrap.appendChild(mkLBtn(code, code === curSrc, () => setSrc(code))));
+}
+
+function renderTgtBtns() {
+  const wrap = document.getElementById('tgtBtns');
+  wrap.innerHTML = '';
+  TGT_LANGS.forEach(code => wrap.appendChild(mkLBtn(code, code === curTgt, () => setTgt(code))));
+}
+
+// =============================================
+// SET SOURCE / TARGET
+// =============================================
+function setSrc(code) {
+  curSrc = code;
+  if (curTgt === curSrc) {
+    curTgt = TGT_LANGS.find(c => c !== curSrc) || 'fr';
+  }
+  renderSrcBtns();
+  renderTgtBtns();
+  const ta = document.getElementById('srcText');
+  const l = LANGS[code];
+  ta.dir = l.dir;
+  ta.style.textAlign = l.dir === 'rtl' ? 'right' : 'left';
+  if (xlated) { setOutPH('Prem TRADUIR per traduir a l’idioma nou…'); xlated = ''; document.getElementById('tgtCnt').textContent = '—'; }
+  saveCfg();
+}
+
+function setTgt(code) {
+  curTgt = code;
+  renderTgtBtns();
+  if (xlated) { setOutPH('Prem TRADUIR per traduir a l’idioma nou…'); xlated = ''; document.getElementById('tgtCnt').textContent = '—'; }
+  saveCfg();
+}
+
+// =============================================
+// SOURCE INPUT
+// =============================================
+function onSrcInput() {
+  const n = document.getElementById('srcText').value.length;
+  const el = document.getElementById('srcCnt');
+  el.textContent = n.toLocaleString('ca') + ' / 3 000';
+  el.className = 'ccount' + (n > 2550 ? ' warn' : '');
+}
+
+// =============================================
+// LOAD FILE (.txt)
+// =============================================
+function loadFile() {
+  const f = document.getElementById('fileIn').files[0];
+  if (!f) return;
+  if (!f.name.toLowerCase().endsWith('.txt')) { showSt('Només s’admeten fitxers .txt (text pla).','warn'); return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    let txt = e.target.result;
+    const full = txt.length;
+    if (txt.length > 3000) txt = txt.substring(0, 3000);
+    document.getElementById('srcText').value = txt;
+    onSrcInput();
+    showSt(full > 3000
+      ? `Fitxer carregat — truncat a 3 000 car. (original: ${full}).`
+      : `Fitxer “${f.name}” carregat (${txt.length} caràcters).`, 'ok');
+  };
+  reader.readAsText(f, 'UTF-8');
+}
+
+// =============================================
+// TRANSLATE
+// =============================================
+async function doTranslate() {
+  if (busy) return;
+  const txt = document.getElementById('srcText').value.trim();
+  if (!txt) { showSt('Introdueix el text a traduir.','warn'); return; }
+  if (txt.length > 3000) { showSt('Text massa llarg (màx. 3 000 caràcters).','err'); return; }
+  if (curSrc === curTgt) { showSt('L’idioma d’entrada i sortida no poden ser iguals.','warn'); return; }
+  const key = document.getElementById('apiKey').value.trim();
+  if (!key) { showSt('No hi ha clau API configurada. Usa el botó Copilot com a alternativa.','warn'); return; }
+
+  busy = true; setBusy(true); setOutLoading(); clearSt();
+  try {
+    const res = await callApi(txt, curSrc, curTgt);
+    xlated = res; showOut(res);
+    document.getElementById('tgtCnt').textContent = res.length + ' caràcters';
+    showSt('Traducció completada.','ok');
+  } catch(err) {
+    setOutPH('Error en la traducció. Revisa la configuració API.');
+    showSt('Error: ' + err.message,'err');
+  } finally { busy = false; setBusy(false); }
+}
+
+// =============================================
+// API CALL
+// =============================================
+async function callApi(text, src, tgt) {
+  const t   = document.getElementById('apiType').value;
+  const key = document.getElementById('apiKey').value.trim();
+  const d   = API_DEFAULTS[t];
+
+  const payload = {
+    messages:[
+      { role:'system', content: buildPrompt(src, tgt) },
+      { role:'user',   content: text }
+    ],
+    temperature: 0.2,
+    max_tokens: 4096
+  };
+
+  let url, headers;
+
+  if (t === 'azure') {
+    url = document.getElementById('apiUrl').value.trim();
+    if (!url) throw new Error('Cal configurar l’Endpoint d’Azure a la Configuració API.');
+    headers = { 'Content-Type':'application/json', 'api-key': key };
+  } else {
+    url = (t === 'custom') ? document.getElementById('apiUrl').value.trim() : d.url;
+    if (!url) throw new Error('Cal configurar la URL de l’API.');
+    payload.model = document.getElementById('mdlName').value.trim() || d.model;
+    headers = { 'Content-Type':'application/json', 'Authorization':'Bearer ' + key };
+  }
+
+  const r = await fetch(url, { method:'POST', headers, body:JSON.stringify(payload) });
+  if (!r.ok) {
+    let msg = 'HTTP ' + r.status;
+    try { const e = await r.json(); msg = e.error?.message || e.message || msg; } catch {}
+    throw new Error(msg);
+  }
+  const dd = await r.json();
+  const out = dd.choices?.[0]?.message?.content;
+  if (!out) throw new Error('Resposta buida de l’API.');
+  return out.trim();
+}
+
+// =============================================
+// SYSTEM PROMPT
+// =============================================
+function buildPrompt(src, tgt) {
+  const sn = LANGS[src]?.api || src;
+  const tn = LANGS[tgt]?.api || tgt;
+  let extra = '';
+  if (tgt === 'ar-MA') {
+    extra = `
+
+IMPORTANT: Use authentic Moroccan Darija dialect (الدارجة المغربية) as naturally spoken in Morocco. Write in Arabic script. Do NOT use formal Modern Standard Arabic (Fus-ha / فصحى). Use everyday Darija vocabulary, expressions and grammar. Include French or Spanish loanwords where they naturally appear in Moroccan speech.`;
+  } else if (tgt === 'ca') {
+    extra = `
+
+Use standard Catalan (català normatiu) as used in Catalonia, following IEC orthographic norms.`;
+  }
+  return `You are a professional translator for OPTIMIZARTE, an insurance agency in Spain. Translate from ${sn} to ${tn}.${extra}
+
+Rules:
+• Maintain the original tone, formality and register
+• Do NOT translate proper nouns, brand names, product names, policy numbers or codes
+• Do NOT add explanations, notes or comments
+• Return ONLY the translated text, nothing else`;
+}
+
+// =============================================
+// TEST API
+// =============================================
+async function testApi() {
+  const key = document.getElementById('apiKey').value.trim();
+  if (!key) { setApiSt('Introdueix la clau API primer.','err'); return; }
+  setApiSt('Provant…','testing');
+  try { await callApi('Hola!','es','en'); setApiSt('✓ Connexió correcta!','ok'); }
+  catch(e) { setApiSt('✗ ' + e.message,'err'); }
+}
+function setApiSt(msg, cls) {
+  const el = document.getElementById('apiSt');
+  el.textContent = msg;
+  el.className = 'api-st' + (cls ? ' '+cls : '');
+}
+
+// =============================================
+// COPILOT FALLBACK
+// =============================================
+async function openCopilot() {
+  const txt = document.getElementById('srcText').value.trim();
+  if (!txt) { showSt('Introdueix el text a traduir.','warn'); return; }
+  const sn = LANGS[curSrc]?.name || curSrc;
+  const tn = LANGS[curTgt]?.name || curTgt;
+  let note = curTgt === 'ar-MA' ? ' (en dialecte marroquí Darija, escrit en àrab, NO en àrab estàndard formal)' : '';
+  const prompt = `Tradueix el text següent de ${sn} a ${tn}${note}.
+Retorna únicament la traducció, sense explicacions ni anotacions.
+
+---
+${txt}`;
+  try { await navigator.clipboard.writeText(prompt); }
+  catch {
+    const ta = document.createElement('textarea');
+    ta.value = prompt;
+    Object.assign(ta.style,{position:'fixed',opacity:'0',pointerEvents:'none'});
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+  }
+  showSt('✓ Prompt copiat al porta-retalls! Enganxa’l a Copilot (Ctrl+V).','ok');
+  window.open('https://copilot.microsoft.com/','_blank');
+}
+
+// =============================================
+// UI HELPERS
+// =============================================
+function showOut(text) {
+  const el = document.getElementById('outArea');
+  const rtl = LANGS[curTgt]?.dir === 'rtl';
+  el.className = 'out-area' + (rtl ? ' rtl' : '');
+  el.textContent = text;
+}
+function setOutLoading() {
+  const el = document.getElementById('outArea');
+  el.className = 'out-area';
+  el.innerHTML = '<span class="spin"></span>&nbsp; Traduint…';
+}
+function setOutPH(msg) {
+  const el = document.getElementById('outArea');
+  el.className = 'out-area';
+  el.innerHTML = `<span class="out-ph">${msg}</span>`;
+}
+function setBusy(b) {
+  const btn = document.getElementById('btnXlate');
+  btn.disabled = b;
+  btn.innerHTML = b ? '<span class="spin"></span>' : 'TRADUIR';
+}
+function clearSrc() {
+  document.getElementById('srcText').value = '';
+  onSrcInput();
+  setOutPH('La traducció apareixeran aquí…');
+  xlated = ''; document.getElementById('tgtCnt').textContent = '—';
+  clearSt();
+}
+function swapLangs() {
+  if (curSrc === curTgt) return;
+  const oldSrc = curSrc, oldTgt = curTgt;
+  if (SRC_LANGS.includes(oldTgt)) curSrc = oldTgt;
+  if (TGT_LANGS.includes(oldSrc)) curTgt = oldSrc; else curTgt = TGT_LANGS[0];
+  renderSrcBtns(); renderTgtBtns();
+  const l = LANGS[curSrc], ta = document.getElementById('srcText');
+  ta.dir = l.dir; ta.style.textAlign = l.dir === 'rtl' ? 'right' : 'left';
+  if (xlated) {
+    ta.value = xlated; onSrcInput();
+    setOutPH('Prem TRADUIR per traduir a l’idioma nou…');
+    xlated = ''; document.getElementById('tgtCnt').textContent = '—';
+  }
+}
+async function copySrc() {
+  const txt = document.getElementById('srcText').value;
+  if (!txt.trim()) return;
+  try { await navigator.clipboard.writeText(txt); showSt('✓ Text copiat.','ok'); }
+  catch { showSt('No s’ha pogut copiar automàticament.','warn'); }
+}
+async function copyOut() {
+  if (!xlated) { showSt('No hi ha traducció per copiar.','warn'); return; }
+  try { await navigator.clipboard.writeText(xlated); showSt('✓ Traducció copiada.','ok'); }
+  catch { showSt('No s’ha pogut copiar automàticament.','warn'); }
+}
+function showSt(msg, cls) {
+  const el = document.getElementById('statusBar');
+  el.textContent = msg; el.className = 'status vis ' + (cls||'');
+  clearTimeout(el._t); el._t = setTimeout(() => el.className = 'status', 5500);
+}
+function clearSt() { document.getElementById('statusBar').className = 'status'; }
+
+// =============================================
+// CONFIG PANEL
+// =============================================
+function toggleCfg() {
+  document.getElementById('cfgBody').classList.toggle('vis');
+  document.getElementById('cfgTog').classList.toggle('open');
+}
+function openCfg() {
+  document.getElementById('cfgBody').classList.add('vis');
+  document.getElementById('cfgTog').classList.add('open');
+}
+function onApiType() {
+  const t = document.getElementById('apiType').value;
+  const d = API_DEFAULTS[t];
+  const needUrl = (t === 'azure' || t === 'custom');
+  document.getElementById('urlField').style.display = needUrl ? '' : 'none';
+  document.getElementById('mdlField').style.display = t === 'azure' ? 'none' : '';
+  if (d.model) document.getElementById('mdlName').value = d.model;
+  document.getElementById('apiInfo').innerHTML = API_INFO_HTML[t] || '';
+  document.getElementById('apiSt').textContent = '';
+  document.getElementById('apiSt').className = 'api-st';
+}
+
+// =============================================
+// SETTINGS (localStorage)
+// =============================================
+const LS_KEY = 'opt_traductor_v2';
+function loadCfg() {
+  try {
+    const s = localStorage.getItem(LS_KEY);
+    if (s) {
+      const c = JSON.parse(s);
+      if (c.apiKey)  document.getElementById('apiKey').value = c.apiKey;
+      if (c.apiType) document.getElementById('apiType').value = c.apiType;
+      if (c.mdlName) document.getElementById('mdlName').value = c.mdlName;
+      if (c.apiUrl)  document.getElementById('apiUrl').value = c.apiUrl;
+      if (c.src && SRC_LANGS.includes(c.src)) curSrc = c.src;
+      if (c.tgt && TGT_LANGS.includes(c.tgt)) curTgt = c.tgt;
+      if (!c.apiKey) openCfg();
+    } else {
+      openCfg();
+    }
+  } catch { openCfg(); }
+  onApiType();
+  renderSrcBtns();
+  renderTgtBtns();
+
+  ['apiKey','apiType','mdlName','apiUrl'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('change', saveCfg);
+  });
+  document.getElementById('apiType').addEventListener('change', onApiType);
+}
+function saveCfg() {
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify({
+      apiKey:  document.getElementById('apiKey').value,
+      apiType: document.getElementById('apiType').value,
+      mdlName: document.getElementById('mdlName').value,
+      apiUrl:  document.getElementById('apiUrl').value,
+      src: curSrc, tgt: curTgt
+    }));
+  } catch {}
+}
+</script>
+</body>
+</html>

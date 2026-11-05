@@ -215,7 +215,10 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
 /* ===== extras AUTOS ===== */
 .htx{min-width:0}
 .optb{flex-wrap:wrap}.optb .ofr{flex:0 0 100%}.optb .ofr small{margin-top:1px}
-@media(max-width:430px){.hero .kpi{display:grid;grid-template-columns:44px minmax(0,1fr);gap:4px 10px;align-items:center;padding:10px 12px}.hero .kpi>.ic{width:44px;height:44px}.hero .kb{display:contents}.hero .kl{grid-column:2}.hero .kv,.hero .ks{grid-column:1/-1}.hero .kpi #kpiLg{display:none}}
+.optb .om{text-align:center}.optb .om .omn{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:clamp(11px,3.35vw,13px)}.optb .om b{display:block;font-size:17.6px;text-align:center;margin-top:2px}
+@media(max-width:360px){button.optb .ol{min-width:54px}.optb .ol i.lg{width:56px;height:19px}}
+.hero .kpi{display:grid;grid-template-columns:44px minmax(0,1fr);gap:4px 10px;align-items:center;padding:10px 12px}.hero .kpi>.ic{width:44px;height:44px}.hero .kb{display:contents}.hero .kl{grid-column:2}.hero .kv,.hero .ks{grid-column:1/-1;text-align:center}
+.pc .hero .kpi{grid-template-columns:44px minmax(0,1fr) auto}.pc #kpiLg{grid-column:3;grid-row:1}
 .plw{display:flex;justify-content:center;margin-top:14px}
 .plate{display:inline-flex;align-items:stretch;height:31px;border:1.5px solid #15161A;border-radius:4px;overflow:hidden;background:#fff;color:#15161A;font-weight:700}
 .plate svg{height:100%;width:auto;display:block}.plate span{display:flex;align-items:center;padding:0 10px;font-size:22px;letter-spacing:1.7px;line-height:1;white-space:nowrap}
@@ -532,9 +535,9 @@ es:{brand:'Seguro de automóvil',hi:'Hola',lead1:v=>`Aquí tienes la mejor propu
  yes:'Sí',nope:'No',
  vc:{us:{p:'Particular',r:'Profesional'},co:{g:'Gasolina',d:'Diésel',h:'Híbrido',e:'Eléctrico',l:'GLP'},cm:{n:'No, ya era suyo',z:'Sí, nuevo',c:'Sí, de 2ª mano a concesionario',t:'Sí, de 2ª mano a particular',r:'Comprado recientemente'},pk:{i:'Garaje individual',c:'Garaje colectivo',s:'En la calle'}},
  pplH:'Las personas',pplS:'Quién interviene en el seguro',role:{t:'Tomador',p:'Propietario',h:'Conductor habitual',o:'Conductor ocasional'},pk:{po:'Población',cp:'Código postal',fn:'Nacimiento',fc:'Carné'},yrs:n=>n===1?'1 año':n+' años',
- covH:'Otras coberturas',covS:'Toca cada bloque para ver el detalle',otherN:c=>`El detalle del resto de coberturas está en la oferta de ${c}.`,apH:'Ventajas en talleres AutoPresto',stH:'Indemnización en caso de siniestro total',endH1:'Recuerda tu opción',endH:'Recuerda tus opciones',endS1:'Cuando quieras, te ayudamos a contratarla',endS:'Elige la que prefieras y te ayudamos a contratarla',
+ covH:'Otras coberturas',covS:'Toca cada bloque para ver el detalle',otherN:c=>`El detalle del resto de coberturas está en la oferta de ${c}.`,apH:'Ventajas en talleres AutoPresto',stH:'Indemnización en caso de siniestro total',endH1:'Recuerda tu opción',endH:'Recuerda tus opciones',endS1:'Para cualquier duda, llámanos',endS:'Para cualquier duda, llámanos',
  foot:'Este documento es informativo y carece de validez contractual. Coberturas, límites y prima definitivos: los de la póliza, previa validación de la aseguradora. Consulta con nosotros tu caso personalizado.',footO:' Los precios de otras compañías son los de las ofertas que nos han facilitado.',
- cta:'Me interesa esta opción',shH:'Te ayudamos a contratarlo',shP:'Te confirmamos el precio y las condiciones, sin compromiso.',shCall:'<span>Llamar ahora<small>972 42 66 65</small></span>',shMail:'Escribir un email',shClose:'Cerrar',
+ cta:'Me interesa',shH:'Te ayudamos a contratarlo',shP:'Te confirmamos el precio y las condiciones, sin compromiso.',shCall:'<span>Llamar ahora<small>972 42 66 65</small></span>',shMail:'Escribir un email',shClose:'Cerrar',
  wa:n=>`Hola, he visto el simulador del seguro de automóvil (${n}). Me interesa.`,mailSub:'Seguro de automóvil',exV:'Tu vehículo'},
 ca:{brand:'Assegurança d\'automòbil',hi:'Hola',lead1:v=>`Aquí tens la millor proposta d'assegurança per ${v}.`,leadN:v=>`Aquí tens les millors propostes d'assegurança per ${v}.`,tuV:'al teu vehicle',tu:v=>`al teu <b>${v}</b>`,
  kickE:'Exemple',kpiL:'Prima total anual',recT:'La nostra recomanació',recB:'Recomanada',
@@ -549,9 +552,9 @@ ca:{brand:'Assegurança d\'automòbil',hi:'Hola',lead1:v=>`Aquí tens la millor 
  yes:'Sí',nope:'No',
  vc:{us:{p:'Particular',r:'Professional'},co:{g:'Gasolina',d:'Dièsel',h:'Híbrid',e:'Elèctric',l:'GLP'},cm:{n:'No, ja era seu',z:'Sí, nou',c:'Sí, de 2a mà a concessionari',t:'Sí, de 2a mà a particular',r:'Comprat recentment'},pk:{i:'Garatge individual',c:'Garatge col·lectiu',s:'Al carrer'}},
  pplH:'Les persones',pplS:'Qui intervé en l\'assegurança',role:{t:'Prenedor',p:'Propietari',h:'Conductor habitual',o:'Conductor ocasional'},pk:{po:'Població',cp:'Codi postal',fn:'Naixement',fc:'Carnet'},yrs:n=>n===1?'1 any':n+' anys',
- covH:'Altres cobertures',covS:'Toca cada bloc per veure\'n el detall',otherN:c=>`El detall de la resta de cobertures és a l'oferta de ${c}.`,apH:'Avantatges als tallers AutoPresto',stH:'Indemnització en cas de sinistre total',endH1:'Recorda la teva opció',endH:'Recorda les teves opcions',endS1:'Quan vulguis, t\'ajudem a contractar-la',endS:'Tria la que prefereixis i t\'ajudem a contractar-la',
+ covH:'Altres cobertures',covS:'Toca cada bloc per veure\'n el detall',otherN:c=>`El detall de la resta de cobertures és a l'oferta de ${c}.`,apH:'Avantatges als tallers AutoPresto',stH:'Indemnització en cas de sinistre total',endH1:'Recorda la teva opció',endH:'Recorda les teves opcions',endS1:'Per a qualsevol dubte, truca\'ns',endS:'Per a qualsevol dubte, truca\'ns',
  foot:'Aquest document és informatiu i no té validesa contractual. Cobertures, límits i prima definitius: els de la pòlissa, amb la validació prèvia de l\'asseguradora. Consulta amb nosaltres el teu cas personalitzat.',footO:' Els preus d\'altres companyies són els de les ofertes que ens han facilitat.',
- cta:'M\'interessa aquesta opció',shH:'T\'ajudem a contractar-la',shP:'Et confirmem el preu i les condicions, sense compromís.',shCall:'<span>Truca ara<small>972 42 66 65</small></span>',shMail:'Escriu un correu',shClose:'Tancar',
+ cta:'M\'interessa',shH:'T\'ajudem a contractar-la',shP:'Et confirmem el preu i les condicions, sense compromís.',shCall:'<span>Truca ara<small>972 42 66 65</small></span>',shMail:'Escriu un correu',shClose:'Tancar',
  wa:n=>`Hola, he vist el simulador de l'assegurança d'automòbil (${n}). M'interessa.`,mailSub:'Assegurança d\'automòbil',exV:'El teu vehicle'}
 }[L];
 
@@ -685,7 +688,7 @@ function render(){
   if(REC&&isFinite(REC.o.q)){
     const o=REC.o,c=REC.c;
     $('kpiL').innerHTML=`${T.recT}<br>${o.d?T.kpiLd:T.kpiL}`;$('kpiV').textContent=eur(o.q);
-    $('kpiS').textContent=`${c.name} · ${optName(o)} · ${T.val[c.val]}`+(isFinite(o.pq)?` · ${T.first(eur(o.pq))}`:'')+(o.p?` · ${T.pend}`:'');
+    $('kpiS').textContent=`${c.name} · ${optName(o)}`+(isFinite(o.pq)?` · ${T.first(eur(o.pq))}`:'')+(o.p?` · ${T.pend}`:'');
     $('kpiLg').innerHTML=c.k?`<i class="lg lg-${c.k}"></i>`:'';
     $('kpi').onclick=()=>{cur=REC;paint();$('optsCard').scrollIntoView({behavior:'smooth',block:'start'});};
   }
@@ -714,7 +717,7 @@ function render(){
     /* el valor solo se indica si distingue unas ofertas de otras; en la recomendada, nunca */
     if(!o.r&&vals.length>1)sub.push(T.val[x.c.val]);
     if(o.nt)sub.push(o.nt);
-    return `<button class="optb" data-f="${FLAT.indexOf(x)}"><span class="ol">${logo(x.c)}</span><span class="om">${o.r?`<small class="rb">★ ${T.recB}</small>`:''}${esc(optName(o))}${sub.length?`<small>${esc(sub.join(' · '))}</small>`:''}${o.p?`<small class="pd">${T.pend}</small>`:''}</span><b>${priceHtml(o)}</b>${two?`<span class="ofr"><small>${esc(T.frC(cap(o.f)))}</small><small>${esc(T.frL(cap(o.g)))}</small></span>`:''}</button>`;
+    return `<button class="optb" data-f="${FLAT.indexOf(x)}"><span class="ol">${logo(x.c)}</span><span class="om">${o.r?`<small class="rb">★ ${T.recB}</small>`:''}<span class="omn">${esc(optName(o))}</span><b>${priceHtml(o)}</b>${sub.length?`<small>${esc(sub.join(' · '))}</small>`:''}${o.p?`<small class="pd">${T.pend}</small>`:''}</span>${two?`<span class="ofr"><small>${esc(T.frC(cap(o.f)))}</small><small>${esc(T.frL(cap(o.g)))}</small></span>`:''}</button>`;
   };
   const blocks=[];FLAT.forEach(x=>{const b=blocks[blocks.length-1];if(b&&b.l===x.lv)b.it.push(x);else blocks.push({l:x.lv,it:[x]});});
   const optsHtml=blocks.map(({l,it})=>`<div class="lv">${!one?`<h3 class="lvh">${esc(T.lv[l])}</h3>`:''}<div class="opts">${it.map(optCard).join('')}</div></div>`).join('');

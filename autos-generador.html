@@ -337,7 +337,8 @@ async function readPdf(file){
     for(let i=1;i<=Math.min(doc.numPages,10);i++){
       const page=await doc.getPage(i),vp=page.getViewport({scale:1}),H=vp.height;
       const tc=await page.getTextContent();
-      const items=tc.items.filter(t=>t.str&&t.str.trim()).map(t=>({s:t.str.trim(),x:t.transform[4],y:H-t.transform[5]-(t.height||t.transform[3]||10),h:t.height||10,w:t.width||0,sp:/\s$/.test(t.str)}));
+      /* fora la marca d'aigua PROYECTO (text gros i girat): s'enganxaria a la linia que trobi a la mateixa alcada */
+      const items=tc.items.filter(t=>t.str&&t.str.trim()&&Math.abs(t.transform[1])<0.01&&t.str.trim()!=='PROYECTO').map(t=>({s:t.str.trim(),x:t.transform[4],y:H-t.transform[5]-(t.height||t.transform[3]||10),h:t.height||10,w:t.width||0,sp:/\s$/.test(t.str)}));
       const images=[];
       const ops=await page.getOperatorList();
       let m=[1,0,0,1,0,0];const stack=[],O=lib.OPS;

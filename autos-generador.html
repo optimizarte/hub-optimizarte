@@ -54,6 +54,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--brand);outline:none;b
 .oi{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;color:#fff;font-size:11px;font-weight:700;line-height:1;flex-shrink:0}.oi.y{background:var(--ok)}.oi.x{background:var(--brand)}
 .ordm{position:absolute;left:0;top:calc(100% + 4px);z-index:30;min-width:150px;background:var(--bg2);border:1px solid var(--br);border-radius:12px;box-shadow:var(--shadow-md);padding:5px;display:flex;flex-direction:column;gap:2px;max-height:320px;overflow:auto}
 .ordm button{display:flex;align-items:center;justify-content:flex-start;width:100%;gap:8px;border-radius:999px;padding:6px 10px 6px 7px;font-size:12.5px;font-weight:500;text-align:left}.ordm button:hover{background:var(--bg3)}.ordm button.cur{background:var(--bg3);font-weight:700}
+.recb{border:1px solid var(--br);border-radius:999px;background:var(--bg2);font-size:12px;font-weight:600;color:var(--t2);padding:6px 10px;white-space:nowrap;flex-shrink:0}.recb:hover{border-color:var(--am)}.recb.on{background:#FFF4E5;border-color:#F2C27B;color:#7A4A00}
 .ordsum{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-bottom:10px;font-size:11.5px;color:var(--t2)}.ordsum b{font-size:10.5px;letter-spacing:.8px;text-transform:uppercase;color:var(--t3);margin-right:3px}.ordsum span{background:var(--bg3);border-radius:999px;padding:2px 9px}
 .main{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.main .logo{min-width:92px;font-weight:600;font-size:13px}.main .mod{flex:1;min-width:150px}.main .pq{width:112px;font-weight:600;text-align:right}.main .fq{width:66px;text-align:right;padding:7px}.main small{font-size:11px;color:var(--t2)}
 .main .co{width:150px}.main .nw{width:150px}
@@ -144,7 +145,7 @@ textarea{min-height:92px;resize:vertical;line-height:1.45}
       <div id="offers"></div>
       <div class="actions"><button class="btn" id="addO">+ Afegir oferta a mà</button></div>
       <div class="warn err" id="warn"></div>
-      <div class="hint">Mapfre i Occident valoren a valor de mercat; la resta, a venal. Occident no es pot canviar.</div>
+      <div class="hint">Si marques una oferta com a recomanada, la seva prima surt destacada a dalt de la pàgina del client. Si no, només surten les opcions. Mapfre i Occident valoren a valor de mercat; la resta, a venal. Occident no es pot canviar.</div>
     </section>
 
     <section class="card">
@@ -295,7 +296,7 @@ const MODCA=Object.fromEntries(Object.entries(MOD).map(([k,v])=>[k,v.n[1]]));
 const LVN={t:'Tercers',a:'Tercers ampliat',r:'Tot risc'};
 const stOf=c=>c.split('');
 let nextId=1;
-const newOffer=x=>Object.assign({id:nextId++,k:'occident',n:'',val:'m',m:'f',name:'',q:'',pq:'',d:0,p:0,f:'',g:'',st:stOf(CAT.r.st),l:{},cat:'r',am:0,nt:'',show:true,ord:0,flags:[],sig:'',src:'',open:false},x);
+const newOffer=x=>Object.assign({id:nextId++,k:'occident',n:'',val:'m',m:'f',name:'',q:'',pq:'',d:0,p:0,f:'',g:'',st:stOf(CAT.r.st),l:{},cat:'r',am:0,nt:'',show:true,ord:0,rec:false,flags:[],sig:'',src:'',open:false},x);
 const S={l:'es',v:{us:'p'},p:[{r:{t:true,p:true,h:true,o:false},n:'',po:'',cp:'',fn:'',fc:'',doc:''}],offers:[],files:[],conf:[],alerts:[],tel:''};
 const num=s=>{s=String(s==null?'':s).replace(/[\s€]/g,'');if(s.includes(','))s=s.replace(/\./g,'').replace(',','.');const v=parseFloat(s);return isFinite(v)&&v>0?v:NaN;};
 const fm=(v,l)=>new Intl.NumberFormat(l==='ca'?'ca-ES':'es-ES',{style:'currency',currency:'EUR',minimumFractionDigits:2,maximumFractionDigits:2,useGrouping:'always'}).format(v);
@@ -661,7 +662,7 @@ function drawPeople(){
 const shownSorted=()=>S.offers.filter(o=>o.show).sort((a,b)=>a.ord-b.ord);
 function setOrd(o,n){
   const rest=shownSorted().filter(x=>x!==o);
-  if(n>0){o.show=true;rest.splice(Math.min(n-1,rest.length),0,o);}else{o.show=false;o.ord=0;}
+  if(n>0){o.show=true;rest.splice(Math.min(n-1,rest.length),0,o);}else{o.show=false;o.ord=0;o.rec=false;}
   rest.forEach((x,i)=>{x.ord=i+1;});
 }
 function defaultOrder(){
@@ -681,6 +682,7 @@ function offerHtml(o){
   return `<div class="of${o.show?'':' off'}" data-o="${o.id}">
    <div class="main">
     ${ordPill(o)}
+    <button class="recb${o.rec?' on':''}" data-rec title="La prima d'aquesta oferta surt destacada a dalt de la pàgina del client">${o.rec?'★ Recomanada':'☆ Recomanar'}</button>
     <span class="logo">${o.k&&!o.editK?`<i class="lg lg-${o.k}" data-ek title="Canviar companyia" style="cursor:pointer"></i>`:`<select class="co" data-of="k" aria-label="Companyia">${CIAS.map(([k,l])=>`<option value="${k}"${k===o.k?' selected':''}>${l}</option>`).join('')}</select>`}</span>
     ${!o.k&&!o.sig||(!o.k&&o.n)?`<input class="nw" type="text" data-of="n" placeholder="Nom de la companyia" maxlength="30" value="${eh(o.n)}">`:''}
     <select class="mod" data-of="m" aria-label="Modalitat">${Object.keys(MOD).map(k=>`<option value="${k}"${k===o.m?' selected':''}>${MODCA[k]}</option>`).join('')}</select>
@@ -699,7 +701,7 @@ function offerHtml(o){
 function drawOffers(){
   const lv=['t','a','r'].filter(l=>S.offers.some(o=>MOD[o.m].lv===l));
   const sum=shownSorted();
-  $('offers').innerHTML=(sum.length?`<div class="ordsum"><b>Ordre d'enviament</b>${sum.map(o=>`<span>${o.ord}. ${eh(ciaName(o)||'?')} · ${eh(o.name||MODCA[o.m])}</span>`).join('')}</div>`:'')+lv.map(l=>{const of=S.offers.filter(o=>MOD[o.m].lv===l);const sh=of.filter(o=>o.show).length;return `<div class="lvh">${LVN[l]}<small>${sh} de ${of.length} es mostren</small></div>${of.map(offerHtml).join('')}`;}).join('')||'<div class="hint">Importa un projecte o afegeix una oferta a mà.</div>';
+  $('offers').innerHTML=(sum.length?`<div class="ordsum"><b>Ordre d'enviament</b>${sum.map(o=>`<span>${o.ord}. ${o.rec?'★ ':''}${eh(ciaName(o)||'?')} · ${eh(o.name||MODCA[o.m])}</span>`).join('')}</div>`:'')+lv.map(l=>{const of=S.offers.filter(o=>MOD[o.m].lv===l);const sh=of.filter(o=>o.show).length;return `<div class="lvh">${LVN[l]}<small>${sh} de ${of.length} es mostren</small></div>${of.map(offerHtml).join('')}`;}).join('')||'<div class="hint">Importa un projecte o afegeix una oferta a mà.</div>';
 }
 const redraw=()=>{drawFiles();drawConf();drawVeh();drawPeople();drawOffers();dirty();};
 
@@ -713,6 +715,7 @@ function payload(){
     const key=o.k||('n:'+norm(o.n));let g=groups.find(x=>x.key===key);
     if(!g){g={key,val:o.k==='occident'?'m':o.val,o:[]};if(o.k)g.k=o.k;else g.n=o.n.trim();groups.push(g);}
     const r={m:o.m,q:num(o.q),st:o.st.join(''),i:o.ord};
+    if(o.rec)r.r=1;
     if(o.name.trim())r.n=o.name.trim();
     if(isFinite(num(o.pq)))r.pq=num(o.pq);
     if(o.d)r.d=1;if(o.p)r.p=1;if(o.am)r.am=1;
@@ -747,7 +750,7 @@ function build(){
   clearTimeout(pvT);pvT=setTimeout(()=>{if($('pv').dataset.u!==url){$('pv').dataset.u=url;$('pv').src=url;}},350);
   let M='';
   if(!bl){
-    const nm=(S.p.find(x=>x.r.t&&x.n.trim())||S.p.find(x=>x.n.trim())).n.trim().split(/\s+/)[0];
+    const nm0=(S.p.find(x=>x.r.t&&x.n.trim())||S.p.find(x=>x.n.trim())).n.trim().split(/\s+/)[0];const nm=nm0.charAt(0).toUpperCase()+nm0.slice(1).toLowerCase();
     const qs=shown.map(o=>num(o.q)),low=Math.min(...qs),many=shown.length>1,fromAny=many||shown[0].d;
     const veh=[S.v.ma,S.v.mo].map(s=>String(s).toUpperCase()).join(' ');
     M={es:`Hola ${nm}, te preparo la propuesta del seguro de tu ${veh}: ${many?`${shown.length} opciones, desde ${fm(low,'es')} al año`:`${fromAny?'desde ':''}${fm(low,'es')} al año`}. Se ve desde el móvil, sin registrarte: ${url}`,
@@ -810,6 +813,7 @@ $('offers').addEventListener('toggle',e=>{const d=e.target;if(!d.classList||!d.c
 addEventListener('click',e=>{if(S.menu&&!e.target.closest('.ordw')){S.menu=0;drawOffers();}});
 addEventListener('keydown',e=>{if(e.key==='Escape'&&S.menu){S.menu=0;drawOffers();}});
 $('offers').addEventListener('click',e=>{const t=e.target,o=offerOf(t);if(!o)return;
+  if(t.closest('[data-rec]')){const was=o.rec;S.offers.forEach(x=>{x.rec=false;});o.rec=!was;if(o.rec&&!o.show)setOrd(o,shownSorted().length+1);drawOffers();dirty();return;}
   const pick=t.closest('[data-ord]');
   if(pick){setOrd(o,+pick.dataset.ord);S.menu=0;drawOffers();dirty();return;}
   if(t.closest('[data-pill]')){S.menu=S.menu===o.id?0:o.id;drawOffers();return;}

@@ -141,7 +141,7 @@ textarea{min-height:92px;resize:vertical;line-height:1.45}
       </div>
 
       <div class="blk">
-        <h3><i class="ic i-fonendo"></i>Vídeo · 45 s</h3>
+        <h3><i class="ic i-fonendo"></i>Vídeo · 47 s</h3>
         <span class="lbl" style="margin-top:8px">Enllaç en directe (personalitzat, s'adapta a mòbil i PC)</span>
         <div class="link"><input type="text" id="urlvid" readonly><button class="btn" id="cuvid">Copiar</button><a class="btn" id="openvid" target="_blank" rel="noopener">Veure</a></div>
         <span class="lbl" style="margin-top:10px">MP4 per adjuntar (de la família d'exemple)</span>
@@ -204,11 +204,11 @@ function build(){
   const hi=nm?'Hola '+nm+',':'Hola,';
   const SUB={es:'Quieres copago y no lo sabes: tu simulación de seguro de salud',ca:'Vols copagament i no ho saps: la teva simulació d\'assegurança de salut'}[S.l];
   const BODY={
-   es:`${hi}\n\nTe he preparado una simulación de seguro de salud: compara con y sin copago y mira cuánto podrías ahorrar.\n\n- Simulación (versión web): ${urlpc}\n- Vídeo explicativo (45 s): ${urlvid}\n\nSe ve sin registrarte. Si quieres ajustarla a tu caso, respóndeme a este correo o escríbeme por WhatsApp al 972 42 66 65.\n\nUn saludo,\n${sig||'Optimizarte by Occident'}`,
-   ca:`${hi}\n\nT'he preparat una simulació d'assegurança de salut: compara amb i sense copagament i mira quant podries estalviar.\n\n- Simulació (versió web): ${urlpc}\n- Vídeo explicatiu (45 s): ${urlvid}\n\nEs veu sense registrar-te. Si vols ajustar-la al teu cas, respon-me a aquest correu o escriu-me per WhatsApp al 972 42 66 65.\n\nUna salutació,\n${sig||'Optimizarte by Occident'}`}[S.l];
+   es:`${hi}\n\nTe he preparado una simulación de seguro de salud: compara con y sin copago y mira cuánto podrías ahorrar.\n\n- Simulación (versión web): ${urlpc}\n- Vídeo explicativo (47 s): ${urlvid}\n\nSe ve sin registrarte. Si quieres ajustarla a tu caso, respóndeme a este correo o escríbeme por WhatsApp al 972 42 66 65.\n\nUn saludo,\n${sig||'Optimizarte by Occident'}`,
+   ca:`${hi}\n\nT'he preparat una simulació d'assegurança de salut: compara amb i sense copagament i mira quant podries estalviar.\n\n- Simulació (versió web): ${urlpc}\n- Vídeo explicatiu (47 s): ${urlvid}\n\nEs veu sense registrar-te. Si vols ajustar-la al teu cas, respon-me a aquest correu o escriu-me per WhatsApp al 972 42 66 65.\n\nUna salutació,\n${sig||'Optimizarte by Occident'}`}[S.l];
   const WA={
-   es:`${hi} te preparo esta simulación de seguro de salud: compara con y sin copago y ve cuánto podrías ahorrar (sin registrarte):\n${url}\n\nY aquí, un vídeo de 45 s que lo explica:\n${urlvid}${sig?'\n'+sig:''}`,
-   ca:`${hi} et preparo aquesta simulació d'assegurança de salut: compara amb i sense copagament i mira quant podries estalviar (sense registrar-te):\n${url}\n\nI aquí, un vídeo de 45 s que ho explica:\n${urlvid}${sig?'\n'+sig:''}`}[S.l];
+   es:`${hi} te preparo esta simulación de seguro de salud: compara con y sin copago y ve cuánto podrías ahorrar (sin registrarte):\n${url}\n\nY aquí, un vídeo de 47 s que lo explica:\n${urlvid}${sig?'\n'+sig:''}`,
+   ca:`${hi} et preparo aquesta simulació d'assegurança de salut: compara amb i sense copagament i mira quant podries estalviar (sense registrar-te):\n${url}\n\nI aquí, un vídeo de 47 s que ho explica:\n${urlvid}${sig?'\n'+sig:''}`}[S.l];
   $('subj').value=w.length?'':SUB;$('mailBody').value=w.length?'':BODY;$('waMsg').value=w.length?'':WA;
   const mt='mailto:'+encodeURIComponent(em).replace(/%40/g,'@')+'?subject='+encodeURIComponent(SUB)+'&body='+encodeURIComponent(BODY.replace(/\n/g,'\r\n'));
   $('mailto').href=w.length?'#':mt;

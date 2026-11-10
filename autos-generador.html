@@ -212,7 +212,9 @@ const MOD={
  f:{lv:'r',n:['Todo riesgo con franquicia','Tot risc amb franquícia']},
  s:{lv:'r',n:['Todo riesgo sin franquicia','Tot risc sense franquícia']}
 };
-/* st: un caracter por fila de ROWS. l: limite por fila, numero en euros o [es, ca] */
+/* LEGACY (10 nov 2026): solo para enlaces antiguos que llevan cat. Los enlaces nuevos NO usan esto: estados y limites salen del PDF
+   (regla de Dany: nunca fiarse de catalogos). Lo vigente de este fichero es la lista completa de coberturas posibles (occGroups, AP, ST) y sus traducciones.
+   st: un caracter por fila de ROWS. l: limite por fila, numero en euros o [es, ca] */
 const CAT={
  t:{m:'l',st:'yyyyynnnnynnn',am:0,puntos:0,l:{rcv:50000000,asi:['Básica','Bàsica'],con:15000,ani:12000}},
  c:{m:'c',st:'yyyyyyynyynyy',am:1,puntos:1,l:{rcv:50000000,asi:['Amplia','Ampliada'],con:15000,ani:12000,rep:['200 € / siniestro','200 € / sinistre']}},
@@ -302,7 +304,7 @@ const MODCA=Object.fromEntries(Object.entries(MOD).map(([k,v])=>[k,v.n[1]]));
 const LVN={t:'Tercers',a:'Tercers ampliat',r:'Tot risc'};
 const stOf=c=>c.split('');
 let nextId=1;
-const newOffer=x=>Object.assign({id:nextId++,k:'occident',n:'',val:'m',m:'f',name:'',q:'',pq:'',d:0,p:0,f:'',g:'',st:stOf(CAT.r.st),l:{},cat:'r',am:0,nt:'',show:true,ord:0,rec:false,flags:[],sig:'',src:'',open:false},x);
+const newOffer=x=>Object.assign({id:nextId++,k:'occident',n:'',val:'m',m:'f',name:'',q:'',pq:'',d:0,p:0,f:'',g:'',st:ROWS.map(()=>'u'),l:{},am:0,dd:0,dx:[],dn:[],apx:[],stx:[],n3:0,nt:'',show:true,ord:0,rec:false,flags:[],sig:'',src:'',open:false},x);
 const S={l:'es',v:{us:'p'},p:[{r:{t:true,p:true,h:true,o:false},n:'',po:'',cp:'',fn:'',fc:'',doc:''}],offers:[],files:[],conf:[],alerts:[],tel:'',short:''};
 const num=s=>{s=String(s==null?'':s).replace(/[\s€]/g,'');if(s.includes(','))s=s.replace(/\./g,'').replace(',','.');const v=parseFloat(s);return isFinite(v)&&v>0?v:NaN;};
 const fm=(v,l)=>new Intl.NumberFormat(l==='ca'?'ca-ES':'es-ES',{style:'currency',currency:'EUR',minimumFractionDigits:2,maximumFractionDigits:2,useGrouping:'always'}).format(v);
@@ -406,32 +408,55 @@ function parseOccident(pages,fileName){
     if(m=/^Nombre:\s*(.*)/i.exec(l))cur.n=m[1];else if(m=/^Poblaci[oó]n:\s*(.*)/i.exec(l))cur.po=m[1];else if(m=/^C[oó]digo postal:\s*(.*)/i.exec(l))cur.cp=m[1];
     else if(m=/^NIF\/CIF:\s*(.*)/i.exec(l))cur.doc=m[1];else if(m=/^Fecha de nacimiento:\s*(.*)/i.exec(l))cur.fn=iso(m[1]);else if(m=/^Fecha de carn[eé]t?:\s*(.*)/i.exec(l))cur.fc=iso(m[1]);
   });
-  /* oferta completa */
+  /* oferta completa: TODO sale del PDF. El catàleg només aporta la llista completa de cobertures possibles i les seves traduccions. */
   const total=/Prima total:\s*([\d.,]+)\s*€/i.exec(T),forma=/Forma de pago:\s*(\w+)/i.exec(T);
   const dpM=/Daños propios con franquicia\s*([\d.]+)\s*€/i.exec(T),dpSin=/^Daños propios/im.test(T);
   const g=/En otros talleres\s*\n?\s*Franquicia\s*([\d.]+)\s*€/i.exec(T);
   const has=r=>r.test(T);
-  const cov={lun:has(/Rotura de lunas/i),atm:has(/fen[oó]menos atmosf[eé]ricos/i),ani:has(/animales cineg[eé]ticos/i),inc:has(/^Incendio\b/im),rob:has(/^Robo\b/im),dp:dpSin,acc:has(/Exceso de equipamiento/i),rep:has(/Reparaciones urgentes/i)};
-  const cat=cov.dp?'r':(cov.inc&&cov.rob)?'c':'t';
+  const cov={rcv:has(/Capital complementario de RC|Responsabilidad civil en la circulaci/i),asi:has(/Asistencia en viaje/i),con:has(/Accidentes corporales del conductor/i),def:has(/Protecci[oó]n jur[ií]dica|Defensa judicial/i),
+    lun:has(/Rotura de lunas/i),rob:has(/^Robo\b/im),inc:has(/^Incendio\b/im),dp:dpSin,atm:has(/fen[oó]menos atmosf[eé]ricos/i),ani:has(/animales cineg[eé]ticos/i),sus:has(/Veh[ií]culo de sustituci[oó]n/i),acc:has(/Exceso de equipamiento/i),rep:has(/Reparaciones urgentes/i)};
   const am=/Asistencia en viaje amplia/i.test(T)?1:0;
-  const st=stOf(CAT[cat].st);Object.keys(cov).forEach(k=>{st[RI[k]]=cov[k]?'y':'n';});
-  const mod=cat==='r'?(dpM?'f':'s'):CAT[cat].m;
-  const l={};const ex=/Exceso de equipamiento opcional\s*([\d.]+)\s*€/i.exec(T);if(ex)l[RI.acc]=eurV(ex[1]);
+  const st=ROWS.map(r=>cov[r.k]?'y':'n');
+  const mod=cov.dp?(dpM?'f':'s'):(cov.inc&&cov.rob)?'c':cov.lun?'l':'t';
+  const l={};
+  const eN=rx=>{const m=rx.exec(T);return m?eurV(m[1]):NaN;};
+  let v0;
+  v0=eN(/Capital complementario de RC:\s*([\d.]+)/i);if(isFinite(v0))l[RI.rcv]=v0;
+  v0=eN(/Capital en caso de muerte\s*([\d.]+)/i);if(isFinite(v0))l[RI.con]=v0;
+  v0=eN(/animales cineg[eé]ticos y dom[eé]sticos\s*Hasta\s*([\d.]+)/i);if(isFinite(v0))l[RI.ani]=v0;
+  v0=eN(/Exceso de equipamiento opcional\s*([\d.]+)/i);if(isFinite(v0))l[RI.acc]=v0;
+  const rp=/(\d[\d.]*)\s*€?\s*\/\s*siniestro/i.exec(T);if(rp&&cov.rep)l[RI.rep]=[`${rp[1]} € / siniestro`,`${rp[1]} € / sinistre`];
+  if(cov.asi)l[RI.asi]=am?['Amplia','Ampliada']:['Básica','Bàsica'];
+  const n3=cov.ani&&/\(3\)/.test(T)?1:0;
+  /* detall: cada línia del catàleg només surt si el PDF la porta; si el seu import no coincideix amb el del PDF, s'amaga l'import */
+  const PT=norm(T);
+  const sec=(a,b)=>{const i=PT.search(a);if(i<0)return '';const rest=PT.slice(i);const j=b?rest.search(b):-1;return j>0?rest.slice(0,j):rest;};
+  const tok=x=>norm(x).replace(/[^a-z0-9 ]/g,' ').split(' ').filter(w=>w.length>=4&&!['para','como','sobre','entre','desde','hasta'].includes(w));
+  const hit=(label,hay)=>{const t=tok(label);if(!t.length)return hay.includes(norm(label));return t.filter(w=>hay.includes(w)).length>=Math.ceil(t.length*0.75);};
+  const dots=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+  const numsOf=x=>typeof x==='number'?[x]:Array.isArray(x)?(String(x[0]).match(/\d[\d.]*/g)||[]).map(eurV).filter(isFinite):[];
+  const numOk=(x,hay)=>numsOf(x).every(n=>new RegExp('(^|[^\d.])'+dots(n).replace(/\./g,'\.')+'([^\d]|$)').test(hay));
+  const GH=[PT,PT,sec('accidentes corporales del conductor','accidentes corporales de los ocupantes'),sec('accidentes corporales de los ocupantes','otros servicios y coberturas'),sec('asistencia al vehiculo','asistencia a las personas'),sec('asistencia a las personas','recuperacion de puntos'),PT];
+  const dx=[],dn=[];let ix=0;
+  occGroups(am,true).forEach((gr,gi)=>{const hay=GH[gi]||'';gr.r.forEach(r=>{const k=ix++;
+    if(!hay||(gi===1&&!/proteccion juridica/.test(PT))||!hit(r[0],hay)){dx.push(k);return;}
+    if(r[2]!=='i'&&r[2]!==undefined&&!numOk(r[2],hay))dn.push(k);});});
+  const apHay=sec('ventajas exclusivas'),apx=AP.map((x,k)=>hit(x[0],apHay)?-1:k).filter(k=>k>=0);
+  const stRx=[/100% del valor a nuevo/,/100% del valor de compra/,/80% del valor de nuevo/,/100% del valor de mercado/],stx=stRx.map((r,k)=>r.test(PT)?-1:k).filter(k=>k>=0);
   const al=[];
-  CAT[cat].st.split('').forEach((c,i)=>{if(c!==st[i]&&ROWS[i].k!=='sus')al.push(`Occident ${LVN[MOD[mod].lv]}: «${ROWS[i].t[1]}» no coincideix amb el catàleg (${fileName}). Revisa el catàleg si el producte ha canviat.`);});
-  const cap=/Capital en caso de muerte\s*([\d.]+)\s*€/i.exec(T);if(cap&&eurV(cap[1])!==15000)al.push(`Occident: el capital de conductor d'aquest projecte és ${cap[1]} €, diferent del catàleg.`);
+  if(dx.length||dn.length||apx.length||stx.length)al.push(`Occident: ${dx.length+apx.length+stx.length} línies del catàleg de detall no surten al PDF i no es mostraran${dn.length?`; ${dn.length} imports no coincideixen i es mostraran com a «Inclosa»`:''} (${fileName}).`);
   if(forma&&!/anual/i.test(forma[1]))al.push(`Occident: la forma de pagament és «${forma[1]}»: comprova que la prima sigui anual.`);
   const offers=[];
-  if(total)offers.push({k:'occident',val:'m',m:mod,q:eurV(total[1]),f:dpM?eurV(dpM[1]):NaN,g:g?eurV(g[1]):NaN,st,l,cat,am,d:0,p:0,flags:[],src:fileName});
-  /* altres ofertes "desde" */
+  if(total)offers.push({k:'occident',val:'m',m:mod,q:eurV(total[1]),f:dpM?eurV(dpM[1]):NaN,g:g?eurV(g[1]):NaN,st:st.slice?st:st,l,am,dd:1,dx,dn,apx,stx,n3,d:0,p:0,flags:[],src:fileName});
+  /* altres ofertes "desde": el PDF només en dona el preu, així que les cobertures NO consten */
   const i0=L.findIndex(x=>/^Otras Ofertas disponibles/i.test(x));
   if(i0>=0)for(let i=i0+1;i<L.length&&!/^\*\s*Franquicia/i.test(L[i]);i++){
     const x=/^-?\s*(Terceros completo|Terceros|TR con franquicia de\s*(\d+) euros.*?|TR sin franquicia.*?)\s+([\d.,]+)\s*€/i.exec(L[i]);if(!x)continue;
     const n=norm(x[1]);const c=n.startsWith('tr')?'r':n.includes('completo')?'c':'t';
-    offers.push({k:'occident',val:'m',m:c==='r'?(x[2]?'f':'s'):CAT[c].m,q:eurV(x[3]),f:x[2]?+x[2]:NaN,g:NaN,st:stOf(CAT[c].st),l:{},cat:c,am:CAT[c].am,d:1,p:0,flags:['Preu «des de»','Cobertures del catàleg'],src:fileName});
+    offers.push({k:'occident',val:'m',m:c==='r'?(x[2]?'f':'s'):c==='c'?'c':'t',q:eurV(x[3]),f:x[2]?+x[2]:NaN,g:NaN,st:ROWS.map(()=>'u'),l:{},am:0,dd:0,dx:[],dn:[],apx:[],stx:[],n3:0,d:1,p:0,flags:['Preu «des de»','Cobertures no verificades: adjunta el projecte d\'aquesta modalitat'],src:fileName});
   }
   const fD=/Fecha:\s*(\d{1,2}) de (\w+) de (\d{4})/i.exec(T);
-  return {type:'occident',label:cat==='r'?'Occident · Tot risc':cat==='c'?'Occident · Tercers complet':'Occident · Tercers',v,P,offers,alerts:al,tel:'',veh:[v.ma,v.mo,v.ve].filter(Boolean).join(' ')};
+  return {type:'occident',label:MOD[mod].lv==='r'?'Occident · Tot risc':mod==='c'?'Occident · Tercers complet':'Occident · Tercers',v,P,offers,alerts:al,tel:'',veh:[v.ma,v.mo,v.ve].filter(Boolean).join(' ')};
 }
 /* ---------- AVANT ---------- */
 const AVL=['Fecha de creación','Presupuesto','Fecha de efecto','Tomador','Datos de contacto','Asesor comercial','Vehículo','Matrícula anterior','Matrícula','Fecha de matriculación','Propietario \\((?:DNI|NIE|CIF|NIF)\\)','Fecha de compra','Tipo de garaje','Kilómetros anuales','Zona de circulación','DNI','NIE','NIF','Sexo','Fecha de nacimiento','Estado civil','Fecha de carnet','Zona de expedición','Experiencia','Compañía Anterior','Póliza anterior','Total de años asegurado','Años sin siniestros','Años en compañía anterior'];
@@ -607,7 +632,7 @@ function merge(){
   /* ofertes */
   const out=[];
   ok.forEach(f=>f.res.offers.forEach(o=>{
-    const key=o.k==='occident'?`occ|${o.cat}|${o.f||''}`:'';
+    const key=o.k==='occident'?`occ|${o.m}|${o.f||''}`:'';
     const ex=key&&out.find(x=>x._key===key);
     if(ex){
       if(Math.abs(ex.q-o.q)>0.005)alerts.push({t:'am',s:`Occident ${MOD[o.m].n[1]}${isFinite(o.f)?' '+o.f+' €':''}: el preu no coincideix entre projectes (${fm(ex.q,'ca')} i ${fm(o.q,'ca')}).`});
@@ -623,10 +648,10 @@ function merge(){
   S.offers=out.map(o=>{const{_key,...r}=o;return newOffer(Object.assign({},r,{q:nStr(r.q),pq:nStr(r.pq),f:nStr(r.f),g:nStr(r.g),show:!r.d}));}).concat(stay);
   defaultOrder();
   /* coherencia */
-  const trs=out.filter(o=>o.k==='occident'&&o.cat==='r'&&isFinite(o.f)).sort((a,b)=>a.f-b.f);
+  const trs=out.filter(o=>o.k==='occident'&&MOD[o.m].lv==='r'&&isFinite(o.f)).sort((a,b)=>a.f-b.f);
   for(let i=0;i+1<trs.length;i++)if(trs[i+1].q>trs[i].q)alerts.push({t:'am',s:`Occident Tot risc: la franquícia de ${trs[i+1].f} € (${fm(trs[i+1].q,'ca')}) surt més cara que la de ${trs[i].f} € (${fm(trs[i].q,'ca')}). Els «des de» poden portar altres opcions: comprova-ho abans d'ensenyar-los junts.`});
-  if(out.some(o=>o.k==='occident'&&o.am&&o.cat==='c')&&out.some(o=>o.k==='occident'&&!o.am&&o.cat==='r'))alerts.push({t:'inf',s:'Occident: el Tercers complet porta assistència ampliada i el Tot risc, bàsica. Al client es mostra tal com és.'});
-  if(out.some(o=>o.d))alerts.push({t:'inf',s:'Les ofertes «des de» d\'Occident queden sense marcar. Les seves cobertures surten del catàleg: comprova-les si les envies.'});
+  if(out.some(o=>o.k==='occident'&&o.am&&MOD[o.m].lv==='a')&&out.some(o=>o.k==='occident'&&!o.am&&MOD[o.m].lv==='r'))alerts.push({t:'inf',s:'Occident: el Tercers complet porta assistència ampliada i el Tot risc, bàsica. Al client es mostra tal com és.'});
+  if(out.some(o=>o.d))alerts.push({t:'inf',s:'Les ofertes «des de» d\'Occident queden sense marcar. Sense cobertures: el PDF només en dona el preu. Adjunta el projecte de cada modalitat per veure-les.'});
   if(out.some(o=>!o.k&&o.sig))alerts.push({t:'am',s:'Hi ha un logo que no reconec: tria la companyia a la secció 4. Quedarà recordada en aquest ordinador.'});
   if(conf.length)alerts.push({t:'am',s:`${conf.length>1?`Hi ha ${conf.length} dades que no coincideixen`:'Hi ha 1 dada que no coincideix'} entre projectes (seccions 2 i 3). Si és rellevant, els preus poden no ser comparables: recalcula abans d'enviar.`});
   ok.forEach(f=>f.res.alerts.forEach(s=>alerts.push({t:'am',s})));
@@ -726,7 +751,7 @@ function payload(){
     if(isFinite(num(o.pq)))r.pq=num(o.pq);
     if(o.d)r.d=1;if(o.p)r.p=1;if(o.am)r.am=1;
     if(isFinite(num(o.f)))r.f=num(o.f);if(isFinite(num(o.g)))r.g=num(o.g);
-    if(o.cat&&o.k==='occident')r.cat=o.cat;
+    if(o.k==='occident'&&o.dd){r.dd=1;if(o.dx.length)r.dx=o.dx;if(o.dn.length)r.dn=o.dn;if(o.apx.length)r.apx=o.apx;if(o.stx.length)r.stx=o.stx;if(o.n3)r.n3=1;}
     if(Object.keys(o.l).length)r.l=o.l;
     if(o.nt)r.nt=o.nt;
     g.o.push(r);
@@ -838,7 +863,7 @@ $('offers').addEventListener('input',e=>{const t=e.target,o=offerOf(t);if(!o)ret
   if(t.dataset.st!==undefined){o.st[+t.dataset.st]=t.value;if(ROWS[+t.dataset.st].k==='dp')drawOffers();dirty();return;}
   const k=t.dataset.of;if(!k)return;
   if(k==='p'){o.p=t.checked?1:0;}
-  else if(k==='k'){o.k=t.value;o.editK=false;o.val=valFor(o.k);if(o.k!=='occident'){o.g='';o.cat='';}
+  else if(k==='k'){o.k=t.value;o.editK=false;o.val=valFor(o.k);if(o.k!=='occident'){o.g='';o.dd=0;}
     if(o.sig&&o.k){const d=learned();d[o.k]=[].concat(d[o.k]||[],o.sig);try{localStorage.setItem('autos.logos',JSON.stringify(d));}catch(_){}
       S.offers.forEach(x=>{if(!x.k&&x.sig===o.sig){x.k=o.k;x.val=valFor(o.k);}o.flags=o.flags.filter(f=>f!=='Companyia per identificar');x.flags=x.flags.filter(f=>f!=='Companyia per identificar');});}
     drawOffers();}
@@ -856,7 +881,7 @@ $('offers').addEventListener('click',e=>{const t=e.target,o=offerOf(t);if(!o)ret
   if(t.dataset.ek!==undefined){o.editK=true;drawOffers();return;}
   if(t.dataset.val&&!t.disabled){o.val=t.dataset.val;drawOffers();dirty();}
   if(t.dataset.delo!==undefined){setOrd(o,0);S.offers=S.offers.filter(x=>x!==o);drawOffers();dirty();}});
-$('addO').onclick=()=>{S.offers.push(newOffer({k:'',n:'',val:'v',m:'f',cat:'',st:stOf(CAT.r.st).map((c,i)=>ROWS[i].k==='rep'||ROWS[i].k==='sus'?'u':c),ord:shownSorted().length+1}));drawOffers();dirty();};
+$('addO').onclick=()=>{S.offers.push(newOffer({k:'',n:'',val:'v',m:'f',cat:'',st:ROWS.map(()=>'u'),ord:shownSorted().length+1}));drawOffers();dirty();};
 $('tel').addEventListener('input',e=>{S.tel=e.target.value;setWa($('url').value==='');});
 $('msg').addEventListener('input',()=>{$('msg').dataset.edited='1';setWa($('url').value==='');});
 if(SHORT_API){$('mkShort').onclick=makeShort;$('cushort').onclick=()=>copy($('shorturl').value);}

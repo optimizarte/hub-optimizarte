@@ -338,7 +338,7 @@ button.kpi{width:100%;max-width:520px;margin:14px auto 0;text-align:left;cursor:
       <div class="fn" id="cmpFn"></div>
     </section>
 
-    <section class="card rv full">
+    <section class="card rv full" id="mcCard">
       <div class="st"><i class="ic i-autos"></i><h2><span data-t="mcH"></span><small id="mcS"></small></h2></div>
       <div class="mc" id="mc"></div>
       <div class="fn" id="mcFn"></div>
@@ -397,7 +397,8 @@ button.kpi{width:100%;max-width:520px;margin:14px auto 0;text-align:left;cursor:
         c:[{k,n,val:'m'|'v',o:[{m,n,q,pq,d,p,f,g,st,l,cat,am,nt}]}]} companias y opciones
          o.m modalidad (ver MOD) · o.n nombre propio · o.q prima anual · o.pq primer recibo si es distinto
          o.d 1 = precio "desde" · o.p 1 = pendiente de confirmar · o.f franquicia · o.g franquicia fuera de AutoPresto
-         o.st un estado por fila de ROWS · o.l limites por indice de fila · o.cat modalidad en el catalogo de Occident
+         o.st un estado por fila de ROWS (leido del PDF) · o.l limites por indice de fila (leidos del PDF) · o.cat SOLO enlaces antiguos (catalogo)
+         o.dd 1 = lleva detalle · o.dx/o.dn indices del detalle que NO salen / cuyo importe no coincide · o.apx/o.stx idem para AutoPresto y siniestro total · o.n3 nota (1)
          o.i orden de envio · o.r 1 = recomendada · o.am 1 = asistencia amplia · o.nt nota corta
    Solo llega al enlace lo que el equipo marca como visible.
    Coberturas de Occident: occident_catalogo.js. Las de otras companias vienen del proyecto de AVANT.
@@ -454,7 +455,9 @@ const MOD={
  f:{lv:'r',n:['Todo riesgo con franquicia','Tot risc amb franquícia']},
  s:{lv:'r',n:['Todo riesgo sin franquicia','Tot risc sense franquícia']}
 };
-/* st: un caracter por fila de ROWS. l: limite por fila, numero en euros o [es, ca] */
+/* LEGACY (10 nov 2026): solo para enlaces antiguos que llevan cat. Los enlaces nuevos NO usan esto: estados y limites salen del PDF
+   (regla de Dany: nunca fiarse de catalogos). Lo vigente de este fichero es la lista completa de coberturas posibles (occGroups, AP, ST) y sus traducciones.
+   st: un caracter por fila de ROWS. l: limite por fila, numero en euros o [es, ca] */
 const CAT={
  t:{m:'l',st:'yyyyynnnnynnn',am:0,puntos:0,l:{rcv:50000000,asi:['Básica','Bàsica'],con:15000,ani:12000}},
  c:{m:'c',st:'yyyyyyynyynyy',am:1,puntos:1,l:{rcv:50000000,asi:['Amplia','Ampliada'],con:15000,ani:12000,rep:['200 € / siniestro','200 € / sinistre']}},
@@ -562,6 +565,7 @@ ca:{brand:'Assegurança d\'automòbil',hi:'Hola',lead1:v=>`Aquí tens la millor 
 function decode(s){try{const b=atob(s.replace(/-/g,'+').replace(/_/g,'/'));return JSON.parse(new TextDecoder().decode(Uint8Array.from(b,c=>c.charCodeAt(0))));}catch(e){return null;}}
 const D=SH?SH.d:(decode(Q.get('d')||'')||{});
 const txt=(s,n)=>typeof s==='string'?s.slice(0,n||60):'';
+const ints=a=>Array.isArray(a)?a.map(Number).filter(n=>Number.isInteger(n)&&n>=0).slice(0,200):[];
 const money=v=>{v=parseFloat(v);return isFinite(v)&&v>0?Math.round(v*100)/100:NaN;};
 const VH=D.v&&typeof D.v==='object'?D.v:{};
 const PP=(Array.isArray(D.p)?D.p:[]).slice(0,4).filter(p=>p&&typeof p==='object');
@@ -572,10 +576,16 @@ let CC=(Array.isArray(D.c)?D.c:[]).slice(0,4).filter(c=>c&&typeof c==='object').
     o:(Array.isArray(c.o)?c.o:[]).slice(0,4).filter(o=>o&&typeof o==='object').map(o=>{
       const st=typeof o.st==='string'&&o.st.length===ROWS.length&&/^[yonu]+$/.test(o.st)?o.st:'u'.repeat(ROWS.length);
       const l={};if(o.l&&typeof o.l==='object')Object.keys(o.l).forEach(i=>{if(ROWS[i]&&(typeof o.l[i]==='string'||typeof o.l[i]==='number'))l[i]=o.l[i];});
-      return {m:MOD[o.m]?o.m:'f',n:txt(o.n,40),q:money(o.q),pq:money(o.pq),d:!!o.d,p:!!o.p,f:money(o.f),g:money(o.g),st,l,cat:CAT[o.cat]?o.cat:'',am:!!o.am,nt:txt(o.nt,30),i:+o.i||0,r:!!o.r};
+      return {m:MOD[o.m]?o.m:'f',n:txt(o.n,40),q:money(o.q),pq:money(o.pq),d:!!o.d,p:!!o.p,f:money(o.f),g:money(o.g),st,l,cat:CAT[o.cat]?o.cat:'',am:!!o.am,dd:!!o.dd,dx:ints(o.dx),dn:ints(o.dn),apx:ints(o.apx),stx:ints(o.stx),n3:!!o.n3,nt:txt(o.nt,30),i:+o.i||0,r:!!o.r};
     })};
 }).filter(c=>c.o.length);
-if(!CC.length){const r=CAT.r;CC=[{k:'occident',occ:true,name:'Occident',val:'m',o:[{m:'f',n:'',q:NaN,pq:NaN,d:false,p:false,f:240,g:300,st:r.st,l:{},cat:'r',am:false,nt:''}]}];MODE='e';}
+if(!CC.length){
+  /* Sin datos no se muestra nada inventado: esta pagina solo vale con un enlace del generador. */
+  const T0={es:['Falta la propuesta','Abre el enlace que te hemos enviado o escríbenos y te lo volvemos a enviar.'],ca:['Falta la proposta',"Obre l'enllaç que t'hem enviat o escriu-nos i te'l tornem a enviar."]}[L];
+  document.querySelector('main').innerHTML=`<section class="card full" style="text-align:center;padding:32px 20px"><h2 style="font-size:20px;font-weight:600;margin-bottom:8px">${T0[0]}</h2><p style="color:var(--t2);margin-bottom:18px">${T0[1]}</p><a href="https://wa.me/34972426665" style="color:var(--brand);font-weight:600">WhatsApp 972 42 66 65</a></section>`;
+  $('cta').style.display='none';$('foot').textContent=T.foot;
+  throw new Error('sin datos');
+}
 const FLAT=[];CC.forEach(c=>c.o.forEach(o=>FLAT.push({c,o,lv:MOD[o.m].lv})));
 const ORDERED=FLAT.some(x=>x.o.i>0);
 FLAT.sort((a,b)=>ORDERED?(a.o.i-b.o.i):(LVORD.indexOf(a.lv)-LVORD.indexOf(b.lv)));
@@ -603,7 +613,7 @@ function mainVal(c,o,i){
   if(k==='dp')return isFinite(o.f)?T.fr(frText(c,o))+(c.occ?' (*)':''):T.noFr;
   const v=limitOf(c,o,i);
   if(c.occ){
-    if(k==='ani')return T.upto(v||cap(12000))+(o.cat==='r'?'':' (1)');
+    if(k==='ani')return o.cat?T.upto(v||cap(12000))+(o.cat==='r'?'':' (1)'):(v?T.upto(v):T.incl)+(o.n3?' (1)':'');
   }
   if(k==='ani'&&v)return T.upto(v);
   return v||T.incl;
@@ -652,17 +662,27 @@ function paint(){
     return `<div class="r${v?'':' no'}${s==='o'?' op':''}"><span><i class="ic i-${v&&s!=='o'?'ok':'ko'}"></i>${esc(m.t[LI])}</span><b class="${v&&s!=='o'?'inc':''}">${esc(v||T.no)}</b></div>`;}).join('');
   const fn=[];
   if(c.occ&&state(o,RI.dp)==='y'&&isFinite(o.f))fn.push(frNote(o));
-  if(c.occ&&state(o,RI.ani)==='y'&&o.cat!=='r')fn.push(T.fn3);
+  if(c.occ&&state(o,RI.ani)==='y'&&(o.cat?o.cat!=='r':o.n3))fn.push(T.fn3);
   $('mcFn').innerHTML=fn.map(x=>`<div>${esc(x)}</div>`).join('');
   /* detalle: solo tenemos el de Occident (catalogo + IPID) */
-  $('covCard').style.display=c.occ?'':'none';
-  $('otherCard').style.display=c.occ?'none':'';
-  if(c.occ){
+  /* detalle: Occident, con la lista completa de coberturas posibles filtrada por lo que lleva el proyecto. Los enlaces antiguos (con cat) siguen como estaban. */
+  const hasDet=c.occ&&(o.cat||o.dd);
+  $('covCard').style.display=hasDet?'':'none';
+  $('otherCard').style.display=!c.occ?'':'none';
+  $('mcCard').style.display=o.st.split('').every(x=>x==='u')?'none':'';
+  if(c.occ&&o.cat){
     const cat=CAT[o.cat||'r'];
     $('covs').innerHTML=occGroups(o.am||cat.am,cat.puntos).map(g=>grp(g.ic,g.t[LI],rows(g.r),g.open)).join('')
       +(state(o,RI.dp)==='y'?grp('obrero',T.apH,list(AP)):'')
       +grp('candau',T.stH,list(ST));
-  }else $('otherNote').textContent=T.otherN(c.name);
+  }else if(c.occ&&o.dd){
+    const dxs=new Set(o.dx),dns=new Set(o.dn);let ix=0;
+    const gs=occGroups(o.am,true).map(g=>({...g,r:g.r.map(x=>[x,ix++]).filter(([x,k])=>!dxs.has(k)).map(([x,k])=>dns.has(k)?[x[0],x[1],'i']:x)})).filter(g=>g.r.length);
+    const ap=AP.filter((x,k)=>!o.apx.includes(k)),sta=ST.filter((x,k)=>!o.stx.includes(k));
+    $('covs').innerHTML=gs.map(g=>grp(g.ic,g.t[LI],rows(g.r),g.open)).join('')
+      +(ap.length?grp('obrero',T.apH,list(ap)):'')
+      +(sta.length?grp('candau',T.stH,list(sta)):'');
+  }else if(!c.occ)$('otherNote').textContent=T.otherN(c.name);
   const wa=T.wa(`${c.name}, ${nm}`);
   $('aWa').href=`https://wa.me/${TEL}?text=${encodeURIComponent(wa)}`;
   $('aMail').href=`mailto:${MAIL}?subject=${encodeURIComponent(T.mailSub)}&body=${encodeURIComponent(wa)}`;

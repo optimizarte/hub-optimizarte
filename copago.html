@@ -204,6 +204,8 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
 .rC .p{background:var(--brand)}.rC .c{background:repeating-linear-gradient(45deg,var(--brand),var(--brand) 4px,rgba(220,0,40,.35) 4px,rgba(220,0,40,.35) 8px)}
 .rK .p{background:var(--comp)}.rK .c{background:repeating-linear-gradient(45deg,var(--comp),var(--comp) 4px,rgba(42,42,49,.35) 4px,rgba(42,42,49,.35) 8px)}
 .pills3 .qs{background:var(--t3)}.pills3 .qa{background:var(--ade)}.pills3 .qc{background:var(--brand)}.pills3 .qk{background:var(--comp)}
+.app{--c5:#B26A00}.rF .p{background:var(--c5)}.rF .c{background:repeating-linear-gradient(45deg,var(--c5),var(--c5) 4px,rgba(178,106,0,.35) 4px,rgba(178,106,0,.35) 8px)}.pills3 .qf{background:var(--c5)}.pb.c5x{background:var(--c5)}.pb+.pb{margin-left:-4px}
+.pdfcard{display:flex;align-items:center;gap:12px;margin-top:16px;border:1px solid var(--br);border-radius:var(--radius);padding:12px 14px;background:var(--bg3);text-decoration:none;color:var(--t1);font-weight:600;font-size:14px}.pdfcard .ic{width:38px;height:38px}.pdfcard small{display:block;color:var(--t3);font-weight:400;font-size:12px;margin-top:2px}.pdfcard:after{content:"\203A";margin-left:auto;font-size:24px;color:var(--brand)}
 .sv,.inv{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
 .acc{padding:0;overflow:hidden}.pc .card.acc{padding:0}
 .acc summary{list-style:none;display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer}.acc summary::-webkit-details-marker{display:none}
@@ -305,6 +307,7 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
       <ul class="checks" id="checks"></ul>
       <div class="kick" style="margin-top:14px" data-t="remind"></div>
       <div class="pills3" id="pills3"></div>
+      <a class="pdfcard" id="pdfL" target="_blank" rel="noopener" style="display:none"><i class="ic i-pdf"></i><span><span data-t="pdfT"></span><small data-t="pdfS"></small></span></a>
     </section>
   </main>
   <div class="footer-bar" id="foot"></div>
@@ -329,13 +332,15 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
      v = (obsoleto, se ignora)                 una sola versión: móvil < 900 px, web ancha >= 900 px
      p  = S,A,C                   primas ANUALES de Sin copago, Advance y Copago 20; vacío = no se muestra (p. ej. p=,2529.10,1481.60)
      pn = nomS|nomA|nomC          nombres de los productos (vacío = por defecto)
+     p5 = prima anual Copago 5    (opcional; vacío = no se muestra) · pn5 = nombre de Copago 5
+     pdf = https://…              enlace a los proyectos originales (OneDrive/Dropbox); solo aparece la card si se indica
      c  = 1                       comparar con la competencia (la competencia va siempre la primera por la izquierda)
      ck = clave de logo o nombre  companyía (p. ej. mapfre, o texto libre si no hay logo)
      cn = nombre del producto     (p. ej. Plenos)
      cp = prima anual             prima anual de la competencia
      cr = s | c | x               copagos de la competencia: s = sin copago · c = como Copago 20 · x = personalizado
      cx = €visita,€actoGrande,gratis/persona   (solo con cr=x)
-     t1 = cmp | cop | none | texto  titular grande;  t2 = lo mismo para el titular pequeño
+     t1 = cmp | cop | opt | none | texto  titular grande (por defecto: cop si hay Copago 5 o 20, si no opt);  t2 = lo mismo para el titular pequeño
      a  = H50,M42,M5,H1           asegurados (sexo H/M + edad)
      n  = nombres (encodeURIComponent, separados por comas, mismo orden que a)
      r  = 3                       rentabilidad anual compuesta en %
@@ -358,28 +363,31 @@ const dec1=v=>v.toFixed(1).replace('.',L==='ca'?',':',');
 const $=id=>document.getElementById(id);
 
 /* ---------- reglas de copago y productos ---------- */
-const RULES={s:{cop:0,alto:0,free:0},a:{cop:COPAGO,alto:ALTO,free:15},c:{cop:COPAGO,alto:ALTO,free:0}};
+const RULES={s:{cop:0,alto:0,free:0},a:{cop:COPAGO,alto:ALTO,free:15},f:{cop:5,alto:25,free:0},c:{cop:COPAGO,alto:ALTO,free:0}};
 const DEFN=L==='ca'?['Sense copagament','Advance','Copagament 20']:['Sin copago','Advance','Copago 20'];
-const DEFP=[3629.02,2529.10,1481.60];
+const DEFP=[3629.02,2529.10,1481.60], DEF5=L==='ca'?'Copagament 5':'Copago 5';
 const PRODS=(function(){
-  const hasP=Q.has('p'), pp=(Q.get('p')||'').split(','), pn=(Q.get('pn')||'').split('|');
-  let occ=['s','a','c'].map((id,i)=>{const v=parseFloat((pp[i]||'').replace(',','.'));const an=hasP?(isFinite(v)&&v>0?v:0):DEFP[i];
-    return an>0?{id,name:(pn[i]||'').trim().slice(0,24)||DEFN[i],annual:an,rule:RULES[id]}:null;}).filter(Boolean);
+  const hasP=Q.has('p')||Q.has('p5'), pp=(Q.get('p')||'').split(','), pn=(Q.get('pn')||'').split('|');
+  const pv=s=>{const v=parseFloat(String(s||'').replace(',','.'));return isFinite(v)&&v>0?v:0;};
+  const mk=(id,an,nm,dn)=>an>0?{id,name:String(nm||'').trim().slice(0,24)||dn,annual:an,rule:RULES[id]}:null;
+  /* orden: Sin copago, Advance, Copago 5, Copago 20 (cualquier combinación) */
+  let occ=hasP?[mk('s',pv(pp[0]),pn[0],DEFN[0]),mk('a',pv(pp[1]),pn[1],DEFN[1]),mk('f',pv(Q.get('p5')),Q.get('pn5'),DEF5),mk('c',pv(pp[2]),pn[2],DEFN[2])].filter(Boolean):[];
   if(!occ.length)occ=['s','a','c'].map((id,i)=>({id,name:DEFN[i],annual:DEFP[i],rule:RULES[id]}));
   const cp=num(Q.get('cp'),0);
   if(Q.get('c')==='1'&&cp>0){
     const ck=(Q.get('ck')||'').trim().slice(0,24), cn=(Q.get('cn')||'').trim().slice(0,28), key=LOGOKEYS.includes(ck.toLowerCase())?ck.toLowerCase():'';
     const cr=Q.get('cr');let rule=RULES.s;if(cr==='c')rule=RULES.c;
     if(cr==='x'){const z=(Q.get('cx')||'').split(',').map(parseFloat);rule={cop:z[0]>=0?z[0]:COPAGO,alto:z[1]>=0?z[1]:ALTO,free:z[2]>=0?z[2]:0};}
-    return [{id:'k',comp:true,key,company:ck,name:cn||ck||(L==='ca'?'La teva assegurança actual':'Tu seguro actual'),annual:cp,rule},...occ.slice(0,2)];
+    return [{id:'k',comp:true,key,company:ck,name:cn||ck||(L==='ca'?'La teva assegurança actual':'Tu seguro actual'),annual:cp,rule},...occ.slice(0,3)];
   }
   return occ;
 })();
 const COMP=PRODS[0].comp?PRODS[0]:null;
 const BASE=COMP||(PRODS.length>1?PRODS.reduce((a,b)=>b.annual>a.annual?b:a):null);   // base del ahorro: la competencia o, si no hay, la opción más cara
 const CMPD=PRODS.filter(p=>p!==BASE).sort((a,b)=>a.annual-b.annual);                  // las comparadas, de más barata a más cara
-const COL={s:'var(--t3)',a:'var(--ade)',c:'var(--brand)',k:'var(--comp)'};
-const ICON={s:'cajafuerte',a:'balanza',c:'ahorro'};
+const COL={s:'var(--t3)',a:'var(--ade)',f:'var(--c5)',c:'var(--brand)',k:'var(--comp)'};
+const ICON={s:'cajafuerte',a:'balanza',f:'grafica',c:'ahorro'};
+const HASCOP=PRODS.some(p=>p.id==='c'||p.id==='f'), HAS20=PRODS.some(p=>p.id==='c'||p.id==='a'), HASA=PRODS.some(p=>p.id==='a');
 const mes=p=>p.annual/12;
 function cost(p,n,h){const F=p.rule.free*NP, hl=Math.min(h,F), ol=Math.max(0,F-hl);   // actos gratuitos: primero los de 100 € (hipótesis favorable al producto con actos gratis)
   return {p:p.annual,c:p.rule.cop*Math.max(0,n-ol)+p.rule.alto*(h-hl)};}
@@ -421,7 +429,7 @@ const ACTS=[
  {es:'Psicología (videoconsulta Salud Digital)',ca:'Psicologia (videoconsulta Salut Digital)',cop:0,aut:0,car:0,adv:0},
  {es:'Chat médico 7/24 (medicina general/urgencias)',ca:'Xat mèdic 7/24 (medicina general/urgències)',cop:0,aut:0,car:0,adv:0},
  /* tratamientos: 2 € por sesión */
- {es:'Fisio/rehabilitación (20 sesiones/año y afección; pack de 10)',ca:'Fisio/rehabilitació (20 sessions/any i afecció; pack de 10)',cop:2,aut:1,car:6},
+ {es:'Fisio/rehabilitación (20 sesiones/año y afección; pack de 10)',ca:'Fisio/rehabilitació (20 sessions/any i afecció; pack de 10)',cop:2,aut:1,car:6,c5:0.5},
  {es:'Psicología (15 sesiones al año; pack de 5)',ca:'Psicologia (15 sessions l\'any; pack de 5)',cop:2,aut:1,car:6},
  {es:'Logofoniatría (20 sesiones/año y afección; pack de 10)',ca:'Logofoniatria (20 sessions/any i afecció; pack de 10)',cop:2,aut:1,car:6},
  {es:'Enfermería (curas e inyectables en consulta)',ca:'Infermeria (cures i injectables a la consulta)',cop:2,aut:1,car:0},
@@ -457,24 +465,30 @@ const ACTS=[
  {es:'Infiltraciones (por sesión)',ca:'Infiltracions (per sessió)',cop:20,aut:1,car:6},
  {es:'Ambulancia',ca:'Ambulància',cop:20,aut:1,car:0}
 ];
+const AMT=(a,id)=>id==='f'?(a.c5!=null?a.c5:({100:25,20:5,2:5,0:0})[a.cop]):a.cop;   // Copago 5: 25 / 5 / 5 € (fisio 0,5 €); Copago 20 y Advance: tabla 2026
+const fE=v=>String(v).replace('.',L==='ca'?',':',')+' €';
+function bigTxt(){const m={};PRODS.forEach(p=>{if(p.rule.alto>0)(m[p.rule.alto]=m[p.rule.alto]||[]).push(p.name);});const k=Object.keys(m).map(Number).sort((a,b)=>b-a);
+  return k.length?': '+k.map(v=>fE(v)+(k.length>1?' ('+m[v].map(esc).join(', ')+')':'')).join(' · '):'';}
 
 
 /* ---------- textos ---------- */
 const T={
 es:{
  ls:'Seguro de Salud', kickE:'Simulación · Familia de ejemplo', kickC:'Simulación personalizada',
- hCop:'Quieres <span>copago</span> y no lo sabes', hCmp:'Compara tu <span>seguro actual</span>',
+ hCop:'Quieres <span>copago</span> y no lo sabes', hCmp:'Compara tu <span>seguro actual</span>', hOpt:'Elige tu <span>seguro de salud</span>',
+ leadOpt:'Mismo cuadro médico y mismas coberturas: compara la prima y lo que pagarías según cuánto vas al médico.',
  lead:'Un seguro «sin copago» suena tranquilizador, pero lo pagas siempre, vayas o no al médico.',
  leadCmp:'Mismo uso, mismas personas: mira cuánto pagas hoy y cuánto pagarías con Occident.',
  famE:n=>n>=3?'Nuestra familia de ejemplo':'Nuestro ejemplo', famC:n=>n>=3?'Tu familia':'Tus asegurados',
  kpiDiff:(a,b)=>`Diferencia de prima al año (${a} vs ${b})`, kpiSolo:n=>`Prima de ${n}`,
  ksVis:(v,c)=>`Equivale a <b>${v}</b> visitas con copago de ${c} €`, ksPlain:'Lo que pagas de más cada año solo en prima',
- plansH:(n,comp)=>comp?'Tu seguro actual frente a Occident':n===1?'Tu opción en Occident':n===2?'Las dos modalidades':'Las tres modalidades',
+ plansH:(n,comp)=>comp?'Tu seguro actual frente a Occident':n===1?'Tu opción en Occident':'Las '+['','','dos','tres','cuatro'][n]+' modalidades',
  plansS:comp=>comp?'Mismo uso, mismas personas, distinta prima':'Mismo cuadro médico, distinta prima',
  tagComp:'Tu seguro actual', tagCara:'La más cara', tagEq:'Equilibrada', tagEco:'La más económica',
  dSin:'Nunca se aplica copago: ni en consultas, ni en pruebas, ni en hospitalización.',
  dAdv:n=>`Sin copago en los 15 primeros actos médicos por asegurado y año${n>1?' ('+n*15+' en total)':''}. Desde el 16, como Copago 20.`,
  d20t:'20 € por centro y día. 100 € en cirugía, hospitalización y pruebas avanzadas (resonancia, PET…).',
+ d5t:'5 € por visita o prueba. 25 € en cirugía, hospitalización y pruebas avanzadas. Rehabilitación: 0,5 € por sesión.',
  dCust:r=>`${r.cop} € por centro y día${r.alto!==r.cop?`. ${r.alto} € en cirugía, hospitalización y pruebas avanzadas`:''}${r.free?`. Sin copago en los ${r.free} primeros actos por asegurado y año`:''}.`,
  dRef:'Referencia', dNow:'Lo que pagas hoy', menos:v=>`${v} menos al año`, mas:v=>`${v} más al año`, mes:'/mes', alAnio:'al año',
  capE:n=>`Primas de la familia de ejemplo (${n} asegurado${n>1?'s':''})`, capC:n=>`Primas de tu familia (${n} asegurado${n>1?'s':''})`,
@@ -483,18 +497,19 @@ es:{
  pTran:'Año tranquilo', pTranS:n=>`${n} visitas`, pNorm:'Año normal', pNormS:'15 + 1 especialista c/u',
  pPed:'Año de pediatra', pAlto:'Año de mucho uso', pAltoS:n=>`${n} visitas`, pFrac:'Fractura', pFracS:n=>`${n} visitas + operación e ingreso`,
  vid:'Ver el vídeo · 47 s', remind:'Recuerda los precios (por mes)', lblN:'Visitas al año', hintN:'<b>Cada visita = un centro y un día</b>, aunque incluya varias pruebas.',
- lblH:'Operaciones, ingresos, resonancias', hintH:'Actos de 100 € (cirugía, hospitalización, pruebas avanzadas).',
+ lblH:'Operaciones, ingresos, resonancias', hintH:()=>'Cirugía, hospitalización y pruebas avanzadas'+bigTxt()+'.',
  lgP:'Prima anual', lgC:'Copagos pagados',
  vOk:(nm,s,e,b)=>`Solo en este año, <b>${esc(nm)} te ahorra <span class="hl">${s}</span></b> frente a ${esc(b)}. `+(e!=null?`Para que ${esc(b)} saliera a cuenta, habría que ir <span class="hl">${e}</span> veces al médico en un año.`:`Con cualquier nivel de uso, ${esc(nm)} sale más barato.`),
- vKo:(n,h,b)=>`Con un uso tan intenso (${n} visitas y ${h} actos de 100 €), <b>${esc(b)} compensa</b>. Es poco habitual: baja el fonendo para ver dónde cambia.`,
+ vKo:(n,h,b)=>`Con un uso tan intenso (${n} visitas y ${h} actos grandes), <b>${esc(b)} compensa</b>. Es poco habitual: baja el fonendo para ver dónde cambia.`,
  vSolo:(nm,t)=>`Con este uso, <b>${esc(nm)}</b> costaría <span class="hl">${t}</span> al año entre prima y copagos.`,
- acc1T:'Copago por acto: 20 €, 100 € y más', acc1S:'Qué actos llevan un copago único de 20 € y cuáles de 100 €',
+ acc1T:()=>HAS20&&PRODS.some(p=>p.id==='f')?'Copago por acto en cada modalidad':HAS20?'Copago por acto: 20 €, 100 € y más':'Copago por acto: 5 €, 25 € y más',
+ acc1S:()=>HAS20&&PRODS.some(p=>p.id==='f')?'Lo que pagas por cada acto según la modalidad':HAS20?'Qué actos llevan un copago único de 20 € y cuáles de 100 €':'Qué actos llevan un copago de 5 € y cuáles de 25 €',
  acc2T:'Autorización: qué es libre con la tarjeta', acc2S:'Qué actos precisan autorización previa y cuáles se piden solo con la tarjeta',
- g100:'Pruebas avanzadas, intervenciones y hospitalización', g20:'Copago único por centro y día', g2:'Por sesión', g0:'Sin copago',
+ g100:'Pruebas avanzadas, intervenciones y hospitalización', g20:'Copago único por centro y día', g20f:'Visitas y pruebas', g2:'Por sesión', g0:'Sin copago',
  n100:'Se paga una vez por acto. La hospitalización no tiene límite de días.',
- n20:'Todo lo que te hagan en el mismo centro y el mismo día se paga una sola vez (por ejemplo, consulta + prueba).',
- n2:'Fisioterapia, psicología, logopedia, curas de enfermería y acupuntura: 2 € por sesión.',
- n0:'Videoconsulta Salud Digital y chat médico 7/24. No cuentan como acto en Advance.',
+ n20:'Todo lo que te hagan en el mismo centro y el mismo día se paga una sola vez (por ejemplo, consulta + prueba).', n20f:'Se paga por cada visita o prueba.', n20b:a=>`En Copago 20${a?' (y Advance)':''}, todo lo que te hagan en el mismo centro y el mismo día se paga una sola vez.`,
+ n2:'Fisioterapia, psicología, logopedia, curas de enfermería y acupuntura: se paga por sesión.', n2f:'En Copago 5, la rehabilitación y fisioterapia es de 0,5 € por sesión.',
+ n0:'Videoconsulta Salud Digital y chat médico 7/24.', n0a:' No cuentan como acto en Advance.',
  advNote:'En Advance, los 15 primeros actos por asegurado y año no pagan copago; cada acto cuenta 1.',
  autY:'Precisan autorización previa', autN:'Libres: solo con la tarjeta', autNote:'Sin autorización: presentas la tarjeta y te atienden. Algunos actos tienen un plazo de carencia, indicado en meses.',
  acc3T:'Salud Digital: ningún servicio tiene copago', acc3S:'Incluido en tu seguro, desde tu área personal e-cliente',
@@ -503,7 +518,7 @@ es:{
  car:m=>`carencia ${m} m`, oct:'solo la OCT', actsFoot:'Principales actos médicos y copagos 2026. Consulta con nosotros el cuadro completo.',
  savH:'Ahorro directo', savS:'Lo que te queda en el bolsillo cada año', vsBase:b=>`al año vs ${esc(b)}`,
  cap10:(p,b)=>`Cada icono = el 10 % de la prima de ${esc(b)}. Ahorras el <b>${p} %</b>.`,
- eqOk:(c,n,h,s,cp)=>`Con lo que ahorras en prima podrías pagar <b>${c} copagos de ${cp} €</b>. En este año pagarías ${n}${h?` más ${h} acto${h>1?'s':''} de 100 €`:''} y aún te sobrarían <b class="green">${s}</b>.`,
+ eqOk:(c,n,h,s,cp)=>`Con lo que ahorras en prima podrías pagar <b>${c} copagos de ${cp} €</b>. En este año pagarías ${n}${h?` más ${h} acto${h>1?'s':''} grande${h>1?'s':''}`:''} y aún te sobrarían <b class="green">${s}</b>.`,
  eqPlain:(nm,s,b)=>`Con <b>${esc(nm)}</b> ahorras <b class="green">${s}</b> al año frente a ${esc(b)}, contando prima y copagos.`,
  eqKo:b=>`Con este nivel de uso ${esc(b)} sale mejor. Reduce las visitas para ver el punto de equilibrio.`,
  invH:'Calcula tu ahorro deslizando el fonendoscopio', invS:p=>`Plan de ahorro con un ${p} % anual compuesto`, inTime:'Dentro de',
@@ -511,29 +526,32 @@ es:{
  acc:nm=>`Ahorro acumulado · ${esc(nm)}`, dash:'aportado sin intereses', invD:(m,i)=>`${m}/mes · intereses ${i}`,
  pigOk:(f,y,nm)=>`Con ${f} pagarías <b>${y} años</b> de tu seguro ${esc(nm)}.`, pigKo:'Con este uso no queda margen para ahorrar. Baja las visitas para verlo.',
  closeH:'Cuidamos de tu familia. Y de tu bolsillo.', tDoc:'Médicos', tNur:'Enfermería', tHos:'Hospitales',
- ck1:n=>`Mismo cuadro médico y mismas coberturas en las ${n===2?'dos':'tres'} modalidades.`, ck1c:'Te explicamos las coberturas de cada opción, punto por punto.',
+ ck1:n=>`Mismo cuadro médico y mismas coberturas en las ${['','','dos','tres','cuatro'][n]} modalidades.`, ck1c:'Te explicamos las coberturas de cada opción, punto por punto.',
  ck2:(c,cp)=>`La diferencia de prima paga <b>${c}</b> copagos de ${cp} € cada año.`, ck2p:(v,nm)=>`Ahorras <b>${v}</b> al año en prima con ${esc(nm)}.`,
  ck3:'Lo que no gastas en copagos puedes destinarlo a un plan de ahorro y sacarle rendimiento.', ck4:nm=>`Si buscas un punto medio, <b>${esc(nm)}</b>: 15 actos gratuitos por persona y año.`,
  foot:(n,p)=>`Simulación basada en supuestos (uso médico del simulador y rentabilidad del ${p} % anual compuesta, no garantizada) con las primas indicadas. Las visitas se reparten por igual entre los ${n} asegurados y las primas se mantienen constantes: a más edad, más ahorro. Consulta con nosotros tu caso personalizado.`,
+ pdfT:'Ver los proyectos originales', pdfS:'Los documentos en los que se basa esta simulación',
  cta:'Quiero mi estudio gratuito', shH:'Calculamos tu caso real', shP:'Cuéntanos la edad de tu familia y te preparamos un estudio personalizado, sin compromiso.',
  shCall:'<span>Llamar ahora<small>972 42 66 65</small></span>', shMail:'Escribir un email', shClose:'Cerrar',
- wa:(nm,n,h)=>`Hola, he visto la simulación de ${nm} (ejemplo: ${n} visitas y ${h} actos de 100 € al año). Quiero un estudio personalizado de seguro de salud para mi familia.`, mailSub:'Estudio personalizado seguro de salud',
+ wa:(nm,n,h)=>`Hola, he visto la simulación de ${nm} (ejemplo: ${n} visitas y ${h} actos grandes al año). Quiero un estudio personalizado de seguro de salud para mi familia.`, mailSub:'Estudio personalizado seguro de salud',
  ageTxt:a=>a===1?'1 año':a+' años', lab:{baby:'Bebé',boyH:'Niño',girlM:'Niña',teenH:'Joven',teenM:'Joven',adultH:'Hombre',adultM:'Mujer',oldH:'Abuelo',oldM:'Abuela'}
 },
 ca:{
  ls:'Assegurança de Salut', kickE:'Simulació · Família d\'exemple', kickC:'Simulació personalitzada',
- hCop:'Vols <span>copagament</span> i no ho saps', hCmp:'Compara la teva <span>assegurança actual</span>',
+ hCop:'Vols <span>copagament</span> i no ho saps', hCmp:'Compara la teva <span>assegurança actual</span>', hOpt:'Tria la teva <span>assegurança de salut</span>',
+ leadOpt:'Mateix quadre mèdic i mateixes cobertures: compara la prima i el que pagaries segons quant vas al metge.',
  lead:'Una assegurança «sense copagament» sona tranquil·litzadora, però la pagues sempre, vagis o no al metge.',
  leadCmp:'Mateix ús, mateixes persones: mira quant pagues avui i quant pagaries amb Occident.',
  famE:n=>n>=3?'La nostra família d\'exemple':'El nostre exemple', famC:n=>n>=3?'La teva família':'Els teus assegurats',
  kpiDiff:(a,b)=>`Diferència de prima a l'any (${a} vs ${b})`, kpiSolo:n=>`Prima de ${n}`,
  ksVis:(v,c)=>`Equival a <b>${v}</b> visites amb copagament de ${c} €`, ksPlain:'El que pagues de més cada any només en prima',
- plansH:(n,comp)=>comp?'La teva assegurança actual davant d\'Occident':n===1?'La teva opció a Occident':n===2?'Les dues modalitats':'Les tres modalitats',
+ plansH:(n,comp)=>comp?'La teva assegurança actual davant d\'Occident':n===1?'La teva opció a Occident':'Les '+['','','dues','tres','quatre'][n]+' modalitats',
  plansS:comp=>comp?'Mateix ús, mateixes persones, diferent prima':'Mateix quadre mèdic, diferent prima',
  tagComp:'La teva assegurança actual', tagCara:'La més cara', tagEq:'Equilibrada', tagEco:'La més econòmica',
  dSin:'No s\'aplica mai copagament: ni en consultes, ni en proves, ni en hospitalització.',
  dAdv:n=>`Sense copagament en els 15 primers actes mèdics per assegurat i any${n>1?' ('+n*15+' en total)':''}. A partir del 16, com Copagament 20.`,
  d20t:'20 € per centre i dia. 100 € en cirurgia, hospitalització i proves avançades (ressonància, PET…).',
+ d5t:'5 € per visita o prova. 25 € en cirurgia, hospitalització i proves avançades. Rehabilitació: 0,5 € per sessió.',
  dCust:r=>`${r.cop} € per centre i dia${r.alto!==r.cop?`. ${r.alto} € en cirurgia, hospitalització i proves avançades`:''}${r.free?`. Sense copagament en els ${r.free} primers actes per assegurat i any`:''}.`,
  dRef:'Referència', dNow:'El que pagues avui', menos:v=>`${v} menys a l'any`, mas:v=>`${v} més a l'any`, mes:'/mes', alAnio:'a l\'any',
  capE:n=>`Primes de la família d'exemple (${n} assegurat${n>1?'s':''})`, capC:n=>`Primes de la teva família (${n} assegurat${n>1?'s':''})`,
@@ -542,18 +560,19 @@ ca:{
  pTran:'Any tranquil', pTranS:n=>`${n} visites`, pNorm:'Any normal', pNormS:'15 + 1 especialista cadascú',
  pPed:'Any de pediatra', pAlto:'Any de molt ús', pAltoS:n=>`${n} visites`, pFrac:'Fractura', pFracS:n=>`${n} visites + operació i ingrés`,
  vid:'Veure el vídeo · 47 s', remind:'Recorda els preus (per mes)', lblN:'Visites a l\'any', hintN:'<b>Cada visita = un centre i un dia</b>, encara que inclogui diverses proves.',
- lblH:'Operacions, ingressos, ressonàncies', hintH:'Actes de 100 € (cirurgia, hospitalització, proves avançades).',
+ lblH:'Operacions, ingressos, ressonàncies', hintH:()=>'Cirurgia, hospitalització i proves avançades'+bigTxt()+'.',
  lgP:'Prima anual', lgC:'Copagaments pagats',
  vOk:(nm,s,e,b)=>`Només en aquest any, <b>${esc(nm)} t'estalvia <span class="hl">${s}</span></b> respecte a ${esc(b)}. `+(e!=null?`Perquè ${esc(b)} sortís a compte, caldria anar <span class="hl">${e}</span> vegades al metge en un any.`:`Amb qualsevol nivell d'ús, ${esc(nm)} surt més barat.`),
- vKo:(n,h,b)=>`Amb un ús tan intens (${n} visites i ${h} actes de 100 €), <b>${esc(b)} compensa</b>. És poc habitual: baixa el fonendoscopi per veure on canvia.`,
+ vKo:(n,h,b)=>`Amb un ús tan intens (${n} visites i ${h} actes grans), <b>${esc(b)} compensa</b>. És poc habitual: baixa el fonendoscopi per veure on canvia.`,
  vSolo:(nm,t)=>`Amb aquest ús, <b>${esc(nm)}</b> costaria <span class="hl">${t}</span> a l'any entre prima i copagaments.`,
- acc1T:'Copagament per acte: 20 €, 100 € i més', acc1S:'Quins actes porten un copagament únic de 20 € i quins de 100 €',
+ acc1T:()=>HAS20&&PRODS.some(p=>p.id==='f')?'Copagament per acte a cada modalitat':HAS20?'Copagament per acte: 20 €, 100 € i més':'Copagament per acte: 5 €, 25 € i més',
+ acc1S:()=>HAS20&&PRODS.some(p=>p.id==='f')?'El que pagues per cada acte segons la modalitat':HAS20?'Quins actes porten un copagament únic de 20 € i quins de 100 €':'Quins actes porten un copagament de 5 € i quins de 25 €',
  acc2T:'Autorització: què és lliure amb la targeta', acc2S:'Quins actes necessiten autorització prèvia i quins es demanen només amb la targeta',
- g100:'Proves avançades, intervencions i hospitalització', g20:'Copagament únic per centre i dia', g2:'Per sessió', g0:'Sense copagament',
+ g100:'Proves avançades, intervencions i hospitalització', g20:'Copagament únic per centre i dia', g20f:'Visites i proves', g2:'Per sessió', g0:'Sense copagament',
  n100:'Es paga una vegada per acte. L\'hospitalització no té límit de dies.',
- n20:'Tot el que et facin al mateix centre i el mateix dia es paga una sola vegada (per exemple, consulta + prova).',
- n2:'Fisioteràpia, psicologia, logopèdia, cures d\'infermeria i acupuntura: 2 € per sessió.',
- n0:'Videoconsulta Salut Digital i xat mèdic 7/24. No compten com a acte a Advance.',
+ n20:'Tot el que et facin al mateix centre i el mateix dia es paga una sola vegada (per exemple, consulta + prova).', n20f:'Es paga per cada visita o prova.', n20b:a=>`A Copagament 20${a?' (i Advance)':''}, tot el que et facin al mateix centre i el mateix dia es paga una sola vegada.`,
+ n2:'Fisioteràpia, psicologia, logopèdia, cures d\'infermeria i acupuntura: es paga per sessió.', n2f:'A Copagament 5, la rehabilitació i fisioteràpia és de 0,5 € per sessió.',
+ n0:'Videoconsulta Salut Digital i xat mèdic 7/24.', n0a:' No compten com a acte a Advance.',
  advNote:'A Advance, els 15 primers actes per assegurat i any no paguen copagament; cada acte compta 1.',
  autY:'Necessiten autorització prèvia', autN:'Lliures: només amb la targeta', autNote:'Sense autorització: presentes la targeta i t\'atenen. Alguns actes tenen un termini de carència, indicat en mesos.',
  acc3T:'Salut Digital: cap servei té copagament', acc3S:'Inclòs a la teva assegurança, des de la teva àrea personal e-client',
@@ -562,7 +581,7 @@ ca:{
  car:m=>`carència ${m} m`, oct:'només l\'OCT', actsFoot:'Principals actes mèdics i copagaments 2026. Consulta amb nosaltres el quadre complet.',
  savH:'Estalvi directe', savS:'El que et queda a la butxaca cada any', vsBase:b=>`a l'any vs ${esc(b)}`,
  cap10:(p,b)=>`Cada icona = el 10 % de la prima de ${esc(b)}. Estalvies el <b>${p} %</b>.`,
- eqOk:(c,n,h,s,cp)=>`Amb el que estalvies en prima podries pagar <b>${c} copagaments de ${cp} €</b>. Aquest any en pagaries ${n}${h?` i ${h} acte${h>1?'s':''} de 100 €`:''} i encara et sobrarien <b class="green">${s}</b>.`,
+ eqOk:(c,n,h,s,cp)=>`Amb el que estalvies en prima podries pagar <b>${c} copagaments de ${cp} €</b>. Aquest any en pagaries ${n}${h?` i ${h} acte${h>1?'s':''} gran${h>1?'s':''}`:''} i encara et sobrarien <b class="green">${s}</b>.`,
  eqPlain:(nm,s,b)=>`Amb <b>${esc(nm)}</b> estalvies <b class="green">${s}</b> a l'any respecte a ${esc(b)}, comptant prima i copagaments.`,
  eqKo:b=>`Amb aquest nivell d'ús ${esc(b)} surt millor. Redueix les visites per veure el punt d'equilibri.`,
  invH:'Calcula el teu estalvi lliscant el fonendoscopi', invS:p=>`Pla d'estalvi amb un ${p} % anual compost`, inTime:'D\'aquí a',
@@ -570,19 +589,20 @@ ca:{
  acc:nm=>`Estalvi acumulat · ${esc(nm)}`, dash:'aportat sense interessos', invD:(m,i)=>`${m}/mes · interessos ${i}`,
  pigOk:(f,y,nm)=>`Amb ${f} pagaries <b>${y} anys</b> de la teva assegurança ${esc(nm)}.`, pigKo:'Amb aquest ús no queda marge per estalviar. Baixa les visites per veure-ho.',
  closeH:'Cuidem la teva família. I la teva butxaca.', tDoc:'Metges', tNur:'Infermeria', tHos:'Hospitals',
- ck1:n=>`Mateix quadre mèdic i mateixes cobertures a les ${n===2?'dues':'tres'} modalitats.`, ck1c:'T\'expliquem les cobertures de cada opció, punt per punt.',
+ ck1:n=>`Mateix quadre mèdic i mateixes cobertures a les ${['','','dues','tres','quatre'][n]} modalitats.`, ck1c:'T\'expliquem les cobertures de cada opció, punt per punt.',
  ck2:(c,cp)=>`La diferència de prima paga <b>${c}</b> copagaments de ${cp} € cada any.`, ck2p:(v,nm)=>`Estalvies <b>${v}</b> a l'any en prima amb ${esc(nm)}.`,
  ck3:'El que no gastes en copagaments pots destinar-lo a un pla d\'estalvi i treure\'n rendiment.', ck4:nm=>`Si busques un punt mig, <b>${esc(nm)}</b>: 15 actes gratuïts per persona i any.`,
  foot:(n,p)=>`Simulació basada en supòsits (ús mèdic del simulador i rendibilitat del ${p} % anual compost, no garantida) amb les primes indicades. Les visites es reparteixen a parts iguals entre els ${n} assegurats i les primes es mantenen constants: a més edat, més estalvi. Consulta amb nosaltres el teu cas personalitzat.`,
+ pdfT:'Veure els projectes originals', pdfS:'Els documents en què es basa aquesta simulació',
  cta:'Vull el meu estudi gratuït', shH:'Calculem el teu cas real', shP:'Explica\'ns l\'edat de la teva família i et preparem un estudi personalitzat, sense compromís.',
  shCall:'<span>Truca ara<small>972 42 66 65</small></span>', shMail:'Escriu un correu', shClose:'Tancar',
- wa:(nm,n,h)=>`Hola, he vist la simulació de ${nm} (exemple: ${n} visites i ${h} actes de 100 € a l'any). Vull un estudi personalitzat d'assegurança de salut per a la meva família.`, mailSub:'Estudi personalitzat assegurança de salut',
+ wa:(nm,n,h)=>`Hola, he vist la simulació de ${nm} (exemple: ${n} visites i ${h} actes grans a l'any). Vull un estudi personalitzat d'assegurança de salut per a la meva família.`, mailSub:'Estudi personalitzat assegurança de salut',
  ageTxt:a=>a===1?'1 any':a+' anys', lab:{baby:'Nadó',boyH:'Nen',girlM:'Nena',teenH:'Jove',teenM:'Jove',adultH:'Home',adultM:'Dona',oldH:'Avi',oldM:'Àvia'}
 }}[L];
 
 /* titulares: t1 (grande) y t2 (pequeño). cmp | cop | none | texto libre */
-function titleHTML(k){if(k==='cmp')return T.hCmp;if(k==='cop')return T.hCop;if(!k||k==='none')return '';return esc(k);}
-const T1=Q.get('t1')||(COMP?'cmp':'cop'), T2=Q.get('t2')||(COMP?'cop':'none');
+function titleHTML(k){if(k==='cmp')return T.hCmp;if(k==='cop')return HASCOP?T.hCop:T.hOpt;if(k==='opt')return T.hOpt;if(!k||k==='none')return '';return esc(k);}
+const T1=Q.get('t1')||(COMP?'cmp':HASCOP?'cop':'opt'), T2=Q.get('t2')||(COMP&&HASCOP?'cop':'none');
 const plain=h=>h.replace(/<[^>]+>/g,'');
 
 /* ---------- icono y etiqueta según edad y sexo ---------- */
@@ -601,20 +621,25 @@ const setP=el=>el.style.setProperty('--p',((el.value-el.min)/(el.max-el.min)*100
 const YR_PER_ICON=2;   // 12 iconos en una sola línea = 24 años
 const STAR=CMPD[0]||PRODS[0];
 const OCC=PRODS.filter(p=>!p.comp);
-const ruleDesc=p=>same(p.rule,RULES.s)?T.dSin:same(p.rule,RULES.a)?T.dAdv(NP):same(p.rule,RULES.c)?T.d20t:T.dCust(p.rule);
+const ruleDesc=p=>same(p.rule,RULES.s)?T.dSin:same(p.rule,RULES.a)?T.dAdv(NP):same(p.rule,RULES.c)?T.d20t:same(p.rule,RULES.f)?T.d5t:T.dCust(p.rule);
 
 /* ---------- colapsables: actos médicos ---------- */
 function actsHTML(){
-  const ch=a=>`<span class="ch">${esc(a[L])}</span>`;
-  const grp=(cop,title,note)=>`<div class="ghd"><span class="pb c${cop}">${cop} €</span><span>${title}</span></div>${note?`<p class="gn">${note}</p>`:''}<div class="chs">${ACTS.filter(a=>a.cop===cop).map(ch).join('')}</div>`;
-  $('acc1b').innerHTML=grp(100,T.g100,T.n100)+grp(20,T.g20,T.n20)+grp(2,T.g2,T.n2)+grp(0,T.g0,T.n0)+`<p class="gn" style="margin-top:12px">${T.advNote}</p><p class="gn">${T.actsFoot}</p>`;
+  const SETS=[];if(HAS20)SETS.push('c');if(PRODS.some(p=>p.id==='f'))SETS.push('f');
+  const setName=id=>id==='f'?PRODS.find(p=>p.id==='f').name:(PRODS.find(p=>p.id==='c')||PRODS.find(p=>p.id==='a')).name;
+  const DEF5={100:25,20:5,2:5,0:0};
+  const ch=a=>`<span class="ch">${esc(a[L])}${SETS.includes('f')&&a.c5!=null?` <small>${esc(setName('f'))}: ${fE(a.c5)}</small>`:''}</span>`;
+  const pills=cop=>cop===0?`<span class="pb c0">0 €</span>`:SETS.map(id=>`<span class="pb ${id==='f'?'c5x':'c'+cop}">${SETS.length>1?esc(setName(id))+' · ':''}${fE(id==='f'?DEF5[cop]:cop)}</span>`).join(' ');
+  const grp=(cop,title,note)=>`<div class="ghd">${pills(cop)}<span>${title}</span></div>${note?`<p class="gn">${note}</p>`:''}<div class="chs">${ACTS.filter(a=>a.cop===cop).map(ch).join('')}</div>`;
+  const n20=SETS.length>1?T.n20b(HASA):HAS20?T.n20:T.n20f;
+  $('acc1b').innerHTML=grp(100,T.g100,T.n100)+grp(20,HAS20&&!SETS.includes('f')?T.g20:T.g20f,n20)+grp(2,T.g2,T.n2+(SETS.includes('f')?' '+T.n2f:''))+grp(0,T.g0,T.n0+(HASA?T.n0a:''))+(HASA?`<p class="gn" style="margin-top:12px">${T.advNote}</p>`:'')+`<p class="gn"${HASA?'':' style="margin-top:12px"'}>${T.actsFoot}</p>`;
   const au=a=>`<span class="ch">${esc(a[L])}${a.aut===2?` <small>${T.oct}</small>`:''}${a.car?` <small class="cr">${T.car(a.car)}</small>`:''}</span>`;
   $('acc2b').innerHTML=
     `<div class="ghd"><span class="pb au1">${L==='ca'?'Cal':'Precisa'}</span><span>${T.autY}</span></div><div class="chs">${ACTS.filter(a=>a.aut===1||a.aut===2).map(au).join('')}</div>`+
     `<div class="ghd"><span class="pb au0">${L==='ca'?'Lliure':'Libre'}</span><span>${T.autN}</span></div><div class="chs">${ACTS.filter(a=>a.aut===0).map(au).join('')}</div>`+
     `<p class="gn" style="margin-top:12px">${T.autNote}</p><p class="gn">${T.actsFoot}</p>`;
   $('acc3b').innerHTML=`<p class="gn" style="margin:0 0 12px">${T.sdIntro}</p><div class="dg">${T.sd.map(([ic,tt,d])=>`<div class="di"><i class="ic i-${ic}"></i><div><b>${tt}</b><span class="zb">${T.sdZero}</span><p>${d}</p></div></div>`).join('')}</div>`;
-  if(!PRODS.some(p=>p.id==='a'||p.id==='c'))$('acc1').style.display='none';
+  if(!PRODS.some(p=>p.id==='a'||p.id==='c'||p.id==='f'))$('acc1').style.display='none';
 }
 
 /* ---------- pintado estático ---------- */
@@ -624,7 +649,9 @@ function renderStatic(){
   document.title=plain(titleHTML(T1)||titleHTML(T2)||T.hCop)+' · '+(L==='ca'?'Salut Occident':'Salud Occident');
   $('heroKick').textContent=MODE==='c'?T.kickC:T.kickE;
   $('h1').innerHTML=titleHTML(T1);$('h1b').innerHTML=titleHTML(T2);$('h1b').style.display=titleHTML(T2)?'':'none';
-  $('lead').textContent=plain(COMP?T.leadCmp:T.lead);
+  $('lead').textContent=plain(COMP?T.leadCmp:HASCOP?T.lead:T.leadOpt);
+  if(!HAS20)document.querySelector('.once').style.display='none';   // «un único copago por centro y día» es de Copago 20 / Advance
+  {const u=(Q.get('pdf')||'').trim();if(/^https:\/\/\S+$/i.test(u)){$('pdfL').href=u;$('pdfL').style.display='';}}
   if(COMP){$('vsrow').innerHTML=`<span class="vl">${COMP.key?`<i class="lg lg-${COMP.key}"></i>`:`<span class="lgt">${esc(COMP.company||COMP.name)}</span>`}</span><b>vs</b><span class="vl"><i class="lg lg-occident"></i></span>`;}else $('vsrow').style.display='none';
   {const q=new URLSearchParams(location.search);q.delete('v');$('vbtn').href='copago-video.html'+(q.toString()?'?'+q.toString():'');}
   $('famLbl').textContent=(MODE==='c'?T.famC:T.famE)(NP);

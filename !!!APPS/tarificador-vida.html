@@ -268,7 +268,7 @@ body.view-plans .doc-card,body.view-table .plans-doc{display:none!important}
     <!-- 3 Condicions -->
     <div class="sb-section">
       <div class="sb-head"><div class="sb-pill"><i class="ico ico-ahorro"></i><span data-i="sCond">Condiciones</span></div></div>
-      <div class="fld"><span data-i="lPay">Forma de pago</span><select id="pay"></select></div>
+      <div class="fld" style="display:none"><span data-i="lPay">Forma de pago</span><select id="pay"></select></div>
       <div class="fld"><span data-i="lShowPays">Mostrar también en la propuesta</span><div class="packs" id="payShow"></div></div>
       <div class="row2">
         <div class="fld"><span data-i="lDCli">Dto. cliente</span><select id="dCli"></select></div>
@@ -281,7 +281,7 @@ body.view-plans .doc-card,body.view-table .plans-doc{display:none!important}
         <div class="alert" id="abcInfo"></div>
       </div>
       <div class="hint" data-i="hDesc">El descuento perfil solo aplica a capitales de fallecimiento ≥ 100.000 €.</div>
-      <div class="tg" style="margin-top:6px"><span data-i="lShowAnual">Mostrar prima anual en la propuesta</span><label class="sw"><input type="checkbox" id="showAnual" checked><span class="track"></span><span class="thumb"></span></label></div>
+      <div class="tg" style="display:none"><span data-i="lShowAnual">Mostrar prima anual en la propuesta</span><label class="sw"><input type="checkbox" id="showAnual" checked><span class="track"></span><span class="thumb"></span></label></div>
     </div>
     <!-- 4 Generador -->
     <div class="sb-section">
@@ -330,7 +330,7 @@ var VIDA_DATA={"versio":"Tarifa v7 16/10/2026 \u00b7 verificada 13/11/2026","tax
 var L={
  es:{appTitle:'Tarificador Seguro de Vida',appSub:'Cálculo sobre tasas de tarifa vigentes',sTitle:'Título',sInsured:'Asegurado',sCond:'Condiciones',sGen:'Generador rápido',sOpts:'Opciones',
   lName:'Nombre',lBirth:'Fecha nacimiento',lEffect:'Fecha efecto',lProf:'Profesión',lSobFall:'Sobretasa fallec. ‰',lSobIpa:'Sobreprima invalidez %',lSport:'Deporte de riesgo',
-  lPay:'Forma de pago',lShowPays:'Mostrar también en la propuesta',lDPerfil:'Dto. perfil',lDAct:'Dto. actividad',lDAbc:'Dto. ABC',lDCli:'Dto. cliente (segmento)',lAbcOn:'ABC · renuncia de comisión (solo Dany)',abcInfo:'ABC −{d}%: reduce la comisión un {c}% (tabla estándar). Se mantiene en renovaciones.',hDesc:'Descuentos encadenados (producto), tope total 40%. Cliente: segmento B hasta 5%, A hasta 10% (requiere DNI). Perfil: solo con alguna garantía complementaria; hasta 5% desde 60.000 €, 10% desde 100.000 €, 15% desde 200.000 € (se limita por opción). Actividad: hasta 10% según sucursal/oficina. ABC: no se usa por defecto (renuncia de comisión).',lShowAnual:'Mostrar prima anual en la propuesta',
+  lPay:'Forma de pago',lShowPays:'Formas de pago en la propuesta (la más fraccionada, en grande)',lDPerfil:'Dto. perfil',lDAct:'Dto. actividad',lDAbc:'Dto. ABC',lDCli:'Dto. cliente (segmento)',lAbcOn:'ABC · renuncia de comisión (solo Dany)',abcInfo:'ABC −{d}%: reduce la comisión un {c}% (tabla estándar). Se mantiene en renovaciones.',hDesc:'Descuentos encadenados (producto), tope total 40%. Cliente: segmento B hasta 5%, A hasta 10% (requiere DNI). Perfil: solo con alguna garantía complementaria; hasta 5% desde 60.000 €, 10% desde 100.000 €, 15% desde 200.000 € (se limita por opción). Actividad: hasta 10% según sucursal/oficina. ABC: no se usa por defecto (renuncia de comisión).',lShowAnual:'Mostrar prima anual en la propuesta',
   lGenCaps:'Capitales (separados por coma)',bGen:'Generar opciones',bAdd:'Opción',bDup:'Duplicar última',bPrint:'Imprimir / PDF',bNew:'Nueva tarificación',
   phTitle:'Propuesta Seguro de Vida',phSubtitle:'Subtítulo (opcional)',
   agTitle:'Desglose para el mediador (no se imprime)',agHint:'Primas netas por garantía según tasas de tarifa. Total = neta + IPS 8% (invalidez y accidentes) + CLEA + Consorcio. Descuentos encadenados como en el tarificador (−10% −10% = −19%). Puede diferir ±0,01 € (±0,10 € con sobreprima de profesión).',
@@ -358,7 +358,7 @@ var L={
   confirmNew:'¿Empezar una tarificación nueva? Se perderán los datos actuales.'},
  ca:{appTitle:'Tarificador Assegurança de Vida',appSub:'Càlcul sobre taxes de tarifa vigents',sTitle:'Títol',sInsured:'Assegurat',sCond:'Condicions',sGen:'Generador ràpid',sOpts:'Opcions',
   lName:'Nom',lBirth:'Data naixement',lEffect:'Data efecte',lProf:'Professió',lSobFall:'Sobretaxa defunció ‰',lSobIpa:'Sobreprima invalidesa %',lSport:'Esport de risc',
-  lPay:'Forma de pagament',lShowPays:'Mostrar també a la proposta',lDPerfil:'Dte. perfil',lDAct:'Dte. activitat',lDAbc:'Dte. ABC',lDCli:'Dte. client (segment)',lAbcOn:'ABC · renúncia de comissió (només Dany)',abcInfo:'ABC −{d}%: redueix la comissió un {c}% (taula estàndard). Es manté a les renovacions.',hDesc:'Descomptes encadenats (producte), topall total 40%. Client: segment B fins a 5%, A fins a 10% (cal DNI). Perfil: només amb alguna garantia complementària; fins a 5% des de 60.000 €, 10% des de 100.000 €, 15% des de 200.000 € (es limita per opció). Activitat: fins a 10% segons sucursal/oficina. ABC: no s’utilitza per defecte (renúncia de comissió).',lShowAnual:'Mostrar prima anual a la proposta',
+  lPay:'Forma de pagament',lShowPays:'Formes de pagament a la proposta (la més fraccionada, en gran)',lDPerfil:'Dte. perfil',lDAct:'Dte. activitat',lDAbc:'Dte. ABC',lDCli:'Dte. client (segment)',lAbcOn:'ABC · renúncia de comissió (només Dany)',abcInfo:'ABC −{d}%: redueix la comissió un {c}% (taula estàndard). Es manté a les renovacions.',hDesc:'Descomptes encadenats (producte), topall total 40%. Client: segment B fins a 5%, A fins a 10% (cal DNI). Perfil: només amb alguna garantia complementària; fins a 5% des de 60.000 €, 10% des de 100.000 €, 15% des de 200.000 € (es limita per opció). Activitat: fins a 10% segons sucursal/oficina. ABC: no s’utilitza per defecte (renúncia de comissió).',lShowAnual:'Mostrar prima anual a la proposta',
   lGenCaps:'Capitals (separats per coma)',bGen:'Generar opcions',bAdd:'Opció',bDup:'Duplicar última',bPrint:'Imprimir / PDF',bNew:'Nova tarificació',
   phTitle:'Proposta Assegurança de Vida',phSubtitle:'Subtítol (opcional)',
   agTitle:'Desglossament per al mediador (no s’imprimeix)',agHint:'Primes netes per garantia segons taxes de tarifa. Total = neta + IPS 8% (invalidesa i accidents) + CLEA + Consorci. Descomptes encadenats com al tarificador (−10% −10% = −19%). Pot diferir ±0,01 € (±0,10 € amb sobreprima de professió).',
@@ -455,9 +455,10 @@ var KEY='opt_tarif_vida_v1';
 var PACKS={F:{fa:false,fc:false,ipa:'no',ipaA:false,ipaC:false,eg:0},FI:{fa:false,fc:false,ipa:'same',ipaA:false,ipaC:false,eg:0},FIA:{fa:true,fc:true,ipa:'same',ipaA:true,ipaC:true,eg:0},FIAE:{fa:true,fc:true,ipa:'same',ipaA:true,ipaC:true,eg:50},FE:{fa:false,fc:false,ipa:'no',ipaA:false,ipaC:false,eg:50}};
 function today(){var d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10);}
 function mkOpt(cap,pk,name){var o=Object.assign({name:name||'',cap:cap||100000,ipaCap:cap||100000},PACKS[pk||'FI']);return o;}
-function fresh(){return {lang:'es',title:'',subtitle:'',name:'',birth:'',effect:today(),prof:'',sobFall:0,sobIpa:0,sport:'',pay:12,showPays:[],dCli:0,dPerfil:0,dAct:0,dAbc:0,abcOn:false,showAnual:true,rec:1,genCaps:'100000',genPacks:['F','FI','FIA','FIAE'],
+function fresh(){return {lang:'es',title:'',subtitle:'',name:'',birth:'',effect:today(),prof:'',sobFall:0,sobIpa:0,sport:'',pay:12,showPays:[1],dCli:0,dPerfil:0,dAct:0,dAbc:0,abcOn:false,showAnual:false,rec:1,genCaps:'100000',genPacks:['F','FI','FIA','FIAE'],
   opts:[mkOpt(100000,'F'),mkOpt(100000,'FI'),mkOpt(100000,'FIAE')]};}
 var S; try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){} if(!S||!S.opts) S=fresh();
+if(S.showAnual){ if(!S.showPays) S.showPays=[]; if(+S.pay!==1&&S.showPays.indexOf(1)<0) S.showPays.push(1); S.showAnual=false; }
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 
 // ---------- helpers ----------
@@ -479,7 +480,7 @@ function fmtDate(s){if(!s)return '';var p=s.split('-');return p[2]+'/'+p[1]+'/'+
 // ---------- sidebar build ----------
 function fillSelects(){
   var pay=$('pay'); pay.innerHTML=''; [1,2,4,6,12].forEach(function(k){var o=document.createElement('option');o.value=k;o.textContent=T('pay')[k]+(PAY[k].pct?' (+'+PAY[k].pct+'%)':'');pay.appendChild(o);}); pay.value=S.pay;
-  var ps=$('payShow'); if(!S.showPays) S.showPays=[]; ps.innerHTML=[1,2,4,6,12].map(function(k){var main=k===+S.pay;return '<label'+(main?' style="opacity:.45"':'')+'><input type="checkbox" value="'+k+'"'+(main||S.showPays.indexOf(k)>=0?' checked':'')+(main?' disabled':'')+'>'+esc(T('pay')[k])+'</label>';}).join('');
+  var ps=$('payShow'); if(!S.showPays) S.showPays=[]; ps.innerHTML=[12,6,4,2,1].map(function(k){var on=k===+S.pay||S.showPays.indexOf(k)>=0;return '<label><input type="checkbox" value="'+k+'"'+(on?' checked':'')+'>'+esc(T('pay')[k])+(k===+S.pay?' <b style="color:var(--occ-red)">\u25CF</b>':'')+'</label>';}).join('');
   var MX={dCli:10,dPerfil:15,dAct:15,dAbc:10};['dCli','dPerfil','dAct','dAbc'].forEach(function(id){var s=$(id);s.innerHTML='';for(var i=0;i<=MX[id];i++){var o=document.createElement('option');o.value=i;o.textContent=i?('-'+i+'%'):'0%';s.appendChild(o);} s.value=S[id]||0;});
   var gp=$('genPacks'); gp.innerHTML=''; Object.keys(PACKS).forEach(function(k){var l=document.createElement('label');l.innerHTML='<input type="checkbox" value="'+k+'"'+(S.genPacks.indexOf(k)>=0?' checked':'')+'>'+esc(T('packs')[k]);gp.appendChild(l);});
 }
@@ -557,7 +558,7 @@ function renderDoc(){
   h+='<tr><td></td>'+res.map(function(R,i){return '<td class="'+recCls(i).trim()+'"><div class="monthly-box"><span class="label">'+esc(T('payRec')[S.pay])+'</span><div class="amount">'+(R.status==='ko'?'—':eur(R.recibo))+'</div></div></td>';}).join('')+'</tr></tfoot>';
   $('dTable').innerHTML=h;
   $('dNotes').textContent=T('notes');
-  document.body.classList.toggle('no-anual',!S.showAnual);
+  document.body.classList.remove('no-anual');
   // agent detail
   var keys=['gFall','gFa','gFc','gIpa','gIpaA','gIpaC','gEg'];
   var d='<thead><tr><th></th>'+S.opts.map(function(o,i){return '<th>'+esc(optName(o,i))+'</th>';}).join('')+'</tr></thead><tbody>';
@@ -573,7 +574,7 @@ function renderDoc(){
   renderPlans(res,c); applyView();
 }
 
-function altPays(){var a=(S.showPays||[]).map(Number).filter(function(k){return k!==+S.pay;}); if(S.showAnual&&+S.pay!==1&&a.indexOf(1)<0) a.unshift(1); return [1,2,4,6,12].filter(function(k){return a.indexOf(k)>=0;});}
+function altPays(){var a=(S.showPays||[]).map(Number).filter(function(k){return k!==+S.pay;}); return [1,2,4,6,12].filter(function(k){return a.indexOf(k)>=0;});}
 function payAmt(R,k){return k===1?R.total:r2(R.total*PAY[k].coef);}
 function renderPlans(res,c){
   var L2=function(k){return esc(T(k));};
@@ -665,7 +666,7 @@ var ABC_COM={0:0,1:1,2:2,3:5,4:8,5:10,6:12.5,7:15,8:20,9:22.5,10:25};
 function abcUI(){ $('abcOn').checked=!!S.abcOn; $('abcBox').style.display=S.abcOn?'':'none'; var d=+S.dAbc||0; $('abcInfo').style.display=S.abcOn&&d?'':'none'; $('abcInfo').textContent=T('abcInfo').replace('{d}',d).replace('{c}',String(ABC_COM[d]).replace('.',',')); }
 $('abcOn').addEventListener('change',function(){S.abcOn=this.checked; if(!S.abcOn) S.dAbc=0; $('dAbc').value=S.dAbc; update(true);});
 
-$('payShow').addEventListener('change',function(){S.showPays=[].slice.call(this.querySelectorAll('input:checked:not(:disabled)')).map(function(x){return +x.value;}); update(true);});
+$('payShow').addEventListener('change',function(){var sel=[].slice.call(this.querySelectorAll('input:checked')).map(function(x){return +x.value;}); if(sel.length){S.pay=Math.max.apply(null,sel); S.showPays=sel.filter(function(k){return k!==S.pay;});} fillSelects(); update(true);});
 $('tarifaInfo').textContent=VIDA_DATA.versio;
 update(true);
 window.__vida={calc:calc,actuarialAge:actuarialAge,S:function(){return S;}};

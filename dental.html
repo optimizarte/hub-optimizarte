@@ -189,7 +189,7 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
 .empty{padding:26px;text-align:center;color:var(--t3);font-size:13px}
 .pills3 .pl b{font-size:22px}
 
-/* ===== VERSIÓN PC (web): body.pc = ancho >= 900 px o ?v=pc ===== */
+/* ===== VERSIÓN PC (web): body.pc = ancho >= 900 px (una sola version; ?v=wa|pc antiguo se ignora) ===== */
 .pc .app{max-width:1180px;padding-bottom:84px}
 .pc main{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;padding:22px 26px 30px;align-items:start}
 .pc main>section.full{grid-column:1/-1}
@@ -337,7 +337,7 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
    Parámetros URL (todos opcionales; sin ellos sale la familia de ejemplo):
      l = es | ca              idioma
      m = e | c                e = familia de ejemplo · c = cliente concreto
-     v = wa | pc              wa = columna móvil (WhatsApp) · pc = versión web ancha · sin v: automático
+     v = (obsoleto, se ignora) una sola versión: columna móvil si ancho < 900 px, web ancha si >= 900 px
      a = H50,M42,M5,H1        asegurados: sexo (H/M) + edad
      n = Papá,Mamá,...        nombres opcionales (mismo orden que a), con encodeURIComponent
      x = emp:40,imp:600       precios de la propuesta que sustituyen a los del baremo (€ por acto)
@@ -345,7 +345,7 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
    ===================================================================== */
 const Q=new URLSearchParams(location.search);
 const L=Q.get('l')==='ca'?'ca':'es', MODE=Q.get('m')==='c'?'c':'e', V=Q.get('v');
-function layout(){document.body.classList.toggle('pc',V==='pc'||(V!=='wa'&&innerWidth>=900));}
+function layout(){document.body.classList.toggle('pc',innerWidth>=900);}
 layout();addEventListener('resize',layout);
 const LOC=L==='ca'?'ca-ES':'es-ES';
 const TEL='34972426665', MAIL='optimizarte@occident.com';

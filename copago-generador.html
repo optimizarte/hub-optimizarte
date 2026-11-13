@@ -161,19 +161,23 @@ textarea{min-height:92px;resize:vertical;line-height:1.45}
       <div class="st"><i class="ic i-whatsapp-verd"></i><h2>6 · Paquet d'enviament<small>Tot llest en un clic. El client no s'ha de registrar ni identificar</small></h2></div>
 
       <div class="blk">
-        <h3><i class="ic i-mail"></i>Correu · versió PC</h3>
+        <h3><i class="ic i-whatsapp-verd"></i>Enllaç de la simulació</h3>
+        <span class="lbl" style="margin-top:8px">Enllaç per al client · una sola versió que s'adapta sola a mòbil i PC · el mateix per correu i WhatsApp</span>
+        <div class="link"><input type="text" id="url" readonly><button class="btn" id="cu">Copiar</button><a class="btn" id="open" target="_blank" rel="noopener">Veure</a></div>
+      </div>
+
+      <div class="blk">
+        <h3><i class="ic i-mail"></i>Correu</h3>
         <span class="lbl" style="margin-top:8px">Assumpte</span><input type="text" id="subj" readonly>
         <span class="lbl" style="margin-top:8px">Text del correu</span><textarea id="mailBody" readonly></textarea>
-        <div class="actions"><a class="btn pri" id="mailto"><i class="ic i-mail" style="width:20px;height:20px;filter:brightness(0) invert(1)"></i>Obrir a Outlook</a><a class="btn" id="openpc" target="_blank" rel="noopener">Veure versió PC</a><button class="btn" id="cupc">Copiar enllaç</button></div>
-        <input type="text" id="urlpc" readonly style="margin-top:8px;font-size:11.5px;color:var(--t3)">
+        <div class="actions"><a class="btn pri" id="mailto"><i class="ic i-mail" style="width:20px;height:20px;filter:brightness(0) invert(1)"></i>Obrir a Outlook</a></div>
         <div class="hint" id="mailHint"></div>
       </div>
 
       <div class="blk">
-        <h3><i class="ic i-whatsapp-verd"></i>WhatsApp · versió mòbil</h3>
+        <h3><i class="ic i-whatsapp-verd"></i>WhatsApp</h3>
         <span class="lbl" style="margin-top:8px">Missatge</span><textarea id="waMsg" readonly></textarea>
-        <div class="actions"><a class="btn wa" id="wa" target="_blank" rel="noopener"><i class="ic i-whatsapp-verd"></i>Enviar per WhatsApp</a><a class="btn" id="open" target="_blank" rel="noopener">Veure versió mòbil</a><button class="btn" id="cu">Copiar enllaç</button></div>
-        <input type="text" id="url" readonly style="margin-top:8px;font-size:11.5px;color:var(--t3)">
+        <div class="actions"><a class="btn wa" id="wa" target="_blank" rel="noopener"><i class="ic i-whatsapp-verd"></i>Enviar per WhatsApp</a></div>
         <div class="hint" id="waHint"></div>
       </div>
 
@@ -247,8 +251,8 @@ function build(){
    const r=parseFloat($('rent').value);if(isFinite(r)&&r!==3)u.searchParams.set('r',r);
   }
   const uv=new URL('copago-video.html',location.href);u.searchParams.forEach((val,k)=>uv.searchParams.set(k,val));const urlvid=uv.toString();
-  u.searchParams.set('v','wa');const url=u.toString();u.searchParams.set('v','pc');const urlpc=u.toString();
-  $('url').value=w.length?'':url;$('open').href=w.length?'#':url;$('urlpc').value=w.length?'':urlpc;$('openpc').href=w.length?'#':urlpc;
+  u.searchParams.delete('v');const url=u.toString();
+  $('url').value=w.length?'':url;$('open').href=w.length?'#':url;
   $('urlvid').value=w.length?'':urlvid;$('openvid').href=w.length?'#':urlvid;
   if($('pv').dataset.u!==url&&!w.length){$('pv').dataset.u=url;$('pv').src=url;}
   const nm=$('cli').value.trim(), sig=$('sig').value.trim(), em=$('mail').value.trim();
@@ -259,8 +263,8 @@ function build(){
   const INTRO={es:cmp?'Te he preparado una comparativa de tu seguro de salud actual con Occident: mira cuánto podrías ahorrar.':'Te he preparado una simulación de seguro de salud: compara con y sin copago y mira cuánto podrías ahorrar.',
                ca:cmp?'T\'he preparat una comparativa de la teva assegurança de salut actual amb Occident: mira quant podries estalviar.':'T\'he preparat una simulació d\'assegurança de salut: compara amb i sense copagament i mira quant podries estalviar.'}[S.l];
   const BODY={
-   es:`${hi}\n\n${INTRO}\n\n- Simulación (versión web): ${urlpc}\n- Vídeo explicativo (47 s): ${urlvid}\n\nSe ve sin registrarte. Si quieres ajustarla a tu caso, respóndeme a este correo o escríbeme por WhatsApp al 972 42 66 65.\n\nUn saludo,\n${sig||'Optimizarte by Occident'}`,
-   ca:`${hi}\n\n${INTRO}\n\n- Simulació (versió web): ${urlpc}\n- Vídeo explicatiu (47 s): ${urlvid}\n\nEs veu sense registrar-te. Si vols ajustar-la al teu cas, respon-me a aquest correu o escriu-me per WhatsApp al 972 42 66 65.\n\nUna salutació,\n${sig||'Optimizarte by Occident'}`}[S.l];
+   es:`${hi}\n\n${INTRO}\n\n- Simulación: ${url}\n- Vídeo explicativo (47 s): ${urlvid}\n\nSe ve sin registrarte. Si quieres ajustarla a tu caso, respóndeme a este correo o escríbeme por WhatsApp al 972 42 66 65.\n\nUn saludo,\n${sig||'Optimizarte by Occident'}`,
+   ca:`${hi}\n\n${INTRO}\n\n- Simulació: ${url}\n- Vídeo explicatiu (47 s): ${urlvid}\n\nEs veu sense registrar-te. Si vols ajustar-la al teu cas, respon-me a aquest correu o escriu-me per WhatsApp al 972 42 66 65.\n\nUna salutació,\n${sig||'Optimizarte by Occident'}`}[S.l];
   const low=INTRO.charAt(0).toLowerCase()+INTRO.slice(1);
   const WA={
    es:`${hi} ${low} (sin registrarte):\n${url}\n\nY aquí, un vídeo de 47 s que lo explica:\n${urlvid}${sig?'\n'+sig:''}`,
@@ -292,7 +296,7 @@ $('people').addEventListener('click',e=>{if(e.target.dataset.del!==undefined){S.
 $('addP').onclick=()=>{if(S.people.length>=8){toast('Màxim 8 persones');return;}S.people.push({sex:'H',age:30,name:''});drawPeople();build();};
 $('ex').onclick=()=>{S.c='0';[...$('segC').children].forEach((b,i)=>b.classList.toggle('on',i===0));$('secComp').style.display='none';['e0','eA','e20'].forEach(id=>$(id).checked=true);['n0','nA','n20'].forEach(id=>$(id).value='');S.people=[{sex:'H',age:50,name:'Papá'},{sex:'M',age:42,name:'Mamá'},{sex:'M',age:5,name:'Niña'},{sex:'H',age:1,name:'Bebé'}];$('p0').value='3629,02';$('pA').value='2529,10';$('p20').value='1481,60';S.t='a';[...$('segT').children].forEach((b,i)=>b.classList.toggle('on',i===0));drawPeople();build();};
 ['p0','pA','p20','rent','cli','mail','tel','sig'].forEach(id=>$(id).addEventListener('input',build));
-$('cu').onclick=()=>copy($('url').value);$('cupc').onclick=()=>copy($('urlpc').value);$('cuvid').onclick=()=>copy($('urlvid').value);
+$('cu').onclick=()=>copy($('url').value);$('cuvid').onclick=()=>copy($('urlvid').value);
 drawPeople();build();
 </script>
 </body>

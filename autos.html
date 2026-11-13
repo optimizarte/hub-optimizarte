@@ -190,7 +190,7 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
 .empty{padding:26px;text-align:center;color:var(--t3);font-size:13px}
 .pills3 .pl b{font-size:22px}
 
-/* ===== VERSIÓN PC (web): body.pc = ancho >= 900 px o ?v=pc ===== */
+/* ===== VERSIÓN PC (web): body.pc = ancho >= 900 px (una sola version; ?v=wa|pc antiguo se ignora) ===== */
 .pc .app{max-width:1180px;padding-bottom:84px}
 .pc main{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;padding:22px 26px 30px;align-items:start}
 .pc main>section.full{grid-column:1/-1}
@@ -390,7 +390,7 @@ button.kpi{width:100%;max-width:520px;margin:14px auto 0;text-align:left;cursor:
    Tambien acepta ?, como los otros simuladores. Parametros (todos opcionales):
      l = es | ca      idioma
      m = e | c        e = ejemplo · c = cliente concreto
-     v = wa | pc      wa = columna movil · pc = web ancha · sin v: automatico
+     v = (obsoleto, se ignora)      una sola version: movil < 900 px, web ancha >= 900 px
      d = JSON en base64url (lo escribe el generador; NO es cifrado):
        {v:{mt,ma,mo,ve,us,pl,co,fm,cm,pk,al,re,pu,km,ca,si,an,as},   vehiculo e historial
         p:[{r:'tpho',n,po,cp,fn,fc}],                                personas (t tomador, p propietario, h habitual, o ocasional)
@@ -408,7 +408,7 @@ const Q=new URLSearchParams(SH?'':(location.hash.slice(1)||location.search));
 addEventListener('hashchange',()=>location.reload());
 const L=(SH?SH.l:Q.get('l'))==='ca'?'ca':'es', V=SH?null:Q.get('v');
 let MODE=SH||Q.get('m')==='c'?'c':'e';
-function layout(){document.body.classList.toggle('pc',V==='pc'||(V!=='wa'&&innerWidth>=900));}
+function layout(){document.body.classList.toggle('pc',innerWidth>=900);}
 layout();addEventListener('resize',layout);
 const LI=L==='ca'?1:0, LOC=L==='ca'?'ca-ES':'es-ES';
 const TEL='34972426665', MAIL='optimizarte@occident.com';

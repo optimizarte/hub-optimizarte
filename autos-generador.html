@@ -155,10 +155,8 @@ textarea{min-height:92px;resize:vertical;line-height:1.45}
         <div class="link"><input type="text" id="shorturl" readonly placeholder="Encara no l'has creat"><button class="btn pri" id="mkShort">Crear enllaç curt</button><button class="btn" id="cushort">Copiar</button></div>
         <div class="hint" id="shortHint">Les dades es xifren en aquest navegador i caduquen als 75 dies. Si canvies alguna dada, caldrà crear-lo de nou.</div>
       </div>
-      <span class="lbl" id="urlLbl">Versió WhatsApp (mòbil) · és la que s'envia al client</span>
+      <span class="lbl" id="urlLbl">Enllaç per al client · una sola versió que s'adapta sola a mòbil i PC</span>
       <div class="link"><input type="text" id="url" readonly><button class="btn pri" id="cu">Copiar</button><a class="btn" id="open" target="_blank" rel="noopener">Obrir</a></div>
-      <span class="lbl" style="margin-top:12px">Versió PC (web) · per ensenyar-la a pantalla gran o enviar per mail</span>
-      <div class="link"><input type="text" id="urlpc" readonly><button class="btn" id="cupc">Copiar</button><a class="btn" id="openpc" target="_blank" rel="noopener">Obrir</a></div>
       <span class="lbl" style="margin-top:14px">Mòbil del client (no viatja a l'enllaç)</span>
       <input type="text" id="tel" inputmode="tel" maxlength="16" placeholder="Si n'hi ha, el WhatsApp s'obre directe a aquest número" style="max-width:340px">
       <span class="lbl" style="margin-top:14px">Missatge preparat (editable)</span>
@@ -803,9 +801,9 @@ function build(){
   if(Object.keys(byC).length>4)err.push('Màxim 4 companyies: desmarca\'n alguna.');
   Object.entries(byC).forEach(([k,n])=>{if(n>4)err.push(`Màxim 4 opcions per companyia (${k||'sense nom'}).`);});
   $('warn').textContent=err.join(' ');$('warn').classList.toggle('on',err.length>0);
-  const mk=vw=>{const q=new URLSearchParams({l:S.l,m:'c',v:vw,d:b64(payload())});return new URL('autos.html',location.href).href.split('#')[0]+'#'+q.toString();};
-  const url=mk('wa'),urlpc=mk('pc'),bl=err.length>0;
-  $('url').value=bl?'':url;$('open').href=bl?'#':url;$('urlpc').value=bl?'':urlpc;$('openpc').href=bl?'#':urlpc;
+  const mk=()=>{const q=new URLSearchParams({l:S.l,m:'c',d:b64(payload())});return new URL('autos.html',location.href).href.split('#')[0]+'#'+q.toString();};
+  const url=mk(),bl=err.length>0;
+  $('url').value=bl?'':url;$('open').href=bl?'#':url;
   clearTimeout(pvT);pvT=setTimeout(()=>{if($('pv').dataset.u!==url){$('pv').dataset.u=url;$('pv').src=url;}},350);
   const link=S.short||url;
   if(SHORT_API){$('shortBox').style.display='';$('shorturl').value=S.short||'';$('mkShort').textContent=S.short?'Tornar a crear':'Crear enllaç curt';$('urlLbl').textContent='Enllaç llarg · per si falla el curt';}
@@ -885,7 +883,7 @@ $('addO').onclick=()=>{S.offers.push(newOffer({k:'',n:'',val:'v',m:'f',cat:'',st
 $('tel').addEventListener('input',e=>{S.tel=e.target.value;setWa($('url').value==='');});
 $('msg').addEventListener('input',()=>{$('msg').dataset.edited='1';setWa($('url').value==='');});
 if(SHORT_API){$('mkShort').onclick=makeShort;$('cushort').onclick=()=>copy($('shorturl').value);}
-$('cu').onclick=()=>copy($('url').value);$('cupc').onclick=()=>copy($('urlpc').value);$('cm').onclick=()=>copy($('msg').value);
+$('cu').onclick=()=>copy($('url').value);$('cm').onclick=()=>copy($('msg').value);
 drawFiles();drawConf();drawVeh();drawPeople();drawOffers();build();
 </script>
 </body>

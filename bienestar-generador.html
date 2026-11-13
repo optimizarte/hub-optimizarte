@@ -115,10 +115,8 @@ textarea{min-height:92px;resize:vertical;line-height:1.45}
 
     <section class="card">
       <div class="st"><i class="ic i-whatsapp-verd"></i><h2>4 · Enllaç i missatge<small>Es publica a GitHub Pages: el client no s'ha de registrar ni identificar</small></h2></div>
-      <span class="lbl">Versió WhatsApp (mòbil) · és la que s'envia al client</span>
+      <span class="lbl">Enllaç per al client · una sola versió que s'adapta sola a mòbil i PC</span>
       <div class="link"><input type="text" id="url" readonly><button class="btn pri" id="cu">Copiar</button><a class="btn" id="open" target="_blank" rel="noopener">Obrir</a></div>
-      <span class="lbl" style="margin-top:12px">Versió PC (web) · per ensenyar-la a pantalla gran o enviar per mail</span>
-      <div class="link"><input type="text" id="urlpc" readonly><button class="btn" id="cupc">Copiar</button><a class="btn" id="openpc" target="_blank" rel="noopener">Obrir</a></div>
       <span class="lbl" style="margin-top:14px">Missatge preparat (editable)</span>
       <textarea id="msg"></textarea>
       <div class="actions"><button class="btn" id="cm">Copiar missatge</button><a class="btn wa" id="wa" target="_blank" rel="noopener"><i class="ic i-whatsapp-verd"></i>Enviar per WhatsApp</a></div>
@@ -183,9 +181,9 @@ function build(){
   if(n)u.searchParams.set('a',S.people.map(p=>p.sex+p.age).join(','));
   if(S.people.some(p=>(p.name||'').trim()))u.searchParams.set('n',S.people.map(p=>encodeURIComponent((p.name||'').trim().slice(0,18))).join(','));
   if(okT){if(joint())u.searchParams.set('t',tot.toFixed(2));else u.searchParams.set('q',qs.map(v=>v.toFixed(2)).join(','));}
-  u.searchParams.set('v','wa');const url=u.toString();u.searchParams.set('v','pc');const urlpc=u.toString();
+  u.searchParams.delete('v');const url=u.toString();
   const bl=err.length>0;
-  $('url').value=bl?'':url;$('open').href=bl?'#':url;$('urlpc').value=bl?'':urlpc;$('openpc').href=bl?'#':urlpc;
+  $('url').value=bl?'':url;$('open').href=bl?'#':url;
   if(n&&$('pv').dataset.u!==url){$('pv').dataset.u=url;$('pv').src=url;}
   const nms=S.people.map(p=>(p.name||'').trim()).filter(Boolean);
   const nm=nms.length?(nms.length===1?nms[0]:nms.slice(0,-1).join(', ')+(S.l==='ca'?' i ':' y ')+nms[nms.length-1]):'';
@@ -209,7 +207,7 @@ $('people').addEventListener('click',e=>{if(e.target.dataset.del!==undefined){S.
 $('addP').onclick=()=>{if(S.people.length>=8){toast('Màxim 8 assegurats');return;}S.touched=true;S.people.push({sex:'H',age:S.p==='s'?SENIOR_MIN:40,name:'',q:''});$('msg').dataset.edited='';drawPeople();build();};
 $('joint').addEventListener('input',()=>{$('msg').dataset.edited='';build();});
 $('msg').addEventListener('input',()=>{$('msg').dataset.edited='1';$('wa').href='https://wa.me/?text='+encodeURIComponent($('msg').value);});
-$('cu').onclick=()=>copy($('url').value);$('cupc').onclick=()=>copy($('urlpc').value);$('cm').onclick=()=>copy($('msg').value);
+$('cu').onclick=()=>copy($('url').value);$('cm').onclick=()=>copy($('msg').value);
 drawPeople();build();
 </script>
 </body>

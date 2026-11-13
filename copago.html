@@ -175,7 +175,7 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
 
 .pills3{display:flex;gap:6px;margin-top:8px}.pills3 .pl{flex:1;min-width:0;border-radius:22px;padding:9px 4px 8px;text-align:center;color:#fff;display:flex;flex-direction:column;gap:1px;align-items:center}.pills3 .pl span{font-size:10.5px;font-weight:600;opacity:.95;line-height:1.2}.pills3 .pl b{color:#fff;font-size:16px;font-weight:700;letter-spacing:-.02em;line-height:1.2}.pills3 .pl b small{font-size:10px;font-weight:600;margin-left:1px}.pills3 .pl i{font-style:normal;font-size:9.5px;opacity:.9}.pills3 .sin{background:var(--t3)}.pills3 .adv{background:var(--ade)}.pills3 .c20{background:var(--brand)}
 
-/* ===== VERSIÓN PC (web): body.pc = ancho >= 900 px o ?v=pc ===== */
+/* ===== VERSIÓN PC (web): body.pc = ancho >= 900 px (una sola version; ?v=wa|pc antiguo se ignora) ===== */
 .pc .app{max-width:1180px;padding-bottom:84px}
 .pc main{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;padding:22px 26px 30px;align-items:start}
 .pc main>section{grid-column:auto}
@@ -326,7 +326,7 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
    Parámetros (todos opcionales; sin ellos sale la familia de ejemplo con las 3 modalidades de Occident):
      l  = es | ca                 idioma
      m  = e | c                   e = familia de ejemplo · c = cliente concreto
-     v  = wa | pc                 wa = columna móvil · pc = web ancha · sin v: automático
+     v = (obsoleto, se ignora)                 una sola versión: móvil < 900 px, web ancha >= 900 px
      p  = S,A,C                   primas ANUALES de Sin copago, Advance y Copago 20; vacío = no se muestra (p. ej. p=,2529.10,1481.60)
      pn = nomS|nomA|nomC          nombres de los productos (vacío = por defecto)
      c  = 1                       comparar con la competencia (la competencia va siempre la primera por la izquierda)
@@ -394,7 +394,7 @@ window.__logosReady=Promise.resolve();
 if(COMP){const lk=document.createElement('link');lk.rel='stylesheet';lk.href='copago-logos.css';document.head.appendChild(lk);window.__logosReady=new Promise(r=>{lk.onload=r;lk.onerror=r;});}
 function logoEl(p){return p.key?`<i class="lg lg-${p.key}"></i>`:(p.company&&p.company!==p.name?`<span class="cmpco">${esc(p.company)}</span>`:'');}
 
-function layout(){document.body.classList.toggle('pc',V==='pc'||(V!=='wa'&&innerWidth>=900));}
+function layout(){document.body.classList.toggle('pc',innerWidth>=900);}
 layout();addEventListener('resize',layout);
 /* ===== Principales actos médicos 2026 (transcrito de la tabla «Modalidad Asistencial; Copagos principales actos médicos 2026») =====
    cop: copago en € por acto (100 = pruebas avanzadas/intervenciones, 20 = copago único por centro y día, 2 = por sesión, 0 = sin copago)

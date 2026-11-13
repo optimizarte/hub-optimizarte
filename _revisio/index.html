@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Revisió d'apps · HUB Optimizarte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root{--red:#DC0028;--dark:#202020;--bg:#FAFAF7;--card:#fff;--line:#E5E3DE;--t2:#4F5059;--t3:#8A8B93;--ok:#10B981;--ko:#DC0028;--pend:#B4B5BC}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--dark);font-family:'DM Sans',system-ui,sans-serif;font-size:14px}
+header{background:var(--dark);color:#fff;padding:18px 16px}
+header h1{font-family:'DM Serif Display',serif;font-weight:400;margin:0;font-size:24px}
+header h1 span{color:var(--red)}
+header p{margin:6px 0 0;color:#cfcfcf;font-size:13px;max-width:820px}
+main{max-width:1000px;margin:0 auto;padding:16px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 14px}
+.bar .count{color:var(--t2);font-size:13px;margin-right:auto}
+button{font-family:inherit;font-size:13px;border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 12px;cursor:pointer}
+button.primary{background:var(--red);border-color:var(--red);color:#fff;font-weight:700}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);margin:22px 0 8px}
+.app{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px;display:grid;grid-template-columns:1fr auto;gap:8px 14px;align-items:center}
+.app.dup{border-left:4px solid var(--red)}
+.name{font-weight:700;font-size:15px}
+.meta{color:var(--t3);font-size:12px;margin-top:2px;word-break:break-all}
+.links{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.links a{display:inline-block;text-decoration:none;color:var(--red);border:1px solid var(--red);border-radius:999px;padding:4px 11px;font-weight:700;font-size:12.5px}
+.links a.v2{color:var(--t2);border-color:var(--line)}
+.links small{color:var(--t3);font-size:11.5px;align-self:center}
+.verdict{display:flex;gap:4px}
+.verdict label{cursor:pointer;border:1px solid var(--line);border-radius:8px;padding:5px 9px;font-size:12px;white-space:nowrap;user-select:none}
+.verdict input{display:none}
+.verdict input:checked+span{font-weight:700}
+.verdict label:has(input[value=bona]:checked){background:#E7F8F1;border-color:var(--ok);color:#047857}
+.verdict label:has(input[value=eliminar]:checked){background:#FDE8EC;border-color:var(--ko);color:var(--ko)}
+.verdict label:has(input[value=canvis]:checked){background:#FFF6E0;border-color:#E0A100;color:#8A6200}
+.note{grid-column:1/-1}
+.note input{width:100%;font-family:inherit;font-size:13px;border:1px solid var(--line);border-radius:8px;padding:6px 9px}
+.excluded{background:#fff;border:1px dashed var(--line);border-radius:12px;padding:12px 14px;color:var(--t2)}
+.excluded li{margin:4px 0}
+footer{color:var(--t3);font-size:12px;text-align:center;padding:24px 16px}
+@media (max-width:640px){.app{grid-template-columns:1fr}.verdict{flex-wrap:wrap}}
+@media print{@page{size:A4;margin:7mm}header{background:none;color:#000;padding:0 0 8px;border-bottom:2px solid var(--red)}header p{color:#333}.bar button{display:none}.app{break-inside:avoid;border-color:#bbb}.links a{border:none;padding:0 6px 0 0}.note input{border:none;border-bottom:1px solid #bbb;border-radius:0}body{background:#fff}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Revisió d'apps · <span>HUB Optimizarte</span></h1>
+  <p>Totes les apps de les targetes del hub, per provar-les una a una. Marca cada una com <b>Bona</b>, <b>Canvis</b> o <b>Eliminar</b> i, quan acabis, prem «Copia el resum» i enganxa-me'l. Les marques es guarden només en aquest navegador.</p>
+</header>
+<main>
+  <div class="bar">
+    <span class="count" id="count"></span>
+    <button id="copy" class="primary">Copia el resum</button>
+    <button id="reset">Esborra les marques</button>
+  </div>
+  <div id="list"></div>
+
+  <h2>No publicades (fora de GitHub)</h2>
+  <div class="excluded">
+    <ul>
+      <li><b>Seguimiento Cartera</b> (<code>seguimiento-cartera-anagan.html</code>, i les variants <code>-occident</code> i <code>-total</code>): porta dades de clients i el repositori és públic. Es prova en local des del hub o des d'OPTICRM.</li>
+      <li><b>Fusió de Contactes</b> (<code>fusio-contactes_1.html</code>): també porta dades de clients; el repositori ja l'exclou expressament. Es prova en local des del hub.</li>
+      <li><b>Seguiment d'Agència</b>: s'obre des del mateix hub (no és un fitxer).</li>
+      <li><b>Control de Deutes</b>: és un artifact de claude.ai, fora del repositori.</li>
+    </ul>
+  </div>
+</main>
+<footer>Generat el 13/11/2026 · sessió mare HUB · carpeta <code>_revisio/</code></footer>
+
+<script>
+// v: versió principal (la més nova); v2: alternativa més antiga (si n'hi ha)
+var APPS = [
+ ["Formularis", [
+  {n:"Alta de Client", f:"../!!!APPS/alta-clientes.html", d:"28/05/2026", v2:"alta-clientes-2.html", d2:"20/05/2026 (còpia de seguretat antiga)"},
+  {n:"Canvi de Mediador", f:"../!!!APPS/generador-cambio-mediador.html", d:"26/07/2026"},
+  {n:"No Renovació de Pòlissa", f:"../!!!APPS/no-renovacion-poliza.html", d:"12/11/2026 (pilot estil nou)"},
+  {n:"Rehabilitació de Pòlissa", f:"../!!!APPS/rehabilitacion-poliza.html", d:"28/07/2026"},
+  {n:"Sol·licitud TIREA / SIHSA", f:"../!!!APPS/tirea-sihsa-v4.html", d:"11/08/2026"},
+  {n:"Contacte WhatsApp · QR", f:"../!!!APPS/whatsapp-links-qr.html", d:"23/09/2026"},
+  {n:"Traductor IA", f:"../!!!APPS/Traductor_IA_OPTIMIZARTE.html", d:"21/09/2026"}
+ ]],
+ ["Sinistres", [
+  {n:"D.I.S. — Decl. Inexistència Sinistre", f:"../!!!APPS/DIS_formulario_3.html", d:"18/08/2026"},
+  {n:"Directori d'Assistència", f:"../!!!APPS/directorio_asistencia_1.html", d:"10/09/2026"}
+ ]],
+ ["Pagaments", [
+  {n:"Calendari de Pagaments", f:"../!!!APPS/CalendarioPagosPolizas_Occident.html", d:"26/07/2026"}
+ ]],
+ ["Simuladors (generador → pàgina de client)", [
+  {n:"Simulador Autos", f:"../autos-generador.html", d:"13/11/2026", x:"../autos.html"},
+  {n:"Simulador Hogar", f:"../hogar-generador.html", d:"13/11/2026", x:"../hogar.html"},
+  {n:"Simulador Vida", f:"../vida-generador.html", d:"13/11/2026", x:"../vida.html"},
+  {n:"Simulador Copagament · Salut", f:"../copago-generador.html", d:"13/11/2026", x:"../copago.html"},
+  {n:"Simulador Dental · Baremo 2025", f:"../dental-generador.html", d:"13/11/2026", x:"../dental.html"},
+  {n:"Simulador Cosalud Bienestar", f:"../bienestar-generador.html", d:"13/11/2026", x:"../bienestar.html"},
+  {n:"Simulador Viajes", f:"../viajes-generador.html", d:"13/11/2026", x:"../viajes.html"}
+ ]],
+ ["Cotitzacions i comparadors", [
+  {n:"Tarificador Vida", f:"../!!!APPS/tarificador-vida.html", d:"13/11/2026"},
+  {n:"Comparativo Vida", f:"comparativo-vida_4.html", d:"02/11/2026 (no pujada fins ara)", v2:"comparativo-vida_4-2.html", d2:"24/08/2026 (la que obre ara el hub)"},
+  {n:"Comparador de Plans de Pensions", f:"comparador_plans_pensions.html", d:"02/11/2026 (no pujada fins ara)", v2:"comparador_plans_pensions-2.html", d2:"15/10/2026 (la que obre ara el hub)"},
+  {n:"Comparador de Propuestas", f:"../!!!APPS/comparador-propuestas_6.html", d:"20/08/2026"},
+  {n:"Comparador de Quadres Mèdics", f:"../!!!APPS/comparador-quadres-medics.html", d:"05/11/2026"},
+  {n:"Comparativa Préstecs Hipotecaris", f:"../!!!APPS/comparativa-prestecs-optimizarte_2.html", d:"08/09/2026"},
+  {n:"Configurador de Accesorios", f:"../!!!APPS/accesorios-config-github.html", d:"06/09/2026"}
+ ]],
+ ["Seguiment i anàlisi", [
+  {n:"Seguiment Mensual · Bonos", f:"seguiment-mensual_3.html", d:"02/11/2026 (no pujada fins ara)", v2:"seguiment-mensual_3-2.html", d2:"25/10/2026 (la que obre ara el hub)"},
+  {n:"Tancaments Mensuals", f:"../!!!APPS/historics-seguiment.html", d:"03/08/2026"},
+  {n:"Seguiment Vendes Excel", f:"../!!!APPS/seguiment-excel.html", d:"11/08/2026"},
+  {n:"Dashboard Mediador", f:"../!!!APPS/dashboard-app.html", d:"11/08/2026"},
+  {n:"Analitzador ChatBot WhatsApp", f:"../!!!APPS/analitzador-chatbot-whatsapp.html", d:"24/09/2026"}
+ ]]
+];
+var KEY="hub-revisio-v1", st={};
+try{st=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function href(p){return encodeURI(p).replace(/!/g,"%21")}
+function fname(p){return p.replace(/^\.\.\//,"")}
+var list=document.getElementById("list"), total=0, html="";
+APPS.forEach(function(g){
+  html+="<h2>"+esc(g[0])+"</h2>";
+  g[1].forEach(function(a){
+    total++; var id=a.n, s=st[id]||{};
+    var links='<a href="'+href(a.f)+'" target="_blank" rel="noopener">Obre'+(a.v2?" · versió nova":"")+'</a>';
+    if(a.x) links+='<a class="v2" href="'+href(a.x)+'" target="_blank" rel="noopener">Pàgina de client</a>';
+    if(a.v2) links+='<a class="v2" href="'+href(a.v2)+'" target="_blank" rel="noopener">Obre -2 · versió antiga</a><small>'+esc(a.d2)+'</small>';
+    var r=["bona","canvis","eliminar"].map(function(v){
+      var lbl={bona:"Bona",canvis:"Canvis",eliminar:"Eliminar"}[v];
+      return '<label><input type="radio" name="'+esc(id)+'" value="'+v+'"'+(s.v===v?" checked":"")+'><span>'+lbl+'</span></label>';
+    }).join("");
+    html+='<div class="app'+(a.v2?" dup":"")+'" data-id="'+esc(id)+'"><div><div class="name">'+esc(a.n)+'</div>'+
+      '<div class="meta">'+esc(fname(a.f))+' · '+esc(a.d)+'</div><div class="links">'+links+'</div></div>'+
+      '<div class="verdict">'+r+'</div>'+
+      '<div class="note"><input placeholder="Nota (opcional): què cal canviar, quina versió és la bona…" value="'+esc(s.t||"")+'"></div></div>';
+  });
+});
+list.innerHTML=html;
+function count(){var d=Object.keys(st).filter(function(k){return st[k].v}).length;document.getElementById("count").textContent=d+" de "+total+" revisades"}
+list.addEventListener("change",function(e){var c=e.target.closest(".app");if(!c)return;var id=c.dataset.id;st[id]=st[id]||{};if(e.target.type==="radio")st[id].v=e.target.value;save();count()});
+list.addEventListener("input",function(e){var c=e.target.closest(".app");if(!c||e.target.type==="radio")return;var id=c.dataset.id;st[id]=st[id]||{};st[id].t=e.target.value;save()});
+document.getElementById("copy").onclick=function(){
+  var out=["Revisió d'apps HUB:"];
+  APPS.forEach(function(g){g[1].forEach(function(a){var s=st[a.n]||{};out.push("- "+a.n+": "+(s.v?s.v.toUpperCase():"pendent")+(s.t?" — "+s.t:""))})});
+  var txt=out.join("\n");
+  (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(function(){alert("Resum copiat. Enganxa'l al xat.")},function(){prompt("Copia aquest text:",txt)});
+};
+document.getElementById("reset").onclick=function(){if(confirm("Esborrar totes les marques?")){st={};save();location.reload()}};
+count();
+</script>
+</body>
+</html>

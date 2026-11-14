@@ -310,7 +310,7 @@ button.kpi{width:100%;max-width:520px;margin:14px auto 0;text-align:left;cursor:
       </div></div>
     </section>
 
-    <section class="card rv" id="capCard">
+    <section class="card rv full" id="capCard">
       <div class="st"><i class="ic i-escudo"></i><h2><span data-t="capH"></span><small data-t="capS"></small></h2></div>
       <p class="intro" data-t="capP"></p>
       <div class="capbox">
@@ -322,18 +322,18 @@ button.kpi{width:100%;max-width:520px;margin:14px auto 0;text-align:left;cursor:
       </div>
     </section>
 
-    <section class="card rv" id="needCard">
+    <section class="card rv full" id="plCard">
+      <div class="st"><i class="ic i-polissa"></i><h2><span id="plH"></span><small data-t="plS"></small></h2></div>
+      <div class="vps" id="vps"></div>
+    </section>
+
+    <section class="card rv full" id="needCard">
       <div class="st"><i class="ic i-calculadora"></i><h2><span data-t="needH"></span><small data-t="needS"></small></h2></div>
       <div class="ctrl"><label for="nInc"><b data-t="nInc"></b><span id="nIncV"></span></label><input type="range" id="nInc" min="10000" max="120000" step="1000" value="30000"></div>
       <div class="ctrl"><label for="nYrs"><b data-t="nYrs"></b><span id="nYrsV"></span></label><input type="range" id="nYrs" min="1" max="25" step="1" value="10"></div>
       <div class="ctrl"><label for="nDebt"><b data-t="nDebt"></b><span id="nDebtV"></span></label><input type="range" id="nDebt" min="0" max="500000" step="5000" value="0"></div>
       <div class="total"><div class="kl" data-t="needR"></div><div class="tv" id="needV"></div><div class="ks" id="needN"></div>
         <button class="gobtn" id="needGo"></button></div>
-    </section>
-
-    <section class="card rv full" id="plCard">
-      <div class="st"><i class="ic i-polissa"></i><h2><span id="plH"></span><small data-t="plS"></small></h2></div>
-      <div class="vps" id="vps"></div>
     </section>
 
     <section class="card rv full" id="cmpCard">
@@ -490,9 +490,9 @@ es:{brand:'Seguro de vida',hi:'Hola',lead:'Aquí tienes tu propuesta de seguro d
  capL:'Capital de fallecimiento',rst:'Volver a la propuesta',capHint:'Mueve la barra para ver el precio con otro capital.',capMed:'Con este capital la compañía puede pedir pruebas médicas.',
  ko:'Este capital no es posible en esta opción. Consúltanos.',
  gFall:'Fallecimiento',gInv:'Invalidez absoluta y permanente',gEg:'Enfermedades graves',
- lnEnf:'Por enfermedad',lnAcc:'Por accidente',lnCirc:'Por accidente de tráfico',lnAdv:p=>`Adelanto (${p} %)`,adv:'Adelanto',no:'No incluida',
+ lnAny:'Por cualquier causa (enfermedad o accidente)',lnEnf:'Por enfermedad',lnAcc:'Por accidente',lnCirc:'Por accidente de tráfico',lnAdv:p=>`Adelanto (${p} %)`,adv:'Adelanto',no:'No incluida',
  wifH:'¿Y si…?',wifS:'Lo que se cobraría en cada caso con la opción elegida',
- w:{fall:'Si falleces por una enfermedad, tus beneficiarios reciben',fa:'Si falleces en un accidente, tus beneficiarios reciben',fc:'Si falleces en un accidente de tráfico, tus beneficiarios reciben',
+ w:{fallAny:'Si falleces, por enfermedad o accidente, tus beneficiarios reciben',ipaAny:'Si una invalidez absoluta y permanente, por enfermedad o accidente, te impide trabajar, cobras tú',fall:'Si falleces por una enfermedad, tus beneficiarios reciben',fa:'Si falleces en un accidente, tus beneficiarios reciben',fc:'Si falleces en un accidente de tráfico, tus beneficiarios reciben',
     ipa:'Si una invalidez absoluta y permanente te impide trabajar, cobras tú',ipaA:'Si la invalidez es por un accidente, cobras tú',ipaC:'Si la invalidez es por un accidente de tráfico, cobras tú',
     eg:'Si te diagnostican un cáncer, un infarto o un ictus, cobras ya',egR:v=>`El resto, ${v}, queda para tus beneficiarios.`},
  needH:'¿Cuánto capital necesito?',needS:'Un cálculo orientativo para empezar',nInc:'Ingresos anuales a proteger',nYrs:'Años que quieres cubrir',nDebt:'Hipoteca y deudas pendientes',yrs:n=>n===1?'1 año':`${n} años`,
@@ -519,9 +519,9 @@ ca:{brand:'Assegurança de vida',hi:'Hola',lead:'Aquí tens la teva proposta d\'
  capL:'Capital de defunció',rst:'Tornar a la proposta',capHint:'Mou la barra per veure el preu amb un altre capital.',capMed:'Amb aquest capital la companyia pot demanar proves mèdiques.',
  ko:'Aquest capital no és possible en aquesta opció. Consulta\'ns.',
  gFall:'Defunció',gInv:'Invalidesa absoluta i permanent',gEg:'Malalties greus',
- lnEnf:'Per malaltia',lnAcc:'Per accident',lnCirc:'Per accident de trànsit',lnAdv:p=>`Avançament (${p} %)`,adv:'Avançament',no:'No inclosa',
+ lnAny:'Per qualsevol causa (malaltia o accident)',lnEnf:'Per malaltia',lnAcc:'Per accident',lnCirc:'Per accident de trànsit',lnAdv:p=>`Avançament (${p} %)`,adv:'Avançament',no:'No inclosa',
  wifH:'I si…?',wifS:'El que es cobraria en cada cas amb l\'opció triada',
- w:{fall:'Si morissis per una malaltia, els teus beneficiaris rebrien',fa:'Si morissis en un accident, els teus beneficiaris rebrien',fc:'Si morissis en un accident de trànsit, els teus beneficiaris rebrien',
+ w:{fallAny:'Si morissis, per malaltia o accident, els teus beneficiaris rebrien',ipaAny:'Si una invalidesa absoluta i permanent, per malaltia o accident, t\'impedeix treballar, cobres tu',fall:'Si morissis per una malaltia, els teus beneficiaris rebrien',fa:'Si morissis en un accident, els teus beneficiaris rebrien',fc:'Si morissis en un accident de trànsit, els teus beneficiaris rebrien',
     ipa:'Si una invalidesa absoluta i permanent t\'impedeix treballar, cobres tu',ipaA:'Si la invalidesa és per un accident, cobres tu',ipaC:'Si la invalidesa és per un accident de trànsit, cobres tu',
     eg:'Si et diagnostiquen un càncer, un infart o un ictus, cobres ja',egR:v=>`La resta, ${v}, queda per als teus beneficiaris.`},
  needH:'Quant capital necessito?',needS:'Un càlcul orientatiu per començar',nInc:'Ingressos anuals a protegir',nYrs:'Anys que vols cobrir',nDebt:'Hipoteca i deutes pendents',yrs:n=>n===1?'1 any':`${n} anys`,
@@ -572,6 +572,8 @@ const res=()=>VM.same(OPTS.map(o=>VM.calc(optAt(o),K)));
 const priceBig=R=>R.ok?`${eur(R.recibo)}<small>${T.per[R.pay]}</small>`:'—';
 const priceSub=R=>!R.ok?'':(R.pay!==1?`<div class="an">${T.orYear(eur(R.total))}</div>`:'')+`<div class="dy">${T.perDay(eur(R.recibo*R.pay/365))}</div>`;
 function line(lab,on,v,up){return `<div class="ln${on?'':' off'}${on&&up?' up':''}"><span>${lab}</span><b>${on?cap(v):T.no}</b></div>`;}
+/* sin doble/triple: una sola linea "cualquier causa"; con accidente: enfermedad = base, accidente = doble, trafico = triple */
+function lines(on,b,a,c){if(!on)return line(T.lnAny,false,0);if(!(a>b))return line(T.lnAny,true,b);return line(T.lnEnf,true,b)+line(T.lnAcc,true,a,true)+(c>a?line(T.lnCirc,true,c,true):'');}
 function grp(ic,lab,body){return `<div class="grp"><div class="gh"><i class="ic i-${ic}"></i>${lab}</div>${body}</div>`;}
 function card(o,R,i){
   const k=R.caps||{},hasI=k.ipa>0,hasE=k.eg>0,rec=i===REC;
@@ -579,8 +581,8 @@ function card(o,R,i){
     <div class="nm">${esc(nameOf(o))}</div>
     <div class="pr">${priceBig(R)}</div>${R.ok?`<div class="pn">${T.payN[R.pay]}</div>`:''}${priceSub(R)}
     ${R.ok?'':`<div class="note">${T.ko}</div>`}
-    ${grp('vida',T.gFall,line(T.lnEnf,true,k.fall)+line(T.lnAcc,true,k.fa,k.fa>k.fall)+line(T.lnCirc,true,k.fc,k.fc>k.fall))}
-    ${grp('fractura',T.gInv,line(T.lnEnf,hasI,k.ipa)+line(T.lnAcc,hasI,k.ipaA,k.ipaA>k.ipa)+line(T.lnCirc,hasI,k.ipaC,k.ipaC>k.ipa))}
+    ${grp('vida',T.gFall,lines(true,k.fall,k.fa,k.fc))}
+    ${grp('fractura',T.gInv,lines(hasI,k.ipa,k.ipaA,k.ipaC))}
     ${grp('fonendo',T.gEg,line(hasE?T.lnAdv(k.egPct):T.adv,hasE,k.eg))}
   </div>`;
 }
@@ -608,10 +610,10 @@ function paintWif(RR){
   $('wifSeg').innerHTML=OPTS.map((o,i)=>`<button data-i="${i}" class="${i===SEL?'on':''}">${i===REC?'★ ':''}${esc(nameOf(o))}</button>`).join('');
   const R=RR[SEL],k=R.caps||{};const it=[];
   const row=(ic,t,v,x)=>`<div class="wi"><i class="ic i-${ic}"></i><div><div class="wt">${t}</div><div class="wv">${cap(v)}</div>${x?`<div class="wx">${x}</div>`:''}</div></div>`;
-  it.push(row('vida',T.w.fall,k.fall));
+  it.push(row('vida',k.fa>k.fall?T.w.fall:T.w.fallAny,k.fall));
   if(k.fa>k.fall)it.push(row('sirena',T.w.fa,k.fa));
   if(k.fc>k.fa)it.push(row('autos',T.w.fc,k.fc));
-  if(k.ipa>0){it.push(row('fractura',T.w.ipa,k.ipa));if(k.ipaA>k.ipa)it.push(row('sirena',T.w.ipaA,k.ipaA));if(k.ipaC>k.ipaA)it.push(row('autos',T.w.ipaC,k.ipaC));}
+  if(k.ipa>0){it.push(row('fractura',k.ipaA>k.ipa?T.w.ipa:T.w.ipaAny,k.ipa));if(k.ipaA>k.ipa)it.push(row('sirena',T.w.ipaA,k.ipaA));if(k.ipaC>k.ipaA)it.push(row('autos',T.w.ipaC,k.ipaC));}
   if(k.eg>0)it.push(row('fonendo',T.w.eg,k.eg,T.w.egR(cap(k.fall-k.eg))));
   $('wif').innerHTML=it.join('');
 }
@@ -623,8 +625,11 @@ function paintCmp(RR){
   const bh=(ic,t)=>`<tr class="bh"><td colspan="${N+1}"><i class="ic i-${ic}"></i>${t}</td></tr>`;
   let h=head+'<tbody>';
   h+=tr(T.price,RR.map(R=>R.ok?R.recibo+'|'+R.pay:'-'),(v,i)=>{const R=RR[i];return R.ok?`<b class="pz">${eur(R.recibo)}</b><small>${T.per[R.pay]}${R.pay!==1?' · '+eur(R.total)+T.per[1]:''}</small>`:'—';});
-  h+=bh('vida',T.gFall)+tr(T.lnEnf,RR.map(R=>R.caps.fall),cv)+tr(T.lnAcc,RR.map(R=>R.caps.fa),cv)+tr(T.lnCirc,RR.map(R=>R.caps.fc),cv);
-  if(RR.some(R=>R.caps.ipa>0))h+=bh('fractura',T.gInv)+tr(T.lnEnf,RR.map(R=>R.caps.ipa),cv)+tr(T.lnAcc,RR.map(R=>R.caps.ipaA),cv)+tr(T.lnCirc,RR.map(R=>R.caps.ipaC),cv);
+  const grows=(b,a,c)=>{const B=RR.map(R=>R.caps[b]),A=RR.map(R=>R.caps[a]),C=RR.map(R=>R.caps[c]);
+    if(!A.some((v,i)=>v>B[i]))return tr(T.lnAny,B,cv);
+    return tr(T.lnEnf,B,cv)+tr(T.lnAcc,A,cv)+(C.some((v,i)=>v>A[i])?tr(T.lnCirc,C,cv):'');};
+  h+=bh('vida',T.gFall)+grows('fall','fa','fc');
+  if(RR.some(R=>R.caps.ipa>0))h+=bh('fractura',T.gInv)+grows('ipa','ipaA','ipaC');
   if(RR.some(R=>R.caps.eg>0))h+=bh('fonendo',T.gEg)+tr(T.adv,RR.map(R=>R.caps.eg),(v,i)=>v>0?`<b>${cap(v)}</b><small>${RR[i].caps.egPct} %</small>`:cv(0));
   $('cmp').innerHTML=h+'</tbody>';
 }

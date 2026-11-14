@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Portal BI — Descàrregues i Sync</title>
+<style>
+:root{--red:#DC0028;--bg:#f5f5f7;--card:#fff;--border:#e0e0e0;--gray:#666;--radius:8px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:#222;font-size:14px;padding:24px;}
+h1{font-size:1.1rem;font-weight:700;margin-bottom:4px;}
+.subtitle{color:var(--gray);font-size:.8rem;margin-bottom:24px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.card-title{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--red);color:#fff;border-radius:4px;padding:3px 10px;font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;}
+.rep{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;}
+.rep:last-child{border-bottom:none;}
+.rep input[type=checkbox]{margin-top:2px;accent-color:var(--red);}
+.rep div b{display:block;font-size:.85rem;}
+.rep div span{color:var(--gray);font-size:.75rem;}
+.btn{display:inline-flex;align-items:center;gap:6px;background:var(--red);color:#fff;border:none;border-radius:6px;padding:9px 18px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;}
+.btn:hover{opacity:.88;}
+.btn-outline{background:none;border:1.5px solid var(--red);color:var(--red);}
+.btn-outline:hover{background:#fff0f2;}
+.bookmarklet-area{margin-top:14px;}
+.bm-link{display:block;background:#f0f4ff;border:1.5px dashed #6b8cff;border-radius:6px;padding:12px 16px;font-size:.78rem;color:#3a57d4;word-break:break-all;text-decoration:none;cursor:grab;margin-bottom:10px;}
+.bm-link:hover{background:#e4ecff;}
+.instructions{background:#fffbf0;border:1px solid #f0d060;border-radius:6px;padding:12px 16px;font-size:.78rem;color:#7a6000;line-height:1.6;}
+.instructions b{color:#5a4000;}
+.instructions ol{margin-left:18px;margin-top:6px;}
+.status-box{background:#f0faf4;border:1px solid #a8e0b8;border-radius:6px;padding:12px 16px;font-size:.78rem;color:#1a6a35;margin-top:12px;display:none;}
+.status-box.visible{display:block;}
+.log-area{background:#1e1e2e;color:#a6e3a1;border-radius:6px;padding:12px 14px;font-size:.72rem;font-family:'Courier New',monospace;max-height:200px;overflow-y:auto;margin-top:12px;display:none;white-space:pre-wrap;}
+.log-area.visible{display:block;}
+.sync-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.ts-label{font-size:.75rem;color:var(--gray);}
+.ts-val{font-size:.75rem;font-weight:600;color:#1a6a35;}
+</style>
+</head>
+<body>
+
+<h1>Portal BI — Descàrregues i Sync</h1>
+<p class="subtitle">Eines per descarregar informes del Portal Comercial Occident i sincronitzar dades amb el Seguiment Mensual</p>
+
+<!-- CARD: VS SYNC -->
+<div class="card">
+  <div class="pill">📊 Ventas y Anulaciones</div>
+  <div class="card-title">Sincronització automàtica amb Seguiment Mensual</div>
+  <p style="font-size:.8rem;color:var(--gray);margin-bottom:14px;line-height:1.5;">
+    El bookmarklet llegeix les dades dels 3 mesos del dossier <b>Ventas y Anulaciones</b> del Portal BI i les envia directament al Seguiment Mensual (auto-omple tots els camps de referència i mes en curs).
+  </p>
+
+  <div class="sync-row" style="margin-bottom:14px;">
+    <span class="ts-label">Última sync:</span>
+    <span class="ts-val" id="lastSyncTs">—</span>
+    <button class="btn btn-outline" style="font-size:.72rem;padding:5px 12px;" onclick="checkLastSync()">🔄 Comprovar</button>
+  </div>
+
+  <div class="bookmarklet-area" id="bmArea">
+    <p style="font-size:.78rem;margin-bottom:8px;"><b>1.</b> Arrossega el botó a la barra de favorits:</p>
+    <a id="bmLink" class="bm-link" href="#" onclick="return false;">(generant bookmarklet…)</a>
+    <div class="instructions">
+      <b>Com usar-lo:</b>
+      <ol>
+        <li>Ves al <a href="https://portalbi.gco.global/MicroStrategyLibrary" target="_blank" style="color:inherit;">Portal BI</a> amb sessió activa</li>
+        <li>Fes clic al bookmarklet <b>📊 VS Sync</b> a la barra de favorits</li>
+        <li>Espera que aparegui la notificació de sincronització completada</li>
+        <li>El <a href="seguiment-mensual_3.html" target="_blank" style="color:inherit;">Seguiment Mensual</a> s'obrirà i rebrà les dades automàticament</li>
+      </ol>
+    </div>
+    <div class="status-box" id="statusBox"></div>
+    <div class="log-area" id="logArea"></div>
+  </div>
+</div>
+
+<!-- CARD: INFO -->
+<div class="card">
+  <div class="card-title">Com funciona</div>
+  <p style="font-size:.8rem;color:var(--gray);line-height:1.6;">
+    El bookmarklet s'executa sobre el Portal BI (on tens sessió activa). Crida l'API del dossier <code>W1A78231EF1B84FA192167D9AB4CDB44D</code> (Ventas y Anulaciones) per als 3 períodes: mes en curs, mes anterior i any anterior (mateix mes). Extreu els totals de la grid, i obre una finestra del Seguiment Mensual enviant les dades via <code>postMessage</code>. Si ja s'ha sincronitzat avui, no repeteix la crida a l'API.
+  </p>
+</div>
+
+<!-- BOOKMARKLET TEMPLATE (raw IIFE — DO NOT EDIT the encoded version, edit here) -->
+<script id="tpl_vs_bm" type="text/plain">
+javascript:(async function(){
+const BASE='https://portalbi.gco.global/MicroStrategyLibrary/api';
+const DOSSIER='W1A78231EF1B84FA192167D9AB4CDB44D';
+/* Project ID des de la URL actual: /app/{appId}/{projectId}/{dossierId} */
+const urlM=location.href.match(/\/app\/[A-F0-9]{32}\/([A-F0-9]{32})\//i);
+const PROJECT=urlM?urlM[1]:'F5D4D904C24CC4DB9DF5EC9B3AD5D402';
+const SEG_URL='https://optimizarte.github.io/hub-optimizarte/!!!APPS/seguiment-mensual_3.html';
+const VS_KEY='oag_vs_data_bm';
+const today=new Date().toISOString().slice(0,10);
+
+/* Auth: prova múltiples fonts */
+const AUTH=window.iSession||window.mstrApp?.sessionMgr?.sessionInfo?.token||window.microstrategy?.pageConfig?.authToken||null;
+if(!AUTH){alert('VS Sync: no s\'ha trobat sessió activa. Assegura\'t que estàs al Portal BI amb sessió iniciada.');return;}
+
+let overlay,logEl;
+function mkOverlay(){
+  overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;top:16px;right:16px;z-index:99999;background:#1e1e2e;color:#a6e3a1;font-family:monospace;font-size:12px;padding:14px 18px;border-radius:8px;min-width:340px;max-width:460px;box-shadow:0 4px 24px rgba(0,0,0,.5);line-height:1.5;max-height:80vh;overflow-y:auto;';
+  overlay.innerHTML='<div style="display:flex;justify-content:space-between;margin-bottom:8px;"><b style="color:#cba6f7;">📊 VS Sync</b><button onclick="this.closest(\'[style]\').remove()" style="background:none;border:none;color:#f38ba8;cursor:pointer;font-size:14px;">✕</button></div>';
+  logEl=document.createElement('div');
+  overlay.appendChild(logEl);
+  document.body.appendChild(overlay);
+}
+function log(msg,type){
+  if(!overlay)mkOverlay();
+  const c={ok:'#a6e3a1',err:'#f38ba8',warn:'#f9e2af',info:'#89b4fa'}[type||'ok'];
+  const el=document.createElement('div');el.style.color=c;el.textContent=msg;
+  logEl.appendChild(el);overlay.scrollTop=overlay.scrollHeight;
+}
+
+mkOverlay();
+log('Auth OK. Descobrint ProjectID...','info');
+
+/* Descobrir Project ID real via GET /api/projects */
+let PROJECT_REAL=null;
+{
+  const r=await fetch(BASE+'/projects',{headers:{'X-MSTR-AuthToken':AUTH,'Accept':'application/json'}});
+  log('GET /api/projects → '+r.status,'info');
+  if(r.ok){
+    const projs=await r.json();
+    log('Projectes: '+JSON.stringify((projs||[]).map(p=>({id:p.id,n:p.name}))).slice(0,400),'info');
+    /* Preferim el que conté "occident" o "portal" o "gco", fallback al primer */
+    const match=(projs||[]).find(p=>(p.name||'').match(/occident|portal|gco|ventas|seguros/i));
+    PROJECT_REAL=(match||projs?.[0])?.id||null;
+    if(PROJECT_REAL)log('ProjectID: '+PROJECT_REAL,'ok');
+    else log('Cap projecte trobat a /api/projects','err');
+  }else{
+    const t=await r.text().catch(()=>'');
+    log('Error /api/projects: '+t.slice(0,200),'err');
+  }
+}
+if(!PROJECT_REAL){
+  /* Fallback: intentar amb els dos candidats de la URL */
+  const candidates=['F5D4D904C24CC4DB9DF5EC9B3AD5D402',PROJECT].filter(Boolean);
+  log('Fallback candidates: '+candidates.join(', '),'warn');
+  PROJECT_REAL=candidates[0];
+}
+
+const hdrsJson={'X-MSTR-AuthToken':AUTH,'X-MSTR-ProjectID':PROJECT_REAL,'Content-Type':'application/json','Accept':'application/json'};
+const hdrsGet={'X-MSTR-AuthToken':AUTH,'X-MSTR-ProjectID':PROJECT_REAL,'Accept':'application/json'};
+log('Dossier: '+DOSSIER,'info');
+
+/* Intenta crear instancia del dossier */
+async function createInstance(){
+  /* Prova 1: POST /api/dossiers/{id}/instances */
+  let r=await fetch(BASE+'/dossiers/'+DOSSIER+'/instances',{method:'POST',headers:hdrsJson,body:'{}'});
+  log('POST dossiers/instances → '+r.status,'info');
+  if(r.ok){
+    const j=await r.json();
+    const iid=j.mid||j.instanceId||j.id||r.headers.get('X-MSTR-MS-Instance');
+    if(iid){log('instanceId: '+iid,'info');return {type:'dossier',iid};}
+  }
+  const err1=await r.text().catch(()=>'');
+  log('Error cos 1: '+err1.slice(0,300),'warn');
+
+  /* Prova 2: POST /api/v2/dossiers/{id}/instances */
+  r=await fetch(BASE+'/v2/dossiers/'+DOSSIER+'/instances',{method:'POST',headers:hdrsJson,body:'{}'});
+  log('POST v2/dossiers/instances → '+r.status,'info');
+  if(r.ok){
+    const j=await r.json();
+    const iid=j.mid||j.instanceId||j.id||r.headers.get('X-MSTR-MS-Instance');
+    if(iid){log('instanceId v2: '+iid,'info');return {type:'dossier_v2',iid};}
+  }
+
+  /* Prova 3: POST /api/documents/{id}/instances */
+  r=await fetch(BASE+'/documents/'+DOSSIER+'/instances',{method:'POST',headers:hdrsJson,body:JSON.stringify({filters:[]})});
+  log('POST documents/instances → '+r.status,'info');
+  if(r.ok){
+    const j=await r.json();
+    const iid=j.mid||j.instanceId||j.id||r.headers.get('X-MSTR-MS-Instance');
+    if(iid){log('instanceId (doc): '+iid,'info');return {type:'document',iid};}
+  }
+  const err3=await r.text().catch(()=>'');
+  log('Error cos 3: '+err3.slice(0,300),'warn');
+  return null;
+}
+
+/* Llegir grid JSON d'una instancia ja creada */
+async function readGrid(inst,label){
+  const {type,iid}=inst;
+  const base=type==='document'?BASE+'/documents':BASE+'/dossiers';
+  const urls=[
+    base+'/'+DOSSIER+'/instances/'+iid+'/chapters/K46/pages/1/visualizations',
+    base+'/'+DOSSIER+'/instances/'+iid+'/data',
+    BASE+'/dossiers/'+DOSSIER+'/instances/'+iid+'/pages/1/visualizations',
+  ];
+  for(const url of urls){
+    const r=await fetch(url,{headers:hdrsGet});
+    if(r.ok){
+      const d=await r.json();
+      log('['+label+'] Grid ('+url.split('/').slice(-1)[0]+'): '+JSON.stringify(d).slice(0,200),'info');
+      const p=parseGrid(d,label);
+      if(p)return p;
+    }else{
+      log('['+label+'] '+url.split('/').slice(-1)[0]+' → '+r.status,'warn');
+    }
+  }
+  return null;
+}
+
+/* Canviar filtre de mes/any via API prompts */
+async function setMonth(inst,yearMonth){
+  const {type,iid}=inst;
+  const base=type==='document'?BASE+'/documents':BASE+'/dossiers';
+
+  /* Buscar prompts */
+  let r=await fetch(base+'/'+DOSSIER+'/instances/'+iid+'/prompts',{headers:hdrsGet});
+  if(!r.ok){log('Prompts → '+r.status,'warn');return false;}
+  const pj=await r.json();
+  const plist=Array.isArray(pj)?pj:(pj.prompts||[]);
+  log('Prompts: '+JSON.stringify(plist.map(p=>({n:p.name,k:p.key||p.id}))).slice(0,300),'info');
+  const prompt=plist.find(p=>(p.name||'').match(/mes|any|año|T1\.1/i));
+  if(!prompt){log('Prompt Mes/Any no trobat','warn');return false;}
+  const pkey=prompt.key||prompt.id;
+
+  /* Buscar element per yearMonth */
+  r=await fetch(base+'/'+DOSSIER+'/instances/'+iid+'/prompts/'+pkey+'/elements',{headers:hdrsGet});
+  let elems=[];
+  if(r.ok){const ej=await r.json();elems=ej.items||ej||[];}
+  log('Elements ('+elems.length+'): '+JSON.stringify(elems.slice(0,3).map(e=>e.name||e.id)),'info');
+  /* Buscar per M/YYYY o M-YYYY o nombre del mes */
+  const [m,y]=yearMonth.split('/');
+  const target=elems.find(e=>{const n=String(e.name||e.id||'');return n.includes(yearMonth)||n.includes(m+'/'+y)||n.includes(m+'-'+y);});
+  if(!target){log('Element '+yearMonth+' no trobat a la llista','warn');
+    log('Disponibles: '+JSON.stringify(elems.map(e=>e.name).slice(0,10)),'info');return false;}
+
+  /* Respondre prompt */
+  const body=JSON.stringify({prompts:[{key:pkey,type:'ELEMENTS',answers:[{id:target.id||target.name,name:target.name}]}]});
+  r=await fetch(base+'/'+DOSSIER+'/instances/'+iid+'/prompts/answers',{method:'PUT',headers:hdrsJson,body});
+  log('Answer prompt '+yearMonth+' → '+r.status,'info');
+  await new Promise(res=>setTimeout(res,2000));
+  return r.ok;
+}
+
+/* Lectura DOM — MicroStrategy Library usa Angular, no <tr> simples.
+   Les cel·les son divs amb classe mstrGridCell / mstr-grid-cell o similars.
+   Estrategia: recollir TOTS els textos visibles del grid i buscar patrons. */
+function readFromDOM(label){
+  function pn(t){if(!t)return 0;return parseFloat(String(t).replace(/[.\s.]/g,'').replace(',','.'))||0;}
+  const r={ssgg_pr_corr:0,vida_pr_corr:0,total_op_vtas:0,total_pr_corr:0,total_op_anu:0,total_pr_anu:0,hogar_op_vtas:0,temporal_op_vtas:0};
+
+  /* Prova 1: <tr> i <td> (per si hi hagués una taula HTML) */
+  const trs=Array.from(document.querySelectorAll('tr'));
+  let found=0,pg1='';
+  if(trs.length>2){
+    for(const row of trs){
+      const cells=Array.from(row.querySelectorAll('td,th'));
+      if(cells.length<4)continue;
+      const texts=cells.map(c=>(c.textContent||'').trim());
+      const nm=texts[0].toLowerCase();
+      const opVtas=pn(texts[3]),prCorr=pn(texts[5]),opAnu=pn(texts[6]),prAnu=pn(texts[8]);
+      if(nm.includes('seguros')||nm.includes('ss.gg')){pg1='ssgg';r.ssgg_pr_corr=prCorr;found++;}
+      else if((nm==='vida'||nm.startsWith('vida'))&&!nm.includes('temporal')){pg1='vida';r.vida_pr_corr=prCorr;found++;}
+      else if(nm.includes('hogar')){r.hogar_op_vtas=opVtas;found++;}
+      else if(nm.includes('temporal')){r.temporal_op_vtas=opVtas;found++;}
+      if((nm===''||nm==='total')&&(opVtas>0||prCorr>0)){r.total_op_vtas=opVtas;r.total_pr_corr=prCorr;r.total_op_anu=opAnu;r.total_pr_anu=prAnu;found++;}
+    }
+  }
+
+  /* Prova 2: grid Angular MSTR Library — divs amb classe que conté "cell" */
+  if(!found){
+    /* Buscar el contenidor del grid: mstr-viz-container, vi-container, etc. */
+    const gridRoot=document.querySelector('[class*="mstr-viz"],[class*="vi-container"],[class*="grid-container"],[class*="mstrGrid"],[id*="grid"],[class*="crosstab"]')
+      ||document.querySelector('mstr-report,mstr-grid,mstr-dossier-page');
+    const root=gridRoot||document.body;
+
+    /* Recollir totes les cel·les ordenades per posició vertical */
+    const cellSel='[class*="mstrGridCell"],[class*="grid-cell"],[class*="gridCell"],[class*="mstr-grid-cell"],[class*="cell-content"],[class*="cellContent"]';
+    const allCells=Array.from(root.querySelectorAll(cellSel));
+    log('[DOM] cel·les trobades: '+allCells.length,'info');
+
+    if(allCells.length>0){
+      /* Agrupar per fila basant-se en la posició Y (getBoundingClientRect) */
+      const byRow=new Map();
+      for(const c of allCells){
+        const rect=c.getBoundingClientRect();
+        const rowKey=Math.round(rect.top/4)*4; /* tolerar 4px de diferència */
+        if(!byRow.has(rowKey))byRow.set(rowKey,[]);
+        byRow.get(rowKey).push({x:rect.left,txt:(c.textContent||'').trim()});
+      }
+      const sortedRows=[...byRow.entries()].sort((a,b)=>a[0]-b[0]);
+      log('[DOM] files per Y: '+sortedRows.length,'info');
+
+      for(const [,cells] of sortedRows){
+        cells.sort((a,b)=>a.x-b.x);
+        const texts=cells.map(c=>c.txt);
+        if(texts.length<4)continue;
+        const nm=texts[0].toLowerCase();
+        const opVtas=pn(texts[3]),prCorr=pn(texts[5]),opAnu=pn(texts[6]),prAnu=pn(texts[8]||'');
+        if(nm.includes('seguros')||nm.includes('ss.gg')){pg1='ssgg';r.ssgg_pr_corr=prCorr;found++;}
+        else if((nm==='vida'||nm.startsWith('vida'))&&!nm.includes('temporal')){pg1='vida';r.vida_pr_corr=prCorr;found++;}
+        else if(nm.includes('hogar')){r.hogar_op_vtas=opVtas;found++;}
+        else if(nm.includes('temporal')){r.temporal_op_vtas=opVtas;found++;}
+        if((nm===''||nm==='total')&&(opVtas>0||prCorr>0)){r.total_op_vtas=opVtas;r.total_pr_corr=prCorr;r.total_op_anu=opAnu;r.total_pr_anu=prAnu;found++;}
+      }
+    }
+  }
+
+  /* Prova 3: text pla de tot el document — extreu números associats a keywords */
+  if(!found){
+    log('[DOM] Prova text pla...','warn');
+    const body=document.body.innerText||'';
+    /* Mostra les primeres 1000 chars del body per diagnòstic */
+    const gridSnippet=body.replace(/\s+/g,' ').slice(0,600);
+    log('[DOM TEXT] '+gridSnippet,'warn');
+  }
+
+  if(!found){log('[DOM] No s\'han trobat files. Estructura no reconeguda.','err');return null;}
+  log('[DOM '+label+'] SSGG:'+r.ssgg_pr_corr+' Vida:'+r.vida_pr_corr+' Ops:'+r.total_op_vtas+' Pr:'+r.total_pr_corr,'ok');
+  return r;
+}
+
+function parseGrid(raw,label){
+  function pn(v){if(v==null)return 0;const s=String(v).replace(/[.\s]/g,'').replace(',','.');return parseFloat(s)||0;}
+  const rows=raw?.data?.rows||raw?.rows||raw?.visualizations?.[0]?.data?.rows||raw?.result?.data?.root?.children||[];
+  if(!rows.length){log('[API PARSE] Estructura desconeguda: '+JSON.stringify(Object.keys(raw||{})),'warn');return null;}
+  const r={ssgg_pr_corr:0,vida_pr_corr:0,total_op_vtas:0,total_pr_corr:0,total_op_anu:0,total_pr_anu:0,hogar_op_vtas:0,temporal_op_vtas:0};
+  let pg1='';
+  for(const row of rows){
+    const nm=String(row.elements?.[0]?.name||row.name||row[0]||'').trim().toLowerCase();
+    const m=row.metrics||row.values||row.data||[];
+    const opVtas=pn((m[0]||{}).value||m[0]),prCorr=pn((m[2]||{}).value||m[2]),opAnu=pn((m[3]||{}).value||m[3]),prAnu=pn((m[5]||{}).value||m[5]);
+    if(nm.includes('seguros')||nm.includes('ss.gg')){pg1='ssgg';r.ssgg_pr_corr=prCorr;}
+    else if((nm==='vida'||nm.startsWith('vida'))&&pg1!=='ssgg'){pg1='vida';r.vida_pr_corr=prCorr;}
+    else if(nm.includes('hogar')){r.hogar_op_vtas=opVtas;}
+    else if(nm.includes('temporal')){r.temporal_op_vtas=opVtas;}
+    if(row.isTotal||nm===''||nm==='total'||(opVtas>0&&prCorr>0&&nm.length<3)){r.total_op_vtas=opVtas;r.total_pr_corr=prCorr;r.total_op_anu=opAnu;r.total_pr_anu=prAnu;}
+  }
+  log('[PARSE '+label+'] SSGG:'+r.ssgg_pr_corr+' Vida:'+r.vida_pr_corr+' Ops:'+r.total_op_vtas+' Pr:'+r.total_pr_corr,'ok');
+  return r;
+}
+
+function sendToSeguiment(rec){
+  log('Obrint Seguiment Mensual...','info');
+  const win=window.open(SEG_URL,'oag_seguiment');
+  setTimeout(function(){
+    try{win.postMessage({type:'VS_SYNC_DATA',data:rec},'*');log('Dades enviades al Seguiment ✓','ok');}
+    catch(e){log('postMessage error: '+e.message,'err');}
+  },3500);
+}
+
+/* Check already synced */
+try{const ex=JSON.parse(localStorage.getItem(VS_KEY)||'null');if(ex&&ex.date===today){log('Ja sincronitzat avui. Reenviant...','ok');sendToSeguiment(ex);return;}}catch(e){}
+
+/* --- MAIN FLOW --- */
+const now=new Date();
+const currM=now.getMonth()+1,currY=now.getFullYear();
+const prevDate=new Date(currY,now.getMonth()-1,1);
+const prevM=prevDate.getMonth()+1,prevY=prevDate.getFullYear();
+
+log('Creant instancia...','info');
+const inst=await createInstance();
+
+let mesCurs=null,mesAnterior=null,anyAnterior=null;
+
+if(inst){
+  /* Llegir mes actual (primer, sense canviar filtre) */
+  log('Llegint mes actual ('+currM+'/'+currY+')...','info');
+  await setMonth(inst,currM+'/'+currY);
+  mesCurs=await readGrid(inst,currM+'/'+currY);
+  if(!mesCurs)mesCurs=readFromDOM(currM+'/'+currY);
+
+  /* Canviar a mes anterior */
+  log('Canviant a mes anterior ('+prevM+'/'+prevY+')...','info');
+  const ok2=await setMonth(inst,prevM+'/'+prevY);
+  if(ok2){mesAnterior=await readGrid(inst,prevM+'/'+prevY);}
+  if(!mesAnterior)mesAnterior=readFromDOM(prevM+'/'+prevY);
+
+  /* Canviar a any anterior */
+  const refM=currM,refY=currY-1;
+  log('Canviant a any anterior ('+refM+'/'+refY+')...','info');
+  const ok3=await setMonth(inst,refM+'/'+refY);
+  if(ok3){anyAnterior=await readGrid(inst,refM+'/'+refY);}
+  if(!anyAnterior)anyAnterior=readFromDOM(refM+'/'+refY);
+}else{
+  /* API no funciona: llegir des del DOM per al mes visible */
+  log('API no disponible. Llegint DOM (mes actual)...','warn');
+  mesCurs=readFromDOM(currM+'/'+currY);
+  log('Per als altres mesos, canvia manualment el filtre i torna a clicar.','warn');
+}
+
+const refM2=currM,refY2=currY-1;
+const rec={
+  date:today,
+  mesCurs:{mes:currM,any:currY,ssgg:mesCurs?.ssgg_pr_corr||0,vida:mesCurs?.vida_pr_corr||0,ops:mesCurs?.total_op_vtas||0,primes:mesCurs?.total_pr_corr||0,hogar:mesCurs?.hogar_op_vtas||0,temporal:mesCurs?.temporal_op_vtas||0},
+  anyAnterior:{mes:refM2,any:refY2,ops:anyAnterior?.total_op_vtas||0,primes:anyAnterior?.total_pr_corr||0,opsAnul:anyAnterior?.total_op_anu||0,primesAnul:anyAnterior?.total_pr_anu||0},
+  mesAnterior:{mes:prevM,any:prevY,ssgg:mesAnterior?.ssgg_pr_corr||0,vida:mesAnterior?.vida_pr_corr||0,primes:mesAnterior?.total_pr_corr||0,ops:mesAnterior?.total_op_vtas||0}
+};
+
+try{localStorage.setItem(VS_KEY,JSON.stringify(rec));}catch(e){}
+log('SYNC COMPLET ✓ — '+today,'ok');
+log('mesCurs: ops='+rec.mesCurs.ops+' pr='+rec.mesCurs.primes,'ok');
+sendToSeguiment(rec);
+})();
+</script>
+
+<script>
+/* ── Build bookmarklet link from template ── */
+(function(){
+  const tpl=document.getElementById('tpl_vs_bm').textContent.trim();
+  const link=document.getElementById('bmLink');
+  link.href=tpl.replace(/\n\s*/g,' ');
+  link.textContent='📊 VS Sync — arrossega\'m a la barra de favorits';
+})();
+
+function checkLastSync(){
+  /* The bookmarklet saves to portalbi.gco.global's localStorage — we can't read it from here.
+     The seguiment-mensual reads from its own localStorage (oag_vs_data).
+     We show the state of the last postMessage received on this page if any. */
+  const ts=document.getElementById('lastSyncTs');
+  ts.textContent='Comprova al Seguiment Mensual (badge sync a la topbar)';
+}
+
+/* Listen for sync confirmations if this page is the opener */
+window.addEventListener('message',function(e){
+  if(e.data&&e.data.type==='VS_SYNC_DATA'){
+    const ts=document.getElementById('lastSyncTs');
+    if(ts)ts.textContent=e.data.data.date+' ✓';
+  }
+});
+</script>
+
+</body>
+</html>

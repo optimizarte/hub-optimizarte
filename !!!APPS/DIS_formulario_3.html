@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D.I.S. · Declaración de Inexistencia de Siniestro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --occ-red:    #DC0028;
+      --occ-dark:   #202020;
+      --occ-gray:   #414141;
+      --occ-light:  #F0F0F0;
+      --occ-border: #E0E0E0;
+      --occ-radius: 8px;
+      --occ-font:   Arial, Helvetica, sans-serif;
+    }
+
+    html, body { height: 100%; font-family: var(--occ-font); background: var(--occ-light); color: var(--occ-gray); }
+    body { display: flex; flex-direction: column; }
+
+    /* ─── TOP BAR ─────────────────────────────────── */
+    .topbar {
+      height: 52px;
+      background: #1e1e1e;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand { display: flex; align-items: baseline; gap: 4px; }
+    .brand-opt { font-family:'Poppins',Arial,sans-serif; font-weight:800; font-size:.92rem; color:#fff; }
+    .brand-by  { font-size:.62rem; color:rgba(255,255,255,.38); margin:0 2px; font-style:italic; }
+    .brand-occ { font-family:'Poppins',Arial,sans-serif; font-weight:800; font-size:.92rem; color:#DC0028; }
+    .topbar-right { text-align:right; }
+    .topbar-title { font-family:'Poppins',Arial,sans-serif; font-size:.78rem; font-weight:700; color:#fff; }
+    .topbar-sub   { font-size:.6rem; color:rgba(255,255,255,.42); margin-top:1px; }
+
+    /* ─── MAIN GRID ───────────────────────────────── */
+    .main { flex:1; display:grid; grid-template-columns:370px 1fr; overflow:hidden; }
+
+    /* ─── FORM PANEL ──────────────────────────────── */
+    .form-panel {
+      background: var(--occ-light);
+      border-right: 1px solid #D4D4D4;
+      overflow-y: auto;
+      padding: 18px 15px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Section pill */
+    .sec-pill {
+      display: inline-block;
+      background: var(--occ-red);
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+
+    /* Form card */
+    .form-card {
+      background: #fff;
+      border: 1px solid var(--occ-border);
+      border-radius: var(--occ-radius);
+      padding: 13px 14px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    /* ── Tipo toggle ── */
+    .tipo-toggle {
+      display: flex;
+      border: 1.5px solid #E0E0E0;
+      border-radius: 7px;
+      overflow: hidden;
+      background: #F8F8F8;
+    }
+    .tipo-toggle input[type="radio"] { display: none; }
+    .tipo-toggle label {
+      flex: 1;
+      text-align: center;
+      padding: 7px 8px;
+      font-size: .68rem;
+      font-weight: 600;
+      color: #888;
+      cursor: pointer;
+      transition: all .18s;
+      user-select: none;
+      line-height: 1.3;
+    }
+    .tipo-toggle input[type="radio"]:checked + label {
+      background: #DC0028;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    /* Field */
+    .field { display:flex; flex-direction:column; gap:4px; }
+    .field label {
+      font-size: .59rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #4a4a4a;
+    }
+    .field input, .field select {
+      border: 1.5px solid #E0E0E0;
+      border-radius: 5px;
+      padding: 7px 9px;
+      font-size: .76rem;
+      font-family: var(--occ-font);
+      color: var(--occ-dark);
+      background: #fff;
+      outline: none;
+      width: 100%;
+      transition: border-color .15s;
+    }
+    .field input:focus, .field select:focus { border-color: var(--occ-red); }
+    .field input::placeholder { color: #C0C0C0; }
+
+    .field-row-3 { display:grid; grid-template-columns:62px 1fr 78px; gap:8px; }
+    .card-divider { border:none; border-top:1px dashed #E8E8E8; margin:2px 0 0; }
+    .field-hint { font-size:.58rem; color:#A0A0A0; margin-top:1px; }
+
+    /* Conditional blocks */
+    .campos-grupo { display:flex; flex-direction:column; gap:11px; }
+
+    /* Buttons */
+    .btn-bar { display:flex; flex-direction:column; gap:8px; }
+    .btn-primary {
+      background: var(--occ-red);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 5px;
+      border: none;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: background .15s;
+    }
+    .btn-primary:hover { background: #b8001f; }
+    .btn-secondary {
+      background: transparent;
+      color: var(--occ-gray);
+      padding: 9px 14px;
+      border-radius: 5px;
+      border: 1.5px solid #D0D0D0;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: all .15s;
+    }
+    .btn-secondary:hover { border-color: #999; background: #f5f5f5; }
+
+    /* ─── PREVIEW PANEL ───────────────────────────── */
+    .preview-panel {
+      background: #c8bfaa;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 28px 36px;
+      gap: 12px;
+    }
+    .preview-label {
+      font-size: .59rem;
+      font-weight: 700;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+      color: rgba(55,44,30,.48);
+      align-self: flex-start;
+      margin-left: 2px;
+    }
+
+    /* ─── DOCUMENT SHEET ──────────────────────────── */
+    .doc-sheet {
+      background: #fff;
+      width: 100%;
+      max-width: 700px;
+      border-radius: 2px;
+      box-shadow: 0 6px 32px rgba(0,0,0,.20);
+      padding: 52px 64px 68px;
+      position: relative;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--occ-dark);
+      line-height: 1.6;
+    }
+    .doc-sheet::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: #DC0028;
+      border-radius: 2px 2px 0 0;
+    }
+
+    .doc-badge {
+      position: absolute;
+      top: 18px; right: 64px;
+      background: #fafafa;
+      border: 1.5px solid #DC0028;
+      border-radius: 4px;
+      padding: 3px 9px;
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      color: #DC0028;
+      text-transform: uppercase;
+    }
+
+    .doc-title {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 18.5px;
+      font-weight: 700;
+      color: var(--occ-dark);
+      text-align: center;
+      letter-spacing: .01em;
+      line-height: 1.25;
+      margin-bottom: 6px;
+    }
+    .doc-subtitle {
+      font-size: 9px;
+      color: #999;
+      text-align: center;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      border-bottom: 1px solid #E8E8E8;
+      padding-bottom: 18px;
+      margin-bottom: 4px;
+    }
+
+    .doc-sec {
+      font-size: 8px;
+      font-weight: 700;
+      color: #DC0028;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin: 22px 0 9px;
+      border-bottom: 1.5px solid #DC0028;
+      padding-bottom: 3px;
+    }
+
+    .doc-row { display:flex; align-items:baseline; gap:6px; margin-bottom:7px; }
+    .doc-lbl { font-size:10px; color:#666; white-space:nowrap; flex-shrink:0; min-width:148px; }
+    .doc-val {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--occ-dark);
+      border-bottom: 1px solid #D0D0D0;
+      flex: 1;
+      min-height: 17px;
+      padding-bottom: 1px;
+    }
+    .doc-val.ph { color:#C8C8C8; font-weight:400; font-style:italic; }
+
+    /* Declaration area */
+    .doc-paragraph {
+      margin-top: 26px;
+      font-size: 10.5px;
+      line-height: 1.8;
+      color: var(--occ-dark);
+      text-align: justify;
+    }
+    /* Inline underlined placeholder spans inside declaration */
+    .ispan {
+      font-weight: 700;
+      border-bottom: 1px solid #C0C0C0;
+      display: inline;
+      padding-bottom: 1px;
+    }
+    .ispan.ph { color:#C8C8C8; font-weight:400; font-style:italic; }
+
+    /* Sign place */
+    .doc-sign-place {
+      margin-top: 30px;
+      font-size: 10.5px;
+      color: var(--occ-dark);
+    }
+    .sval { font-weight:700; border-bottom:1px solid #D0D0D0; padding:0 2px; display:inline-block; min-width:50px; }
+    .sval.ph { color:#C8C8C8; font-weight:400; font-style:italic; }
+
+    /* Signature row */
+    .doc-sign-row { margin-top:44px; display:flex; align-items:flex-end; gap:24px; }
+    .sign-box { flex:1.4; border-top:1px solid #202020; padding-top:5px; }
+    .sign-space { height:42px; }
+    .sign-cap { font-size:8.5px; color:#AAA; letter-spacing:.07em; text-transform:uppercase; }
+    .sign-cap-lbl { font-size:9px; color:#555; font-weight:700; letter-spacing:.06em; margin-bottom:2px; }
+
+    .id-box { flex-shrink:0; min-width:190px; display:flex; flex-direction:column; gap:6px; }
+    .id-row { display:flex; flex-direction:column; gap:2px; }
+    .id-lbl { font-size:8.5px; color:#888; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
+    .id-val {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--occ-dark);
+      border-bottom: 1px solid #202020;
+      min-height: 19px;
+      padding-bottom: 2px;
+    }
+    .id-val.ph { color:#C8C8C8; font-weight:400; font-style:italic; }
+
+    /* ─── FOOTER ──────────────────────────────────── */
+    .footer-bar {
+      background: #1e1e1e;
+      color: rgba(255,255,255,.38);
+      font-size: .63rem;
+      text-align: center;
+      padding: 8px;
+      flex-shrink: 0;
+      letter-spacing: .04em;
+    }
+
+    /* ─── PRINT ───────────────────────────────────── */
+    @media print {
+      @page { margin: 14mm 16mm; size: A4 portrait; }
+      .topbar, .form-panel, .footer-bar, .preview-label { display: none !important; }
+      .main { display: block !important; overflow: visible !important; }
+      .preview-panel { background: #fff !important; padding: 0 !important; display: block !important; overflow: visible !important; }
+      .doc-sheet { box-shadow: none !important; border-radius: 0 !important; padding: 0 !important; max-width: 100% !important; width: 100% !important; }
+      .doc-sheet::before { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ TOP BAR ══ -->
+<div class="topbar">
+  <div class="brand">
+    <span class="brand-opt">Optimizarte</span>
+    <span class="brand-by">by</span>
+    <span class="brand-occ">Occident</span>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-title">Declaració d'Inexistència de Sinistre · D.I.S.</div>
+    <div class="topbar-sub">Generador de document · Actualització en temps real</div>
+  </div>
+</div>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+
+  <!-- FORM PANEL -->
+  <div class="form-panel">
+
+    <!-- INCIDENTE -->
+    <div>
+      <div class="sec-pill">Incidente</div>
+      <div class="form-card">
+        <div class="field">
+          <label>Fecha del incidente</label>
+          <input type="date" id="fechaIncidente">
+        </div>
+        <div class="field">
+          <label>Lugar y provincia</label>
+          <input type="text" id="lugarProvincia" placeholder="Ej: Sabadell, Barcelona">
+        </div>
+      </div>
+    </div>
+
+    <!-- VEHÍCULO PERJUDICADO -->
+    <div>
+      <div class="sec-pill">Vehículo Perjudicado</div>
+      <div class="form-card">
+        <div class="field">
+          <label>Matrícula</label>
+          <input type="text" id="matriculaPerj" placeholder="Ej: 1234 ABC" oninput="this.value=this.value.toUpperCase()">
+        </div>
+        <hr class="card-divider">
+        <div class="field">
+          <label>Entidad Aseguradora</label>
+          <input type="text" id="aseguradoraPerj" placeholder="Nombre de la compañía">
+        </div>
+        <div class="field">
+          <label>Nº de Póliza</label>
+          <input type="text" id="polizaPerj" placeholder="Número de póliza">
+        </div>
+      </div>
+    </div>
+
+    <!-- VEHÍCULO PROPIETARIO -->
+    <div>
+      <div class="sec-pill">Vehículo Propietario / Declarante</div>
+      <div class="form-card">
+        <div class="field">
+          <label>Matrícula</label>
+          <input type="text" id="matriculaProp" placeholder="Ej: 5678 XYZ" oninput="this.value=this.value.toUpperCase()">
+        </div>
+        <hr class="card-divider">
+        <div class="field">
+          <label>Entidad Aseguradora</label>
+          <input type="text" id="aseguradoraProp" placeholder="Nombre de la compañía">
+        </div>
+        <div class="field">
+          <label>Nº de Póliza</label>
+          <input type="text" id="polizaProp" placeholder="Número de póliza">
+        </div>
+      </div>
+    </div>
+
+    <!-- DECLARANTE -->
+    <div>
+      <div class="sec-pill">Datos del Declarante</div>
+      <div class="form-card">
+
+        <!-- Toggle -->
+        <div class="tipo-toggle">
+          <input type="radio" name="tipoDeclarante" id="tipoFisica" value="fisica" checked>
+          <label for="tipoFisica">Persona Física</label>
+          <input type="radio" name="tipoDeclarante" id="tipoJuridica" value="juridica">
+          <label for="tipoJuridica">Persona Jurídica</label>
+        </div>
+
+        <!-- Campos Persona Física -->
+        <div class="campos-grupo" id="camposFisica">
+          <div class="field">
+            <label>Nombre completo (Don / Doña)</label>
+            <input type="text" id="nombreFisica" placeholder="Nombre y apellidos completos">
+          </div>
+          <div class="field">
+            <label>DNI / NIE / CIF</label>
+            <input type="text" id="dniFisica" placeholder="Ej: 12345678A" oninput="this.value=this.value.toUpperCase()">
+          </div>
+        </div>
+
+        <!-- Campos Persona Jurídica -->
+        <div class="campos-grupo" id="camposJuridica" style="display:none;">
+          <div class="field">
+            <label>Razón Social</label>
+            <input type="text" id="razonSocial" placeholder="Nombre de la empresa">
+          </div>
+          <div class="field">
+            <label>CIF</label>
+            <input type="text" id="cifEmpresa" placeholder="Ej: A12345678" oninput="this.value=this.value.toUpperCase()">
+          </div>
+          <hr class="card-divider">
+          <div class="field">
+            <label>Representante Legal (Don / Doña)</label>
+            <input type="text" id="nombreRep" placeholder="Nombre y apellidos del representante">
+          </div>
+          <div class="field">
+            <label>DNI / NIE del Representante</label>
+            <input type="text" id="dniRep" placeholder="Ej: 12345678A" oninput="this.value=this.value.toUpperCase()">
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FECHA Y LUGAR DE FIRMA -->
+    <div>
+      <div class="sec-pill">Lugar y Fecha de Firma</div>
+      <div class="form-card">
+        <div class="field">
+          <label>Localidad de firma</label>
+          <input type="text" id="ciudadFirma" placeholder="Ej: Sabadell">
+        </div>
+        <div class="field-row-3">
+          <div class="field">
+            <label>Día</label>
+            <input type="number" id="diaFirma" min="1" max="31" placeholder="DD">
+          </div>
+          <div class="field">
+            <label>Mes</label>
+            <select id="mesFirma">
+              <option value="">— Mes —</option>
+              <option value="enero">Enero</option>
+              <option value="febrero">Febrero</option>
+              <option value="marzo">Marzo</option>
+              <option value="abril">Abril</option>
+              <option value="mayo">Mayo</option>
+              <option value="junio">Junio</option>
+              <option value="julio">Julio</option>
+              <option value="agosto">Agosto</option>
+              <option value="septiembre">Septiembre</option>
+              <option value="octubre">Octubre</option>
+              <option value="noviembre">Noviembre</option>
+              <option value="diciembre">Diciembre</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Año</label>
+            <input type="number" id="anioFirma" placeholder="AAAA" min="2020" max="2099">
+          </div>
+        </div>
+        <p class="field-hint">Se autocompleta con la fecha de hoy. Modifica si es necesario.</p>
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="btn-bar">
+      <button class="btn-primary" onclick="window.print()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 6 2 18 2 18 9"/>
+          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+          <rect x="6" y="14" width="12" height="8"/>
+        </svg>
+        Imprimir / Guardar como PDF
+      </button>
+      <button class="btn-secondary" onclick="resetForm()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="1 4 1 10 7 10"/>
+          <path d="M3.51 15a9 9 0 1 0 .49-3.5"/>
+        </svg>
+        Limpiar formulario
+      </button>
+    </div>
+
+  </div><!-- /form-panel -->
+
+  <!-- PREVIEW PANEL -->
+  <div class="preview-panel">
+    <div class="preview-label">Vista previa del documento · Actualización en tiempo real</div>
+
+    <div class="doc-sheet">
+
+      <div class="doc-badge">D.I.S.</div>
+
+      <div class="doc-title">DECLARACIÓN DE INEXISTENCIA DE ACCIDENTE</div>
+      <div class="doc-subtitle">Declaración responsable</div>
+
+      <!-- INCIDENTE -->
+      <div class="doc-sec">Incidente</div>
+      <div class="doc-row">
+        <span class="doc-lbl">Fecha del incidente:</span>
+        <span class="doc-val ph" id="dFecha">—</span>
+      </div>
+      <div class="doc-row">
+        <span class="doc-lbl">Lugar y provincia:</span>
+        <span class="doc-val ph" id="dLugar">—</span>
+      </div>
+
+      <!-- VEHÍCULO PERJUDICADO -->
+      <div class="doc-sec">Datos del Vehículo Perjudicado</div>
+      <div class="doc-row">
+        <span class="doc-lbl">Matrícula del vehículo:</span>
+        <span class="doc-val ph" id="dMatriculaPerj">—</span>
+      </div>
+      <div class="doc-row">
+        <span class="doc-lbl">Entidad Aseguradora:</span>
+        <span class="doc-val ph" id="dAseguradoraPerj">—</span>
+      </div>
+      <div class="doc-row">
+        <span class="doc-lbl">Nº de Póliza:</span>
+        <span class="doc-val ph" id="dPolizaPerj">—</span>
+      </div>
+
+      <!-- VEHÍCULO PROPIETARIO -->
+      <div class="doc-sec">Datos del Vehículo Propietario</div>
+      <div class="doc-row">
+        <span class="doc-lbl">Matrícula del vehículo:</span>
+        <span class="doc-val ph" id="dMatriculaProp">—</span>
+      </div>
+      <div class="doc-row">
+        <span class="doc-lbl">Entidad Aseguradora:</span>
+        <span class="doc-val ph" id="dAseguradoraProp">—</span>
+      </div>
+      <div class="doc-row">
+        <span class="doc-lbl">Nº de Póliza:</span>
+        <span class="doc-val ph" id="dPolizaProp">—</span>
+      </div>
+
+      <!-- ── DECLARACIÓN — PERSONA FÍSICA ── -->
+      <div class="doc-paragraph" id="docFisica">
+        <p>
+          Don/Doña:&nbsp;<span class="ispan ph" id="dNombreFisica">Nombre y apellidos del declarante</span>,
+          propietario/a o asegurado/a del vehículo arriba indicado,
+          <strong>DECLARA</strong>, bajo su responsabilidad, que dicho vehículo
+          <strong>no ha intervenido</strong> en la ocurrencia de un accidente con el
+          vehículo del perjudicado en la fecha y lugar que se citan. Y para que conste
+          a todos los efectos oportunos, firmo la presente declaración.
+        </p>
+      </div>
+
+      <!-- ── DECLARACIÓN — PERSONA JURÍDICA ── -->
+      <div class="doc-paragraph" id="docJuridica" style="display:none;">
+        <p>
+          <span class="ispan ph" id="dRazonSocial">Razón Social de la empresa</span>,
+          con C.I.F.&nbsp;<span class="ispan ph" id="dCifEmpresa">A00000000</span>,
+          representada en este acto por Don/Doña&nbsp;<span class="ispan ph" id="dNombreRep">Nombre del representante legal</span>,
+          con D.N.I.&nbsp;<span class="ispan ph" id="dDniRep">00000000A</span>,
+          en calidad de representante legal, propietaria o asegurada del vehículo arriba indicado,
+          <strong>DECLARA</strong>, bajo su responsabilidad, que dicho vehículo
+          <strong>no ha intervenido</strong> en la ocurrencia de un accidente con el
+          vehículo del perjudicado en la fecha y lugar que se citan. Y para que conste
+          a todos los efectos oportunos, firmo la presente declaración.
+        </p>
+      </div>
+
+      <!-- LUGAR Y FECHA DE FIRMA -->
+      <div class="doc-sign-place">
+        En&nbsp;<span class="sval ph" id="dCiudad">_________________</span>,&nbsp;
+        a&nbsp;<span class="sval ph" id="dDia">__</span>&nbsp;
+        de&nbsp;<span class="sval ph" id="dMes">____________</span>&nbsp;
+        de&nbsp;<span class="sval ph" id="dAnio">______</span>
+      </div>
+
+      <!-- FIRMA -->
+      <div class="doc-sign-row">
+
+        <div class="sign-box">
+          <div class="sign-cap-lbl">FIRMADO:</div>
+          <div class="sign-space"></div>
+        </div>
+
+        <!-- Física: DNI simple -->
+        <div class="id-box" id="signFisica" style="min-height:95px;">
+          <div class="id-row">
+            <span class="id-lbl">D.N.I. / N.I.E. / C.I.F.:</span>
+            <span class="id-val ph" id="dDniFisica">_______________</span>
+          </div>
+        </div>
+
+        <!-- Jurídica: empresa + rep -->
+        <div class="id-box" id="signJuridica" style="display:none;">
+          <div class="id-row">
+            <span class="id-lbl">EN NOMBRE DE:</span>
+            <span class="id-val ph" id="dEmpresaSign" style="font-size:9.5px;">Razón Social</span>
+          </div>
+          <div class="id-row">
+            <span class="id-lbl">C.I.F.:</span>
+            <span class="id-val ph" id="dCifSign">A00000000</span>
+          </div>
+          <div class="id-row">
+            <span class="id-lbl">D.N.I. / N.I.E. REPRESENTANTE:</span>
+            <span class="id-val ph" id="dDniRepSign">_______________</span>
+          </div>
+        </div>
+
+      </div><!-- /doc-sign-row -->
+
+    </div><!-- /doc-sheet -->
+  </div><!-- /preview-panel -->
+
+</div><!-- /main -->
+
+<!-- ══ FOOTER ══ -->
+<div class="footer-bar">
+  OPTIMIZARTE 3.0 &nbsp;·&nbsp; Codi mediador: 260963 &nbsp;·&nbsp; Document generat localment, sense enviament de dades
+</div>
+
+<script>
+  const $ = id => document.getElementById(id);
+
+  /* ── Set doc value helper ── */
+  function setVal(id, text, fallback) {
+    const el = $(id);
+    if (!el) return;
+    const val = (text || '').toString().trim();
+    if (val) {
+      el.classList.remove('ph');
+      el.textContent = val;
+    } else {
+      el.classList.add('ph');
+      el.textContent = fallback || '—';
+    }
+  }
+
+  function formatDateES(val) {
+    if (!val) return null;
+    const [y, m, d] = val.split('-');
+    return `${d}/${m}/${y}`;
+  }
+
+  function getTipo() {
+    return $('tipoJuridica').checked ? 'juridica' : 'fisica';
+  }
+
+  /* ── Toggle física/jurídica ── */
+  function switchTipo() {
+    const isJuridica = getTipo() === 'juridica';
+    $('camposFisica').style.display  = isJuridica ? 'none' : 'flex';
+    $('camposJuridica').style.display = isJuridica ? 'flex' : 'none';
+    $('docFisica').style.display      = isJuridica ? 'none' : 'block';
+    $('docJuridica').style.display    = isJuridica ? 'block' : 'none';
+    $('signFisica').style.display     = isJuridica ? 'none' : 'flex';
+    $('signJuridica').style.display   = isJuridica ? 'flex' : 'none';
+    updateDoc();
+  }
+
+  /* ── Main update ── */
+  function updateDoc() {
+    // Incidente
+    setVal('dFecha', formatDateES($('fechaIncidente').value));
+    setVal('dLugar', $('lugarProvincia').value);
+
+    // Perjudicado
+    setVal('dMatriculaPerj',   $('matriculaPerj').value.toUpperCase());
+    setVal('dAseguradoraPerj', $('aseguradoraPerj').value);
+    setVal('dPolizaPerj',      $('polizaPerj').value);
+
+    // Propietario
+    setVal('dMatriculaProp',   $('matriculaProp').value.toUpperCase());
+    setVal('dAseguradoraProp', $('aseguradoraProp').value);
+    setVal('dPolizaProp',      $('polizaProp').value);
+
+    if (getTipo() === 'fisica') {
+      // Declarante física
+      setVal('dNombreFisica', $('nombreFisica').value, 'Nombre y apellidos del declarante');
+      setVal('dDniFisica',    $('dniFisica').value.toUpperCase(), '_______________');
+    } else {
+      // Declarante jurídica
+      setVal('dRazonSocial',  $('razonSocial').value,            'Razón Social de la empresa');
+      setVal('dCifEmpresa',   $('cifEmpresa').value.toUpperCase(),'A00000000');
+      setVal('dNombreRep',    $('nombreRep').value,              'Nombre del representante legal');
+      setVal('dDniRep',       $('dniRep').value.toUpperCase(),   '00000000A');
+      // Firma jurídica
+      setVal('dEmpresaSign',  $('razonSocial').value,            'Razón Social');
+      setVal('dCifSign',      $('cifEmpresa').value.toUpperCase(),'A00000000');
+      setVal('dDniRepSign',   $('dniRep').value.toUpperCase(),   '_______________');
+    }
+
+    // Fecha firma
+    setVal('dCiudad', $('ciudadFirma').value,        '_________________');
+    setVal('dDia',    $('diaFirma').value,           '__');
+    setVal('dMes',    $('mesFirma').value,           '____________');
+    setVal('dAnio',   $('anioFirma').value,          '______');
+  }
+
+  /* ── Auto-fill today ── */
+  function autoFillToday() {
+    const now = new Date();
+    const months = ['enero','febrero','marzo','abril','mayo','junio',
+                    'julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    $('diaFirma').value  = now.getDate();
+    $('mesFirma').value  = months[now.getMonth()];
+    $('anioFirma').value = now.getFullYear();
+  }
+
+  /* ── Reset ── */
+  function resetForm() {
+    document.querySelectorAll('.form-panel input[type=text], .form-panel input[type=number], .form-panel input[type=date]')
+      .forEach(el => el.value = '');
+    document.querySelectorAll('.form-panel select').forEach(el => el.selectedIndex = 0);
+    $('tipoFisica').checked = true;
+    switchTipo();
+    autoFillToday();
+    updateDoc();
+  }
+
+  /* ── Event bindings ── */
+  document.querySelectorAll('.form-panel input, .form-panel select').forEach(el => {
+    el.addEventListener('input',  updateDoc);
+    el.addEventListener('change', updateDoc);
+  });
+  $('tipoFisica').addEventListener('change',  switchTipo);
+  $('tipoJuridica').addEventListener('change', switchTipo);
+
+  /* ── Init ── */
+  autoFillToday();
+  updateDoc();
+</script>
+
+</body>
+</html>

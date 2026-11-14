@@ -1,0 +1,104 @@
+/* style.css */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #12121a; /* Fondo oscuro para resaltar la luz */
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    overflow: hidden;
+}
+
+.pantalla {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    max-width: 450px;
+    padding: 20px;
+}
+
+/* Clases para gestionar transiciones desde JavaScript */
+.visible {
+    display: flex;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+.oculta {
+    display: none !important;
+}
+
+/* Estilos del botón */
+button {
+    background-color: #ffb400; 
+    color: #12121a;
+    border: none;
+    padding: 16px 32px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 30px;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    background-color: #ffc840;
+}
+
+.instruccion-soplar {
+    color: #888;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    animation: pulseText 2s infinite;
+}
+
+/* --- ANIMACIONES DE LA VELA (SVG) --- */
+.svg-vela {
+    width: 150px;
+    height: 300px;
+}
+
+#llama {
+    transform-origin: 100px 130px; /* Punto de anclaje en la base de la llama */
+    animation: titilar 0.12s infinite alternate;
+}
+
+#resplandor {
+    transform-origin: center;
+    animation: pulsarLuz 2s infinite alternate;
+    filter: blur(15px); /* Desenfoque suave para efecto de luz */
+}
+
+@keyframes titilar {
+    0% { transform: scaleX(0.95) scaleY(0.95) rotate(-2deg); fill: #ffb400; }
+    100% { transform: scaleX(1.05) scaleY(1.05) rotate(2deg); fill: #ffcc00; }
+}
+
+@keyframes pulsarLuz {
+    0% { opacity: 0.15; transform: scale(0.9); }
+    100% { opacity: 0.3; transform: scale(1.1); }
+}
+
+@keyframes pulseText {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Textos finales */
+.mensaje-destacado {
+    color: #ffb400;
+    font-size: 2.8rem;
+    margin-bottom: 15px;
+}

@@ -503,7 +503,7 @@ es:{brand:'Seguro de vida',hi:'Hola',lead:'Aquí tienes tu propuesta de seguro d
      inv:'Recibes tú el capital si una invalidez absoluta y permanente te impide ejercer cualquier actividad remunerada.',
      eg:'Adelanto del 25, 50 o 75 % del capital de fallecimiento ante un primer diagnóstico de cáncer, infarto, ictus, insuficiencia renal, trasplante, Alzheimer, Parkinson, esclerosis múltiple o ELA.'},
  svH:'Servicios incluidos',svS:'En todas las opciones, sin coste añadido',
- sv:[['nota','Mi testamento',1],['balanza','Asesoramiento jurídico telefónico'],['enfermera','Orientación médica telefónica'],['fonendo','Segunda opinión médica'],['salud','Rehabilitación cardiaca'],['candau','Borrado digital']],gift:'Gratis',
+ sv:[['nota','Mi testamento + borrado digital',1,'Haz el testamento de forma rápida y con asesoramiento legal. Al fallecer, se borran sus datos personales de Internet.'],['balanza','Asesoramiento jurídico telefónico'],['enfermera','Orientación médica telefónica'],['fonendo','Segunda opinión médica'],['salud','Rehabilitación cardiaca']],gift:'Gratis',
  pdfH1:'El proyecto original',pdfH:'Los proyectos originales',pdfS1:'Tal como lo emite Occident',pdfS:'Tal como los emite Occident',pdfO:'Proyecto Occident',pdfOpen:'Abrir',pdfWait:'Cargando…',pdfErr:'No disponible',
  clH:'Consulta con nosotros tu caso personalizado',clS:'Te ayudamos a elegir el capital y las garantías que necesitas, sin compromiso.',
  foot:'Este documento es informativo y carece de validez contractual. Precios calculados con la tarifa vigente de Occident para tu edad, impuestos incluidos; la contratación requiere la declaración de salud y la aceptación de la compañía. Consulta con nosotros tu caso personalizado.',
@@ -532,7 +532,7 @@ ca:{brand:'Assegurança de vida',hi:'Hola',lead:'Aquí tens la teva proposta d\'
      inv:'Reps tu el capital si una invalidesa absoluta i permanent t\'impedeix exercir qualsevol activitat remunerada.',
      eg:'Avançament del 25, 50 o 75 % del capital de defunció davant un primer diagnòstic de càncer, infart, ictus, insuficiència renal, trasplantament, Alzheimer, Parkinson, esclerosi múltiple o ELA.'},
  svH:'Serveis inclosos',svS:'A totes les opcions, sense cost afegit',
- sv:[['nota','El meu testament',1],['balanza','Assessorament jurídic telefònic'],['enfermera','Orientació mèdica telefònica'],['fonendo','Segona opinió mèdica'],['salud','Rehabilitació cardíaca'],['candau','Esborrat digital']],gift:'Gratis',
+ sv:[['nota','El meu testament + esborrat digital',1,"Fes el testament de manera ràpida i amb assessorament legal. En morir, s'esborren les seves dades personals d'Internet."],['balanza','Assessorament jurídic telefònic'],['enfermera','Orientació mèdica telefònica'],['fonendo','Segona opinió mèdica'],['salud','Rehabilitació cardíaca']],gift:'Gratis',
  pdfH1:'El projecte original',pdfH:'Els projectes originals',pdfS1:"Tal com l'emet Occident",pdfS:'Tal com els emet Occident',pdfO:'Projecte Occident',pdfOpen:'Obrir',pdfWait:'Carregant…',pdfErr:'No disponible',
  clH:'Consulta amb nosaltres el teu cas personalitzat',clS:'T\'ajudem a triar el capital i les garanties que necessites, sense compromís.',
  foot:'Aquest document és informatiu i no té validesa contractual. Preus calculats amb la tarifa vigent d\'Occident per a la teva edat, impostos inclosos; la contractació requereix la declaració de salut i l\'acceptació de la companyia. Consulta amb nosaltres el teu cas personalitzat.',
@@ -657,7 +657,7 @@ function render(){
   $('heroKick').textContent=MODE==='c'?'':T.kickE;$('heroKick').style.display=MODE==='c'?'none':'';
   $('hi').innerHTML=pretty?`${T.hi} <span>${esc(pretty)}</span>,`:T.hi;
   $('lead').textContent=N>1?T.leadN(N):T.lead;
-  $('svs').innerHTML=T.sv.map(([ic,t,g])=>`<li${g?' class="gift"':''}><i class="ic i-${ic}"></i><span>${t}${g?` <em class="gold">${T.gift}</em>`:''}</span></li>`).join('');
+  $('svs').innerHTML=T.sv.map(([ic,t,g,d])=>`<li${g?' class="gift"':''}><i class="ic i-${ic}"></i><span>${t}${g?` <em class="gold">${T.gift}</em>`:''}${d?`<small style="display:block;font-weight:400;color:var(--t3);font-size:12px;margin-top:1px">${d}</small>`:''}</span></li>`).join('');
   if(X!=='c'){$('capCard').style.display='none';$('needCard').style.display='none';}
   $('capMin').textContent=cap(30000);$('capMax').textContent=cap(500000);
   $('foot').textContent=T.foot;

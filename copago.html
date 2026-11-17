@@ -209,6 +209,7 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
 .rC .p{background:var(--brand)}.rC .c{background:repeating-linear-gradient(45deg,var(--brand),var(--brand) 4px,rgba(220,0,40,.35) 4px,rgba(220,0,40,.35) 8px)}
 .rK .p{background:var(--comp)}.rK .c{background:repeating-linear-gradient(45deg,var(--comp),var(--comp) 4px,rgba(42,42,49,.35) 4px,rgba(42,42,49,.35) 8px)}
 .pills3 .qs{background:var(--t3)}.pills3 .qa{background:var(--ade)}.pills3 .qc{background:var(--brand)}.pills3 .qk{background:var(--comp)}
+.pills3 .qs{background:var(--brand-ink)}.pills3 .lgw{background:#fff;border-radius:999px;padding:3px 10px;display:inline-flex;align-items:center;gap:6px;max-width:100%}.pills3 .lgw .lg{--w:76px;width:calc(var(--w) * (1 - 2 * var(--lx,0)));height:calc(var(--w) / 4);background-size:var(--w) 100%;background-position:calc(var(--lx,0) * -1 * var(--w)) center}.pills3 .lgw small{font-size:10px;color:var(--t2);font-weight:600}.cmphd .cmpn{display:block;font-size:11px;color:var(--t3);font-weight:600;margin-top:2px}/* comparativa: la competencia en gris/negro y TODO Occident en rojo (antes «Sin copago» salía gris) */.app.hc .rS .p,.app.hc .rA .p,.app.hc .rF .p{background:var(--brand)}.app.hc .rS .c,.app.hc .rA .c,.app.hc .rF .c{background:repeating-linear-gradient(45deg,var(--brand),var(--brand) 4px,rgba(220,0,40,.35) 4px,rgba(220,0,40,.35) 8px)}.app.hc .pills3 .qs,.app.hc .pills3 .qa,.app.hc .pills3 .qf{background:var(--brand)}
 .app{--c5:#B26A00}.rF .p{background:var(--c5)}.rF .c{background:repeating-linear-gradient(45deg,var(--c5),var(--c5) 4px,rgba(178,106,0,.35) 4px,rgba(178,106,0,.35) 8px)}.pills3 .qf{background:var(--c5)}.pb.c5x{background:var(--c5)}.pb+.pb{margin-left:-4px}
 .pdfcard{display:flex;align-items:center;gap:12px;margin-top:16px;border:1px solid var(--br);border-radius:var(--radius);padding:12px 14px;background:var(--bg3);text-decoration:none;color:var(--t1);font-weight:600;font-size:14px}.pdfcard .ic{width:38px;height:38px}.pdfcard small{display:block;color:var(--t3);font-weight:400;font-size:12px;margin-top:2px}.pdfcard:after{content:"\203A";margin-left:auto;font-size:24px;color:var(--brand)}
 .sv,.inv{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
@@ -390,7 +391,8 @@ const PRODS=(function(){
 const COMP=PRODS[0].comp?PRODS[0]:null;
 const BASE=COMP||(PRODS.length>1?PRODS.reduce((a,b)=>b.annual>a.annual?b:a):null);   // base del ahorro: la competencia o, si no hay, la opción más cara
 const CMPD=PRODS.filter(p=>p!==BASE).sort((a,b)=>a.annual-b.annual);                  // las comparadas, de más barata a más cara
-const COL={s:'var(--t3)',a:'var(--ade)',f:'var(--c5)',c:'var(--brand)',k:'var(--comp)'};
+const COL=COMP?{s:'#A5001E',a:'#DC0028',f:'#F0627A',c:'#EE3F5C',k:'var(--comp)'}:{s:'var(--t3)',a:'var(--ade)',f:'var(--c5)',c:'var(--brand)',k:'var(--comp)'};
+document.getElementById('app').classList.toggle('hc',!!COMP);
 const ICON={s:'cajafuerte',a:'balanza',f:'grafica',c:'ahorro'};
 const HASCOP=PRODS.some(p=>p.id==='c'||p.id==='f'), HAS20=PRODS.some(p=>p.id==='c'||p.id==='a'), HASA=PRODS.some(p=>p.id==='a');
 const NOVIS=!!COMP&&PRODS.every(p=>!p.rule.cop&&!p.rule.alto), OCCN=PRODS.filter(p=>!p.comp).length;   // comparativa sense copagaments: el cost no depèn de les visites
@@ -407,7 +409,7 @@ const same=(r,o)=>r.cop===o.cop&&r.alto===o.alto&&r.free===o.free;
 /* ---------- logos de companyías (CSS externo, solo cuando se compara) ---------- */
 window.__logosReady=Promise.resolve();
 if(COMP){const lk=document.createElement('link');lk.rel='stylesheet';lk.href='copago-logos.css';document.head.appendChild(lk);window.__logosReady=new Promise(r=>{lk.onload=r;lk.onerror=r;});}
-function logoEl(p){return p.key?`<i class="lg lg-${p.key}"></i>`:(p.company&&p.company!==p.name?`<span class="cmpco">${esc(p.company)}</span>`:'');}
+function logoEl(p){if(!p.comp)return '<i class="lg lg-occident"></i>';return p.key?`<i class="lg lg-${p.key}"></i>`:(p.company&&p.company!==p.name?`<span class="cmpco">${esc(p.company)}</span>`:'');}
 
 function layout(){document.body.classList.toggle('pc',innerWidth>=900);}
 layout();addEventListener('resize',layout);
@@ -683,8 +685,8 @@ function renderStatic(){
     const tag=p.comp?T.tagComp:PRODS.length<2?'':p===hi&&hi!==lo?T.tagCara:p===lo?T.tagEco:T.tagEq;
     const d=p===BASE?(COMP?T.dNow:T.dRef):(BASE?(BASE.annual>=p.annual?T.menos(eur(BASE.annual-p.annual)):T.mas(eur(p.annual-BASE.annual))):'');
     const cls=p.comp?' comp':p===bestOcc&&PRODS.length>1?' best':p.id==='a'?' mid':'';
-    const icon=p.comp?'':`<i class="ic i-${ICON[p.id]}"></i>`;
-    return `<div class="plan${cls}" style="${PRODS.length===1?'flex-basis:100%':''}">${p.comp?`<div class="cmphd">${logoEl(p)}</div>`:''}<div class="top">${icon}<div><h3>${esc(p.name)}</h3>${tag?`<span class="tag">${tag}</span>`:''}</div></div><div class="y">${eur(mes(p),2)}<small>${T.mes}</small></div><div class="m">${eur(p.annual,2)} ${T.alAnio}</div><p>${ruleDesc(p)}</p>${d?`<div class="d${p!==BASE&&BASE&&BASE.annual>=p.annual?' g':''}">${d}</div>`:''}</div>`;}).join('');
+    const icon=COMP?'':`<i class="ic i-${ICON[p.id]}"></i>`;
+    return `<div class="plan${cls}" style="${PRODS.length===1?'flex-basis:100%':''}">${COMP?`<div class="cmphd">${logoEl(p)}${!p.comp&&OCCN>1?`<small class="cmpn">${esc(p.name)}</small>`:''}</div>`:''}<div class="top">${icon}<div><h3>${esc(p.name)}</h3>${tag?`<span class="tag">${tag}</span>`:''}</div></div><div class="y">${eur(mes(p),2)}<small>${T.mes}</small></div><div class="m">${eur(p.annual,2)} ${T.alAnio}</div><p>${ruleDesc(p)}</p>${d?`<div class="d${p!==BASE&&BASE&&BASE.annual>=p.annual?' g':''}">${d}</div>`:''}</div>`;}).join('');
   $('dots').innerHTML=PRODS.map((_,i)=>`<i${i?'':' class="on"'}></i>`).join('');$('dots').style.display=PRODS.length>1?'':'none';
   $('planCap').textContent=(MODE==='c'?T.capC:T.capE)(NP);
   /* barras del simulador */
@@ -704,7 +706,7 @@ function renderStatic(){
   if(BASE)cks.push(T.ck3);
   const adv=PRODS.find(p=>p.id==='a');if(adv)cks.push(T.ck4(adv.name));
   $('checks').innerHTML=cks.filter(Boolean).map(s=>`<li><i class="ic i-ok"></i><span>${s}</span></li>`).join('');
-  $('pills3').innerHTML=PRODS.map(p=>`<div class="pl q${p.id}"><span>${esc(p.name)}</span><b>${eur(mes(p),2)}<small>${T.mes}</small></b><i>${eur(p.annual,2)} ${T.alAnio}</i></div>`).join('');
+  $('pills3').innerHTML=PRODS.map(p=>`<div class="pl q${p.id}">${COMP?`<span class="lgw">${blbl(p)}</span>`:`<span>${esc(p.name)}</span>`}<b>${eur(mes(p),2)}<small>${T.mes}</small></b><i>${eur(p.annual,2)} ${T.alAnio}</i></div>`).join('');
   $('foot').textContent=T.foot(NP,String(RENT*100).replace('.',L==='ca'?',':'.'));
   actsHTML();
   const pr=[

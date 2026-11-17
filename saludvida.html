@@ -235,6 +235,9 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
 .app .rS .p,.app .rA .p,.app .rF .p,.app .rC .p{background:var(--brand)}.app .rS .c,.app .rA .c,.app .rF .c,.app .rC .c{background:repeating-linear-gradient(45deg,var(--brand),var(--brand) 4px,rgba(220,0,40,.35) 4px,rgba(220,0,40,.35) 8px)}
 .cst .pills3 .pl{background:var(--bg2)!important;border:1.5px solid var(--br)}.cst .pills3 .pl span,.cst .pills3 .pl i{color:var(--t2)}.cst .pills3 .pl b{color:var(--brand)}.cst .pills3 .pl.qk b{color:var(--t1)}.cst .pills3 .pl:not(.qk){border-color:var(--brand)}
 .cpill .pills3 .pl{background:var(--brand)!important}.cpill .pills3 .pl.qk{background:var(--comp)!important}
+/* móvil: primas una debajo de otra (sin scroll lateral) · sin cifra de ahorro en portada ni veredicto duplicado */
+body:not(.pc) .swipe{flex-direction:column;overflow:visible;scroll-snap-type:none;margin:10px 0 0;padding:6px 0 4px}body:not(.pc) .plan{flex:none;width:100%}.dots{display:none!important}
+.heroR>.kpi{display:none}#vbox{display:none}
 /* ===== elegir: plan de ahorro / seguro de vida ===== */
 .optg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.optb{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;border:1.5px solid var(--br);border-radius:var(--radius-lg);background:var(--bg3);padding:14px 10px;font-weight:700;font-size:14px;color:var(--t1);line-height:1.25;transition:all .12s;cursor:pointer}
 .optb .ic{width:56px;height:56px}.optb small{display:block;font-weight:500;font-size:11.5px;color:var(--t2);margin-top:2px}.optb.on{border-color:var(--brand);background:var(--brand-dim)}
@@ -278,6 +281,13 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
       <div class="sub" id="planCap" style="text-align:center;margin:10px 0 0;color:var(--t1);font-weight:600;font-size:13px"></div>
     </section>
 
+    <section class="card rv" id="secSav">
+      <div class="st"><i class="ic i-ahorro"></i><h2><span data-t="savH"></span><small data-t="savS"></small></h2></div>
+      <div class="sv" id="sv"></div>
+      <div class="slots s10" id="coins"></div><div class="slcap" id="coinscap"></div>
+      <div class="eq" id="eq"></div>
+    </section>
+
     <section class="card rv" id="secSim">
       <div class="st"><i class="ic i-calculadora"></i><h2><span data-t="simH"></span><small data-t="simS"></small></h2></div>
       <div class="simgrid"><div class="simL">
@@ -302,16 +312,12 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
 
     
 
-    <section class="card rv" id="secSav">
-      <div class="st"><i class="ic i-ahorro"></i><h2><span data-t="savH"></span><small data-t="savS"></small></h2></div>
-      <div class="sv" id="sv"></div>
-      <div class="slots s10" id="coins"></div><div class="slcap" id="coinscap"></div>
-      <div class="eq" id="eq"></div>
-    </section>
+    
 
     <section class="card rv" id="secOpt" style="display:none">
-      <div class="st"><i class="ic i-ok"></i><h2><span data-t="optH"></span><small data-t="optS"></small></h2></div>
+      <div class="st"><i class="ic i-balanza"></i><h2><span data-t="optH"></span><small data-t="optS"></small></h2></div>
       <div class="optg"><button class="optb" id="oE" type="button"><i class="ic i-ahorro"></i><span data-t="oE"></span></button><button class="optb" id="oV" type="button"><i class="ic i-vida"></i><span data-t="oV"></span></button></div>
+      <ul class="checks" id="optc" style="margin-top:12px"></ul>
     </section>
     <section class="card rv" id="secInv" style="display:none">
       <div class="st"><i class="ic i-grafica"></i><h2><span data-t="invH"></span><small id="invS"></small></h2></div>
@@ -345,7 +351,7 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
       <div class="st"><i class="ic i-team"></i><h2 data-t="closeH"></h2></div>
       <div class="team"><div><i class="ic i-fonendo"></i><span data-t="tDoc"></span></div><div><i class="ic i-enfermera"></i><span data-t="tNur"></span></div><div><i class="ic i-salud"></i><span data-t="tHos"></span></div></div>
       <ul class="checks" id="checks"></ul>
-      <div class="kick" style="margin-top:14px" data-t="remind"></div>
+      <div class="vlink" id="sumFin" style="display:none"></div><div class="kick" style="margin-top:14px" data-t="remind"></div>
       <div class="pills3" id="pills3"></div>
       <a class="pdfcard" id="pdfL" target="_blank" rel="noopener" style="display:none"><i class="ic i-pdf"></i><span><span data-t="pdfT"></span><small data-t="pdfS"></small></span></a>
     </section>
@@ -605,7 +611,7 @@ function bigTxt(){const m={};PRODS.forEach(p=>{if(p.rule.alto>0)(m[p.rule.alto]=
 /* ---------- textos ---------- */
 const T={
 es:{
- optH:'Optimiza lo que ahorras', optS:'Elige qué hacer con tu ahorro anual', oE:'Plan de ahorro', oV:'Seguro de Vida', rateL:'Interés anual estimado', vidaH:'Tu seguro de Vida', vidaS:'Elige el capital y mira cuánto cuesta', vWho:'Persona asegurada', vCap:'Capital a asegurar', vCapH:'Desliza para probar distintos capitales', vAcc:'Doble capital por accidente', vInv:'Con invalidez absoluta', vMes:'al mes', vAnio:'al año', vFall:'Fallecimiento', vAccC:'Fallecimiento por accidente', vInvC:'Invalidez absoluta', vTot:'Prima total estimada', vErrAge:'La edad de esta persona está fuera del rango asegurable (18 a 64 años).', vErrMin:'Con este capital no se alcanza la prima mínima: sube el capital.', vLinkOk:(ah,pr,sob)=>`Tu ahorro de <b>${ah}</b> al año cubre el seguro de Vida (<b>${pr}</b> al año) y todavía te sobran <b class="green">${sob}</b>.`, vLinkPart:(ah,pr,pc)=>`Tu ahorro de <b>${ah}</b> al año paga el <b class="green">${pc} %</b> de este seguro de Vida (<b>${pr}</b> al año).`, vLinkNo:pr=>`Este seguro de Vida costaría <b>${pr}</b> al año.`, vNote:'Prima estimada con tarifa estándar, sin recargos por salud o profesión ni descuentos. Tu caso personalizado puede variar.', ckV:'Con lo que ahorras en Salud puedes asegurar el futuro de tu familia con un seguro de Vida.', footV:'Prima de Vida estimada con tarifa estándar; puede variar según salud, profesión y descuentos.', ls:'Seguro de Salud · Vida', kickE:'Simulación · Familia de ejemplo', kickC:'Simulación personalizada',
+ optH:'¿Y qué hacer con lo que ahorras?', optS:'Elige una opción', oE:'Plan de ahorro', oV:'Seguro de Vida', rateL:'Interés anual estimado', vidaH:'Tu seguro de Vida', vidaS:'Elige el capital y mira cuánto cuesta', vWho:'Persona asegurada', vCap:'Capital a asegurar', vCapH:'Desliza para probar distintos capitales', vAcc:'Doble capital por accidente', vInv:'Con invalidez absoluta', vMes:'al mes', vAnio:'al año', vFall:'Fallecimiento', vAccC:'Fallecimiento por accidente', vInvC:'Invalidez absoluta', vTot:'Prima total estimada', vErrAge:'La edad de esta persona está fuera del rango asegurable (18 a 64 años).', vErrMin:'Con este capital no se alcanza la prima mínima: sube el capital.', vLinkOk:(ah,pr,sob)=>`Tu ahorro de <b>${ah}</b> al año cubre el seguro de Vida (<b>${pr}</b> al año) y todavía te sobran <b class="green">${sob}</b>.`, vLinkPart:(ah,pr,pc)=>`Tu ahorro de <b>${ah}</b> al año paga el <b class="green">${pc} %</b> de este seguro de Vida (<b>${pr}</b> al año).`, vLinkNo:pr=>`Este seguro de Vida costaría <b>${pr}</b> al año.`, vNote:'Prima estimada con tarifa estándar, sin recargos por salud o profesión ni descuentos. Tu caso personalizado puede variar.', finE:'incrementarlo hasta {Y} en {N} años con un plan de ahorro', finV:'tener un buen seguro de Vida', finH:'Puedes tener un ahorro directo de {X} al año', ckV:'Con lo que ahorras en Salud puedes asegurar el futuro de tu familia con un seguro de Vida.', footV:'Prima de Vida estimada con tarifa estándar; puede variar según salud, profesión y descuentos.', ls:'Seguro de Salud · Vida', kickE:'Simulación · Familia de ejemplo', kickC:'Simulación personalizada',
  hCop:'Quieres <span>copago</span> y no lo sabes', hCmp:'Compara tu <span>seguro actual</span>', hOpt:'Elige tu <span>seguro de salud</span>',
  leadOpt:'Mismo cuadro médico y mismas coberturas: compara la prima y lo que pagarías según cuánto vas al médico.',
  lead:'Un seguro «sin copago» suena tranquilizador, pero lo pagas siempre, vayas o no al médico.',
@@ -669,7 +675,7 @@ es:{
  ageTxt:a=>a===1?'1 año':a+' años', lab:{baby:'Bebé',boyH:'Niño',girlM:'Niña',teenH:'Joven',teenM:'Joven',adultH:'Hombre',adultM:'Mujer',oldH:'Abuelo',oldM:'Abuela'}
 },
 ca:{
- optH:'Optimitza el que estalvies', optS:'Tria què fer amb el teu estalvi anual', oE:'Pla d\'estalvi', oV:'Assegurança de Vida', rateL:'Interès anual estimat', vidaH:'La teva assegurança de Vida', vidaS:'Tria el capital i mira quant costa', vWho:'Persona assegurada', vCap:'Capital a assegurar', vCapH:'Llisca per provar diferents capitals', vAcc:'Doble capital per accident', vInv:'Amb invalidesa absoluta', vMes:'al mes', vAnio:'a l\'any', vFall:'Mort', vAccC:'Mort per accident', vInvC:'Invalidesa absoluta', vTot:'Prima total estimada', vErrAge:'L\'edat d\'aquesta persona és fora del rang assegurable (18 a 64 anys).', vErrMin:'Amb aquest capital no s\'arriba a la prima mínima: puja el capital.', vLinkOk:(ah,pr,sob)=>`El teu estalvi de <b>${ah}</b> a l\'any cobreix l\'assegurança de Vida (<b>${pr}</b> a l\'any) i encara et sobren <b class="green">${sob}</b>.`, vLinkPart:(ah,pr,pc)=>`El teu estalvi de <b>${ah}</b> a l\'any paga el <b class="green">${pc} %</b> d\'aquesta assegurança de Vida (<b>${pr}</b> a l\'any).`, vLinkNo:pr=>`Aquesta assegurança de Vida costaria <b>${pr}</b> a l\'any.`, vNote:'Prima estimada amb tarifa estàndard, sense recàrrecs per salut o professió ni descomptes. El teu cas personalitzat pot variar.', ckV:'Amb el que estalvies en Salut pots assegurar el futur de la teva família amb una assegurança de Vida.', footV:'Prima de Vida estimada amb tarifa estàndard; pot variar segons salut, professió i descomptes.', ls:'Assegurança de Salut · Vida', kickE:'Simulació · Família d\'exemple', kickC:'Simulació personalitzada',
+ optH:'I què fer amb el que estalvies?', optS:'Tria una opció', oE:'Pla d\'estalvi', oV:'Assegurança de Vida', rateL:'Interès anual estimat', vidaH:'La teva assegurança de Vida', vidaS:'Tria el capital i mira quant costa', vWho:'Persona assegurada', vCap:'Capital a assegurar', vCapH:'Llisca per provar diferents capitals', vAcc:'Doble capital per accident', vInv:'Amb invalidesa absoluta', vMes:'al mes', vAnio:'a l\'any', vFall:'Mort', vAccC:'Mort per accident', vInvC:'Invalidesa absoluta', vTot:'Prima total estimada', vErrAge:'L\'edat d\'aquesta persona és fora del rang assegurable (18 a 64 anys).', vErrMin:'Amb aquest capital no s\'arriba a la prima mínima: puja el capital.', vLinkOk:(ah,pr,sob)=>`El teu estalvi de <b>${ah}</b> a l\'any cobreix l\'assegurança de Vida (<b>${pr}</b> a l\'any) i encara et sobren <b class="green">${sob}</b>.`, vLinkPart:(ah,pr,pc)=>`El teu estalvi de <b>${ah}</b> a l\'any paga el <b class="green">${pc} %</b> d\'aquesta assegurança de Vida (<b>${pr}</b> a l\'any).`, vLinkNo:pr=>`Aquesta assegurança de Vida costaria <b>${pr}</b> a l\'any.`, vNote:'Prima estimada amb tarifa estàndard, sense recàrrecs per salut o professió ni descomptes. El teu cas personalitzat pot variar.', finE:'incrementar-lo fins a {Y} en {N} anys amb un pla d\'estalvi', finV:'tenir una bona assegurança de Vida', finH:'Pots tenir un estalvi directe de {X} a l\'any', ckV:'Amb el que estalvies en Salut pots assegurar el futur de la teva família amb una assegurança de Vida.', footV:'Prima de Vida estimada amb tarifa estàndard; pot variar segons salut, professió i descomptes.', ls:'Assegurança de Salut · Vida', kickE:'Simulació · Família d\'exemple', kickC:'Simulació personalitzada',
  hCop:'Vols <span>copagament</span> i no ho saps', hCmp:'Compara la teva <span>assegurança actual</span>', hOpt:'Tria la teva <span>assegurança de salut</span>',
  leadOpt:'Mateix quadre mèdic i mateixes cobertures: compara la prima i el que pagaries segons quant vas al metge.',
  lead:'Una assegurança «sense copagament» sona tranquil·litzadora, però la pagues sempre, vagis o no al metge.',
@@ -776,6 +782,15 @@ function actsHTML(){
 }
 
 /* ---------- pintado estático ---------- */
+function finTxt(){
+  const el=$('sumFin');if(!el)return;
+  const x=Math.max(0,window.__sav||0),y=window.__fv||0;
+  const parts=[];if(OPT_E&&y>x)parts.push(T.finE.replace('{Y}','<b>'+eur(y)+'</b>').replace('{N}',st.Y));if(OPT_V)parts.push(T.finV);
+  if(!(OPT_E||OPT_V)||x<=0){el.style.display='none';return;}
+  const sep=L==='ca'?' o ':' o ';let t=T.finH.replace('{X}','<b>'+eur(x)+'</b>');
+  if(parts.length)t+=', '+parts.join(sep);
+  el.innerHTML=t+'.';el.style.display='';
+}
 function footTxt(){
   const rp=String(RENT*100).replace('.',L==='ca'?',':'.');
   $('invS').textContent=T.invS(rp);
@@ -830,7 +845,7 @@ function renderStatic(){
   const cks=[];
   cks.push(COMP?T.ck1c:PRODS.length>1?T.ck1(PRODS.length):'');
   if(BASE&&diff>0)cks.push(STAR.rule.cop>0?T.ck2(nf(Math.floor(diff/STAR.rule.cop)),STAR.rule.cop):T.ck2p(eur(diff),STAR.name));
-  if(OPT_E)cks.push(T.ck3);if(OPT_V)cks.push(T.ckV);
+  $('optc').innerHTML=[OPT_E?T.ck3:'',OPT_V?T.ckV:''].filter(Boolean).map(x=>`<li><i class='ic i-ok'></i><span>${x}</span></li>`).join('');
 
   $('checks').innerHTML=cks.filter(Boolean).map(s=>`<li><i class="ic i-ok"></i><span>${s}</span></li>`).join('');
   $('pills3').innerHTML=PRODS.map(p=>`<div class="pl q${p.id}">${COMP?`<span class="lgw">${blbl(p)}</span>`:`<span>${esc(p.name)}</span>`}<b>${eur(mes(p),2)}<small>${T.mes}</small></b><i>${eur(p.annual,2)} ${T.alAnio}</i></div>`).join('');
@@ -872,7 +887,7 @@ function render(){
     $('yslots').innerHTML=Array.from({length:12},(_,i)=>{const full=(i+1)*YR_PER_ICON<=y, half=!full&&i*YR_PER_ICON<y;return `<i class="ic i-ahorro${full?'':half?' half':' off'}"></i>`;}).join('');
     $('yscap').innerHTML=T.capY(YR_PER_ICON,eur(Math.max(0,sb)),best.name);
     chart(y);
-    window.__sav=Math.max(0,sb);
+    window.__sav=Math.max(0,sb);window.__fv=fb;finTxt();
     if(typeof renderVida==='function')renderVida();
   }else{
     $('verdict').innerHTML=T.vSolo(PRODS[0].name,eur(tot(cs[0])));

@@ -95,6 +95,9 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
 .bar .p{background:var(--t3)}.bar .c{background:repeating-linear-gradient(45deg,var(--t3),var(--t3) 4px,var(--brl) 4px,var(--brl) 8px)}
 .rA .p{background:var(--ade)}.rA .c{background:repeating-linear-gradient(45deg,var(--ade),var(--ade) 4px,rgba(59,157,248,.35) 4px,rgba(59,157,248,.35) 8px)}
 .r20 .p{background:var(--brand)}.r20 .c{background:repeating-linear-gradient(45deg,var(--brand),var(--brand) 4px,rgba(220,0,40,.35) 4px,rgba(220,0,40,.35) 8px)}
+.brow .rl .bl{display:inline-flex;align-items:center;gap:8px;min-width:0}.brow .rl .lg{width:96px;height:24px;background-position:left center}.brow .rl .bl small{font-size:12px;color:var(--t2);font-weight:600}
+@media(max-width:420px){.app .vsrow{gap:8px}.app .vsrow .vl{padding:6px 12px}.app .vsrow .lg{width:96px;height:26px}}
+.novis .simgrid{display:block}.novis .simL,.novis .legend .lg2+.lg2{display:none}
 .legend{display:flex;gap:8px;margin-top:10px;font-size:11px;color:var(--t2)}
 .lg2{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--br);border-radius:999px;background:var(--bg2);padding:3px 10px}.lg2 s{width:10px;height:10px;border-radius:3px;display:inline-block;text-decoration:none}
 .verdict{margin-top:14px;display:flex;gap:12px;align-items:center;background:var(--brand-dim);border:1px solid var(--brand-dim2);border-radius:var(--radius);padding:12px 14px;font-size:13.5px;color:var(--t2)}
@@ -352,7 +355,7 @@ const L=Q.get('l')==='ca'?'ca':'es', MODE=Q.get('m')==='c'?'c':'e', V=Q.get('v')
 const num=(s,d)=>{const v=parseFloat(String(s).replace(',','.'));return isFinite(v)&&v>0?v:d;};
 const RENT=Math.min(0.10,Math.max(0,num(Q.get('r'),3)/100));
 const COPAGO=20, ALTO=100, TEL='34972426665', MAIL='optimizarte@occident.com';
-const LOGOKEYS=["allianz", "arag", "axa", "berkley", "caser", "fiatc", "generali", "helvetia", "mapfre", "mussap", "pelayo", "qualitas", "reale", "zurich"];
+const LOGOKEYS=["adeslas", "allianz", "arag", "axa", "berkley", "caser", "fiatc", "generali", "helvetia", "mapfre", "mussap", "pelayo", "qualitas", "reale", "zurich"];
 const DEF_NAMES=L==='ca'?['Papa','Mama','Nena','Nadó']:['Papá','Mamá','Niña','Bebé'];
 let people=(Q.get('a')||'').split(',').map(s=>s.trim().match(/^([HMhm])(\d{1,2})$/)).filter(Boolean).slice(0,8).map(m=>({sex:m[1].toUpperCase(),age:+m[2]}));
 let names=(Q.get('n')||'').split(',').map(s=>{try{return decodeURIComponent(s).slice(0,18);}catch(e){return '';}});
@@ -390,6 +393,8 @@ const CMPD=PRODS.filter(p=>p!==BASE).sort((a,b)=>a.annual-b.annual);            
 const COL={s:'var(--t3)',a:'var(--ade)',f:'var(--c5)',c:'var(--brand)',k:'var(--comp)'};
 const ICON={s:'cajafuerte',a:'balanza',f:'grafica',c:'ahorro'};
 const HASCOP=PRODS.some(p=>p.id==='c'||p.id==='f'), HAS20=PRODS.some(p=>p.id==='c'||p.id==='a'), HASA=PRODS.some(p=>p.id==='a');
+const NOVIS=!!COMP&&PRODS.every(p=>!p.rule.cop&&!p.rule.alto), OCCN=PRODS.filter(p=>!p.comp).length;   // comparativa sense copagaments: el cost no depèn de les visites
+const blbl=p=>!COMP?esc(p.name):p.comp?(p.key?`<i class="lg lg-${p.key}"></i>`:esc(p.company||p.name)):`<i class="lg lg-occident"></i>`+(OCCN>1?`<small>${esc(p.name)}</small>`:'');   // a la comparativa: logos en lloc de noms
 const mes=p=>p.annual/12;
 function cost(p,n,h){const F=p.rule.free*NP, hl=Math.min(h,F), ol=Math.max(0,F-hl);   // actos gratuitos: primero los de 100 € (hipótesis favorable al producto con actos gratis)
   return {p:p.annual,c:p.rule.cop*Math.max(0,n-ol)+p.rule.alto*(h-hl)};}
@@ -502,6 +507,7 @@ es:{
  lblH:'Operaciones, ingresos, resonancias', hintH:()=>'Cirugía, hospitalización y pruebas avanzadas'+bigTxt()+'.',
  lgP:'Prima anual', lgC:'Copagos pagados',
  vOk:(nm,s,e,b)=>`Solo en este año, <b>${esc(nm)} te ahorra <span class="hl">${s}</span></b> frente a ${esc(b)}. `+(e!=null?`Para que ${esc(b)} saliera a cuenta, habría que ir <span class="hl">${e}</span> veces al médico en un año.`:`Con cualquier nivel de uso, ${esc(nm)} sale más barato.`),
+ vFix:(nm,s,b)=>`<b>${esc(nm)} te ahorra <span class="hl">${s}</span></b> cada año frente a ${esc(b)}.`, simHf:'¿Cuánto pagaréis cada año?', simSf:'Sin copagos: el coste es solo la prima, vayáis las veces que vayáis al médico',
  vKo:(n,h,b)=>`Con un uso tan intenso (${n} visitas y ${h} actos grandes), <b>${esc(b)} compensa</b>. Es poco habitual: baja el fonendo para ver dónde cambia.`,
  vSolo:(nm,t)=>`Con este uso, <b>${esc(nm)}</b> costaría <span class="hl">${t}</span> al año entre prima y copagos.`,
  acc1T:()=>HAS20&&PRODS.some(p=>p.id==='f')?'Copago por acto en cada modalidad':HAS20?'Copago por acto: 20 €, 100 € y más':'Copago por acto: 5 €, 25 € y más',
@@ -565,6 +571,7 @@ ca:{
  lblH:'Operacions, ingressos, ressonàncies', hintH:()=>'Cirurgia, hospitalització i proves avançades'+bigTxt()+'.',
  lgP:'Prima anual', lgC:'Copagaments pagats',
  vOk:(nm,s,e,b)=>`Només en aquest any, <b>${esc(nm)} t'estalvia <span class="hl">${s}</span></b> respecte a ${esc(b)}. `+(e!=null?`Perquè ${esc(b)} sortís a compte, caldria anar <span class="hl">${e}</span> vegades al metge en un any.`:`Amb qualsevol nivell d'ús, ${esc(nm)} surt més barat.`),
+ vFix:(nm,s,b)=>`<b>${esc(nm)} t'estalvia <span class="hl">${s}</span></b> cada any respecte a ${esc(b)}.`, simHf:'Quant pagareu cada any?', simSf:'Sense copagaments: el cost és només la prima, aneu al metge les vegades que aneu',
  vKo:(n,h,b)=>`Amb un ús tan intens (${n} visites i ${h} actes grans), <b>${esc(b)} compensa</b>. És poc habitual: baixa el fonendoscopi per veure on canvia.`,
  vSolo:(nm,t)=>`Amb aquest ús, <b>${esc(nm)}</b> costaria <span class="hl">${t}</span> a l'any entre prima i copagaments.`,
  acc1T:()=>HAS20&&PRODS.some(p=>p.id==='f')?'Copagament per acte a cada modalitat':HAS20?'Copagament per acte: 20 €, 100 € i més':'Copagament per acte: 5 €, 25 € i més',
@@ -647,6 +654,7 @@ function actsHTML(){
 /* ---------- pintado estático ---------- */
 function renderStatic(){
   document.documentElement.lang=L;
+  if(NOVIS){$('secSim').classList.add('novis');$('secSim').querySelector('[data-t=simH]').dataset.t='simHf';$('secSim').querySelector('[data-t=simS]').dataset.t='simSf';}
   document.querySelectorAll('[data-t]').forEach(e=>{const v=T[e.dataset.t];e.innerHTML=typeof v==='function'?v():v;});
   document.title=plain(titleHTML(T1)||titleHTML(T2)||T.hCop)+' · '+(L==='ca'?'Salut Occident':'Salud Occident');
   $('heroKick').textContent=MODE==='c'?T.kickC:T.kickE;
@@ -680,7 +688,7 @@ function renderStatic(){
   $('dots').innerHTML=PRODS.map((_,i)=>`<i${i?'':' class="on"'}></i>`).join('');$('dots').style.display=PRODS.length>1?'':'none';
   $('planCap').textContent=(MODE==='c'?T.capC:T.capE)(NP);
   /* barras del simulador */
-  $('bars').innerHTML=PRODS.map((p,i)=>`<div class="brow r${p.id.toUpperCase()}"><div class="rl"><span>${esc(p.name)}</span><span class="t" id="t${i}"></span></div><div class="bar"><i class="p" id="b${i}p"></i><i class="c" id="b${i}c"></i></div></div>`).join('');
+  $('bars').innerHTML=PRODS.map((p,i)=>`<div class="brow r${p.id.toUpperCase()}"><div class="rl"><span class="bl">${blbl(p)}</span><span class="t" id="t${i}"></span></div><div class="bar"><i class="p" id="b${i}p"></i><i class="c" id="b${i}c"></i></div></div>`).join('');
   /* ahorro e inversión: solo si hay con qué comparar */
   if(!BASE){$('secSav').style.display='none';$('secInv').style.display='none';}
   else{
@@ -718,7 +726,7 @@ function render(){
     const bt=tot(cost(BASE,st.N,st.H));
     sav=CMPD.map(p=>bt-tot(cost(p,st.N,st.H)));
     bi=sav.indexOf(Math.max(...sav));best=CMPD[bi];sb=sav[bi];
-    $('verdict').innerHTML= sb>0 ? T.vOk(best.name,eur(sb),equil(best,BASE,st.H),BASE.name) : T.vKo(st.N,st.H,BASE.name);
+    $('verdict').innerHTML= sb>0&&NOVIS ? T.vFix(best.name,eur(sb),BASE.name) : sb>0 ? T.vOk(best.name,eur(sb),equil(best,BASE,st.H),BASE.name) : T.vKo(st.N,st.H,BASE.name);
     sav.forEach((s,i)=>$('sv'+i).textContent=eur(s));
     const ratio=Math.max(0,Math.min(1,sb/BASE.annual)), nc=Math.round(ratio*10);
     $('coins').innerHTML=Array.from({length:10},(_,i)=>`<i class="ic i-ahorro${i<nc?'':' off'}"></i>`).join('');

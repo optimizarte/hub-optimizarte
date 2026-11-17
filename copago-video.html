@@ -59,6 +59,8 @@ h2{font-size:34px;font-weight:700;letter-spacing:-.02em;line-height:1.12}
 .trk .tb{position:absolute;left:0;right:0;top:27px;height:12px;border-radius:99px;background:var(--bg4);box-shadow:inset 0 0 0 1px var(--br)}
 .trk .tf{position:absolute;left:0;top:27px;height:12px;border-radius:99px;background:var(--brand)}
 .trk .th{position:absolute;top:2px;width:60px;height:60px;margin-left:-30px;border-radius:50%;border:3px solid var(--brand);background-color:#fff;background-position:center;background-size:42px;background-repeat:no-repeat;box-shadow:0 4px 12px rgba(15,15,30,.25)}
+.brow .rl .bl{display:inline-flex;align-items:center;gap:10px;min-width:0}.brow .rl .lg{width:130px;height:32px;background-position:left center}.brow .rl .bl small{font-size:15px;color:var(--t2);font-weight:600}
+#sc3.novis>div:first-child{display:none}#sc3.novis>div{max-width:640px;width:100%;margin:0 auto}
 .brow{margin-top:14px}.brow .rl{display:flex;justify-content:space-between;align-items:baseline;font-size:17px;font-weight:600;margin-bottom:6px}.brow .rl .t{font-size:28px;font-weight:600;letter-spacing:-.02em}
 .bar{height:22px;background:var(--bg3);border:1px solid var(--br);border-radius:99px;overflow:hidden;display:flex}.bar i{display:block;height:100%}
 .bar .p{background:var(--t3)}.bar .c{background:repeating-linear-gradient(45deg,var(--t3),var(--t3) 4px,var(--brl) 4px,var(--brl) 8px)}
@@ -224,7 +226,7 @@ const L=Q.get('l')==='ca'?'ca':'es', MODE=Q.get('m')==='c'?'c':'e', V=Q.get('v')
 const num=(s,d)=>{const v=parseFloat(String(s).replace(',','.'));return isFinite(v)&&v>0?v:d;};
 const RENT=Math.min(0.10,Math.max(0,num(Q.get('r'),3)/100));
 const COPAGO=20, ALTO=100, TEL='34972426665', MAIL='optimizarte@occident.com';
-const LOGOKEYS=["allianz", "arag", "axa", "berkley", "caser", "fiatc", "generali", "helvetia", "mapfre", "mussap", "pelayo", "qualitas", "reale", "zurich"];
+const LOGOKEYS=["adeslas", "allianz", "arag", "axa", "berkley", "caser", "fiatc", "generali", "helvetia", "mapfre", "mussap", "pelayo", "qualitas", "reale", "zurich"];
 const DEF_NAMES=L==='ca'?['Papa','Mama','Nena','Nadó']:['Papá','Mamá','Niña','Bebé'];
 let people=(Q.get('a')||'').split(',').map(s=>s.trim().match(/^([HMhm])(\d{1,2})$/)).filter(Boolean).slice(0,8).map(m=>({sex:m[1].toUpperCase(),age:+m[2]}));
 let names=(Q.get('n')||'').split(',').map(s=>{try{return decodeURIComponent(s).slice(0,18);}catch(e){return '';}});
@@ -262,6 +264,8 @@ const CMPD=PRODS.filter(p=>p!==BASE).sort((a,b)=>a.annual-b.annual);            
 const COL={s:'var(--t3)',a:'var(--ade)',f:'var(--c5)',c:'var(--brand)',k:'var(--comp)'};
 const ICON={s:'cajafuerte',a:'balanza',f:'grafica',c:'ahorro'};
 const HASCOP=PRODS.some(p=>p.id==='c'||p.id==='f'), HAS20=PRODS.some(p=>p.id==='c'||p.id==='a'), HASA=PRODS.some(p=>p.id==='a');
+const NOVIS=!!COMP&&PRODS.every(p=>!p.rule.cop&&!p.rule.alto), OCCN=PRODS.filter(p=>!p.comp).length;   // comparativa sense copagaments: el cost no depèn de les visites
+const blbl=p=>!COMP?esc(p.name):p.comp?(p.key?`<i class="lg lg-${p.key}"></i>`:esc(p.company||p.name)):`<i class="lg lg-occident"></i>`+(OCCN>1?`<small>${esc(p.name)}</small>`:'');   // a la comparativa: logos en lloc de noms
 const mes=p=>p.annual/12;
 function cost(p,n,h){const F=p.rule.free*NP, hl=Math.min(h,F), ol=Math.max(0,F-hl);   // actos gratuitos: primero los de 100 € (hipótesis favorable al producto con actos gratis)
   return {p:p.annual,c:p.rule.cop*Math.max(0,n-ol)+p.rule.alto*(h-hl)};}
@@ -289,6 +293,7 @@ es:{ls:'Seguro de Salud',kE:'Simulación · Familia de ejemplo',kC:'Simulación 
  dl:(a,b)=>`Diferencia de prima al año (${a} vs ${b})`,dsV:(nm,n,c)=>`Con <b>${nm}</b> pagas menos en prima cada año · equivale a <b>${n}</b> visitas con copago de ${c} €`,dsP:nm=>`Con <b>${nm}</b> pagas menos en prima cada año`,
  o1:'Un único copago de 20 € por centro y día',o2:'<b>Ejemplo:</b> consulta, análisis y ecografía el mismo día en el mismo centro: pagas una sola vez.',q1:'Visitas al año (familia)',
  vOk:(nm,s,e,b)=>`Solo en este año, <b>${nm} te ahorra <span class="hl">${s}</span></b> frente a ${b}. `+(e!=null?`Para que ${b} saliera a cuenta, habría que ir <span class="hl">${e}</span> veces al médico en un año.`:`Con cualquier nivel de uso, ${nm} sale más barato.`),
+ vFix:(nm,s,b)=>`<b>${nm} te ahorra <span class="hl">${s}</span></b> cada año frente a ${b}.`,
  vKo:(n,b)=>`Con un uso tan intenso (${n} visitas), <b>${b} compensa</b>.`,vSolo:(nm,t)=>`Con este uso, <b>${nm}</b> costaría <span class="hl">${t}</span> al año entre prima y copagos.`,
  h4:'Y si lo inviertes <em>al 3 %</em>',q4:'Dentro de',yr:y=>y===1?'1 año':y+' años',al:nm=>`Ahorro acumulado · ${nm}`,eq:(f,y,nm)=>`Con <b>${f}</b> pagarías <b>${y} años</b> de tu seguro ${nm}.`,
  h5:'Cuidamos de tu familia. <em>Y de tu bolsillo.</em>',tD:'Médicos',tN:'Enfermería',tH:'Hospitales',rm:'Recuerda los precios (por mes)',ct:'Consulta con nosotros tu caso personalizado',
@@ -301,6 +306,7 @@ ca:{ls:'Assegurança de Salut',kE:'Simulació · Família d\'exemple',kC:'Simula
  dl:(a,b)=>`Diferència de prima a l'any (${a} vs ${b})`,dsV:(nm,n,c)=>`Amb <b>${nm}</b> pagues menys en prima cada any · equival a <b>${n}</b> visites amb copagament de ${c} €`,dsP:nm=>`Amb <b>${nm}</b> pagues menys en prima cada any`,
  o1:'Un únic copagament de 20 € per centre i dia',o2:'<b>Exemple:</b> consulta, anàlisi i ecografia el mateix dia al mateix centre: pagues una sola vegada.',q1:'Visites a l\'any (família)',
  vOk:(nm,s,e,b)=>`Només en aquest any, <b>${nm} t'estalvia <span class="hl">${s}</span></b> respecte a ${b}. `+(e!=null?`Perquè ${b} sortís a compte, caldria anar <span class="hl">${e}</span> vegades al metge en un any.`:`Amb qualsevol nivell d'ús, ${nm} surt més barat.`),
+ vFix:(nm,s,b)=>`<b>${nm} t'estalvia <span class="hl">${s}</span></b> cada any respecte a ${b}.`,
  vKo:(n,b)=>`Amb un ús tan intens (${n} visites), <b>${b} compensa</b>.`,vSolo:(nm,t)=>`Amb aquest ús, <b>${nm}</b> costaria <span class="hl">${t}</span> a l'any entre prima i copagaments.`,
  h4:'I si ho inverteixes <em>al 3 %</em>',q4:'D\'aquí a',yr:y=>y===1?'1 any':y+' anys',al:nm=>`Estalvi acumulat · ${nm}`,eq:(f,y,nm)=>`Amb <b>${f}</b> pagaries <b>${y} anys</b> de la teva assegurança ${nm}.`,
  h5:'Cuidem la teva família. <em>I la teva butxaca.</em>',tD:'Metges',tN:'Infermeria',tH:'Hospitals',rm:'Recorda els preus (per mes)',ct:'Consulta amb nosaltres el teu cas personalitzat',
@@ -339,8 +345,9 @@ if(BASE&&DIFF>0){$('diffbox').dataset.in=DIFFIN;$('dl').textContent=TX.dl(BASE.n
   $('ds').innerHTML=STAR.rule.cop>0?TX.dsV(esc(STAR.name),nf(Math.floor(DIFF/STAR.rule.cop)),STAR.rule.cop):TX.dsP(esc(STAR.name));}
 else $('diffbox').remove();
 $('o1').textContent=TX.o1;$('o2').innerHTML=TX.o2;$('q1').textContent=TX.q1;if(!HAS20)document.querySelector('#sc3 .once').style.visibility='hidden';
-$('vbars').innerHTML=PRODS.map((p,i)=>`<div class="brow r${p.id.toUpperCase()}"><div class="rl"><span>${esc(p.name)}</span><span class="t" id="t${i}"></span></div><div class="bar"><i class="p" id="b${i}p"></i><i class="c" id="b${i}c"></i></div></div>`).join('');
-$('vd').innerHTML=BASE?(SB>0?TX.vOk(esc(BEST.name),eur(SB),EQ,esc(BASE.name)):TX.vKo(N,esc(BASE.name))):TX.vSolo(esc(PRODS[0].name),eur(tot(cost(PRODS[0],N,H))));
+$('vbars').innerHTML=PRODS.map((p,i)=>`<div class="brow r${p.id.toUpperCase()}"><div class="rl"><span class="bl">${blbl(p)}</span><span class="t" id="t${i}"></span></div><div class="bar"><i class="p" id="b${i}p"></i><i class="c" id="b${i}c"></i></div></div>`).join('');
+if(NOVIS){$('sc3').classList.add('novis');$('vbars').dataset.in='.4';document.querySelector('#sc3 .verdict').dataset.in='1.6';}
+$('vd').innerHTML=BASE?(SB>0&&NOVIS?TX.vFix(esc(BEST.name),eur(SB),esc(BASE.name)):SB>0?TX.vOk(esc(BEST.name),eur(SB),EQ,esc(BASE.name)):TX.vKo(N,esc(BASE.name))):TX.vSolo(esc(PRODS[0].name),eur(tot(cost(PRODS[0],N,H))));
 if(BASE){$('h4').innerHTML=TX.h4;$('q4').textContent=TX.q4;$('al').textContent=TX.al(BEST.name);
   $('slots').innerHTML=Array.from({length:12},()=>'<i class="ic i-ahorro off"></i>').join('');}
 $('h5').innerHTML=TX.h5;$('tD').textContent=TX.tD;$('tN').textContent=TX.tN;$('tH').textContent=TX.tH;$('rm').textContent=TX.rm;$('ct').textContent=TX.ct;
@@ -349,7 +356,7 @@ $('pills').innerHTML=PRODS.map((p,i)=>`<div class="pp q${p.id} a-pop" data-in="$
 $('wa').href='https://wa.me/34972426665?text='+encodeURIComponent(TX.wa((BEST||STAR).name));
 
 /* ---------- línea de tiempo ---------- */
-const DUR={sc1:6,sc2:7.5,sc3:10.5,sc4:9,sc5:8};
+const DUR={sc1:6,sc2:7.5,sc3:NOVIS?6:10.5,sc4:9,sc5:8};
 const SC=[];let acc=0;
 ['sc1','sc2','sc3','sc4','sc5'].forEach(id=>{if(id==='sc4'&&!BASE){$('sc4').remove();return;}SC.push([id,acc,acc+DUR[id]]);acc+=DUR[id];});
 const TOTAL=acc, K=1.15, TT=TOTAL*K;   // K = 1,15 → todo el vídeo un 15 % más lento

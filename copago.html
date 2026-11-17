@@ -356,7 +356,7 @@ const L=Q.get('l')==='ca'?'ca':'es', MODE=Q.get('m')==='c'?'c':'e', V=Q.get('v')
 const num=(s,d)=>{const v=parseFloat(String(s).replace(',','.'));return isFinite(v)&&v>0?v:d;};
 const RENT=Math.min(0.10,Math.max(0,num(Q.get('r'),3)/100));
 const COPAGO=20, ALTO=100, TEL='34972426665', MAIL='optimizarte@occident.com';
-const LOGOKEYS=["adeslas", "allianz", "arag", "axa", "berkley", "caser", "fiatc", "generali", "helvetia", "mapfre", "mussap", "pelayo", "qualitas", "reale", "zurich"];
+const LOGOKEYS=["adeslas", "allianz", "arag", "aegon", "axa", "berkley", "caser", "fiatc", "generali", "helvetia", "mapfre", "mussap", "pelayo", "qualitas", "reale", "zurich"];
 const DEF_NAMES=L==='ca'?['Papa','Mama','Nena','Nadó']:['Papá','Mamá','Niña','Bebé'];
 let people=(Q.get('a')||'').split(',').map(s=>s.trim().match(/^([HMhm])(\d{1,2})$/)).filter(Boolean).slice(0,8).map(m=>({sex:m[1].toUpperCase(),age:+m[2]}));
 let names=(Q.get('n')||'').split(',').map(s=>{try{return decodeURIComponent(s).slice(0,18);}catch(e){return '';}});

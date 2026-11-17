@@ -247,7 +247,7 @@ function drawPeople(){
    <input type="text" data-f="name" value="${(p.name||'').replace(/"/g,'&quot;')}" placeholder="Nom (opcional)" maxlength="18">
    <button class="x" data-del title="Treure">×</button><div class="cat">${cat} · ${p.age} ${p.age===1?'any':'anys'}</div></div>`;}).join('');
 }
-const LOGOS=[['adeslas','Adeslas'],['allianz','Allianz'],['arag','ARAG'],['axa','AXA'],['berkley','Berkley'],['caser','Caser'],['fiatc','Fiatc'],['generali','Generali'],['helvetia','Helvetia'],['mapfre','Mapfre'],['mussap','Mussap'],['pelayo','Pelayo'],['qualitas','Qualitas'],['reale','Reale'],['zurich','Zurich']];
+const LOGOS=[['adeslas','Adeslas'],['aegon','Aegon'],['allianz','Allianz'],['arag','ARAG'],['axa','AXA'],['berkley','Berkley'],['caser','Caser'],['fiatc','Fiatc'],['generali','Generali'],['helvetia','Helvetia'],['mapfre','Mapfre'],['mussap','Mussap'],['pelayo','Pelayo'],['qualitas','Qualitas'],['reale','Reale'],['zurich','Zurich']];
 $('ck').innerHTML=LOGOS.map(([k,n])=>`<option value="${k}">${n}</option>`).join('')+'<option value="_">Altra companyia…</option>';
 function build(){
   if(S.c==='r')return buildR();

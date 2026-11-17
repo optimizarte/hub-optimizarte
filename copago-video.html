@@ -59,7 +59,8 @@ h2{font-size:34px;font-weight:700;letter-spacing:-.02em;line-height:1.12}
 .trk .tb{position:absolute;left:0;right:0;top:27px;height:12px;border-radius:99px;background:var(--bg4);box-shadow:inset 0 0 0 1px var(--br)}
 .trk .tf{position:absolute;left:0;top:27px;height:12px;border-radius:99px;background:var(--brand)}
 .trk .th{position:absolute;top:2px;width:60px;height:60px;margin-left:-30px;border-radius:50%;border:3px solid var(--brand);background-color:#fff;background-position:center;background-size:42px;background-repeat:no-repeat;box-shadow:0 4px 12px rgba(15,15,30,.25)}
-.brow .rl .bl{display:inline-flex;align-items:center;gap:10px;min-width:0}.brow .rl .lg{width:130px;height:32px;background-position:left center}.brow .rl .bl small{font-size:15px;color:var(--t2);font-weight:600}
+.brow .rl .bl{display:inline-flex;align-items:center;gap:10px;min-width:0}.brow .rl .lg{--w:104px;width:calc(var(--w) * (1 - 2 * var(--lx,0)));height:calc(var(--w) / 4);background-size:var(--w) 100%;background-position:calc(var(--lx,0) * -1 * var(--w)) center}.brow .rl .bl small{font-size:15px;color:var(--t2);font-weight:600}
+#sc3.many .brow{margin-top:6px}#sc3.many .brow .rl{margin-bottom:4px}#sc3.many .brow .rl .t{font-size:22px}#sc3.many .verdict{margin-top:12px!important}
 #sc3.novis>div:first-child{display:none}#sc3.novis>div{max-width:640px;width:100%;margin:0 auto}
 .brow{margin-top:14px}.brow .rl{display:flex;justify-content:space-between;align-items:baseline;font-size:17px;font-weight:600;margin-bottom:6px}.brow .rl .t{font-size:28px;font-weight:600;letter-spacing:-.02em}
 .bar{height:22px;background:var(--bg3);border:1px solid var(--br);border-radius:99px;overflow:hidden;display:flex}.bar i{display:block;height:100%}
@@ -346,6 +347,7 @@ if(BASE&&DIFF>0){$('diffbox').dataset.in=DIFFIN;$('dl').textContent=TX.dl(BASE.n
 else $('diffbox').remove();
 $('o1').textContent=TX.o1;$('o2').innerHTML=TX.o2;$('q1').textContent=TX.q1;if(!HAS20)document.querySelector('#sc3 .once').style.visibility='hidden';
 $('vbars').innerHTML=PRODS.map((p,i)=>`<div class="brow r${p.id.toUpperCase()}"><div class="rl"><span class="bl">${blbl(p)}</span><span class="t" id="t${i}"></span></div><div class="bar"><i class="p" id="b${i}p"></i><i class="c" id="b${i}c"></i></div></div>`).join('');
+if(PRODS.length>3)$('sc3').classList.add('many');
 if(NOVIS){$('sc3').classList.add('novis');$('vbars').dataset.in='.4';document.querySelector('#sc3 .verdict').dataset.in='1.6';}
 $('vd').innerHTML=BASE?(SB>0&&NOVIS?TX.vFix(esc(BEST.name),eur(SB),esc(BASE.name)):SB>0?TX.vOk(esc(BEST.name),eur(SB),EQ,esc(BASE.name)):TX.vKo(N,esc(BASE.name))):TX.vSolo(esc(PRODS[0].name),eur(tot(cost(PRODS[0],N,H))));
 if(BASE){$('h4').innerHTML=TX.h4;$('q4').textContent=TX.q4;$('al').textContent=TX.al(BEST.name);

@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Analitzador de Pòlisses · OPTIMIZARTE by Occident</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brand:#DC0028; --brand-ink:#B20021; --brand-dim:rgba(220,0,40,.07); --brand-dim2:rgba(220,0,40,.15);
+  --dark:#202020;
+  --bg:#FAFAF7; --bg2:#FFFFFF; --bg3:#F4F3EF; --bg4:#ECEBE6;
+  --br:#E5E3DE; --brl:#CFCDC7;
+  --t1:#15161A; --t2:#4F5059; --t3:#8A8B93; --t4:#B4B5BC;
+  --ok:#1f9d55; --ok-bg:#EDFAF3; --ok-br:#BFE6CF;
+  --warn:#B45309; --warn-bg:#FFFBEB; --warn-br:#F6DE9C;
+  --err:#B20021; --err-bg:#FFF0F2; --err-br:#F8C9D1;
+  --info:#3B82F6;
+  --radius-sm:6px; --radius:10px; --radius-lg:14px; --pill:999px;
+  --shadow-sm:0 1px 2px rgba(15,15,30,.05);
+  --shadow-card:0 1px 0 rgba(15,15,30,.03),0 1px 3px rgba(15,15,30,.05);
+  --shadow-md:0 6px 20px -8px rgba(15,15,30,.10),0 2px 4px rgba(15,15,30,.05);
+  --font:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-title:Arial,Helvetica,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--font);font-size:14px;line-height:1.5;color:var(--t1);background:var(--bg)}
+.hdr{position:sticky;top:0;z-index:50;height:60px;background:var(--dark);display:flex;align-items:center;gap:14px;padding:0 20px;box-shadow:0 2px 20px rgba(0,0,0,.25)}
+.hdr-logo{font-size:15px;font-weight:700;letter-spacing:-.01em;color:#fff;text-decoration:none;white-space:nowrap}
+.hdr-logo .by{font-size:9.5px;font-weight:500;color:#999;margin:0 3px}
+.hdr-logo .occ{color:var(--brand)}
+.hdr-div{width:1px;height:26px;background:rgba(255,255,255,.14)}
+.hdr-sub{font-family:var(--font-title);font-size:15px;font-weight:700;color:rgba(255,255,255,.88);white-space:nowrap}
+.hdr-sp{flex:1}
+.hdr-meta{font-size:12px;color:rgba(255,255,255,.55)}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 56px}
+h1{font-family:var(--font-title);font-size:30px;font-weight:700;margin:0 0 6px;letter-spacing:-.01em}
+h1 em{font-style:normal;color:var(--brand)}
+.lead{color:var(--t2);margin:0 0 22px;max-width:760px}
+h2{font-size:17px;font-weight:600;letter-spacing:-.01em;margin:0 0 4px}
+.sec-note{font-size:12px;color:var(--t3);margin:0 0 14px}
+.card{background:var(--bg2);border:1px solid var(--br);border-radius:var(--radius-lg);box-shadow:var(--shadow-card);padding:18px;margin-bottom:16px}
+.card--accent{position:relative;overflow:hidden}
+.card--accent::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--brand)}
+.card--calc{background:var(--bg3)}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(4,minmax(0,1fr))}
+.grid.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.span2{grid-column:span 2}.span4{grid-column:1/-1}
+.field-label,label.k{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--t3);margin-bottom:5px}
+input,select,textarea{width:100%;font:inherit;color:var(--t1);background:var(--bg2);border:1px solid var(--br);border-radius:var(--radius);padding:9px 12px;transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-dim)}
+input::placeholder,textarea::placeholder{color:var(--t4)}
+input[type=checkbox]{width:auto;accent-color:var(--brand)}
+input[type=range]{padding:0;accent-color:var(--brand)}
+textarea{resize:vertical;min-height:70px}
+.btn{display:inline-flex;align-items:center;gap:8px;font:inherit;font-size:13.5px;font-weight:600;padding:10px 18px;border-radius:var(--pill);border:1px solid transparent;cursor:pointer;min-height:40px;text-decoration:none;transition:.15s}
+.btn svg{width:16px;height:16px}
+.btn--primary{background:var(--brand);color:#fff}.btn--primary:hover{background:var(--brand-ink)}
+.btn--secondary{background:var(--bg2);border-color:var(--br);color:var(--t1)}.btn--secondary:hover{border-color:var(--brand);color:var(--brand)}
+.btn--ghost{background:transparent;color:var(--t2)}.btn--ghost:hover{background:var(--bg3)}
+.btn--green{background:var(--ok);color:#fff}
+.btn:focus-visible,.tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.btn-sm{padding:6px 12px;font-size:12.5px;min-height:32px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.banner{border-radius:var(--radius);border:1px solid;border-left-width:4px;padding:10px 14px;margin:10px 0;font-size:13px}
+.banner--ok{background:var(--ok-bg);border-color:var(--ok-br);border-left-color:var(--ok)}
+.banner--warn{background:var(--warn-bg);border-color:var(--warn-br);border-left-color:var(--warn)}
+.banner--error{background:var(--err-bg);border-color:var(--err-br);border-left-color:var(--err)}
+.badge{display:inline-block;border-radius:var(--pill);font-size:12px;font-weight:600;padding:2px 10px;border:1px solid}
+.badge--ok{background:var(--ok-bg);border-color:var(--ok-br);color:var(--ok)}
+.badge--warn{background:var(--warn-bg);border-color:var(--warn-br);color:var(--warn)}
+.badge--err{background:var(--err-bg);border-color:var(--err-br);color:var(--err)}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--bg3);color:var(--t2);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;text-align:left;padding:9px 12px;border-bottom:1px solid var(--br);white-space:nowrap}
+td{padding:7px 10px;border-bottom:1px solid var(--br);vertical-align:top}
+tbody tr:hover{background:var(--bg3)}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+.gtab td input,.gtab td select{padding:6px 8px;font-size:13px}
+.gtab .cell{display:grid;grid-template-columns:96px 1fr;gap:6px}
+.prop-head{border-top:3px solid var(--brand);border-radius:var(--radius);background:var(--bg2);border-left:1px solid var(--br);border-right:1px solid var(--br);border-bottom:1px solid var(--br);padding:14px;box-shadow:var(--shadow-sm)}
+.prop-head h3{font-size:14px;margin:0 0 10px;color:var(--brand)}
+.prop-head .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.chk{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px dashed var(--br);font-size:13px}
+.chk input{margin-top:3px}
+.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.tab{font:inherit;font-weight:600;font-size:13px;padding:8px 16px;border-radius:var(--pill);border:1px solid var(--br);background:var(--bg2);cursor:pointer;color:var(--t2)}
+.tab.on{background:var(--dark);color:#fff;border-color:var(--dark)}
+.msg{min-height:280px;font-size:13.5px;line-height:1.55}
+.score{display:flex;align-items:center;gap:8px;margin:3px 0;font-size:12.5px}
+.score .lb{width:150px;color:var(--t2)}
+.score .bar{flex:1;height:8px;background:var(--bg4);border-radius:var(--pill);overflow:hidden;min-width:60px}
+.score .bar i{display:block;height:100%;background:var(--brand);border-radius:var(--pill)}
+.score .v{width:34px;text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.big{font-size:30px;font-weight:700;letter-spacing:-.02em}
+.rep-grid{display:grid;gap:14px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.rep-col{background:var(--bg2);border:1px solid var(--br);border-radius:var(--radius-lg);padding:14px}
+.rep-col.best{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-dim)}
+.rep-col h4{margin:0 0 2px;font-size:14.5px}
+.rep-col .sub{font-size:12px;color:var(--t3);margin-bottom:8px}
+ul.cl{margin:6px 0;padding-left:18px}ul.cl li{margin:2px 0}
+.pros li::marker{color:var(--ok)}.cons li::marker{color:var(--err)}
+.hl{background:var(--warn-bg);border:1px solid var(--warn-br);border-radius:var(--radius-sm);padding:6px 10px;margin:4px 0;font-size:12.5px}
+.hl b{color:var(--warn)}
+footer{background:var(--bg3);border-top:1px solid var(--br);color:var(--t3);font-size:11.5px;text-align:center;padding:14px}
+.hide{display:none!important}
+@media(max-width:720px){
+  .wrap{padding:20px 16px 48px}h1{font-size:24px}
+  .hdr-meta{display:none}
+  .grid,.grid.g3{grid-template-columns:repeat(2,minmax(0,1fr))}.span2{grid-column:1/-1}
+  .rep-grid{grid-template-columns:1fr}
+  .actions .btn{width:100%;justify-content:center}
+  .gtab .cell{grid-template-columns:1fr}
+}
+@media(max-width:420px){.hdr-sub{display:none}.grid,.grid.g3,.prop-head .grid{grid-template-columns:1fr}}
+@page{size:A4;margin:8mm}
+@media print{
+  .hdr,.no-print,.actions,footer,.tabs{display:none!important}
+  body{background:#fff;font-size:10.5pt}
+  .card{box-shadow:none;border:1px solid var(--br);break-inside:avoid}
+  .wrap{padding:0;max-width:none}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body.print-rep .sec-input,body.print-rep #msgs{display:none!important}
+}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <a class="hdr-logo" href="https://optimizarte.github.io/hub-optimizarte/" title="Tornar al Hub">Optimizarte <span class="by">by</span> <span class="occ">Occident</span></a>
+  <span class="hdr-div"></span>
+  <span class="hdr-sub">Analitzador de Pòlisses</span>
+  <span class="hdr-sp"></span>
+  <span class="hdr-meta">Mediador · Actuari · Pèrit — Llei 50/1980</span>
+</header>
+
+<main class="wrap">
+  <h1>Analitzador de <em>pòlisses</em></h1>
+  <p class="lead">Introdueix una o més pòlisses o propostes (fins a 3). L'eina calcula l'anàlisi individual o comparativa, assenyala riscos ocults, puntua cada opció i en genera una recomanació. Després crea els missatges de <b>mail</b> i <b>WhatsApp</b> per al client. Tot es calcula al teu navegador: no s'envia cap dada enlloc.</p>
+
+  <!-- 1. PERFIL -->
+  <section class="card card--accent sec-input">
+    <h2>1 · Client i context</h2>
+    <p class="sec-note">Sense aquestes dades l'anàlisi queda marcada com a «PROVISIONAL – pendent de confirmar».</p>
+    <div class="grid">
+      <div><label class="k" for="cNom">Nom del client</label><input id="cNom" placeholder="Nom i cognoms"></div>
+      <div><label class="k" for="cTel">Telèfon (WhatsApp)</label><input id="cTel" inputmode="tel" placeholder="6XX XXX XXX"></div>
+      <div><label class="k" for="cMail">Correu electrònic</label><input id="cMail" type="email" placeholder="client@correu.com"></div>
+      <div><label class="k" for="cPerfil">Perfil (edat, activitat)</label><input id="cPerfil" placeholder="p. ex. 42 anys, autònom"></div>
+      <div><label class="k" for="ramo">Ram</label>
+        <select id="ramo">
+          <option value="hogar">Llar</option><option value="auto">Auto</option><option value="vida">Vida / Accidents</option>
+          <option value="salud">Salut</option><option value="empresa">Empreses / RC / Multirisc</option><option value="decesos">Decessos</option><option value="otro">Altre</option>
+        </select></div>
+      <div><label class="k" for="tipus">Contractació</label>
+        <select id="tipus"><option value="nova">Nova</option><option value="renov">Renovació</option></select></div>
+      <div><label class="k" for="prio">Prioritat del client</label>
+        <select id="prio"><option value="equil">Equilibrada</option><option value="preu">Preu</option><option value="cobert">Cobertures</option><option value="servei">Servei</option></select></div>
+      <div><label class="k" for="npr">Nombre de propostes</label>
+        <select id="npr"><option value="1">1 (anàlisi individual)</option><option value="2" selected>2 (comparativa)</option><option value="3">3 (comparativa)</option></select></div>
+      <div class="span2"><label class="k" for="cDesc">Notes / necessitats del client</label><input id="cDesc" placeholder="p. ex. té hipoteca, vol baixar la prima, mascota…"></div>
+      <div><label class="k" for="lang">Idioma dels missatges</label>
+        <select id="lang"><option value="es">Castellà</option><option value="ca">Català</option></select></div>
+      <div><label class="k" for="signa">Signa</label><input id="signa" placeholder="El teu nom (opcional)"></div>
+    </div>
+    <h2 style="margin-top:18px;font-size:14px">Dades necessàries del ram <span id="miss" class="badge badge--warn" style="margin-left:6px"></span></h2>
+    <p class="sec-note">Marca les que ja has confirmat amb el client. Les que quedin sense marcar es llistaran com a preguntes pendents.</p>
+    <div id="dadesRam"></div>
+  </section>
+
+  <!-- 2. PROPOSTES -->
+  <section class="card sec-input">
+    <h2>2 · Propostes / pòlisses</h2>
+    <p class="sec-note">Si una dada no consta a la documentació, deixa-la buida: l'informe dirà «No consta en la documentación».</p>
+    <div class="grid g3" id="props"></div>
+  </section>
+
+  <!-- 3. GARANTIES -->
+  <section class="card sec-input">
+    <h2>3 · Garanties</h2>
+    <p class="sec-note">Una fila per garantia i una columna per proposta. Estat: inclou / limitada / no inclou / no consta; indica capital, límit o franquícia.</p>
+    <div class="tbl-wrap"><table class="gtab" id="gtab"></table></div>
+    <div class="actions"><button class="btn btn--secondary btn-sm" onclick="addRow()">+ Afegeix garantia</button>
+      <button class="btn btn--ghost btn-sm" onclick="loadTpl(true)">Recarrega garanties tipus del ram</button></div>
+  </section>
+
+  <!-- 4. TEXT -->
+  <section class="card sec-input">
+    <h2>4 · Lletra petita (opcional)</h2>
+    <p class="sec-note">Enganxa el text de les condicions de cada proposta: l'eina n'extreu franquícies, carències, exclusions, regla proporcional i clàusules limitatives perquè les revisis.</p>
+    <div class="grid g3" id="txts"></div>
+    <div class="actions"><button class="btn btn--secondary btn-sm" onclick="scanTexts()">Detecta clàusules</button></div>
+    <div id="scanOut"></div>
+  </section>
+
+  <!-- 5. VALORACIO -->
+  <section class="card sec-input">
+    <h2>5 · Valoració professional</h2>
+    <p class="sec-note">Preu i amplitud de cobertures es calculen soles. La resta és criteri teu (1–10).</p>
+    <div class="grid g3" id="vals"></div>
+    <div class="grid g3" id="notes" style="margin-top:12px"></div>
+    <div class="actions">
+      <button class="btn btn--primary" onclick="analyze()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>Analitza</button>
+      <button class="btn btn--ghost" onclick="resetAll()">Neteja-ho tot</button>
+      <button class="btn btn--secondary" onclick="copyPrompt(this)" title="Copia les instruccions d'anàlisi per enganxar-les a qualsevol IA">Copia el prompt per a una IA</button>
+    </div>
+  </section>
+
+  <!-- INFORME -->
+  <section id="report" class="hide">
+    <div class="card card--accent" id="repBody"></div>
+    <div class="actions no-print">
+      <button class="btn btn--secondary" onclick="printReport()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M7 14h10v7H7z"/></svg>Imprimeix l'informe</button>
+    </div>
+  </section>
+
+  <!-- MISSATGES -->
+  <section id="msgs" class="card hide">
+    <h2>Missatges per al client</h2>
+    <p class="sec-note">Generats a partir de l'anàlisi. Edita'ls abans d'enviar: res no s'envia des d'aquí.</p>
+    <div class="tabs">
+      <button class="tab on" id="tabM" onclick="showTab('m')">Mail</button>
+      <button class="tab" id="tabW" onclick="showTab('w')">WhatsApp</button>
+      <button class="tab" id="tabR" onclick="genMsgs()">↻ Regenera</button>
+    </div>
+    <div id="paneM">
+      <label class="k" for="mSubj">Assumpte</label><input id="mSubj" style="margin-bottom:10px">
+      <label class="k" for="mBody">Cos del missatge</label><textarea id="mBody" class="msg"></textarea>
+      <div class="actions">
+        <button class="btn btn--primary" onclick="copyEl('mBody',this)">Copia el mail</button>
+        <a class="btn btn--secondary" id="mailto" href="#" target="_blank" rel="noopener">Obre al client de correu</a>
+      </div>
+    </div>
+    <div id="paneW" class="hide">
+      <label class="k" for="wBody">Missatge de WhatsApp</label><textarea id="wBody" class="msg"></textarea>
+      <div class="actions">
+        <button class="btn btn--primary" onclick="copyEl('wBody',this)">Copia el WhatsApp</button>
+        <a class="btn btn--secondary" id="walink" href="#" target="_blank" rel="noopener">Obre WhatsApp</a>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>OPTIMIZARTE by Occident · Anàlisi orientativa; prevalen les condicions contractuals signades · Llei 50/1980 de Contracte d'Assegurança</footer>
+
+<script>
+'use strict';
+/* ====== Dades base ====== */
+var $=function(i){return document.getElementById(i)};
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function num(v){if(v===''||v==null)return null;var n=parseFloat(String(v).replace(/\./g,'').replace(',','.'));return isNaN(n)?null:n}
+function eur(n){return n==null?'No consta':n.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})+' €'}
+function eur0(n){return n==null?'No consta':Math.round(n).toLocaleString('es-ES')+' €'}
+
+var DADES={
+ hogar:['Règim (propietari, llogater o segona residència)','m² i any de construcció','Capital de continent i de contingut','Objectes de valor','Zona','Hipoteca i beneficiari'],
+ auto:['Vehicle i valor','Ús i quilòmetres a l\'any','Conductors (edat i anys de carnet)','Historial de sinistres i bonificació','Garatge'],
+ vida:['Edat','Capital i beneficiaris','Professió i esports','Préstec vinculat','Qüestionari de salut'],
+ salud:['Edats dels assegurats','Quadre mèdic','Copagaments','Carències i preexistències','Reemborsament'],
+ empresa:['Activitat (CNAE)','Facturació i empleats','Local','Capitals','Límits per sinistre i per any, sublímits','Àmbit temporal (ocurrència/reclamació) i territorial'],
+ decesos:['Edats dels assegurats','Tipus de prima (natural o anivellada)','Capital i serveis'],
+ otro:['Descripció del risc assegurat','Capitals assegurats']
+};
+var DADES_GEN=['Data d\'efecte i forma de pagament','Pòlissa actual (si n\'hi ha) i pressupost','Prioritats del client (preu, cobertures o servei)'];
+var TPL={
+ hogar:['Incendi, explosió, llamp','Danys per aigua','Robatori i espoliació','Responsabilitat civil','Continent (edifici)','Contingut (mobiliari)','Objectes de valor','Fenòmens atmosfèrics','Danys elèctrics','Assistència 24h / reparacions urgents','Defensa jurídica','Vandalisme'],
+ auto:['Responsabilitat civil obligatòria','Responsabilitat civil voluntària','Defensa i reclamació','Lluna','Robatori','Incendi','Danys propis (tot risc)','Assistència en viatge','Vehicle de substitució','Ocupants / accidents conductor'],
+ vida:['Mort per qualsevol causa','Mort per accident','Invalidesa absoluta permanent','Invalidesa per accident','Malalties greus','Incapacitat temporal','Exclusions (esports, professió)'],
+ salud:['Assistència primària i especialistes','Hospitalització','Urgències','Proves diagnòstiques','Cirurgia','Reemborsament','Dental','Maternitat','Carències'],
+ empresa:['RC explotació','RC patronal','RC professional','Continent / contingut','Pèrdua de beneficis','Robatori','Danys elèctrics','Defensa jurídica'],
+ decesos:['Servei funerari','Trasllat nacional','Trasllat internacional','Assistència familiar','Capital addicional','Prima natural / anivellada'],
+ otro:['Garantia 1','Garantia 2','Garantia 3']
+};
+var ST={ok:'✅ Inclou',lim:'⚠️ Limitada',no:'❌ No inclou',nc:'— No consta'};
+var STW={ok:1,lim:.5,no:0,nc:0};
+var S={props:[],rows:[]};
+var MAXP=3;
+function newProp(i){return {asseg:'',prod:'',net:'',tot:'',pag:'',dur:'',inc:'',cap:'',val:'',fra:'',valtip:'',lb:5,srv:5,adq:5,man:5,txt:'',pros:'',cons:''}}
+var promptText='';
+
+/* ====== Render del formulari ====== */
+function np(){return parseInt($('npr').value,10)}
+function ensure(){while(S.props.length<MAXP)S.props.push(newProp(S.props.length))}
+function renderProps(){
+  var n=np(),h='';
+  for(var i=0;i<n;i++){var p=S.props[i];
+    h+='<div class="prop-head"><h3>Proposta '+(i+1)+'</h3><div class="grid">'+
+    f(i,'asseg','Asseguradora')+f(i,'prod','Producte / modalitat')+
+    f(i,'net','Prima neta (€)','decimal')+f(i,'tot','Prima total (€) *','decimal')+
+    '<div><label class="k">Pagament</label><select onchange="S.props['+i+'].pag=this.value">'+
+      ['','Anual','Semestral','Trimestral','Mensual'].map(function(o){return '<option'+(p.pag===o?' selected':'')+'>'+o+'</option>'}).join('')+'</select></div>'+
+    f(i,'dur','Durada (p. ex. anual renovable)')+
+    f(i,'cap','Capital principal assegurat (€)','decimal')+f(i,'val','Valor real a assegurar (€)','decimal')+
+    f(i,'fra','Franquícia general (€)','decimal')+
+    '<div><label class="k">Tipus de valor</label><select onchange="S.props['+i+'].valtip=this.value">'+
+      ['','Valor de reposició (nou)','Valor real (amb depreciació)','Primer risc','Valor total'].map(function(o){return '<option'+(p.valtip===o?' selected':'')+'>'+o+'</option>'}).join('')+'</select></div>'+
+    f(i,'inc','Increment anual previst de la prima (%)','decimal')+
+    '</div></div>';
+  }
+  $('props').innerHTML=h;
+}
+function f(i,k,l,im){return '<div><label class="k">'+esc(l)+'</label><input '+(im?'inputmode="'+im+'" ':'')+'value="'+esc(S.props[i][k])+'" oninput="S.props['+i+'].'+k+'=this.value"></div>'}
+function renderTxts(){
+  var n=np(),h='';
+  for(var i=0;i<n;i++)h+='<div><label class="k">Condicions proposta '+(i+1)+'</label><textarea placeholder="Enganxa aquí el text de les condicions…" oninput="S.props['+i+'].txt=this.value">'+esc(S.props[i].txt)+'</textarea></div>';
+  $('txts').innerHTML=h;
+}
+function renderVals(){
+  var n=np(),h='',h2='';
+  for(var i=0;i<n;i++){var p=S.props[i];
+    h+='<div class="prop-head"><h3>Proposta '+(i+1)+(S.props[i].asseg?' · '+esc(S.props[i].asseg):'')+'</h3>'+
+    sl(i,'lb','Qualitat de la lletra petita')+sl(i,'srv','Servei i solvència (si hi ha dades)')+sl(i,'adq','Adequació al perfil del client')+
+    (n===1?sl(i,'man','Preu (valoració pròpia, 1 sola proposta)'):'')+'</div>';
+    h2+='<div><label class="k">Proposta '+(i+1)+' · avantatges addicionals</label><textarea placeholder="Un per línia" oninput="S.props['+i+'].pros=this.value">'+esc(p.pros)+'</textarea>'+
+    '<label class="k" style="margin-top:8px">Proposta '+(i+1)+' · inconvenients addicionals</label><textarea placeholder="Un per línia" oninput="S.props['+i+'].cons=this.value">'+esc(p.cons)+'</textarea></div>';
+  }
+  $('vals').innerHTML=h;$('notes').innerHTML=h2;
+}
+function sl(i,k,l){return '<div style="margin-bottom:8px"><label class="k">'+esc(l)+': <b id="sv'+i+k+'">'+S.props[i][k]+'</b></label><input type="range" min="1" max="10" value="'+S.props[i][k]+'" oninput="S.props['+i+'].'+k+'=+this.value;$(\'sv'+i+k+'\').textContent=this.value"></div>'}
+function renderRows(){
+  var n=np(),h='<thead><tr><th>Garantia</th>';
+  for(var i=0;i<n;i++)h+='<th>Proposta '+(i+1)+'</th>';
+  h+='<th></th></tr></thead><tbody>';
+  S.rows.forEach(function(r,ri){
+    h+='<tr><td><input value="'+esc(r.n)+'" oninput="S.rows['+ri+'].n=this.value" style="min-width:150px"></td>';
+    for(var i=0;i<n;i++){var c=r.v[i]||(r.v[i]={st:'nc',tx:''});
+      h+='<td><div class="cell"><select onchange="S.rows['+ri+'].v['+i+'].st=this.value">'+
+        Object.keys(ST).map(function(k){return '<option value="'+k+'"'+(c.st===k?' selected':'')+'>'+ST[k]+'</option>'}).join('')+
+        '</select><input placeholder="capital / franquícia" value="'+esc(c.tx)+'" oninput="S.rows['+ri+'].v['+i+'].tx=this.value"></div></td>';}
+    h+='<td><button class="btn btn--ghost btn-sm" title="Elimina" onclick="S.rows.splice('+ri+',1);renderRows()">✕</button></td></tr>';
+  });
+  $('gtab').innerHTML=h+'</tbody>';
+}
+function addRow(){S.rows.push({n:'',v:[]});renderRows()}
+function loadTpl(force){
+  if(!force&&S.rows.length)return;
+  S.rows=(TPL[$('ramo').value]||[]).map(function(n){return {n:n,v:[]}});renderRows();
+}
+function renderDades(){
+  var r=$('ramo').value,items=(DADES_GEN.concat(DADES[r]||[])),h='';
+  items.forEach(function(t,i){h+='<label class="chk"><input type="checkbox" class="dchk" data-t="'+esc(t)+'" onchange="countMiss()"><span>'+esc(t)+'</span></label>'});
+  $('dadesRam').innerHTML=h;countMiss();
+}
+function countMiss(){
+  var a=document.querySelectorAll('.dchk'),m=0;a.forEach(function(c){if(!c.checked)m++});
+  $('miss').textContent=m?m+' pendents':'Tot confirmat';
+  $('miss').className='badge '+(m?'badge--warn':'badge--ok');
+}
+function renderAll(){ensure();renderProps();renderTxts();renderVals();renderRows()}
+$('npr').addEventListener('change',function(){renderAll();$('report').classList.add('hide');$('msgs').classList.add('hide')});
+$('ramo').addEventListener('change',function(){loadTpl(true);renderDades()});
+function resetAll(){if(!confirm('Esborrar totes les dades introduïdes?'))return;
+  S.props=[];ensure();['cNom','cTel','cMail','cPerfil','cDesc','signa'].forEach(function(i){$(i).value=''});
+  renderAll();loadTpl(true);renderDades();$('scanOut').innerHTML='';$('report').classList.add('hide');$('msgs').classList.add('hide')}
+
+/* ====== Detecció de clàusules ====== */
+var KW=[
+ ['Franquícia',/franquicia|franquícia/i],['Carència / espera',/carencia|carència|periodo de espera|per[ií]odo de espera/i],
+ ['Exclusió',/exclu[iy]|no cubre|quedan excluid|no estar[aá]n cubiert|no ser[aá]n objeto/i],
+ ['Límit / sublímit',/sublímite|sublimite|límite m[aá]ximo|hasta un l[ií]mite|hasta un m[aá]ximo|limitad/i],
+ ['Regla proporcional / infraassegurança',/regla proporcional|infraseguro|infra-seguro|suma asegurada inferior/i],
+ ['Depreciació / vetustat',/depreciaci|vetustez|valor real|desgaste/i],
+ ['Revalorització',/revalorizaci|IPC|[ií]ndice de precios/i],
+ ['Clàusula limitativa',/cl[aá]usula limitativa|limitativ|aceptaci[oó]n expresa|aceptaci[oó]n por escrito/i],
+ ['Preexistències / salut',/preexistent|enfermedad previa|cuestionario de salud/i],
+ ['Prescripció / comunicació de sinistre',/prescripci|plazo de (siete|7) d[ií]as|comunicar el siniestro/i],
+ ['Cancel·lació / renovació',/renovaci[oó]n|rescisi[oó]n|resoluci[oó]n del contrato|preaviso|un mes de antelaci/i]
+];
+var scanRes=[[],[],[]];
+function scanTexts(){
+  var n=np(),h='';
+  for(var i=0;i<n;i++){
+    var t=S.props[i].txt||'',res=[];
+    if(t.trim()){
+      var parts=t.replace(/\r/g,'').split(/(?<=[.;:])\s+|\n+/);
+      parts.forEach(function(s){s=s.trim();if(s.length<12)return;
+        KW.forEach(function(k){if(k[1].test(s)&&!res.some(function(r){return r.s===s&&r.k===k[0]}))res.push({k:k[0],s:s.length>260?s.slice(0,257)+'…':s})})});
+    }
+    scanRes[i]=res;
+    h+='<h2 style="font-size:14px;margin-top:14px">Proposta '+(i+1)+': '+(t.trim()?res.length+' fragments a revisar':'sense text')+'</h2>';
+    res.slice(0,40).forEach(function(r){h+='<div class="hl"><b>'+esc(r.k)+'.</b> '+esc(r.s)+'</div>'});
+    if(res.length>40)h+='<div class="sec-note">… i '+(res.length-40)+' fragments més.</div>';
+  }
+  $('scanOut').innerHTML=h;
+}
+
+/* ====== Anàlisi ====== */
+var RES=null;
+function pname(i){var p=S.props[i];return (p.asseg||('Proposta '+(i+1)))+(p.prod?' · '+p.prod:'')}
+function analyze(){
+  var n=np(),ps=[],i;
+  for(i=0;i<n;i++){
+    var p=S.props[i],tot=num(p.tot),net=num(p.net);
+    if(tot==null&&net!=null)tot=net;
+    var cap=num(p.cap),val=num(p.val),fra=num(p.fra),inc=num(p.inc);
+    var inc_=0,exc_=0,lim_=0,no_=0,nc_=0,tot_g=0;
+    S.rows.forEach(function(r){if(!r.n.trim())return;var c=r.v[i]||{st:'nc'};tot_g++;
+      if(c.st==='ok')inc_++;else if(c.st==='lim')lim_++;else if(c.st==='no')no_++;else nc_++});
+    var cov=tot_g?(inc_+lim_*.5)/tot_g*10:null;
+    var per1000=(tot!=null&&cap)?tot/(cap/1000):null;
+    var ratio=(cap&&val)?cap/val:null;
+    var proj=null;
+    if(tot!=null){var g=(inc||0)/100,s5=0,s10=0,y;for(y=0;y<10;y++){var a=tot*Math.pow(1+g,y);if(y<5)s5+=a;s10+=a}proj={y5:s5,y10:s10,g:inc}}
+    ps.push({i:i,name:pname(i),p:p,tot:tot,cap:cap,val:val,fra:fra,inc:inc,cov:cov,counts:{ok:inc_,lim:lim_,no:no_,nc:nc_,tot:tot_g},per1000:per1000,ratio:ratio,proj:proj});
+  }
+  var prices=ps.map(function(x){return x.tot}).filter(function(v){return v!=null&&v>0});
+  var minP=prices.length?Math.min.apply(null,prices):null;
+  var W={equil:{pr:.25,co:.25,lb:.15,sv:.15,ad:.2},preu:{pr:.4,co:.2,lb:.1,sv:.1,ad:.2},cobert:{pr:.15,co:.35,lb:.15,sv:.1,ad:.25},servei:{pr:.15,co:.2,lb:.1,sv:.3,ad:.25}}[$('prio').value];
+  ps.forEach(function(x){
+    var pr;
+    if(ps.length>1&&minP&&x.tot)pr=Math.max(1,Math.min(10,10*minP/x.tot));
+    else pr=x.p.man;
+    x.sc={pr:pr,co:x.cov==null?5:Math.max(1,x.cov),lb:x.p.lb,sv:x.p.srv,ad:x.p.adq};
+    x.global=x.sc.pr*W.pr+x.sc.co*W.co+x.sc.lb*W.lb+x.sc.sv*W.sv+x.sc.ad*W.ad;
+    x.pros=[];x.cons=[];
+    var cmp=ps.length>1;
+    if(cmp&&x.tot&&x.tot===minP)x.pros.push('Prima més baixa ('+eur(x.tot)+')');
+    if(cmp&&x.tot&&minP&&x.tot>minP*1.15)x.cons.push('Prima '+Math.round((x.tot/minP-1)*100)+'% més alta que la més barata');
+    if(x.cov!=null){if(x.cov>=8)x.pros.push('Amplitud de cobertures alta ('+x.counts.ok+' incloses de '+x.counts.tot+')');
+      if(x.counts.no>0)x.cons.push(x.counts.no+' garantia/es no inclosa/es: '+S.rows.filter(function(r){return r.n.trim()&&(r.v[x.i]||{}).st==='no'}).map(function(r){return r.n}).slice(0,4).join(', '));
+      if(x.counts.lim>0)x.cons.push(x.counts.lim+' garantia/es limitada/es (revisa capitals i sublímits)');
+      if(x.counts.nc>0)x.cons.push(x.counts.nc+' garantia/es sense dades: «No consta en la documentación»')}
+    if(x.ratio!=null){if(x.ratio<.95)x.cons.push('Possible infraassegurança: capital '+Math.round(x.ratio*100)+'% del valor real → regla proporcional (art. 30 LCS)');
+      else if(x.ratio>1.05)x.cons.push('Possible sobreassegurança: es pagaria prima per un capital superior al valor (art. 31 LCS)');
+      else x.pros.push('Capital ajustat al valor assegurable');}
+    if(x.inc>0&&x.inc>=3)x.cons.push('Increment anual de prima previst del '+x.inc+'%');
+    if(x.p.valtip==='Valor de reposició (nou)')x.pros.push('Indemnització a valor de reposició (nou)');
+    if(x.p.valtip==='Valor real (amb depreciació)')x.cons.push('Indemnització a valor real: s\'aplica depreciació');
+    if(x.p.lb>=8)x.pros.push('Lletra petita clara i favorable');if(x.p.lb<=4)x.cons.push('Lletra petita desfavorable');
+    if(scanRes[x.i]&&scanRes[x.i].length){var lim=scanRes[x.i].filter(function(r){return r.k==='Clàusula limitativa'||r.k==='Exclusió'}).length;if(lim)x.cons.push(lim+' fragment/s d\'exclusions o clàusules limitatives a verificar amb signatura expressa (art. 3 LCS)')}
+    x.p.pros.split('\n').forEach(function(l){if(l.trim())x.pros.push(l.trim())});
+    x.p.cons.split('\n').forEach(function(l){if(l.trim())x.cons.push(l.trim())});
+  });
+  var best=ps.slice().sort(function(a,b){return b.global-a.global})[0];
+  var miss=[];document.querySelectorAll('.dchk').forEach(function(c){if(!c.checked)miss.push(c.getAttribute('data-t'))});
+  RES={ps:ps,best:best,minP:minP,miss:miss,W:W,cmp:ps.length>1};
+  renderReport();genMsgs();
+  $('report').classList.remove('hide');$('msgs').classList.remove('hide');
+  $('report').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function bar(l,v){return '<div class="score"><span class="lb">'+l+'</span><span class="bar"><i style="width:'+(v*10)+'%"></i></span><span class="v">'+v.toFixed(1)+'</span></div>'}
+function renderReport(){
+  var R=RES,ps=R.ps,ramo=$('ramo').options[$('ramo').selectedIndex].text,h='';
+  var cli=$('cNom').value.trim();
+  h+='<h2>'+(R.cmp?'Anàlisi comparativa':'Anàlisi individual')+' · '+esc(ramo)+(cli?' · '+esc(cli):'')+'</h2>';
+  if(R.miss.length||!ps.some(function(x){return x.tot!=null})){
+    h+='<div class="banner banner--warn"><b>PROVISIONAL – pendent de confirmar.</b> Falten dades per concloure amb seguretat:<ol class="cl">'+
+    R.miss.slice(0,8).map(function(m){return '<li>'+esc(m)+'</li>'}).join('')+(ps.some(function(x){return x.tot!=null})?'':'<li>Prima total de cap proposta</li>')+'</ol></div>';
+  }
+  // Fitxa
+  h+='<h3>1 · Fitxa resum</h3><div class="tbl-wrap"><table><thead><tr><th></th>'+ps.map(function(x){return '<th>'+esc(x.name)+'</th>'}).join('')+'</tr></thead><tbody>'+
+  [['Prima neta',function(x){return eur(num(x.p.net))}],['Prima total',function(x){return eur(x.tot)}],['Pagament',function(x){return x.p.pag||'No consta'}],['Durada',function(x){return x.p.dur||'No consta'}],
+   ['Capital principal',function(x){return eur0(x.cap)}],['Franquícia general',function(x){return x.fra==null?'No consta':eur0(x.fra)}],['Tipus de valor',function(x){return x.p.valtip||'No consta'}],
+   ['Cost per cada 1.000 € de capital',function(x){return x.per1000==null?'—':eur(x.per1000)}]].map(function(r){return '<tr><td><b>'+r[0]+'</b></td>'+ps.map(function(x){return '<td class="num" style="text-align:left">'+esc(r[1](x))+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table></div>';
+  // Taula garanties
+  var rows=S.rows.filter(function(r){return r.n.trim()});
+  if(rows.length){
+    h+='<h3 style="margin-top:18px">2 · Taula comparativa de garanties</h3><div class="tbl-wrap"><table><thead><tr><th>Garantia</th>'+ps.map(function(x){return '<th>'+esc(x.name)+'</th>'}).join('')+'</tr></thead><tbody>'+
+    rows.map(function(r){
+      var diff=R.cmp&&new Set(ps.map(function(x){return (r.v[x.i]||{st:'nc'}).st})).size>1;
+      return '<tr'+(diff?' style="background:var(--warn-bg)"':'')+'><td><b>'+esc(r.n)+'</b>'+(diff?' <span class="badge badge--warn">difereix</span>':'')+'</td>'+ps.map(function(x){var c=r.v[x.i]||{st:'nc',tx:''};return '<td>'+ST[c.st]+(c.tx?'<br><span style="color:var(--t2)">'+esc(c.tx)+'</span>':'')+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table></div>';
+    if(R.cmp)h+='<p class="sec-note">Les files ressaltades són les diferències que importen. Comprova que capitals i franquícies siguin homogenis abans de comparar.</p>';
+  }
+  // Cols: puntuacions, pros/contres
+  h+='<h3 style="margin-top:18px">3 · Puntuacions, avantatges i inconvenients</h3><div class="rep-grid">'+ps.map(function(x){
+    var s=x.sc;return '<div class="rep-col'+(R.cmp&&x===R.best?' best':'')+'"><h4>'+esc(x.name)+(R.cmp&&x===R.best?' <span class="badge badge--ok">Recomanada</span>':'')+'</h4>'+
+    '<div class="sub">Puntuació global</div><div class="big">'+x.global.toFixed(1)+'<span style="font-size:14px;color:var(--t3)"> /10</span></div>'+
+    bar('Preu',s.pr)+bar('Amplitud cobertures',s.co)+bar('Lletra petita',s.lb)+bar('Servei i solvència',s.sv)+bar('Adequació al client',s.ad)+
+    '<b style="font-size:12.5px">Avantatges</b><ul class="cl pros">'+(x.pros.length?x.pros:['—']).map(function(t){return '<li>'+esc(t)+'</li>'}).join('')+'</ul>'+
+    '<b style="font-size:12.5px">Inconvenients</b><ul class="cl cons">'+(x.cons.length?x.cons:['—']).map(function(t){return '<li>'+esc(t)+'</li>'}).join('')+'</ul></div>'}).join('')+'</div>';
+  // Riscos ocults + pericial + actuarial
+  h+='<h3 style="margin-top:18px">4 · Riscos ocults i visió pericial</h3>';
+  ps.forEach(function(x){
+    var l=[];
+    if(x.ratio!=null){var cap10=10000,pagat=x.ratio<1?cap10*x.ratio:cap10;
+      l.push('<b>Infra/sobreassegurança:</b> capital '+eur0(x.cap)+' enfront d\'un valor de '+eur0(x.val)+' ('+Math.round(x.ratio*100)+'%). '+(x.ratio<1?'Davant un sinistre parcial de '+eur0(cap10)+', la regla proporcional pagaria només ≈ '+eur0(pagat)+' (art. 30 LCS).':'No s\'observa infraassegurança.'));
+    }else l.push('<b>Infraassegurança:</b> no es pot calcular sense capital i valor real (No consta en la documentación).');
+    if(x.fra!=null)l.push('<b>Sinistre petit:</b> amb un sinistre de 600 €, l\'assegurador pagaria '+eur0(Math.max(0,600-x.fra))+' (franquícia de '+eur0(x.fra)+').');
+    else l.push('<b>Franquícia:</b> No consta en la documentación; confirma-la abans de signar.');
+    if(x.p.valtip==='Valor real (amb depreciació)')l.push('<b>Sinistre amb béns antics:</b> la depreciació pot reduir notablement la indemnització respecte al cost de reposar el bé.');
+    if(x.counts.nc)l.push('<b>Dades pendents:</b> '+x.counts.nc+' garantia/es sense informació; no s\'han d\'assumir cobertes.');
+    var sc=scanRes[x.i]||[];if(sc.length){l.push('<b>Lletra petita detectada:</b> '+sc.length+' fragment/s (franquícies, carències, exclusions o clàusules limitatives) que cal revisar amb el client i signar expressament.')}
+    h+='<div style="margin-bottom:10px"><b>'+esc(x.name)+'</b><ul class="cl">'+l.map(function(t){return '<li>'+t+'</li>'}).join('')+'</ul></div>';
+  });
+  h+='<h3 style="margin-top:18px">5 · Visió actuarial</h3><div class="tbl-wrap"><table><thead><tr><th></th>'+ps.map(function(x){return '<th>'+esc(x.name)+'</th>'}).join('')+'</tr></thead><tbody>'+
+   '<tr><td><b>Cost a 5 anys</b></td>'+ps.map(function(x){return '<td>'+(x.proj?eur0(x.proj.y5):'No consta')+'</td>'}).join('')+'</tr>'+
+   '<tr><td><b>Cost a 10 anys</b></td>'+ps.map(function(x){return '<td>'+(x.proj?eur0(x.proj.y10):'No consta')+'</td>'}).join('')+'</tr>'+
+   '<tr><td><b>Increment anual aplicat</b></td>'+ps.map(function(x){return '<td>'+(x.inc!=null?x.inc+' %':'0 % (no consta)')+'</td>'}).join('')+'</tr></tbody></table></div>';
+  if(R.cmp&&ps.length>1&&R.minP){
+    var o=ps.slice().sort(function(a,b){return (a.tot||1e12)-(b.tot||1e12)});
+    var dif=(o[1].tot||0)-(o[0].tot||0);
+    h+='<p>Diferència de preu entre la més barata i la següent: <b>'+eur(dif)+' / any</b> ('+(o[0].tot?Math.round(dif/o[0].tot*100):0)+'%). '+
+       (o[0].global>=o[1].global?'La més barata també puntua millor en conjunt: la diferència queda justificada a favor seu.':'La proposta més cara puntua millor ('+o[1].global.toFixed(1)+' vs '+o[0].global.toFixed(1)+'): la diferència de preu '+(o[1].counts.ok>o[0].counts.ok?'queda justificada per més garanties incloses.':'no queda clarament justificada; revisa-la.'))+'</p>';
+  }
+  // Recomanació
+  var b=R.best,others=ps.filter(function(x){return x!==b});
+  h+='<h3 style="margin-top:18px">6 · Recomanació</h3><div class="banner banner--ok"><b>'+(R.cmp?'Recomanem: ':'Valoració: ')+esc(b.name)+'</b> — puntuació global '+b.global.toFixed(1)+'/10, segons la prioritat «'+$('prio').options[$('prio').selectedIndex].text+'».'+(R.cmp&&others.length?' Alternativa: '+others.map(function(o){return esc(o.name)+' ('+o.global.toFixed(1)+')'}).join('; ')+'.':'')+
+    (b.global<6?'<br><b>Cap proposta és clarament adequada</b> (puntuació inferior a 6): cal ajustar capitals, afegir/treure garanties o negociar franquícies abans de signar.':'')+'</div>';
+  var neg=['Confirma per escrit capitals, sublímits i franquícies de cada garantia.','Verifica que les clàusules limitatives estiguin destacades i acceptades per escrit (art. 3 LCS).','Pregunta per la revalorització (IPC o fixa) i per l\'increment de prima en renovar.','Confirma carències, exclusions i condicions de cancel·lació / renovació.'];
+  if(b.ratio!=null&&b.ratio<.95)neg.unshift('Ajusta el capital al valor real per evitar la regla proporcional.');
+  if(b.counts.nc)neg.unshift('Obté per escrit les garanties que ara «no consten» ('+b.counts.nc+').');
+  R.miss.slice(0,3).forEach(function(m){neg.push('Dada pendent del client: '+m)});
+  h+='<b>Punts a negociar o confirmar amb l\'asseguradora abans de signar</b><ol class="cl">'+neg.map(function(t){return '<li>'+esc(t)+'</li>'}).join('')+'</ol>';
+  R.neg=neg;
+  var resum=resumClient('ca');R.resum=resum;
+  h+='<div class="card--calc" style="padding:12px 14px;border-radius:var(--radius)"><b>Resum per explicar al client</b><br>'+esc(resum)+'</div>';
+  h+='<p class="sec-note" style="margin-top:12px">Aquesta anàlisi és orientativa; prevalen les condicions contractuals signades. Els fets provenen de les dades introduïdes; les valoracions són opinió professional.</p>';
+  $('repBody').innerHTML=h;
+}
+function resumClient(lg){
+  var R=RES,b=R.best,t=function(a,c){return lg==='ca'?c:a};
+  var s=R.cmp?t('Hemos comparado '+R.ps.length+' opciones y la más adecuada para usted es ','Hem comparat '+R.ps.length+' opcions i la més adequada per a vostè és ')
+            :t('Hemos revisado su póliza: ','Hem revisat la seva pòlissa: ');
+  s+=b.name+(b.tot!=null?t(', con una prima de ',', amb una prima de ')+eur(b.tot)+t(' al año',' a l\'any'):'')+'. ';
+  var pr=b.pros.slice(0,2);if(pr.length)s+=t('Destaca por: ','Destaca per: ')+pr.map(function(x){return tr(x,lg)}).join('; ').toLowerCase()+'. ';
+  var cn=b.cons.slice(0,1);if(cn.length)s+=t('A tener en cuenta: ','A tenir en compte: ')+cn.map(function(x){return tr(x,lg)}).join('; ').toLowerCase()+'.';
+  return s;
+}
+
+/* ====== Missatges ====== */
+var CA2ES=[['Prima més baixa','Prima más baja'],['Prima ','Prima '],['més alta que la més barata','más alta que la más barata'],['Amplitud de cobertures alta','Amplitud de coberturas alta'],['incloses de','incluidas de'],
+['garantia/es no inclosa/es','garantía/s no incluida/s'],['garantia/es limitada/es (revisa capitals i sublímits)','garantía/s limitada/s (revisaremos capitales y sublímites)'],['garantia/es sense dades: «No consta en la documentación»','garantía/s sin datos: «No consta en la documentación»'],
+['Possible infraassegurança: capital','Posible infraseguro: capital'],['del valor real → regla proporcional (art. 30 LCS)','del valor real → regla proporcional (art. 30 LCS)'],['Possible sobreassegurança: es pagaria prima per un capital superior al valor (art. 31 LCS)','Posible sobreseguro: se pagaría prima por un capital superior al valor (art. 31 LCS)'],
+['Capital ajustat al valor assegurable','Capital ajustado al valor asegurable'],['Increment anual de prima previst del','Incremento anual de prima previsto del'],['Indemnització a valor de reposició (nou)','Indemnización a valor de reposición (nuevo)'],
+['Indemnització a valor real: s\'aplica depreciació','Indemnización a valor real: se aplica depreciación'],['Lletra petita clara i favorable','Letra pequeña clara y favorable'],['Lletra petita desfavorable','Letra pequeña desfavorable'],
+['fragment/s d\'exclusions o clàusules limitatives a verificar amb signatura expressa (art. 3 LCS)','fragmento/s de exclusiones o cláusulas limitativas a verificar con firma expresa (art. 3 LCS)'],
+['Confirma per escrit capitals, sublímits i franquícies de cada garantia.','Confirmar por escrito capitales, sublímites y franquicias de cada garantía.'],
+['Verifica que les clàusules limitatives estiguin destacades i acceptades per escrit (art. 3 LCS).','Verificar que las cláusulas limitativas estén destacadas y aceptadas por escrito (art. 3 LCS).'],
+['Pregunta per la revalorització (IPC o fixa) i per l\'increment de prima en renovar.','Preguntar por la revalorización (IPC o fija) y por el incremento de prima al renovar.'],
+['Confirma carències, exclusions i condicions de cancel·lació / renovació.','Confirmar carencias, exclusiones y condiciones de cancelación / renovación.'],
+['Ajusta el capital al valor real per evitar la regla proporcional.','Ajustar el capital al valor real para evitar la regla proporcional.'],['Obté per escrit les garanties que ara «no consten»','Obtener por escrito las garantías que ahora «no constan»'],
+['Dada pendent del client: ','Dato pendiente del cliente: ']];
+var RAMO_ES={hogar:'hogar',auto:'auto',vida:'vida / accidentes',salud:'salud',empresa:'empresas / RC / multirriesgo',decesos:'decesos',otro:'seguro'};
+var RAMO_CA={hogar:'llar',auto:'auto',vida:'vida / accidents',salud:'salut',empresa:'empreses / RC / multirisc',decesos:'decessos',otro:'assegurança'};
+function tr(s,lg){if(lg!=='es')return s;CA2ES.forEach(function(r){s=s.split(r[0]).join(r[1])});return s}
+function genMsgs(){
+  if(!RES)return;
+  var lg=$('lang').value,t=function(a,c){return lg==='ca'?c:a},R=RES,b=R.best,nom=$('cNom').value.trim(),sig=$('signa').value.trim();
+  var ramo=(lg==='ca'?RAMO_CA:RAMO_ES)[$('ramo').value];
+  var sal=nom?t('Estimado/a '+nom+',','Estimat/da '+nom+','):t('Estimado/a cliente,','Estimat/da client,');
+  var lines=R.ps.map(function(x,i){return (R.cmp?(i+1)+'. ':'• ')+x.name+': '+(x.tot!=null?eur(x.tot)+t(' / año',' / any'):t('prima no consta','prima no consta'))+' · '+t('puntuación ','puntuació ')+x.global.toFixed(1)+'/10'}).join('\n');
+  var pros=b.pros.slice(0,4).map(function(p){return '• '+tr(p,lg)}).join('\n');
+  var cons=b.cons.slice(0,3).map(function(p){return '• '+tr(p,lg)}).join('\n');
+  var neg=R.neg.slice(0,4).map(function(p){return '• '+tr(p,lg)}).join('\n');
+  var firma=t('Un cordial saludo,','Una cordial salutació,')+'\n'+(sig?sig+'\n':'')+'OPTIMIZARTE by Occident';
+  var m=sal+'\n\n'+
+   (R.cmp?t('Como acordamos, hemos analizado las propuestas de seguro de '+ramo+' para usted. Este es el resumen:','Tal com vam acordar, hem analitzat les propostes d\'assegurança de '+ramo+' per a vostè. Aquest és el resum:')
+         :t('Hemos analizado su póliza de '+ramo+'. Este es el resumen:','Hem analitzat la seva pòlissa de '+ramo+'. Aquest és el resum:'))+'\n\n'+lines+'\n\n'+
+   t('NUESTRA RECOMENDACIÓN: ','LA NOSTRA RECOMANACIÓ: ')+b.name+'.\n'+(pros?t('Por qué:\n','Per què:\n')+pros+'\n\n':'\n')+
+   (cons?t('Puntos a tener en cuenta:\n','Punts a tenir en compte:\n')+cons+'\n\n':'')+
+   t('Antes de firmar confirmaremos con la aseguradora:\n','Abans de signar confirmarem amb l\'asseguradora:\n')+neg+'\n\n'+
+   (R.miss.length?t('Para cerrar el análisis le pediremos confirmar algunos datos adicionales (fecha de efecto, capitales y circunstancias del riesgo).','Per tancar l\'anàlisi us demanarem confirmar algunes dades addicionals (data d\'efecte, capitals i circumstàncies del risc).')+'\n\n':'')+
+   t('Quedamos a su disposición para resolver cualquier duda y, si le parece bien, tramitar la contratación.','Quedem a la seva disposició per resoldre qualsevol dubte i, si us sembla bé, tramitar la contractació.')+'\n\n'+
+   t('Este análisis es orientativo; prevalecen las condiciones contractuales firmadas.','Aquesta anàlisi és orientativa; prevalen les condicions contractuals signades.')+'\n\n'+firma;
+  $('mSubj').value=t('Análisis de su seguro de '+ramo+' · OPTIMIZARTE','Anàlisi de la seva assegurança de '+ramo+' · OPTIMIZARTE');
+  $('mBody').value=m;
+  var w=(nom?t('Hola '+nom+' 👋','Hola '+nom+' 👋'):t('Hola 👋','Hola 👋'))+'\n'+
+   t('Hemos analizado '+(R.cmp?'las propuestas':'su póliza')+' de seguro de '+ramo+'.','Hem analitzat '+(R.cmp?'les propostes':'la seva pòlissa')+' d\'assegurança de '+ramo+'.')+'\n\n'+
+   R.ps.map(function(x){return '📋 '+x.name+(x.tot!=null?' → '+eur(x.tot)+t('/año','/any'):'')}).join('\n')+'\n\n'+
+   '✅ *'+t('Recomendada','Recomanada')+':* '+b.name+'\n'+
+   b.pros.slice(0,3).map(function(p){return '• '+tr(p,lg)}).join('\n')+'\n\n'+
+   (b.cons.length?'⚠️ '+t('A tener en cuenta','A tenir en compte')+': '+tr(b.cons[0],lg)+'\n\n':'')+
+   t('Le he enviado el detalle por correo. ¿Hablamos y lo cerramos? 🙂','T\'he enviat el detall per correu. En parlem i ho tanquem? 🙂')+'\n'+
+   '— '+(sig||'OPTIMIZARTE by Occident');
+  $('wBody').value=w;
+  updLinks();
+}
+function updLinks(){
+  var mail=$('cMail').value.trim();
+  $('mailto').href='mailto:'+encodeURIComponent(mail)+'?subject='+encodeURIComponent($('mSubj').value)+'&body='+encodeURIComponent($('mBody').value);
+  var tel=$('cTel').value.replace(/[^\d]/g,'');if(tel.length===9)tel='34'+tel;
+  $('walink').href='https://wa.me/'+tel+'?text='+encodeURIComponent($('wBody').value);
+}
+['mSubj','mBody','wBody'].forEach(function(i){$(i).addEventListener('input',updLinks)});
+['cMail','cTel'].forEach(function(i){$(i).addEventListener('input',updLinks)});
+$('lang').addEventListener('change',genMsgs);
+function showTab(w){
+  $('paneM').classList.toggle('hide',w!=='m');$('paneW').classList.toggle('hide',w!=='w');
+  $('tabM').classList.toggle('on',w==='m');$('tabW').classList.toggle('on',w==='w');
+}
+function copyEl(id,btn){
+  var el=$(id),txt=el.value;
+  var done=function(){var o=btn.textContent;btn.textContent='✓ Copiat';btn.classList.add('btn--green');setTimeout(function(){btn.textContent=o;btn.classList.remove('btn--green')},1500)};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done,function(){el.select();document.execCommand('copy');done()});
+  else{el.select();document.execCommand('copy');done()}
+}
+function printReport(){document.body.classList.add('print-rep');window.print();setTimeout(function(){document.body.classList.remove('print-rep')},500)}
+
+/* ====== Prompt per a IA ====== */
+function copyPrompt(btn){
+  var t=PROMPT,done=function(){var o=btn.textContent;btn.textContent='✓ Copiat';setTimeout(function(){btn.textContent=o},1500)};
+  var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();
+  try{(navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(t):Promise.reject()).then(done,function(){document.execCommand('copy');done()})}catch(e){document.execCommand('copy');done()}
+  document.body.removeChild(ta);
+}
+var PROMPT=[
+'# ROL',
+'Actúa como un experto en seguros con más de 20 años de experiencia en el mercado español. Combinas tres perfiles:',
+'1. MEDIADOR (corredor/agente): conoces el mercado, las aseguradoras, las prácticas comerciales y las necesidades reales del cliente.',
+'2. ACTUARIO: analizas primas, franquicias, capitales, revalorizaciones, tarificación, relación precio/cobertura y evolución del coste.',
+'3. PERITO: sabes cómo se tramita y liquida un siniestro: exclusiones, carencias, infraseguro, regla proporcional, límites por garantía, valor de reposición o real y la letra pequeña.',
+'Defiendes el interés del cliente, no el de ninguna aseguradora. Eres objetivo, preciso y claro.',
+'',
+'# MARCO NORMATIVO',
+'Ley 50/1980 de Contrato de Seguro (arts. 3, 10, 22, 29 y 30), RDL 3/2020 de distribución de seguros y deber de información previa. Señala las cláusulas limitativas que deban estar destacadas y aceptadas por escrito.',
+'',
+'# TAREAS',
+'A) UNA póliza o propuesta → análisis individual. B) DOS O MÁS → análisis comparativo.',
+'',
+'# ANTES DE ANALIZAR',
+'Si falta información mínima, PARA y PREGUNTA (lista numerada, máximo 8). No inventes datos. Lo provisional se marca «PROVISIONAL – pendiente de confirmar».',
+'',
+'# METODOLOGÍA',
+'1. Ficha resumen. 2. Coberturas (capital, franquicia, sublímites, reposición/valor real, primer riesgo/valor total). 3. Exclusiones, carencias y cláusulas limitativas. 4. Riesgos ocultos (infraseguro, regla proporcional, revalorización, subida por edad, renovación y cancelación). 5. Visión pericial: 2-3 siniestros típicos con cifras. 6. Visión actuarial: coste por 1.000 € de capital y proyección a 5-10 años. 7. PROS y CONTRAS. 8. Puntuación 1-10 en precio, coberturas, letra pequeña, servicio/solvencia y adecuación al perfil.',
+'',
+'# COMPARATIVAS',
+'Tabla con una fila por garantía y una columna por propuesta (✅ ❌ ⚠️ con capital/franquicia). Destaca diferencias reales, comprueba homogeneidad, calcula la diferencia de precio y si queda justificada.',
+'',
+'# RECOMENDACIÓN FINAL',
+'Recomendación clara según perfil y prioridades; si ninguna es adecuada, qué pedir o negociar. Lista de «Puntos a negociar o confirmar antes de firmar» y un resumen de 3-4 líneas para el cliente.',
+'',
+'# REGLAS',
+'No inventes coberturas ni cifras: «No consta en la documentación». Cita página/apartado/cláusula. Distingue hechos de opinión. Responde en el idioma del usuario. Recuerda al final que el análisis es orientativo y prevalecen las condiciones contractuales firmadas.'
+].join('\n');
+
+/* ====== Init ====== */
+ensure();renderAll();loadTpl(true);renderDades();
+</script>
+</body>
+</html>

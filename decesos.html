@@ -467,7 +467,7 @@ const txt=(s,n)=>typeof s==='string'?s.slice(0,n||60):'';
 const num=(v,lo,hi)=>{v=+v;return isFinite(v)?Math.min(hi,Math.max(lo,v)):0;};
 const PAY=[1,2,4,6,12].includes(+D.f)?+D.f:12;
 const SVC=D.s==='i'?'i':'c',PET=D.m?1:0;
-const PPL=(Array.isArray(D.a)?D.a:[]).slice(0,12).filter(p=>p&&typeof p==='object').map(p=>({e:Math.round(num(p.e,0,110)),c:Math.round(num(p.c,0,50000))}));
+const PPL=(Array.isArray(D.a)?D.a:[]).slice(0,12).filter(p=>p&&typeof p==='object').map(p=>({n:txt(p.n,30).trim().split(/\s+/)[0]||'',e:Math.round(num(p.e,0,110)),c:Math.round(num(p.c,0,50000))}));
 const OPTS=(Array.isArray(D.o)?D.o:[]).slice(0,2).filter(o=>o&&typeof o==='object'&&+o.p>0).map(o=>{
   const p=num(o.p,0,100000),q=+o.q>0?num(o.q,0,100000):p/PAY;
   return {t:o.t==='e'?'e':'o',p,q,r:!!o.r,ac:Math.round(num(o.ac,0,1e6)),ip:Math.round(num(o.ip,0,1e6)),h:num(o.h,0,1000)};});
@@ -491,7 +491,7 @@ const icP=e=>e<3?'bebe':e>=65?'abuelo':'cliente';
 function paintPlan(){
   const chip=(ic,l,v)=>`<span class="chip"><i class="ic i-${ic}"></i>${l?l+' ':''}<b>${v}</b></span>`;
   $('chips').innerHTML=chip('decesos',T.svcL,T.svc[SVC])+chip('cliente','',T.nP(NP))+chip('mascota',T.petL,T.yn[PET])+chip('calendario','',T.payN[PAY]);
-  $('ppl').innerHTML=PPL.map((p,i)=>`<div class="pp"><i class="ic i-${icP(p.e)}"></i><div><div class="pn2">${T.pers(i+1)}</div><div class="pa">${T.age(p.e)}</div></div>${p.c?`<div class="pv">${T.capS}<b>${cap(p.c)}</b></div>`:''}</div>`).join('');
+  $('ppl').innerHTML=PPL.map((p,i)=>`<div class="pp"><i class="ic i-${icP(p.e)}"></i><div><div class="pn2">${p.n?esc(p.n):T.pers(i+1)}</div><div class="pa">${T.age(p.e)}</div></div>${p.c?`<div class="pv">${T.capS}<b>${cap(p.c)}</b></div>`:''}</div>`).join('');
   $('pplN').textContent=PPL.some(p=>p.c)?T.pplN:'';
 }
 function paintKpi(){

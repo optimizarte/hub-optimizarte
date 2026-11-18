@@ -408,7 +408,7 @@ const same=(r,o)=>r.cop===o.cop&&r.alto===o.alto&&r.free===o.free;
 
 /* ---------- logos de companyías (CSS externo, solo cuando se compara) ---------- */
 window.__logosReady=Promise.resolve();
-if(COMP){const lk=document.createElement('link');lk.rel='stylesheet';lk.href='copago-logos.css';document.head.appendChild(lk);window.__logosReady=new Promise(r=>{lk.onload=r;lk.onerror=r;});}
+{const lk=document.createElement('link');lk.rel='stylesheet';lk.href='copago-logos.css';document.head.appendChild(lk);window.__logosReady=new Promise(r=>{lk.onload=r;lk.onerror=r;});}
 function logoEl(p){if(!p.comp)return '<i class="lg lg-occident"></i>';return p.key?`<i class="lg lg-${p.key}"></i>`:(p.company&&p.company!==p.name?`<span class="cmpco">${esc(p.company)}</span>`:'');}
 
 function layout(){document.body.classList.toggle('pc',innerWidth>=900);}
@@ -706,7 +706,7 @@ function renderStatic(){
   if(BASE)cks.push(T.ck3);
   const adv=PRODS.find(p=>p.id==='a');if(adv)cks.push(T.ck4(adv.name));
   $('checks').innerHTML=cks.filter(Boolean).map(s=>`<li><i class="ic i-ok"></i><span>${s}</span></li>`).join('');
-  $('pills3').innerHTML=PRODS.map(p=>`<div class="pl q${p.id}">${COMP?`<span class="lgw">${blbl(p)}</span>`:`<span>${esc(p.name)}</span>`}<b>${eur(mes(p),2)}<small>${T.mes}</small></b><i>${eur(p.annual,2)} ${T.alAnio}</i></div>`).join('');
+  $('pills3').innerHTML=PRODS.map(p=>`<div class="pl q${p.id}"><span class="lgw">${COMP?blbl(p):`<i class="lg lg-occident"></i>${OCCN>1?`<small>${esc(p.name)}</small>`:''}`}</span><b>${eur(mes(p),2)}<small>${T.mes}</small></b><i>${eur(p.annual,2)} ${T.alAnio}</i></div>`).join('');
   $('foot').textContent=T.foot(NP,String(RENT*100).replace('.',L==='ca'?',':'.'));
   actsHTML();
   const pr=[

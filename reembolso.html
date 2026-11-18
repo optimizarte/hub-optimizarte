@@ -240,7 +240,8 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
 .lr{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--br);font-size:13px;color:var(--t2)}.lr b{white-space:nowrap;color:var(--t1)}.lr small{font-weight:400;color:var(--t3)}
 .pills3 .qr{background:var(--brand)}
 .pdfcard{display:flex;align-items:center;gap:12px;margin-top:16px;border:1px solid var(--br);border-radius:var(--radius);padding:12px 14px;background:var(--bg3);text-decoration:none;color:var(--t1);font-weight:600;font-size:14px}.pdfcard .ic{width:38px;height:38px}.pdfcard small{display:block;color:var(--t3);font-weight:400;font-size:12px;margin-top:2px}.pdfcard:after{content:"A";margin-left:auto;font-size:24px;color:var(--brand)}
-</style>
+.pills3 .lgw{background:#fff;border-radius:999px;padding:3px 10px;display:inline-flex;align-items:center;gap:6px;max-width:100%}.pills3 .lgw .lg{width:76px;height:19px}.pills3 .lgw small{font-size:10px;color:var(--t2);font-weight:600}</style>
+<link rel="stylesheet" href="copago-logos.css">
 </head>
 <body>
 <div class="app" id="app">
@@ -301,7 +302,7 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
       <div class="st"><i class="ic i-team"></i><h2 data-t="closeH"></h2></div>
       <div class="team"><div><i class="ic i-fonendo"></i><span data-t="tDoc"></span></div><div><i class="ic i-enfermera"></i><span data-t="tNur"></span></div><div><i class="ic i-salud"></i><span data-t="tHos"></span></div></div>
       <ul class="checks" id="checks"></ul>
-      <div class="pills3"><div class="pl qr"><span data-t="prodN"></span><b id="pmB"></b><i id="paB"></i></div></div>
+      <div class="pills3"><div class="pl qr"><span class="lgw"><i class="lg lg-occident"></i><small data-t="prodN"></small></span><b id="pmB"></b><i id="paB"></i></div></div>
       <a class="pdfcard" id="pdfL" target="_blank" rel="noopener" style="display:none"><i class="ic i-pdf"></i><span><span data-t="pdfT"></span><small data-t="pdfS"></small></span></a>
     </section>
   </main>

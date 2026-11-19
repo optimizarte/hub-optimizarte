@@ -86,7 +86,7 @@ textarea{min-height:92px;resize:vertical;line-height:1.45}
     <section class="card">
       <div class="st"><i class="ic i-calendario"></i><h2>1 · Producte i idioma<small>El que veurà el client</small></h2></div>
       <div class="row2">
-        <div><span class="lbl">Producte</span><div class="seg" id="segP"><button data-v="b" class="on">Salud Bienestar</button><button data-v="s">Salud Bienestar Sénior</button></div></div>
+        <div><span class="lbl">Producte</span><div class="seg" id="segP"><button data-v="b" class="on">Salut Benestar</button><button data-v="s">Salut Benestar Sènior</button></div></div>
         <div><span class="lbl">Idioma del client</span><div class="seg" id="segL"><button data-v="es" class="on">Castellano</button><button data-v="ca">Català</button></div></div>
       </div>
     </section>
@@ -166,8 +166,8 @@ function build(){
   const n=S.people.length, err=[], notes=[];
   if(!n)err.push('Afegeix almenys un assegurat.');
   const young=S.people.filter(isBad);
-  if(young.length)err.push(`${NAME.s.es} és a partir de ${SENIOR_MIN} anys: revisa ${young.length===1?'l\'assegurat marcat':'els assegurats marcats'} o tria Salud Bienestar.`);
-  if(S.p==='b'&&S.people.some(p=>p.age>=SENIOR_MIN))notes.push(`Hi ha algun assegurat de ${SENIOR_MIN} anys o més: comprova si li correspon ${NAME.s.es}.`);
+  if(young.length)err.push(`${NAME.s.ca} és a partir de ${SENIOR_MIN} anys: revisa ${young.length===1?'l\'assegurat marcat':'els assegurats marcats'} o tria Salut Benestar.`);
+  if(S.p==='b'&&S.people.some(p=>p.age>=SENIOR_MIN))notes.push(`Hi ha algun assegurat de ${SENIOR_MIN} anys o més: comprova si li correspon ${NAME.s.ca}.`);
   let qs=[],tot=NaN;
   if(joint()){tot=annual(num($('joint').value));if(!isFinite(tot))err.push('Indica la prima conjunta.');}
   else{qs=S.people.map(p=>annual(num(p.q)));if(n&&qs.some(v=>!isFinite(v)))err.push('Indica la prima de cada assegurat.');else tot=Math.round(qs.reduce((a,b)=>a+b,0)*100)/100;}

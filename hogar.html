@@ -369,10 +369,10 @@ button.kpi{width:100%;max-width:520px;margin:14px auto 0;text-align:left;cursor:
 
 <script type="text/plain" id="engine">
 /* =====================================================================
-   SEGURO DE HOGAR · comparativa para el cliente (ES / CA)
+   SEGURO DE HOGAR · comparativa para el cliente (ES / CA / FR)
    Los datos viajan DESPUES del # para que no lleguen a los registros del servidor.
    Tambien acepta ?, como los otros simuladores. Parametros (todos opcionales):
-     l = es | ca      idioma
+     l = es | ca | fr   idioma
      m = e | c        e = ejemplo · c = cliente concreto
      v = (obsoleto, se ignora)      una sola version: movil < 900 px, web ancha >= 900 px
      d = JSON en base64url (lo escribe el generador; NO es cifrado):
@@ -389,11 +389,11 @@ button.kpi{width:100%;max-width:520px;margin:14px auto 0;text-align:left;cursor:
 const SH=window.__SHORT||null;
 const Q=new URLSearchParams(SH?'':(location.hash.slice(1)||location.search));
 addEventListener('hashchange',()=>location.reload());
-const L=(SH?SH.l:Q.get('l'))==='ca'?'ca':'es', V=SH?null:Q.get('v');
+const L=(l=>l==='ca'||l==='fr'?l:'es')(SH?SH.l:Q.get('l')), V=SH?null:Q.get('v');
 let MODE=SH||Q.get('m')==='c'?'c':'e';
 function layout(){document.body.classList.toggle('pc',innerWidth>=900);}
 layout();addEventListener('resize',layout);
-const LI=L==='ca'?1:0, LOC=L==='ca'?'ca-ES':'es-ES';
+const LI=L==='ca'?1:L==='fr'?2:0, LOC=L==='ca'?'ca-ES':'es-ES';   /* el frances usa el formato de importes de Occident (1.234,56 €) */
 const TEL='34972426665', MAIL='optimizarte@occident.com';
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -407,68 +407,68 @@ const eur=v=>new Intl.NumberFormat(LOC,{style:'currency',currency:'EUR',minimumF
    si un proyecto cambia, el generador lo refleja sin tocar nada. Lo que el PDF no dice es «No consta».
    Lo incluyen la pagina del cliente y el generador.
    Estados: y incluida · o opcional · n no incluida · u no consta
-   Limites: numero (euros) · texto neutro ('100 %') · [castellano, catalan]
+   Limites: numero (euros) · texto neutro ('100 %') · [castellano, catalan, frances]
    ===================================================================== */
 const BLOCKS=[
- {k:'fue',ic:'sirena',t:['Incendio y fenómenos naturales','Incendi i fenòmens naturals']},
- {k:'agu',ic:'hogar',t:['Daños por agua','Danys per aigua']},
- {k:'rob',ic:'cajafuerte',t:['Robo y vandalismo','Robatori i vandalisme']},
- {k:'ele',ic:'bombeta',t:['Eléctricos, roturas y estética','Elèctrics, trencaments i estètica']},
- {k:'rc', ic:'escudo',t:['Responsabilidad civil','Responsabilitat civil']},
- {k:'alq',ic:'rebut',t:['Alquiler de la vivienda','Lloguer de l\'habitatge']},
- {k:'asi',ic:'obrero',t:['Asistencia y servicios','Assistència i serveis']},
- {k:'jur',ic:'balanza',t:['Defensa jurídica','Defensa jurídica']},
- {k:'otr',ic:'polissa',t:['Otras garantías','Altres garanties']}
+ {k:'fue',ic:'sirena',t:['Incendio y fenómenos naturales','Incendi i fenòmens naturals','Incendie et phénomènes naturels']},
+ {k:'agu',ic:'hogar',t:['Daños por agua','Danys per aigua','Dégâts des eaux']},
+ {k:'rob',ic:'cajafuerte',t:['Robo y vandalismo','Robatori i vandalisme','Vol et vandalisme']},
+ {k:'ele',ic:'bombeta',t:['Eléctricos, roturas y estética','Elèctrics, trencaments i estètica','Électricité, casse et esthétique']},
+ {k:'rc', ic:'escudo',t:['Responsabilidad civil','Responsabilitat civil','Responsabilité civile']},
+ {k:'alq',ic:'rebut',t:['Alquiler de la vivienda','Lloguer de l\'habitatge','Location du logement']},
+ {k:'asi',ic:'obrero',t:['Asistencia y servicios','Assistència i serveis','Assistance et services']},
+ {k:'jur',ic:'balanza',t:['Defensa jurídica','Defensa jurídica','Défense juridique']},
+ {k:'otr',ic:'polissa',t:['Otras garantías','Altres garanties','Autres couvertures']}
 ];
 const ROWS=[
- {k:'inc',b:'fue',t:['Incendio, explosión y rayo','Incendi, explosió i llamp']},
- {k:'atm',b:'fue',t:['Lluvia, viento, pedrisco y nieve','Pluja, vent, pedra i neu']},
- {k:'inu',b:'fue',t:['Inundación','Inundació']},
- {k:'fil',b:'fue',t:['Filtraciones por cubierta y fachada','Filtracions per coberta i façana']},
- {k:'rui',b:'fue',t:['Ruina total','Ruïna total']},
- {k:'imp',b:'fue',t:['Impacto de vehículos, aeronaves y humo','Impacte de vehicles, aeronaus i fum']},
- {k:'gas',b:'fue',t:['Gastos del siniestro (demolición, desescombro, salvamento)','Despeses del sinistre (demolició, enderroc, salvament)']},
- {k:'agu',b:'agu',t:['Rotura o fuga de tuberías','Trencament o fuita de canonades']},
- {k:'got',b:'agu',t:['Goteras y filtraciones de vecinos','Goteres i filtracions de veïns']},
- {k:'loc',b:'agu',t:['Localización y reparación de la fuga','Localització i reparació de la fuita']},
- {k:'sin',b:'agu',t:['Localización y reparación sin daños','Localització i reparació sense danys']},
- {k:'des',b:'agu',t:['Desatasco de tuberías','Desembussos de canonades']},
- {k:'exc',b:'agu',t:['Exceso de consumo de agua','Excés de consum d\'aigua']},
- {k:'jun',b:'agu',t:['Filtraciones por juntas de sanitarios','Filtracions per juntes de sanitaris']},
- {k:'rob',b:'rob',t:['Robo del continente y desperfectos','Robatori del continent i desperfectes']},
- {k:'roc',b:'rob',t:['Robo del contenido (mobiliario)','Robatori del contingut (mobiliari)']},
- {k:'van',b:'rob',t:['Vandalismo de terceros','Vandalisme de tercers']},
- {k:'cer',b:'rob',t:['Reposición de cerraduras','Reposició de panys']},
- {k:'tra',b:'rob',t:['Robo en trasteros, anexos y jardín','Robatori a trasters, annexos i jardí']},
- {k:'ele',b:'ele',t:['Daños eléctricos','Danys elèctrics']},
- {k:'rot',b:'ele',t:['Rotura de cristales y espejos','Trencament de vidres i miralls']},
- {k:'vit',b:'ele',t:['Vitrocerámica e inducción','Vitroceràmica i inducció']},
- {k:'san',b:'ele',t:['Rotura de sanitarios','Trencament de sanitaris']},
- {k:'res',b:'ele',t:['Restauración estética','Restauració estètica']},
- {k:'doc',b:'ele',t:['Reposición de archivos y documentos','Reposició d\'arxius i documents']},
- {k:'rcg',b:'rc',t:['Responsabilidad civil del inmueble','Responsabilitat civil de l\'immoble']},
- {k:'rca',b:'rc',t:['RC como arrendador frente al inquilino','RC com a arrendador davant l\'inquilí']},
- {k:'rcm',b:'rc',t:['RC medioambiental / contaminación','RC mediambiental / contaminació']},
- {k:'pal',b:'alq',t:['Pérdida de alquileres / inhabitabilidad','Pèrdua de lloguers / inhabitabilitat']},
- {k:'vai',b:'alq',t:['Vandalismo del inquilino o usuario','Vandalisme de l\'inquilí o usuari']},
- {k:'ocu',b:'alq',t:['Ocupación ilegal','Ocupació il·legal']},
- {k:'rer',b:'alq',t:['Reembolso de reservas','Reemborsament de reserves']},
- {k:'hue',b:'alq',t:['Robo y daños a bienes del usuario','Robatori i danys a béns de l\'usuari']},
- {k:'hum',b:'alq',t:['Robo de metálico del usuario','Robatori de metàl·lic de l\'usuari']},
- {k:'asi',b:'asi',t:['Asistencia hogar urgente','Assistència llar urgent']},
- {k:'bri',b:'asi',t:['Bricohogar (manitas)','Bricollar (manetes)']},
- {k:'cal',b:'asi',t:['Reparación urgente de calderas','Reparació urgent de calderes']},
- {k:'ree',b:'asi',t:['Reparación de electrodomésticos','Reparació d\'electrodomèstics']},
- {k:'inf',b:'asi',t:['Asistencia informática','Assistència informàtica']},
- {k:'pla',b:'asi',t:['Control de plagas','Control de plagues']},
- {k:'med',b:'asi',t:['Orientación médica','Orientació mèdica']},
- {k:'jur',b:'jur',t:['Defensa jurídica y reclamación','Defensa jurídica i reclamació']},
- {k:'tac',b:'otr',t:['Todo riesgo accidental','Tot risc accidental']},
- {k:'mov',b:'otr',t:['Rotura de pantalla de móvil','Trencament de pantalla de mòbil']}
+ {k:'inc',b:'fue',t:['Incendio, explosión y rayo','Incendi, explosió i llamp','Incendie, explosion et foudre']},
+ {k:'atm',b:'fue',t:['Lluvia, viento, pedrisco y nieve','Pluja, vent, pedra i neu','Pluie, vent, grêle et neige']},
+ {k:'inu',b:'fue',t:['Inundación','Inundació','Inondations']},
+ {k:'fil',b:'fue',t:['Filtraciones por cubierta y fachada','Filtracions per coberta i façana','Infiltrations par la toiture et la façade']},
+ {k:'rui',b:'fue',t:['Ruina total','Ruïna total','Ruine totale']},
+ {k:'imp',b:'fue',t:['Impacto de vehículos, aeronaves y humo','Impacte de vehicles, aeronaus i fum','Impact de véhicules, d\'aéronefs et fumée']},
+ {k:'gas',b:'fue',t:['Gastos del siniestro (demolición, desescombro, salvamento)','Despeses del sinistre (demolició, enderroc, salvament)','Frais du sinistre (démolition, enlèvement des débris, sauvetage)']},
+ {k:'agu',b:'agu',t:['Rotura o fuga de tuberías','Trencament o fuita de canonades','Rupture ou fuite de tuyauteries']},
+ {k:'got',b:'agu',t:['Goteras y filtraciones de vecinos','Goteres i filtracions de veïns','Fuites provenant de logements contigus ou supérieurs']},
+ {k:'loc',b:'agu',t:['Localización y reparación de la fuga','Localització i reparació de la fuita','Localisation et réparation de fuites d\'eau']},
+ {k:'sin',b:'agu',t:['Localización y reparación sin daños','Localització i reparació sense danys','Localisation et réparation sans dommage']},
+ {k:'des',b:'agu',t:['Desatasco de tuberías','Desembussos de canonades','Débouchage de conduites']},
+ {k:'exc',b:'agu',t:['Exceso de consumo de agua','Excés de consum d\'aigua','Surconsommation d\'eau']},
+ {k:'jun',b:'agu',t:['Filtraciones por juntas de sanitarios','Filtracions per juntes de sanitaris','Infiltrations dues aux joints des sanitaires']},
+ {k:'rob',b:'rob',t:['Robo del continente y desperfectos','Robatori del continent i desperfectes','Vol avec effraction de l\'immobilier et dommages']},
+ {k:'roc',b:'rob',t:['Robo del contenido (mobiliario)','Robatori del contingut (mobiliari)','Vol avec effraction et vol aggravé du mobilier']},
+ {k:'van',b:'rob',t:['Vandalismo de terceros','Vandalisme de tercers','Actes de vandalisme commis par des tiers']},
+ {k:'cer',b:'rob',t:['Reposición de cerraduras','Reposició de panys','Remplacement de serrures']},
+ {k:'tra',b:'rob',t:['Robo en trasteros, anexos y jardín','Robatori a trasters, annexos i jardí','Vol dans les débarras, annexes et jardin']},
+ {k:'ele',b:'ele',t:['Daños eléctricos','Danys elèctrics','Dommages électriques']},
+ {k:'rot',b:'ele',t:['Rotura de cristales y espejos','Trencament de vidres i miralls','Bris de miroirs et de carreaux']},
+ {k:'vit',b:'ele',t:['Vitrocerámica e inducción','Vitroceràmica i inducció','Plaques vitrocéramiques et à induction']},
+ {k:'san',b:'ele',t:['Rotura de sanitarios','Trencament de sanitaris','Rupture de sanitaires']},
+ {k:'res',b:'ele',t:['Restauración estética','Restauració estètica','Restitution esthétique']},
+ {k:'doc',b:'ele',t:['Reposición de archivos y documentos','Reposició d\'arxius i documents','Remplacement de documents et archives']},
+ {k:'rcg',b:'rc',t:['Responsabilidad civil del inmueble','Responsabilitat civil de l\'immoble','Responsabilité civile immobilière']},
+ {k:'rca',b:'rc',t:['RC como arrendador frente al inquilino','RC com a arrendador davant l\'inquilí','Responsabilité civile du bailleur envers le locataire']},
+ {k:'rcm',b:'rc',t:['RC medioambiental / contaminación','RC mediambiental / contaminació','Responsabilité civile environnementale / pollution']},
+ {k:'pal',b:'alq',t:['Pérdida de alquileres / inhabitabilidad','Pèrdua de lloguers / inhabitabilitat','Perte de loyers / inhabitabilité']},
+ {k:'vai',b:'alq',t:['Vandalismo del inquilino o usuario','Vandalisme de l\'inquilí o usuari','Vandalisme du locataire ou de l\'utilisateur']},
+ {k:'ocu',b:'alq',t:['Ocupación ilegal','Ocupació il·legal','Occupation illicite']},
+ {k:'rer',b:'alq',t:['Reembolso de reservas','Reemborsament de reserves','Remboursement de réservations']},
+ {k:'hue',b:'alq',t:['Robo y daños a bienes del usuario','Robatori i danys a béns de l\'usuari','Vol et dommages aux biens de l\'utilisateur']},
+ {k:'hum',b:'alq',t:['Robo de metálico del usuario','Robatori de metàl·lic de l\'usuari','Vol d\'espèces de l\'utilisateur']},
+ {k:'asi',b:'asi',t:['Asistencia hogar urgente','Assistència llar urgent','Assistance à domicile urgente']},
+ {k:'bri',b:'asi',t:['Bricohogar (manitas)','Bricollar (manetes)','BricoHogar (petits travaux)']},
+ {k:'cal',b:'asi',t:['Reparación urgente de calderas','Reparació urgent de calderes','Réparation d\'urgence de chaudières']},
+ {k:'ree',b:'asi',t:['Reparación de electrodomésticos','Reparació d\'electrodomèstics','Réparation d\'appareils électroménagers']},
+ {k:'inf',b:'asi',t:['Asistencia informática','Assistència informàtica','Assistance informatique']},
+ {k:'pla',b:'asi',t:['Control de plagas','Control de plagues','Lutte contre les nuisibles']},
+ {k:'med',b:'asi',t:['Orientación médica','Orientació mèdica','Orientation médicale']},
+ {k:'jur',b:'jur',t:['Defensa jurídica y reclamación','Defensa jurídica i reclamació','Défense juridique et réclamation']},
+ {k:'tac',b:'otr',t:['Todo riesgo accidental','Tot risc accidental','Tout risque accidentel']},
+ {k:'mov',b:'otr',t:['Rotura de pantalla de móvil','Trencament de pantalla de mòbil','Bris d\'écran de téléphone mobile']}
 ];
 const RI={};ROWS.forEach((r,i)=>{RI[r.k]=i;});
 /* uso de la vivienda: a alquiler anual · t uso turistico · h habitual · s segunda residencia */
-const USOS={a:['Alquiler anual','Lloguer anual'],t:['Alquiler turístico','Lloguer turístic'],h:['Vivienda habitual','Habitatge habitual'],s:['Segunda residencia','Segona residència']};
+const USOS={a:['Alquiler anual','Lloguer anual','Location annuelle'],t:['Alquiler turístico','Lloguer turístic','Location touristique'],h:['Vivienda habitual','Habitatge habitual','Logement habituel'],s:['Segunda residencia','Segona residència','Résidence secondaire']};
 /* Patrones con los que el generador reconoce cada fila en el texto de un proyecto de Occident */
 const OCPAT={inc:/Incendio y complementarios/i,atm:/Lluvia\. Viento/i,inu:/Inundaci[oó]n/i,fil:/Filtraciones por cubierta/i,rui:/Ruina total/i,imp:/Choque o impacto/i,gas:/Demolici[oó]n y desescombro/i,
  agu:/Rotura, fuga o escape/i,got:/Goteras procedentes/i,loc:/Localizaci[oó]n y reparaci[oó]n de escapes/i,sin:/reparaci[oó]n sin da[ñn]os/i,des:/Desatasco/i,exc:/Exceso de consumo/i,jun:/juntas en aparatos/i,
@@ -476,6 +476,16 @@ const OCPAT={inc:/Incendio y complementarios/i,atm:/Lluvia\. Viento/i,inu:/Inund
  ele:/Da[ñn]os el[eé]ctricos a instalaciones/i,rot:/Rotura de espejos/i,vit:/vitrocer[aá]micas/i,san:/Rotura de sanitarios/i,res:/Restituci[oó]n est[eé]tica/i,doc:/Reposici[oó]n de archivos/i,
  rcg:/Responsabilidad civil del inmueble/i,rcm:/Responsabilidad civil medioambiental/i,pal:/P[eé]rdida de alquileres/i,vai:/vandalismo causados por el (?:inquilino|usuario)/i,ocu:/ocupaci[oó]n ilegal/i,rer:/Reembolso de reservas/i,hue:/bienes del usuario/i,hum:/met[aá]lico del usuario/i,
  asi:/Asistencia Hogar/i,bri:/BricoHogar/i,cal:/reparaci[oó]n de calderas/i,ree:/reparaci[oó]n de electrodom/i,med:/Orientaci[oó]n m[eé]dica/i,jur:/defensa jur[ií]dica/i};
+
+/* FRANCES (19 nov 2026): patrones para leer un proyecto de Occident EN FRANCES (misma plantilla de Occident, «Projet d'assurance Habitation»). Se unen a los castellanos: una fila se reconoce en cualquiera de los dos idiomas. */
+const OCPATF={inc:/Incendie et compl[eé]mentaires/i,atm:/Pluie\. Vent/i,inu:/Inondations?/i,fil:/Infiltrations par la toiture/i,rui:/Ruine totale/i,imp:/Collision ou impact/i,gas:/D[eé]molition et enl[eè]vement/i,
+ agu:/Rupture ou fuite de tuyauteries/i,got:/Fuites provenant de logements/i,loc:/Localisation et r[eé]paration de fuites/i,sin:/r[eé]paration sans dommage/i,des:/D[eé]bouchage/i,exc:/Surconsommation/i,jun:/joints d.[eé]tanch[eé]it[eé]/i,
+ rob:/Vol avec effraction de l.immobilier/i,roc:/Vol avec effraction et vol aggrav[eé] du mobilier/i,van:/Actes de vandalisme ou malveillants/i,cer:/Remplacement de serrures apr[eè]s un vol avec effraction/i,tra:/d[eé]barras et annexes/i,
+ ele:/Dommages [eé]lectriques aux installations/i,rot:/Bris de miroirs/i,vit:/vitroc[eé]ramiques/i,san:/Rupture de sanitaires/i,res:/Restitution esth[eé]tique/i,doc:/Remplacement de documents/i,
+ rcg:/Responsabilit[eé] civile immobili[eè]re/i,rcm:/Responsabilit[eé] civile environnementale/i,pal:/Perte de loyers/i,vai:/vandalisme (?:caus[eé]|commis)[^.]{0,30}(?:locataire|utilisateur)/i,ocu:/occupation illicite/i,rer:/Remboursement de r[eé]servations/i,hue:/biens de l.utilisateur/i,hum:/esp[eè]ces de l.utilisateur/i,
+ asi:/Assistance [aà] domicile/i,bri:/BricoHogar/i,cal:/r[eé]paration d.urgence de chaudi[eè]re/i,ree:/r[eé]paration d.appareils [eé]lectrom[eé]nagers/i,med:/Orientation m[eé]dicale/i,jur:/protection juridique/i};
+Object.keys(OCPATF).forEach(k=>{OCPAT[k]=OCPAT[k]?new RegExp('(?:'+OCPAT[k].source+')|(?:'+OCPATF[k].source+')','i'):OCPATF[k];});
+
 
 const CIAS={occident:'Occident',allianz:'Allianz',arag:'ARAG',axa:'AXA',berkley:'Berkley',caser:'Caser',fiatc:'FIATC',generali:'Generali',helvetia:'Helvetia',mapfre:'Mapfre',mussap:'Mussap',pelayo:'Pelayo',qualitas:'Qualitas',reale:'Reale',zurich:'Zurich'};
 const T={
@@ -514,7 +524,25 @@ ca:{brand:'Assegurança de la llar',hi:'Hola',lead1:v=>`Aquí tens la proposta d
  tipsH:'Consells per a la teva llar',
  foot:'Aquest document és informatiu i no té validesa contractual. Cobertures, límits i prima definitius: els de la pòlissa, amb la validació prèvia de l\'asseguradora. Consulta amb nosaltres el teu cas personalitzat.',footO:' Les primes i cobertures d\'altres companyies són les dels documents que ens han facilitat i la seva lectura és orientativa: el detall és al condicionat de cada companyia.',
  cta:'M\'interessa',shH:'T\'ajudem a contractar-la',shP:'Et confirmem el preu i les condicions, sense compromís.',shCall:'<span>Truca ara<small>972 42 66 65</small></span>',shMail:'Escriu un correu',shClose:'Tancar',
- wa:n=>`Hola, he vist la comparativa de l'assegurança de la llar (${n}). M'interessa.`,mailSub:'Assegurança de la llar'}
+ wa:n=>`Hola, he vist la comparativa de l'assegurança de la llar (${n}). M'interessa.`,mailSub:'Assegurança de la llar'},
+fr:{brand:"Assurance habitation",hi:'Bonjour',lead1:v=>`Voici la proposition d'assurance habitation pour ${v}.`,leadN:v=>`Voici la comparaison des assurances habitation pour ${v}.`,tuV:'votre logement',tuP:p=>`votre logement à ${p}`,
+ kickE:'Exemple',recT:'Notre recommandation',kpiL:'Prime annuelle totale',kpiLd:'Prime annuelle totale à partir de',recB:'Recommandée',actB:'Votre contrat actuel',propB:'Proposition',pend:'À confirmer',from:'à partir de',
+ prH1:'Votre option',prH:'Comparaison des prix',prS:'Prime annuelle totale de chaque option',perM:v=>`≈ ${v} par mois`,cheapest:'La plus économique',
+ more:(v,p)=>`${v} de plus par an${p?` (+${p} %)`:''}`,less:v=>`${v} de moins par an`,
+ usoN:a=>`Attention : ces options correspondent à des usages différents (${a}). Elles ne sont pas équivalentes : chacune couvre des risques propres à son usage, c'est pourquoi certaines couvertures n'apparaissent que dans l'une d'elles.`,
+ capH:'Capitaux assurés',capS:'Ce qui est assuré dans chaque option',cont:'Bâtiment (le logement)',cnte:'Mobilier',rcl:'Responsabilité civile',
+ capN:'Les capitaux ne coïncident pas entre les options : le prix n\'est pas tout à fait comparable.',
+ diffH:'Ce qui change entre les options',diffS:'Résumé des principales différences',only:'Elle l\'inclut, pas les autres',bestH:'Meilleure couverture',
+ nc2:'« Non indiqué » : ce document ne mentionne pas la couverture. Confirmez-le avec nous avant de décider.',same:'Il n\'y a pas de différences notables entre les options.',
+ cmpH:'Comparaison des couvertures',cmpS:'Les lignes avec des différences portent un point rouge. Touchez un bloc pour l\'ouvrir ou le fermer',onlyD:'Différences uniquement',all:'Tout voir',
+ incl:'Incluse',opt:'En option',no:'Non incluse',nc:'Non indiqué',nodif:'Il n\'y a pas de différences dans les couvertures.',
+ fn1:'Vert : meilleur chiffre parmi les options. ',
+ homeH:'Votre logement',homeS:'Les données avec lesquelles nous avons préparé la proposition. Si l\'une n\'est pas correcte, dites-le-nous',
+ hk:{cl:'Titulaire',di:'Adresse',tp:'Type de logement',m2:'Surface',an:'Année de construction',ha:'Occupants',pi:'Piscine',al:'Alarme'},yes:'Oui',nope:'Non',
+ tipsH:'Conseils pour votre logement',
+ foot:'Ce document est informatif et n\'a aucune validité contractuelle. Couvertures, limites et prime définitives : celles de la police, après validation préalable de l\'assureur. Consultez-nous pour votre cas personnalisé.',footO:' Les primes et couvertures des autres compagnies sont celles des documents qui nous ont été remis et leur lecture est indicative : le détail figure dans les conditions de chaque compagnie.',
+ cta:'Cela m\'intéresse',shH:'Nous vous aidons à le souscrire',shP:'Nous vous confirmons le prix et les conditions, sans engagement.',shCall:'<span>Appeler maintenant<small>972 42 66 65</small></span>',shMail:'Écrire un e-mail',shClose:'Fermer',
+ wa:n=>`Bonjour, j'ai vu la comparaison de l'assurance habitation (${n}). Cela m'intéresse.`,mailSub:'Assurance habitation'}
 }[L];
 
 /* ---------- datos ---------- */
@@ -535,7 +563,7 @@ let CC=(Array.isArray(D.c)?D.c:[]).slice(0,5).filter(c=>c&&typeof c==='object').
 }).filter(c=>c.o.length);
 if(!CC.length){
   /* Sin datos no se muestra nada inventado: esta pagina solo vale con un enlace del generador. */
-  const T0={es:['Falta la comparativa','Abre el enlace que te hemos enviado o escríbenos y te lo volvemos a enviar.'],ca:['Falta la comparativa',"Obre l'enllaç que t'hem enviat o escriu-nos i te'l tornem a enviar."]}[L];
+  const T0={fr:['La comparaison est introuvable','Ouvrez le lien que nous vous avons envoyé ou écrivez-nous et nous vous le renverrons.'],es:['Falta la comparativa','Abre el enlace que te hemos enviado o escríbenos y te lo volvemos a enviar.'],ca:['Falta la comparativa',"Obre l'enllaç que t'hem enviat o escriu-nos i te'l tornem a enviar."]}[L];
   document.querySelector('main').innerHTML=`<section class="card full" style="text-align:center;padding:32px 20px"><h2 style="font-size:20px;font-weight:600;margin-bottom:8px">${T0[0]}</h2><p style="color:var(--t2);margin-bottom:18px">${T0[1]}</p><a href="https://wa.me/34972426665" style="color:var(--brand);font-weight:600">WhatsApp 972 42 66 65</a></section>`;
   $('cta').style.display='none';$('foot').textContent=T.foot;
   throw new Error('sin datos');
@@ -546,7 +574,7 @@ const N=FLAT.length;
 const REC=FLAT.find(x=>x.o.r);
 const optName=o=>o.n||'';
 const logo=c=>c.k?`<span class="lgw"><i class="lg lg-${c.k}" role="img" aria-label="${esc(c.name)}"></i></span>`:`<span class="cname">${esc(c.name)}</span>`;
-const lim=v=>v===undefined||v===''||v===null?'':typeof v==='number'?cap(v):Array.isArray(v)?v[LI]:String(v);
+const lim=v=>v===undefined||v===''||v===null?'':typeof v==='number'?cap(v):Array.isArray(v)?(v[LI]??v[0]):String(v);
 const limOf=(x,i)=>lim(x.o.l[i]);
 /* valor numerico comparable: euros o porcentaje puros */
 const numOf=v=>{if(typeof v==='number')return {n:v,u:'€'};if(typeof v==='string'){const m=/^\s*(\d+(?:[.,]\d+)?)\s*%\s*$/.exec(v);if(m)return {n:parseFloat(m[1].replace(',','.')),u:'%'};}return null;};
@@ -649,7 +677,7 @@ function fmtHome(){
   const tw=who=>who?txt(who.n,60).trim():'';
   const who=PP.find(p=>String(p.r||'').includes('t'))||PP[0];
   const dir=[txt(H.di,70),txt(H.po,40)].filter(Boolean).join(' · ');
-  return [['cl',tw(who)],['di',dir],['tp',txt(H.tp,40)],['m2',H.m2?nf.format(+H.m2)+' m²':''],['an',H.an?String(H.an).replace(/\D/g,''):''],['ha',H.ha?nf.format(+H.ha):''],['pi',yn(H.pi)],['al',yn(H.al)]].filter(x=>x[1]);
+  return [['cl',tw(who)],['di',dir],['tp',(t=>/^(?:piso|pis|appartement)$/i.test(t)?['Piso','Pis','Appartement'][LI]:t)(txt(H.tp,40))],['m2',H.m2?nf.format(+H.m2)+' m²':''],['an',H.an?String(H.an).replace(/\D/g,''):''],['ha',H.ha?nf.format(+H.ha):''],['pi',yn(H.pi)],['al',yn(H.al)]].filter(x=>x[1]);
 }
 function render(){
   document.documentElement.lang=L;document.title=T.brand+' · Occident';

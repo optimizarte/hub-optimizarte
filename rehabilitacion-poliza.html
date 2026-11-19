@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rehabilitación de Póliza — OPTIMIZARTE 3.0</title>
+    <style>
+        :root {
+            --occ-red:     #DC0028;
+            --occ-red-alt: #B8001F;
+            --occ-dark:    #202020;
+            --occ-gray:    #414141;
+            --occ-gray-3:  #E7E6E6;
+            --occ-light:   #F5F5F5;
+            --occ-white:   #FFFFFF;
+            --occ-border:  #E0E0E0;
+            --occ-radius:  8px;
+            --occ-shadow:  0 2px 12px rgba(0,0,0,0.09);
+            --occ-font:    Arial, Helvetica, sans-serif;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            font-family: var(--occ-font);
+            background: var(--occ-light);
+            color: var(--occ-dark);
+            line-height: 1.5;
+            margin: 0;
+            padding: 28px 20px 48px;
+        }
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            background: var(--occ-white);
+            border-radius: var(--occ-radius);
+            box-shadow: var(--occ-shadow);
+            overflow: hidden;
+        }
+        header {
+            background: #2D2D2D;
+            color: var(--occ-white);
+            padding: 0 32px;
+            height: 56px;
+            box-shadow: 0 3px 10px rgba(0,0,0,.35);
+        }
+        .header-inner {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            height: 100%;
+        }
+        .logo-block {
+            flex-shrink: 0;
+            border-right: 1px solid rgba(255,255,255,0.15);
+            padding-right: 20px;
+        }
+        .header-text h1 {
+            margin: 0 0 2px;
+            font-family: Georgia, serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+        .header-text p {
+            margin: 0;
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.55);
+        }
+        .section-bar {
+            height: 4px;
+            background: linear-gradient(90deg, #DC0028 0%, #B8001F 100%);
+        }
+        .form-content { padding: 28px 32px 30px; }
+        fieldset {
+            border: 1px solid var(--occ-border);
+            border-radius: var(--occ-radius);
+            padding: 20px 22px 16px;
+            margin-bottom: 20px;
+            background: var(--occ-white);
+        }
+        legend {
+            font-weight: 700;
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--occ-white);
+            background: var(--occ-red);
+            padding: 4px 14px;
+            border-radius: 4px;
+            margin-left: -4px;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+        @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+        .form-group { margin-bottom: 13px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 700;
+            font-size: 0.78rem;
+            color: var(--occ-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .form-control {
+            width: 100%;
+            padding: 9px 11px;
+            border: 1px solid var(--occ-border);
+            border-radius: 5px;
+            font-family: var(--occ-font);
+            font-size: 0.9rem;
+            color: var(--occ-dark);
+            background: #FAFAFA;
+            transition: border-color .18s, box-shadow .18s, background .18s;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--occ-red);
+            box-shadow: 0 0 0 3px rgba(220,0,40,.12);
+            background: var(--occ-white);
+        }
+        /* TYPE SELECTOR TABS */
+        .type-selector {
+            display: flex;
+            margin: 14px 0 18px;
+            border: 1.5px solid var(--occ-border);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .type-pill {
+            flex: 1;
+            padding: 10px 8px;
+            border: none;
+            border-right: 1px solid var(--occ-border);
+            background: var(--occ-light);
+            color: var(--occ-gray);
+            font-family: var(--occ-font);
+            font-size: 0.83rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .15s, color .15s;
+            text-align: center;
+            letter-spacing: 0.01em;
+        }
+        .type-pill:last-child { border-right: none; }
+        .type-pill.active { background: var(--occ-red); color: #fff; }
+        .type-pill:hover:not(.active) { background: #EBEBEB; color: var(--occ-dark); }
+        /* ENTITY SUBSECTIONS */
+        .entity-section {
+            background: #FFF5F7;
+            border: 1px solid rgba(220,0,40,.18);
+            border-radius: 6px;
+            padding: 14px 16px;
+            margin-bottom: 14px;
+        }
+        .section-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(220,0,40,.3);
+            border-radius: 20px;
+            padding: 3px 11px;
+            font-size: 0.72rem;
+            color: var(--occ-red);
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        /* DIVIDER */
+        .field-divider {
+            border: none;
+            border-top: 1px solid var(--occ-border);
+            margin: 16px 0 14px;
+        }
+        /* BUTTON */
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 13px;
+            background: var(--occ-red);
+            color: #fff;
+            border: none;
+            border-radius: var(--occ-radius);
+            font-family: var(--occ-font);
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background .18s, transform .1s;
+        }
+        .btn-primary:hover { background: var(--occ-red-alt); }
+        .btn-primary:active { transform: scale(0.98); }
+        .actions { margin-top: 24px; }
+        /* FOOTER */
+        .form-footer {
+            background: var(--occ-dark);
+            padding: 13px 32px;
+            font-size: 0.74rem;
+            color: rgba(255,255,255,.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <header>
+        <div class="header-inner">
+            <div class="logo-block">
+                <div style="font-family:system-ui,sans-serif;font-size:15px;font-weight:700;letter-spacing:-.01em;color:#fff">
+                    Optimizarte
+                    <span style="font-family:Arial,sans-serif;font-size:9.5px;font-weight:500;color:#999;margin:0 3px;letter-spacing:0">by</span>
+                    <span style="font-weight:700;color:#DC0028">Occident</span>
+                </div>
+            </div>
+            <div class="header-text">
+                <h1>Generador &mdash; Solicitud de Rehabilitación de Póliza</h1>
+                <p>Código Mediador: 260963 &middot; Departamento de Emisión y Suscripción</p>
+            </div>
+        </div>
+    </header>
+    <div class="section-bar"></div>
+
+    <div class="form-content">
+        <form id="rehabilForm" onsubmit="generarEscrito(event)">
+
+            <!-- 1. DATOS DE LA PÓLIZA -->
+            <fieldset>
+                <legend>Datos de la Póliza</legend>
+                <div class="grid-2" style="margin-top:14px;">
+                    <div class="form-group">
+                        <label for="refPoliza">Referencia de Póliza</label>
+                        <input type="text" id="refPoliza" class="form-control" placeholder="Ej: 8-11.361.279-W" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ramo">Ramo / Código</label>
+                        <input type="text" id="ramo" class="form-control" placeholder="Ej: 01689 - Comercios" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="gestora">Gestora (Sucursal)</label>
+                    <input type="text" id="gestora" class="form-control" value="8-49139 OPTIMIZARTE 3.0 S.L.U. (Oficina Zona Girona)" required>
+                </div>
+            </fieldset>
+
+            <!-- 2. DATOS DEL TOMADOR -->
+            <fieldset>
+                <legend>Datos del Tomador</legend>
+
+                <div class="type-selector">
+                    <button type="button" class="type-pill active" onclick="setTipo('fisica')">&#128100; Persona Física</button>
+                    <button type="button" class="type-pill" onclick="setTipo('empresa')">&#127970; Empresa</button>
+                    <button type="button" class="type-pill" onclick="setTipo('comunidad')">&#127968; Comunidad</button>
+                </div>
+
+                <!-- PERSONA FÍSICA -->
+                <div id="section-fisica">
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="nombreFisica">Nombre y Apellidos</label>
+                            <input type="text" id="nombreFisica" class="form-control" placeholder="Nombre y apellidos completos" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nifFisica">DNI / NIF</label>
+                            <input type="text" id="nifFisica" class="form-control" placeholder="00000000X" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EMPRESA -->
+                <div id="section-empresa" style="display:none;">
+                    <div class="entity-section">
+                        <div class="section-chip">
+                            <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="12" height="10" rx="1"/><path d="M5 7h6M5 10h4"/></svg>
+                            Datos de la Empresa
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label for="razonSocial">Razón / Denominación Social</label>
+                                <input type="text" id="razonSocial" class="form-control" placeholder="Empresa S.L.">
+                            </div>
+                            <div class="form-group">
+                                <label for="cifEmpresa">CIF de la Empresa</label>
+                                <input type="text" id="cifEmpresa" class="form-control" placeholder="B12345678">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="entity-section">
+                        <div class="section-chip">
+                            <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+                            Representante
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label for="nombreRepEmpresa">Nombre y Apellidos</label>
+                                <input type="text" id="nombreRepEmpresa" class="form-control" placeholder="Nombre y apellidos">
+                            </div>
+                            <div class="form-group">
+                                <label for="dniRepEmpresa">DNI del Representante</label>
+                                <input type="text" id="dniRepEmpresa" class="form-control" placeholder="00000000X">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="calidadEmpresa">Calidad del Representante</label>
+                            <select id="calidadEmpresa" class="form-control">
+                                <option value="" disabled selected>Seleccione calidad</option>
+                                <option value="Gerente">Gerente</option>
+                                <option value="Administrador">Administrador</option>
+                                <option value="Apoderado">Apoderado</option>
+                                <option value="Director General">Director General</option>
+                                <option value="Propietario">Propietario</option>
+                                <option value="Representante">Representante</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COMUNIDAD -->
+                <div id="section-comunidad" style="display:none;">
+                    <div class="entity-section">
+                        <div class="section-chip">
+                            <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 14V8l6-5 6 5v6"/><rect x="6" y="10" width="4" height="4"/></svg>
+                            Datos de la Comunidad
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label for="denominacion">Denominación de la Comunidad</label>
+                                <input type="text" id="denominacion" class="form-control" placeholder="Comunidad C/ Ejemplo, 12">
+                            </div>
+                            <div class="form-group">
+                                <label for="cifComunidad">CIF de la Comunidad</label>
+                                <input type="text" id="cifComunidad" class="form-control" placeholder="H12345678">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="entity-section">
+                        <div class="section-chip">
+                            <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+                            Representante
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label for="nombreRepCom">Nombre y Apellidos</label>
+                                <input type="text" id="nombreRepCom" class="form-control" placeholder="Nombre y apellidos">
+                            </div>
+                            <div class="form-group">
+                                <label for="dniRepCom">DNI del Representante</label>
+                                <input type="text" id="dniRepCom" class="form-control" placeholder="00000000X">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="calidadComunidad">Calidad del Representante</label>
+                            <select id="calidadComunidad" class="form-control">
+                                <option value="" disabled selected>Seleccione calidad</option>
+                                <option value="Presidente">Presidente</option>
+                                <option value="Secretario">Secretario</option>
+                                <option value="Administrador de Fincas">Administrador de Fincas</option>
+                                <option value="Vicepresidente">Vicepresidente</option>
+                                <option value="Representante">Representante</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="field-divider">
+                <div class="form-group">
+                    <label for="localidad">Localidad</label>
+                    <input type="text" id="localidad" class="form-control" placeholder="Figueres" required>
+                </div>
+            </fieldset>
+
+            <!-- 3. FECHAS -->
+            <fieldset>
+                <legend>Fechas del Documento</legend>
+                <div class="grid-2" style="margin-top:14px;">
+                    <div class="form-group">
+                        <label for="fechaEfecto">Fecha Efecto Recibo</label>
+                        <input type="date" id="fechaEfecto" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaFirma">Fecha Firma Solicitud</label>
+                        <input type="date" id="fechaFirma" class="form-control" required>
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="actions">
+                <button type="submit" class="btn-primary">
+                    <svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right:7px;"><path d="M4 4h12v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4z"/><path d="M8 4V2h4v2"/><path d="M7 11l2 2 4-4"/></svg>
+                    Generar Vista Previa del Escrito
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="form-footer">
+        <svg viewBox="0 0 20 20" width="13" height="13" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1.8" style="flex-shrink:0"><circle cx="10" cy="10" r="8"/><path d="M10 9v5M10 7v.5"/></svg>
+        Uso interno &middot; OPTIMIZARTE 3.0 &middot; Código mediador: 260963 &middot; Documento generado localmente, sin envío de datos
+    </div>
+</div>
+
+<script>
+var tipoTomador = 'fisica';
+
+function sincRep(desde, hacia) {
+    var campos = {
+        nombre: { fisica: 'nombreFisica', empresa: 'nombreRepEmpresa', comunidad: 'nombreRepCom' },
+        dni:    { fisica: 'nifFisica',    empresa: 'dniRepEmpresa',    comunidad: 'dniRepCom'    }
+    };
+    Object.keys(campos).forEach(function(c) {
+        var valOrigen = document.getElementById(campos[c][desde]).value;
+        var destId    = campos[c][hacia];
+        if (valOrigen && !document.getElementById(destId).value) {
+            document.getElementById(destId).value = valOrigen;
+        }
+    });
+}
+
+function setTipo(tipo) {
+    // Sincronizar datos de persona física / representante al cambiar
+    if (tipoTomador !== tipo) {
+        if (tipo === 'empresa'   || tipo === 'comunidad') sincRep(tipoTomador, tipo);
+        if (tipoTomador === 'empresa' && tipo === 'comunidad') sincRep('empresa', 'comunidad');
+        if (tipoTomador === 'comunidad' && tipo === 'empresa') sincRep('comunidad', 'empresa');
+    }
+
+    tipoTomador = tipo;
+    var pills = document.querySelectorAll('.type-pill');
+    var tipos = ['fisica', 'empresa', 'comunidad'];
+    pills.forEach(function(pill, i) {
+        pill.classList.toggle('active', tipos[i] === tipo);
+    });
+    document.getElementById('section-fisica').style.display    = tipo === 'fisica'    ? '' : 'none';
+    document.getElementById('section-empresa').style.display   = tipo === 'empresa'   ? '' : 'none';
+    document.getElementById('section-comunidad').style.display = tipo === 'comunidad' ? '' : 'none';
+
+    document.getElementById('nombreFisica').required = (tipo === 'fisica');
+    document.getElementById('nifFisica').required    = (tipo === 'fisica');
+
+    ['razonSocial','cifEmpresa','nombreRepEmpresa','dniRepEmpresa','calidadEmpresa'].forEach(function(id) {
+        document.getElementById(id).required = (tipo === 'empresa');
+    });
+    ['denominacion','cifComunidad','nombreRepCom','dniRepCom','calidadComunidad'].forEach(function(id) {
+        document.getElementById(id).required = (tipo === 'comunidad');
+    });
+}
+
+function fmtShort(s) {
+    if (!s) return '';
+    var p = s.split('-');
+    return p[2] + '/' + p[1] + '/' + p[0];
+}
+
+function fmtLong(s) {
+    if (!s) return '';
+    var meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    var p = s.split('-');
+    return parseInt(p[2]) + ' de ' + meses[parseInt(p[1])-1] + ' de ' + p[0];
+}
+
+function generarEscrito(e) {
+    e.preventDefault();
+
+    var refPoliza  = document.getElementById('refPoliza').value.trim();
+    var ramo       = document.getElementById('ramo').value.trim();
+    var gestora    = document.getElementById('gestora').value.trim();
+    var localidad  = document.getElementById('localidad').value.trim();
+    var fEfecto    = document.getElementById('fechaEfecto').value;
+    var fFirma     = document.getElementById('fechaFirma').value;
+
+    var nif = '', nifFirma = '', nombreFirmante = '', p1 = '', firmaExtra = '';
+
+    if (tipoTomador === 'fisica') {
+        nombreFirmante = document.getElementById('nombreFisica').value.trim();
+        nif            = document.getElementById('nifFisica').value.trim();
+        nifFirma       = nif;
+        p1 = 'Por medio del presente escrito, me dirijo a ustedes con el fin de solicitar formalmente la <strong>rehabilitaci\u00f3n inmediata</strong> de la p\u00f3liza de referencia, la cual figura actualmente con el estado de anulada.';
+        firmaExtra = '';
+    } else if (tipoTomador === 'empresa') {
+        var rs  = document.getElementById('razonSocial').value.trim();
+        var cif = document.getElementById('cifEmpresa').value.trim();
+        var cal = document.getElementById('calidadEmpresa').value;
+        nombreFirmante = document.getElementById('nombreRepEmpresa').value.trim();
+        nifFirma       = document.getElementById('dniRepEmpresa').value.trim();
+        nif = cif;
+        p1 = 'Por medio del presente escrito, y actuando en calidad de <strong>' + cal + '</strong> de la entidad mercantil <strong>' + rs + '</strong>, con CIF <strong>' + cif + '</strong>, me dirijo a ustedes con el fin de solicitar formalmente la <strong>rehabilitaci\u00f3n inmediata</strong> de la p\u00f3liza de referencia, la cual figura actualmente con el estado de anulada.';
+        firmaExtra = '<div style="font-size:9.5pt;color:#555;margin-top:2px;">En calidad de ' + cal + ' de ' + rs + '</div>';
+    } else {
+        var den = document.getElementById('denominacion').value.trim();
+        var cif = document.getElementById('cifComunidad').value.trim();
+        var cal = document.getElementById('calidadComunidad').value;
+        nombreFirmante = document.getElementById('nombreRepCom').value.trim();
+        nifFirma       = document.getElementById('dniRepCom').value.trim();
+        nif = cif;
+        p1 = 'Por medio del presente escrito, y actuando en calidad de <strong>' + cal + '</strong> de la <strong>Comunidad de Propietarios ' + den + '</strong>, con CIF <strong>' + cif + '</strong>, me dirijo a ustedes con el fin de solicitar formalmente la <strong>rehabilitaci\u00f3n inmediata</strong> de la p\u00f3liza de referencia, la cual figura actualmente con el estado de anulada.';
+        firmaExtra = '<div style="font-size:9.5pt;color:#555;margin-top:2px;">En calidad de ' + cal + ' de Comunidad de Propietarios ' + den + '</div>';
+    }
+
+    var fEfectoFmt = fmtShort(fEfecto);
+    var fFirmaFmt  = fmtShort(fFirma);
+    var fFirmaLong = fmtLong(fFirma);
+
+    var html = '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">'
+        + '<title>Rehabilitaci\u00f3n P\u00f3liza ' + refPoliza + '</title>'
+        + '<style>'
+        + '@page { size: A4 portrait; margin: 22mm 22mm 22mm 22mm; }'
+        + '@media print {'
+        +   'body { background: white !important; }'
+        +   '.no-print { display: none !important; }'
+        +   '.wrap { max-width: 100% !important; margin: 0 !important; box-shadow: none !important; border-radius: 0 !important; }'
+        +   '.carta { padding: 0 !important; }'
+        + '}'
+        + 'body { font-family: Arial, Helvetica, sans-serif; font-size: 11pt; line-height: 1.65; color: #2a2a2a; margin: 0; padding: 0; background: #ECECEC; }'
+        + '.wrap { max-width: 700px; margin: 30px auto 40px; background: #fff; box-shadow: 0 2px 20px rgba(0,0,0,.13); border-radius: 6px; overflow: hidden; }'
+        + '.carta { padding: 42px 50px 46px; }'
+        + '.destinatario { font-weight: 700; font-size: 11pt; color: #1a1a1a; margin-bottom: 52px; }'
+        + '.meta { font-size: 11pt; line-height: 1.7; margin-bottom: 24px; color: #2a2a2a; }'
+        + '.meta strong { color: #1a1a1a; }'
+        + '.parrafo { margin-bottom: 14px; text-align: justify; font-size: 11pt; hyphens: auto; }'
+        + '.firma-box { margin-top: 30px; }'
+        + '.firma-espacio { height: 52px; }'
+        + '.firma-nombre { font-weight: 700; font-size: 11pt; }'
+        + '.firma-nif { font-size: 10.5pt; color: #2a2a2a; margin-top: 1px; }'
+        + '.firma-fecha { font-size: 11pt; margin-top: 3px; }'
+        + '.no-print { text-align: center; padding: 16px; background: #F5F5F5; border-top: 1px solid #E0E0E0; }'
+        + '.btn-print { background: #DC0028; color: #fff; border: none; padding: 10px 30px; font-family: Arial,sans-serif; font-size: 10pt; font-weight: 700; border-radius: 6px; cursor: pointer; letter-spacing: .04em; text-transform: uppercase; }'
+        + '.btn-print:hover { background: #B8001F; }'
+        + '</style></head><body>'
+        + '<div class="wrap"><div class="carta">'
+
+        + '<div class="destinatario">A / A Departamento de Emisi\u00f3n y Suscripci\u00f3n</div>'
+
+        + '<div class="meta">'
+        + '<strong>Asunto:</strong> Solicitud de rehabilitaci\u00f3n de p\u00f3liza y certificado de inexistencia de siniestros<br>'
+        + '<strong>Referencia de P\u00f3liza:</strong> ' + refPoliza + '<br>'
+        + '<strong>Ramo:</strong> ' + ramo + '<br>'
+        + '<strong>Identificador / NIF:</strong> ' + nif + '<br>'
+        + '<strong>Gestora (Sucursal):</strong> ' + gestora
+        + '</div>'
+
+        + '<div class="parrafo">Muy se\u00f1ores m\u00edos:</div>'
+
+        + '<div class="parrafo">' + p1 + '</div>'
+
+        + '<div class="parrafo">A los efectos oportunos, <strong>se certifica expresamente que no se ha producido ning\u00fan tipo de siniestro</strong> que pueda ser objeto de cobertura por la citada p\u00f3liza durante el periodo comprendido <strong>entre el ' + fEfectoFmt + ' y el ' + fFirmaFmt + '</strong>.</div>'
+
+        + '<div class="parrafo">Agradeciendo de antemano su gesti\u00f3n para regularizar esta situaci\u00f3n a la mayor brevedad posible, quedo a su disposici\u00f3n para cualquier aclaraci\u00f3n o tr\u00e1mite adicional que estimen necesario.</div>'
+
+        + '<div class="firma-box">'
+        + '<div class="parrafo">Atentamente,</div>'
+        + '<div class="firma-espacio"></div>'
+        + '<div class="firma-nombre">' + nombreFirmante + '</div>'
+        + '<div class="firma-nif">DNI: ' + nifFirma + '</div>'
+        + firmaExtra
+        + '<div class="firma-fecha">' + localidad + ', a ' + fFirmaLong + '</div>'
+        + '</div>'
+
+        + '</div>'
+        + '<div class="no-print"><button class="btn-print" onclick="window.print()">Imprimir / Guardar como PDF</button></div>'
+        + '</div></body></html>';
+
+    var w = window.open('', '_blank');
+    if (!w) { alert('Activa los pop-ups para este sitio y vuelve a intentarlo.'); return; }
+    w.document.write(html);
+    w.document.close();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementById('fechaFirma').value = today;
+    setTipo('fisica');
+});
+</script>
+</body>
+</html>

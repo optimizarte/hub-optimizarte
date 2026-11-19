@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPTIMIZARTE 3.0 — Hub d'Eines</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--red:#DC0028;--red-alt:#B8001F;--red-l:#FFF0F2;--dark:#1e1e1e;--gray:#414141;--gray-2:#BEBEBE;--gray-3:#E7E6E6;--border:#E0E0E0;--bg:#F0F0F0;--radius:8px;--shadow:0 2px 8px rgba(0,0,0,0.09);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Open Sans',Arial,sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;}
+
+/* TOPBAR */
+.topbar{height:52px;background:var(--dark);display:flex;align-items:center;justify-content:space-between;padding:0 22px;box-shadow:0 2px 8px rgba(0,0,0,.3);}
+.brand{display:flex;align-items:baseline;gap:4px;}
+.brand-opt{font-family:'Poppins',Arial,sans-serif;font-weight:800;font-size:.92rem;color:#fff;}
+.brand-by{font-size:.6rem;color:rgba(255,255,255,.35);font-style:italic;}
+.brand-occ{font-family:'Poppins',Arial,sans-serif;font-weight:800;font-size:.92rem;color:var(--red);}
+.topbar-right{text-align:right;}
+.topbar-title{font-family:'Poppins',Arial,sans-serif;font-size:.78rem;font-weight:700;color:#fff;}
+.topbar-sub{font-size:.6rem;color:rgba(255,255,255,.4);margin-top:1px;}
+.red-bar{height:3px;background:linear-gradient(90deg,var(--red),var(--red-alt));}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--dark) 0%,#2d0010 60%,#3a0015 100%);padding:36px 28px 32px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:var(--red);opacity:.06;border-radius:50%;}
+.hero::after{content:'';position:absolute;bottom:-30px;left:-30px;width:150px;height:150px;background:var(--red);opacity:.06;border-radius:50%;}
+.hero-logo{display:inline-flex;align-items:center;gap:10px;margin-bottom:16px;}
+.hero-pin{width:40px;height:40px;}
+.hero-brand{text-align:left;}
+.hero-brand-main{font-family:'Poppins',Arial,sans-serif;font-weight:800;font-size:1.7rem;color:#fff;line-height:1;letter-spacing:-.5px;}
+.hero-brand-sub{font-size:.65rem;color:rgba(255,255,255,.45);letter-spacing:1.5px;text-transform:uppercase;font-weight:500;}
+.hero-tagline{font-size:.82rem;color:rgba(255,255,255,.55);margin-bottom:8px;}
+.hero-badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px;}
+.hero-badge{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:3px;padding:3px 10px;font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.55);}
+.hero-badge.active{background:rgba(220,0,40,.2);border-color:rgba(220,0,40,.4);color:rgba(255,180,180,.9);}
+
+/* WRAP */
+.wrap{max-width:1100px;margin:0 auto;padding:28px 20px 48px;}
+
+/* SECTION PILL */
+.sec-pill{display:inline-flex;align-items:center;gap:6px;background:var(--red);color:#fff;padding:3px 12px;border-radius:4px;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:18px;}
+.sec-pill svg{width:12px;height:12px;flex-shrink:0;}
+
+/* TOOLS GRID */
+.tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px;}
+@media(max-width:860px){.tools-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:540px){.tools-grid{grid-template-columns:1fr;}}
+
+.tool-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;transition:all .2s;cursor:pointer;text-decoration:none;color:inherit;}
+.tool-card:hover{box-shadow:0 6px 20px rgba(0,0,0,.13);transform:translateY(-3px);border-color:rgba(220,0,40,.25);}
+.tool-card.new{border-color:rgba(220,0,40,.35);box-shadow:0 2px 12px rgba(220,0,40,.1);}
+
+.tc-stripe{height:4px;background:linear-gradient(90deg,var(--red),var(--red-alt));}
+.tc-stripe.stripe-blue{background:linear-gradient(90deg,#0563C1,#1d4ed8);}
+.tc-stripe.stripe-green{background:linear-gradient(90deg,#059669,#10B981);}
+.tc-stripe.stripe-amber{background:linear-gradient(90deg,#D97706,#F59E0B);}
+
+.tc-body{padding:18px 18px 14px;flex:1;}
+.tc-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;flex-shrink:0;}
+.tc-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px;}
+.tc-title{font-family:'Poppins',Arial,sans-serif;font-size:13.5px;font-weight:700;color:var(--dark);line-height:1.3;}
+.tc-badge{font-size:8.5px;font-weight:700;padding:2px 7px;border-radius:3px;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+.badge-new{background:rgba(220,0,40,.1);color:var(--red);border:1px solid rgba(220,0,40,.2);}
+.badge-ok{background:rgba(5,150,105,.1);color:#059669;border:1px solid rgba(5,150,105,.2);}
+.tc-desc{font-size:11.5px;color:var(--gray);line-height:1.5;}
+
+.tc-footer{border-top:1px solid var(--border);padding:10px 18px;display:flex;align-items:center;justify-content:space-between;background:#FAFAFA;}
+.tc-lang{font-size:9.5px;color:var(--gray-2);font-weight:600;letter-spacing:.3px;}
+.tc-arrow{width:22px;height:22px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .18s;}
+.tool-card:hover .tc-arrow{transform:translateX(3px);}
+.tc-arrow svg{width:11px;height:11px;}
+
+/* INFO STRIP */
+.info-strip{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;display:flex;align-items:center;gap:12px;font-size:11.5px;color:var(--gray);box-shadow:var(--shadow);}
+.info-strip svg{width:18px;height:18px;color:var(--red);flex-shrink:0;}
+.info-strip strong{color:var(--dark);}
+
+/* FOOTER */
+.footer-bar{background:var(--dark);color:rgba(255,255,255,.38);font-size:.62rem;text-align:center;padding:10px 22px;}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="brand">
+    <span class="brand-opt">Optimizarte</span>
+    <span class="brand-by">by</span>
+    <span class="brand-occ">Occident</span>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-title">Hub d'Eines Internes</div>
+    <div class="topbar-sub">Agència 17167 · SEGM5 OAG</div>
+  </div>
+</div>
+<div class="red-bar"></div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-logo">
+    <svg class="hero-pin" viewBox="0 0 40 50" xmlns="http://www.w3.org/2000/svg">
+      <defs><filter id="ps" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,.4)"/></filter></defs>
+      <path d="M20 2C11.2 2 4 9.2 4 18C4 29 20 48 20 48C20 48 36 29 36 18C36 9.2 28.8 2 20 2Z" fill="#DC0028" filter="url(#ps)"/>
+      <circle cx="20" cy="18" r="7" fill="none" stroke="white" stroke-width="2.5"/>
+      <circle cx="20" cy="18" r="3" fill="white"/>
+    </svg>
+    <div class="hero-brand">
+      <div class="hero-brand-main">OPTIMIZART€</div>
+      <div class="hero-brand-sub">by Occident · Agència 17167</div>
+    </div>
+  </div>
+  <p class="hero-tagline">Eines de gestió interna — Pòlisses · Comercial · Anàlisi</p>
+  <div class="hero-badges">
+    <span class="hero-badge active">3 eines actives</span>
+    <span class="hero-badge">Mediador 17167</span>
+    <span class="hero-badge">SEGM5 OAG</span>
+    <span class="hero-badge">Ús intern</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="sec-pill">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Eines disponibles
+  </div>
+
+  <div class="tools-grid">
+
+    <!-- EINA 1: Calendari de Pagaments -->
+    <a class="tool-card" href="CalendarioPagosPolizas_Occident.html">
+      <div class="tc-stripe"></div>
+      <div class="tc-body">
+        <div class="tc-icon" style="background:rgba(220,0,40,.08);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#DC0028" stroke-width="1.8" stroke-linecap="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/>
+          </svg>
+        </div>
+        <div class="tc-header">
+          <div class="tc-title">Calendari de Pagaments de Pòlisses</div>
+          <span class="tc-badge badge-ok">Actiu</span>
+        </div>
+        <p class="tc-desc">Genera el quadre de distribució mensual de primes per als teus clients. Suport multiidioma: CA · ES · FR · EN · AR (RTL).</p>
+      </div>
+      <div class="tc-footer">
+        <span class="tc-lang">CA · ES · FR · EN · AR</span>
+        <div class="tc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </a>
+
+    <!-- EINA 2: Generador Canvi de Mediador -->
+    <a class="tool-card" href="GENERA_1.HTM">
+      <div class="tc-stripe stripe-blue"></div>
+      <div class="tc-body">
+        <div class="tc-icon" style="background:rgba(5,99,193,.08);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0563C1" stroke-width="1.8" stroke-linecap="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </div>
+        <div class="tc-header">
+          <div class="tc-title">Generador de Carta de Canvi de Mediador</div>
+          <span class="tc-badge badge-ok">Actiu</span>
+        </div>
+        <p class="tc-desc">Genera la sol·licitud formal de canvi de mediació per a Occident. Suport per a persona física i persona jurídica.</p>
+      </div>
+      <div class="tc-footer">
+        <span class="tc-lang">ES · Impressió A4</span>
+        <div class="tc-arrow" style="background:#0563C1"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </a>
+
+    <!-- EINA 3: Comparador Plans de Pensions (NOU) -->
+    <a class="tool-card new" href="comparador_plans_pensions.html">
+      <div class="tc-stripe stripe-amber"></div>
+      <div class="tc-body">
+        <div class="tc-icon" style="background:rgba(217,119,6,.08);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="1.8" stroke-linecap="round">
+            <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+        </div>
+        <div class="tc-header">
+          <div class="tc-title">Comparador de Plans de Pensions</div>
+          <span class="tc-badge badge-new">Nou</span>
+        </div>
+        <p class="tc-desc">Compara els 5 plans Occident amb qualsevol dels 762 plans INVERCO. Rendibilitats anualitzades a 30, 20, 15, 10, 5 i 1 any. Dades Agost 2026.</p>
+      </div>
+      <div class="tc-footer">
+        <span class="tc-lang">762 plans · INVERCO Agost 2026</span>
+        <div class="tc-arrow" style="background:#D97706"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- INFO STRIP -->
+  <div class="info-strip">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <span>Totes les eines funcionen <strong>localment al teu navegador</strong> — sense enviament de dades. Guarda sempre els fitxers amb el botó de l'eina (no amb "Desar pàgina" del navegador).</span>
+  </div>
+
+</div>
+
+<div class="footer-bar">OPTIMIZARTE 3.0 · Mediador Occident 17167 · SEGM5 OAG · Eines d'ús intern · sense enviament de dades</div>
+
+</body>
+</html>

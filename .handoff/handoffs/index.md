@@ -1,0 +1,1 @@
+2026-10-24T00:46:40.433Z | anagan, seguimiento-cartera, api connector, tesis broker, clients-seed, actualizar-anagan, polizas, hub-optimizarte, occident, jwt token | Integrate ANAGAN client contact data into seguimiento-cartera-anagan.html (547KB self-contained HTML app). App had polic | 2026-10-24/handoff-2026-10-24T00-46-40-433Z.md

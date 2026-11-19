@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-24T00:46:40.433Z",
+  "project": "HUB-OPTIMIZARTE",
+  "session": "cd03b569",
+  "headline": "Integrate ANAGAN client contact data into seguimiento-cartera-anagan.html (547KB self-contained HTML app). App had polic",
+  "summary": "Session split across two context windows. First half: explored seguimiento-cartera-anagan.html structure, read Excel export (733 clients, ID column empty), discovered ANAGAN portal at anagan.app.tesis.io backed by api.tesis.io REST API via DevTools. Second half: built PowerShell script Actualizar-ANAGAN.ps1, modified HTML to support clients-seed block, ran live API download (733 clients, 732 NIF, 673 tel, 634 email), injected 150KB JSON into HTML. App now shows NIF/phone/email/address in renderFicha() per client.",
+  "taskDescription": "Integrate ANAGAN client contact data into seguimiento-cartera-anagan.html (547KB self-contained HTML app). App had policy/cartera seed data but lacked client contact info (NIF, phone, email, address). Built API connector to https://api.tesis.io/v2/ (Tesis Broker Manager REST API) to download 733 clients and inject contact data into HTML. Matters because app is live cartera management tool used daily by insurance agency.",
+  "currentStatus": "DONE. 733 clients downloaded and injected into HTML clients-seed block. renderFicha() modified to show contact data. Button '🔄 Actualizar ANAGAN' added to toolbar with modal instructions. Actualizar-ANAGAN.ps1 script created for future refreshes. Token expires ~12h from session — user needs fresh token next time.",
+  "keyDecisions": [
+    "Decision: API connector (Camino B) over name-based Excel matching — Reason: Excel ID column empty for all 733 rows, name matching ~85-90% accuracy insufficient, direct API access confirmed available",
+    "Decision: PowerShell script updates HTML file directly instead of in-page fetch — Reason: HTML served from file:// origin, API CORS only permits https://anagan.app.tesis.io, browser fetch would be blocked",
+    "Decision: Inject client data as separate <script id='clients-seed'> block alongside existing <script id='seed'> — Reason: preserves existing save/export flow unmodified, easy to update independently",
+    "Decision: Limit=50 with 15 pages for API pagination — Reason: API returns wrapper {items, total, totalPages} not bare array; 50 items/page balances speed and server load",
+    "Decision: Fields extracted: id, nif, tomador, telefonoMovil/telefonoPrincipal (first non-empty), email, direccionCompletaFiscal, localidad, provincia, cp, tipoDocumento — Reason: confirmed present in API response via field inspection"
+  ],
+  "userContribution": null,
+  "userDecisions": [
+    {
+      "decision": "Chose API connector (Camino B) over manual Excel import with name matching",
+      "reason": "User proposed exploring ANAGAN web portal and evaluating API connector after discovering Excel ID column was empty",
+      "alternativesRejected": "Camino A (re-export with ID filled), name-based matching (~85-90% accuracy)"
+    },
+    {
+      "decision": "Provided JWT Bearer token directly from Edge DevTools",
+      "reason": "User had ANAGAN portal open and logged in, copied Authorization header from Network tab Request Headers",
+      "alternativesRejected": "Script-prompted interactive Read-Host entry"
+    }
+  ],
+  "failedApproaches": [
+    "Approach: $($_.Exception.Message) inside PS string literals → Result: ParseException 'variable reference not valid, : not followed by valid variable name char' → Lesson: Extract to temp var ($errMsg = $_.Exception.Message) before interpolating in PS5.1 strings",
+    "Approach: Iterate directly over $resp from Invoke-RestMethod → Result: got pagination envelope object instead of client array → Lesson: API wraps results in {items:[], total:N, totalPages:N}, must use $resp.items",
+    "Approach: Pass full JWT token inline in long PowerShell command string → Result: token silently truncated/corrupted mid-string, causing 401 Unauthorized → Lesson: Assign JWT to $t1 variable first, then build $token = 'Bearer $t1' separately",
+    "Approach: gstack browse skill (headless Chromium) for web browsing → Result: Server failed to start within 15s on Windows environment → Lesson: Use computer-use screenshot of Edge DevTools instead on this Windows machine"
+  ],
+  "blockers": null,
+  "modifiedFiles": [
+    "!!!APPS/seguimiento-cartera-anagan.html: Added CLIENTS_DATA map (reads clients-seed block), enriched buildMeta() to merge NIF/tel/email/dir into CLIENTS map, extended renderFicha() to display contact row with phone/email/address links + ANAGAN timestamp, added '🔄 Actualizar ANAGAN' button to toolbar with modal handler",
+    "!!!APPS/Actualizar-ANAGAN.ps1: NEW — PowerShell script that authenticates to api.tesis.io with Bearer token, downloads all clients via listadoClientes (paginated, $resp.items), builds compact JSON, injects into HTML clients-seed block"
+  ],
+  "implicitRules": [
+    "App is a single self-contained HTML file — all state lives in embedded JSON seed blocks, no external dependencies except Google Fonts and XLSX.js CDN",
+    "API base: https://api.tesis.io/v2/ — CORS origin: https://anagan.app.tesis.io — Auth: Bearer JWT in Authorization header",
+    "JWT token expires in ~12 hours (exp - iat = 43200s); iat/exp are Unix timestamps in the payload",
+    "API pagination: GET /listadoClientes?grupos=...&page=N&limit=50 returns {items:[], total:733, totalPages:15, ...}",
+    "GET /countClientes returns {total:733, totalPages:N} — use for preflight count",
+    "Client ID in seed data: a[0] (field 'id') matches API response field 'id' exactly — this is the join key",
+    "Seed rawRows format: [id, cia, ef, vt, ramo, tom, rie, colid, col, tipo, sub, prima, est, pol, dni]",
+    "Hub conventions: catalan language, DM Sans font, #DC0028 red, #202020 dark, no external deps",
+    "Windows environment — Python unavailable, use PowerShell COM or Invoke-RestMethod for data tasks",
+    "gstack browse skill (headless Chromium) does not work on this Windows machine — use computer-use screenshot of Edge instead"
+  ],
+  "nextSteps": [
+    "Open seguimiento-cartera-anagan.html in browser, click a client, verify ficha shows NIF/phone/email/address with ANAGAN timestamp",
+    "When JWT expires (~12h from session), re-copy Authorization header from DevTools and re-run Actualizar-ANAGAN.ps1 with new token",
+    "Optionally explore polizas refresh: GET https://api.tesis.io/v2/polizas to keep cartera seed data fresh (endpoint confirmed visible in DevTools when navigating to polizas section)",
+    "Consider adding README.md in !!!APPS/ documenting token renewal process and script usage",
+    "Consider improving Actualizar-ANAGAN.ps1 JSON serialization: replace manual EscJson string builder with per-field ConvertTo-Json -Compress for robustness with special chars"
+  ],
+  "keywords": [
+    "anagan",
+    "seguimiento-cartera",
+    "api connector",
+    "tesis broker",
+    "clients-seed",
+    "actualizar-anagan",
+    "polizas",
+    "hub-optimizarte",
+    "occident",
+    "jwt token"
+  ]
+}

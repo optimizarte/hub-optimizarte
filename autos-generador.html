@@ -79,6 +79,7 @@ textarea{min-height:92px;resize:vertical;line-height:1.45}
 .phone iframe{display:block;width:100%;height:740px;border:0;border-radius:24px;background:#fff}
 .phone .cap{color:rgba(255,255,255,.55);font-size:11px;text-align:center;margin-top:8px}
 .hint{font-size:11.5px;color:var(--t3);margin-top:6px}
+#pdfBox{margin-top:12px;border-top:1px dashed var(--br);padding-top:12px}#pdfList{display:flex;flex-direction:column;gap:6px;margin-top:8px}#pdfList .pf{background:var(--bg3);border:1px solid var(--br);border-radius:var(--radius);padding:6px 10px;font-size:12.5px}#pdfList .pf small{color:var(--t3);margin-left:6px}#pdfBox .ck{white-space:normal}#pdfList .ck{background:none;border:0;padding:0}#pdfList .al{margin-top:6px;padding:5px 9px;font-size:12px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--t1);color:#fff;padding:10px 18px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:.25s}.toast.on{opacity:1}
 @media print{#hdr,.phone{display:none}}
 .i-autos{background-image:url(data:image/png;base64,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)}
@@ -154,6 +155,11 @@ textarea{min-height:92px;resize:vertical;line-height:1.45}
         <span class="lbl">Enllaç curt · és el que s'envia al client</span>
         <div class="link"><input type="text" id="shorturl" readonly placeholder="Encara no l'has creat"><button class="btn pri" id="mkShort">Crear enllaç curt</button><button class="btn" id="cushort">Copiar</button></div>
         <div class="hint" id="shortHint">Les dades es xifren en aquest navegador i caduquen als 75 dies. Si canvies alguna dada, caldrà crear-lo de nou.</div>
+        <div id="pdfBox">
+          <label class="ck"><input type="checkbox" id="pdfOn">Afegir al final un card amb els PDF originals de la companyia</label>
+          <div id="pdfList"></div>
+          <div class="hint">Els PDF es xifren en aquest navegador com la resta de dades i caduquen igual. El client els veu tal com són: revisa els avisos. La vista prèvia de la dreta no mostra aquest card.</div>
+        </div>
       </div>
       <span class="lbl" id="urlLbl">Enllaç per al client · una sola versió que s'adapta sola a mòbil i PC</span>
       <div class="link"><input type="text" id="url" readonly><button class="btn pri" id="cu">Copiar</button><a class="btn" id="open" target="_blank" rel="noopener">Obrir</a></div>
@@ -303,7 +309,7 @@ const LVN={t:'Tercers',a:'Tercers ampliat',r:'Tot risc'};
 const stOf=c=>c.split('');
 let nextId=1;
 const newOffer=x=>Object.assign({id:nextId++,k:'occident',n:'',val:'m',m:'f',name:'',q:'',pq:'',d:0,p:0,f:'',g:'',st:ROWS.map(()=>'u'),l:{},am:0,dd:0,dx:[],dn:[],apx:[],stx:[],n3:0,nt:'',show:true,ord:0,rec:false,flags:[],sig:'',src:'',open:false},x);
-const S={l:'es',v:{us:'p'},p:[{r:{t:true,p:true,h:true,o:false},n:'',po:'',cp:'',fn:'',fc:'',doc:''}],offers:[],files:[],conf:[],alerts:[],tel:'',short:''};
+const S={l:'es',v:{us:'p'},p:[{r:{t:true,p:true,h:true,o:false},n:'',po:'',cp:'',fn:'',fc:'',doc:''}],offers:[],files:[],pdf:false,conf:[],alerts:[],tel:'',short:''};
 const num=s=>{s=String(s==null?'':s).replace(/[\s€]/g,'');if(s.includes(','))s=s.replace(/\./g,'').replace(',','.');const v=parseFloat(s);return isFinite(v)&&v>0?v:NaN;};
 const fm=(v,l)=>new Intl.NumberFormat(l==='ca'?'ca-ES':'es-ES',{style:'currency',currency:'EUR',minimumFractionDigits:2,maximumFractionDigits:2,useGrouping:'always'}).format(v);
 const nStr=v=>{if(!isFinite(v))return '';return String(v).replace('.',',');};
@@ -732,7 +738,7 @@ function drawOffers(){
   const sum=shownSorted();
   $('offers').innerHTML=(sum.length?`<div class="ordsum"><b>Ordre d'enviament</b>${sum.map(o=>`<span>${o.ord}. ${o.rec?'★ ':''}${eh(ciaName(o)||'?')} · ${eh(o.name||MODCA[o.m])}</span>`).join('')}</div>`:'')+lv.map(l=>{const of=S.offers.filter(o=>MOD[o.m].lv===l);const sh=of.filter(o=>o.show).length;return `<div class="lvh">${LVN[l]}<small>${sh} de ${of.length} es mostren</small></div>${of.map(offerHtml).join('')}`;}).join('')||'<div class="hint">Importa un projecte o afegeix una oferta a mà.</div>';
 }
-const redraw=()=>{drawFiles();drawConf();drawVeh();drawPeople();drawOffers();dirty();};
+const redraw=()=>{drawFiles();if(SHORT_API)drawPdf();drawConf();drawVeh();drawPeople();drawOffers();dirty();};
 
 /* ================= ENLLAÇ ================= */
 function b64(o){const by=new TextEncoder().encode(JSON.stringify(o));let s='';by.forEach(x=>s+=String.fromCharCode(x));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
@@ -768,18 +774,71 @@ async function seal(obj,id,keyBytes){
   const c=await crypto.subtle.encrypt({name:'AES-GCM',iv,additionalData:utf8(id)},aes,utf8(JSON.stringify(obj)));
   return {c:b64u(new Uint8Array(c)),iv:b64u(iv)};
 }
+/* PDF originals: nomes amb enllac curt. Es xifren amb la mateixa clau i es pugen a trossos abans que l'enllac */
+const PDF_MAX=15*1024*1024,PART=1500000;
+function pdfWarn(t){
+  const w=[];
+  if(/\b(\d{8}|[XYZ]\d{7})[ -]?[A-HJ-NP-TV-Z]\b/.test(t))w.push('Conté un NIF o NIE.');
+  const tel=(t.match(/(?:\+34[\s.]?)?\b[6789]\d{2}[\s.]?\d{2,3}[\s.]?\d{2,3}[\s.]?\d{0,2}\b/g)||[]).map(x=>x.replace(/\D/g,'').slice(-9)).filter(x=>x.length===9&&x!=='972426665');
+  if(tel.length)w.push('Conté un número de telèfon.');
+  if(/otras ofertas/i.test(t))w.push('Inclou «Otras ofertas disponibles», que potser no ensenyes a la pàgina.');
+  if(/comisi[oó]n/i.test(t))w.push('Parla de comissions.');
+  return w;
+}
+const pdfOk=()=>S.files.filter(f=>f.file&&f.res&&f.res.type);
+const pdfSel=()=>S.pdf?pdfOk().filter(f=>f.inc):[];
+const kb=n=>n>=1048576?(n/1048576).toFixed(1).replace('.',',')+' MB':Math.max(1,Math.round(n/1024))+' KB';
+function drawPdf(){
+  const ok=pdfOk();
+  $('pdfOn').checked=S.pdf;$('pdfOn').disabled=!ok.length;
+  const tot=pdfSel().reduce((a,f)=>a+f.size,0);
+  $('pdfList').innerHTML=!S.pdf?'':!ok.length?'<div class="hint">Primer importa algun projecte.</div>':ok.map(f=>`<div class="pf"><label class="ck"><input type="checkbox" data-pf="${S.files.indexOf(f)}"${f.inc?' checked':''}>${eh(f.name)}<small>${kb(f.size)}</small></label>${f.inc?f.warn.map(w=>`<div class="al">${eh(w)}</div>`).join(''):''}</div>`).join('')
+    +(tot>PDF_MAX?`<div class="al err">Massa pes (${kb(tot)}): el màxim és ${kb(PDF_MAX)}.</div>`:'');
+}
+async function aesKey(keyBytes,use){
+  const utf8=x=>new TextEncoder().encode(x);
+  const k=await crypto.subtle.importKey('raw',keyBytes,'HKDF',false,['deriveKey']);
+  return crypto.subtle.deriveKey({name:'HKDF',hash:'SHA-256',salt:new Uint8Array(0),info:utf8('oferta-v1')},k,{name:'AES-GCM',length:256},false,[use]);
+}
+async function sealPdfs(list,id,keyBytes){
+  const aes=await aesKey(keyBytes,'encrypt'),parts=[],meta=[];
+  const occ=list.filter(f=>f.res.type==='occident').length,av=list.length-occ;let no=0,na=0;
+  for(const f of list){
+    const i=meta.length,iv=crypto.getRandomValues(new Uint8Array(12));
+    const c=b64u(new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv,additionalData:new TextEncoder().encode(id+'/f'+i)},aes,await f.file.arrayBuffer())));
+    const a=parts.length;for(let x=0;x<c.length;x+=PART)parts.push(c.slice(x,x+PART));
+    const t=f.res.type==='occident'?'o':'a',n=t==='o'?(occ>1?++no:0):(av>1?++na:0);
+    meta.push({t,n,s:f.size,iv:b64u(iv),a,k:parts.length-a});
+  }
+  return {parts,meta};
+}
 async function makeShort(){
   const btn=$('mkShort');
   if($('warn').textContent){toast('Primer corregeix el que falta');return;}
   btn.disabled=true;btn.textContent='Creant…';
   try{
-    const key=crypto.getRandomValues(new Uint8Array(12));
+    const key=crypto.getRandomValues(new Uint8Array(12)),sel=pdfSel();
+    if(sel.reduce((a,f)=>a+f.size,0)>PDF_MAX)throw new Error('Els PDF pesen massa');
+    const fail=r=>new Error(r.status===403?'Aquest compte no pot crear enllaços':r.status===401||r.type==='opaqueredirect'?'Cal tornar a iniciar sessió':'Error '+r.status);
     for(let i=0;i<3;i++){
       const id=randId();
-      const r=await fetch(SHORT_API+'/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(await seal({l:S.l,d:payload()},id,key)),redirect:'manual'});
+      let f=null,taken=false;
+      if(sel.length){
+        btn.textContent='Xifrant PDF…';
+        f=await sealPdfs(sel,id,key);
+        for(let k=0;k<f.parts.length;k++){
+          btn.textContent=`Pujant PDF ${k+1}/${f.parts.length}…`;
+          const r=await fetch(`${SHORT_API}/${id}/p/${k}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({c:f.parts[k]}),redirect:'manual'});
+          if(r.status===409&&k===0){taken=true;break;}
+          if(r.status!==201)throw fail(r);
+        }
+        if(taken)continue;
+        btn.textContent='Creant…';
+      }
+      const r=await fetch(SHORT_API+'/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(await seal(f?{l:S.l,p:'autos',d:payload(),f:f.meta}:{l:S.l,p:'autos',d:payload()},id,key)),redirect:'manual'});
       if(r.status===409)continue;
       if(r.status===201){S.short=`${location.origin}/${S.l==='ca'?'c/':''}${id}#${b64u(key)}`;$('msg').dataset.edited='';build();toast('Enllaç curt creat ✓');return;}
-      throw new Error(r.status===403?'Aquest compte no pot crear enllaços':r.status===401||r.type==='opaqueredirect'?'Cal tornar a iniciar sessió':'Error '+r.status);
+      throw fail(r);
     }
     throw new Error('Torna-ho a provar');
   }catch(e){toast((e.message||'Error')+'. Pots enviar l\'enllaç llarg.');}
@@ -834,7 +893,7 @@ async function addFiles(list){
   for(const file of files){
     if(S.files.some(f=>f.name===file.name&&f.size===file.size))continue;
     const f={name:file.name,size:file.size,busy:true};S.files.push(f);drawFiles();
-    try{f.res=parseFile(await readPdf(file),file.name);}catch(e){console.error(e);f.err='No s\'ha pogut llegir el PDF';}
+    try{const pg=await readPdf(file);f.res=parseFile(pg,file.name);f.file=file;f.inc=true;f.warn=pdfWarn(pg.flatMap(x=>x.items.map(t=>t.s)).join(' '));}catch(e){console.error(e);f.err='No s\'ha pogut llegir el PDF';}
     f.busy=false;
     merge();redraw();
   }
@@ -882,9 +941,75 @@ $('offers').addEventListener('click',e=>{const t=e.target,o=offerOf(t);if(!o)ret
 $('addO').onclick=()=>{S.offers.push(newOffer({k:'',n:'',val:'v',m:'f',cat:'',st:ROWS.map(()=>'u'),ord:shownSorted().length+1}));drawOffers();dirty();};
 $('tel').addEventListener('input',e=>{S.tel=e.target.value;setWa($('url').value==='');});
 $('msg').addEventListener('input',()=>{$('msg').dataset.edited='1';setWa($('url').value==='');});
-if(SHORT_API){$('mkShort').onclick=makeShort;$('cushort').onclick=()=>copy($('shorturl').value);}
+if(SHORT_API){$('mkShort').onclick=makeShort;$('cushort').onclick=()=>copy($('shorturl').value);
+  $('pdfOn').onchange=e=>{S.pdf=e.target.checked;drawPdf();dirty();};
+  $('pdfList').addEventListener('change',e=>{const i=e.target.dataset.pf;if(i===undefined)return;S.files[+i].inc=e.target.checked;drawPdf();dirty();});
+  drawPdf();}
 $('cu').onclick=()=>copy($('url').value);$('cm').onclick=()=>copy($('msg').value);
 drawFiles();drawConf();drawVeh();drawPeople();drawOffers();build();
+</script>
+<script>
+/* Calendari OPTICRM per als <input type="date"> del generador (19/11/2026).
+   Copia fidel de PATCH-DATEPICK + PATCH-OFERTES-F13 + PATCH-CAL-MAN-v1 de l'app.js d'OPTICRM (només llegit), sense
+   el que aquí no cal (shadow root SR i files d'hora). Fila de baix: [Esborrar] [dd/mm/aaaa] [Avui]; res a dalt.
+   Comportament: el cursor ja és al camp en obrir; Enter valida (dd/mm/aaaa, també amb - . o espai); Esc tanca;
+   vora vermella si la data no és vàlida. Si OPTICRM canvia el calendari, s'ha de tornar a copiar d'allà. */
+(function(){
+  var MES=['Gener','Febrer','Març','Abril','Maig','Juny','Juliol','Agost','Setembre','Octubre','Novembre','Desembre'],DS=['Dl','Dt','Dc','Dj','Dv','Ds','Dg'];
+  var CSS='input[type=date]::-webkit-calendar-picker-indicator{display:none}input[type=date]{cursor:pointer}'+
+    '.dpk{position:fixed;z-index:2147483000;width:268px;background:#fff;border:1px solid #E7E5DF;border-radius:14px;box-shadow:0 14px 34px rgba(0,0,0,.18);padding:12px 12px 10px;font-family:Inter,"Segoe UI",system-ui,sans-serif;color:#1D1E24;animation:dpkIn .14s ease-out}'+
+    /* el generador posa box-sizing:border-box i un halo als inputs: aqui es neutralitza per quedar igual que OPTICRM */'.dpk{box-sizing:content-box}.dpk .dpk-in:focus{box-shadow:none}'+
+    '@keyframes dpkIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}'+
+    '.dpk-in{width:100%;box-sizing:border-box;border:1px solid #E7E5DF;border-radius:8px;padding:6px 8px;margin-bottom:8px;font:600 13px Inter,"Segoe UI",system-ui,sans-serif;color:#1D1E24;outline:none;background:#fff}.dpk-in:focus{border-color:#bb1c33}.dpk-f{align-items:center}.dpk-f .dpk-in{flex:1;min-width:0;width:auto;margin:0;padding:4px 6px;font-size:12.5px;text-align:center;border-radius:999px}'+
+    '.dpk-h{display:flex;align-items:center;gap:6px;margin-bottom:8px}.dpk-t{flex:1;text-align:center;font-weight:700;font-size:13.5px}'+
+    '.dpk-n{width:28px;height:28px;border-radius:999px;border:1px solid #E7E5DF;background:#fff;cursor:pointer;font-size:14px;color:#55565E;display:grid;place-items:center;padding:0}.dpk-n:hover{border-color:#bb1c33;color:#bb1c33}'+
+    '.dpk-g{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}.dpk-w{font-size:10px;font-weight:700;color:#A3A4AB;text-align:center;padding:3px 0;text-transform:uppercase}'+
+    '.dpk-d{height:32px;border:none;background:transparent;border-radius:9px;font-size:12.5px;font-weight:600;color:#1D1E24;cursor:pointer;font-family:inherit;padding:0}.dpk-d:hover{background:#F4F3EF}'+
+    '.dpk-d.o{color:#C9CACF}.dpk-d.we{color:#8A8B93}.dpk-d.td{box-shadow:inset 0 0 0 1.5px #bb1c33;color:#bb1c33}.dpk-d.sel{background:#bb1c33;color:#fff;box-shadow:none}'+
+    '.dpk-f{display:flex;gap:6px;justify-content:space-between;margin-top:9px;padding-top:9px;border-top:1px solid #F1EFEA}'+
+    '.dpk-b{border:1px solid #E7E5DF;background:#fff;border-radius:999px;padding:5px 12px;font-size:11.5px;font-weight:700;cursor:pointer;color:#55565E;font-family:inherit}.dpk-b:hover{border-color:#bb1c33;color:#bb1c33}.dpk-b.p{background:#bb1c33;border-color:#bb1c33;color:#fff}';
+  var cur=null;
+  var st=document.createElement('style');st.textContent=CSS;document.head.appendChild(st);
+  function iso(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
+  function parse(v){var m=String(v||'').match(/^(\d{4})-(\d{2})-(\d{2})/);return m?new Date(+m[1],m[2]-1,+m[3]):null;}
+  function close(){if(cur){cur.el.remove();document.removeEventListener('mousedown',cur.out,true);cur=null;}}
+  function set(inp,v){try{Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(inp,v);}catch(e){inp.value=v;}
+    ['input','change'].forEach(function(t){inp.dispatchEvent(new Event(t,{bubbles:true}));});}
+  function open(inp){
+    close();if(!inp||inp.disabled||inp.readOnly)return;
+    var sel=parse(inp.value),view=sel?new Date(sel.getFullYear(),sel.getMonth(),1):new Date(new Date().getFullYear(),new Date().getMonth(),1);
+    var el=document.createElement('div');el.className='dpk';document.body.appendChild(el);
+    function draw(){
+      var y=view.getFullYear(),m=view.getMonth(),first=(new Date(y,m,1).getDay()+6)%7,start=new Date(y,m,1-first),t=new Date();t.setHours(0,0,0,0);
+      var cmIn='<input type="text" class="dpk-in" inputmode="numeric" autocomplete="off" placeholder="dd/mm/aaaa" title="Escriu la data completa i prem Enter" value="'+(sel?('0'+sel.getDate()).slice(-2)+'/'+('0'+(sel.getMonth()+1)).slice(-2)+'/'+sel.getFullYear():'')+'">';
+      var h='<div class="dpk-h"><button type="button" class="dpk-n" data-nv="-12" title="12 mesos enrere">«</button><button type="button" class="dpk-n" data-nv="-1">‹</button><div class="dpk-t">'+MES[m]+' '+y+'</div><button type="button" class="dpk-n" data-nv="1">›</button><button type="button" class="dpk-n" data-nv="12" title="12 mesos endavant">»</button></div><div class="dpk-g">';
+      DS.forEach(function(d){h+='<div class="dpk-w">'+d+'</div>';});
+      for(var i=0;i<42;i++){var d=new Date(start);d.setDate(start.getDate()+i);var c='dpk-d'+(d.getMonth()!==m?' o':'')+(i%7>4?' we':'')+(+d===+t?' td':'')+(sel&&+d===+sel?' sel':'');h+='<button type="button" class="'+c+'" data-d="'+iso(d)+'">'+d.getDate()+'</button>';}
+      h+='</div><div class="dpk-f"><button type="button" class="dpk-b" data-x="clr">Esborrar</button>'+cmIn+'<button type="button" class="dpk-b p" data-x="tod">Avui</button></div>';
+      el.innerHTML=h;
+    }
+    draw();
+    var pd=function(v){var m=String(v||'').trim().match(/^(\d{1,2})[\/\-.\s](\d{1,2})[\/\-.\s](\d{4})$/);if(!m)return null;var dd=+m[1],mo=+m[2],yy=+m[3];var d=new Date(yy,mo-1,dd);return(d.getFullYear()===yy&&d.getMonth()===mo-1&&d.getDate()===dd)?d:null;};
+    var okR=function(d){var v=iso(d);if(inp.min&&v<inp.min)return false;if(inp.max&&v>inp.max)return false;return true;};
+    el.addEventListener('keydown',function(e){var t=e.target;if(!t.classList||!t.classList.contains('dpk-in'))return;if(e.key==='Tab')return;e.stopPropagation();if(e.key==='Enter'){e.preventDefault();var d=pd(t.value);if(d&&okR(d)){set(inp,iso(d));close();}else{t.style.borderColor='#DC0028';}}else if(e.key==='Escape'){close();}});
+    el.addEventListener('input',function(e){var t=e.target;if(!t.classList||!t.classList.contains('dpk-in'))return;t.style.borderColor='';});
+    setTimeout(function(){var ae=document.activeElement;if(ae&&ae!==inp&&/^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName))return;var ti=el.querySelector('.dpk-in');if(ti){ti.focus();ti.select();}},0);
+    var r=inp.getBoundingClientRect(),W=window.innerWidth,H=window.innerHeight,eh=el.offsetHeight||330;
+    el.style.left=Math.max(8,Math.min(r.left,W-276))+'px';el.style.top=(r.bottom+6+eh>H?Math.max(8,r.top-eh-6):r.bottom+6)+'px';
+    el.addEventListener('mousedown',function(e){e.stopPropagation();});
+    el.addEventListener('click',function(e){e.stopPropagation();var b=e.target.closest('button');if(!b)return;
+      if(b.dataset.nv){view.setMonth(view.getMonth()+(+b.dataset.nv));draw();return;}
+      if(b.dataset.d){set(inp,b.dataset.d);close();return;}
+      if(b.dataset.x==='tod'){set(inp,iso(new Date()));close();return;}
+      if(b.dataset.x==='clr'){set(inp,'');close();}});
+    var out=function(e){var p=e.composedPath?e.composedPath():[];if(p.indexOf(el)<0&&p.indexOf(inp)<0)close();};
+    setTimeout(function(){document.addEventListener('mousedown',out,true);},0);
+    cur={el:el,out:out,inp:inp};
+  }
+  document.addEventListener('click',function(e){var t=e.target;if(t&&t.tagName==='INPUT'&&t.type==='date'&&!t.hasAttribute('data-nodpk')){e.preventDefault();if(cur&&cur.inp===t){close();return;}open(t);}},true);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();},true);
+  try{var _sp=HTMLInputElement.prototype.showPicker;HTMLInputElement.prototype.showPicker=function(){if(this.type==='date'&&!this.hasAttribute('data-nodpk')){if(cur&&cur.inp===this){close();return;}open(this);return;}if(_sp)return _sp.apply(this,arguments);};}catch(e){}
+})();
 </script>
 </body>
 </html>

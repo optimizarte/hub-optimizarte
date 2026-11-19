@@ -129,6 +129,8 @@ textarea{min-height:92px;resize:vertical;line-height:1.45}
         <div><span class="lbl">Nom del producte (opcional)</span><input type="text" id="cn" placeholder="p. ex. Plenos" maxlength="28"></div>
         <div><span class="lbl">Prima (segons anual/mensual de sota)</span><input type="text" inputmode="decimal" id="cp" placeholder="3200,00"><div class="hint" id="dcp"></div></div>
       </div>
+      <div style="margin-top:12px"><span class="lbl">Modalitat (línia sota el logo, opcional)</span><input type="text" id="cm" placeholder="p. ex. Sense copagament · Amb copagaments" maxlength="24"></div>
+      <div style="margin-top:12px"><span class="lbl">Detall de la competència (text sota el preu, opcional)</span><textarea id="ct" rows="4" maxlength="400" placeholder="Si ho deixes buit, surt el text automàtic segons els copagaments"></textarea></div>
       <div style="margin-top:12px"><span class="lbl">Copagaments del seu producte</span><div class="seg" id="segCR"><button data-v="s" class="on">Sense copagament</button><button data-v="c">Com Copagament 20</button><button data-v="x">Personalitzat</button></div></div>
       <div class="row3" id="cxbox" style="display:none">
         <div><span class="lbl">€ per visita (centre i dia)</span><input type="text" inputmode="decimal" id="cx1" value="20"></div>
@@ -273,7 +275,7 @@ function build(){
    u.searchParams.set('l',S.l);u.searchParams.set('m',S.m);
    u.searchParams.set('p',[0,1,3].map(i=>act[i]?ann[i].toFixed(2):'').join(','));if(act[2])u.searchParams.set('p5',ann[2].toFixed(2));
    const nn=ids.map(r=>$(r[1]).value.trim().replace(/[|,]/g,' ').slice(0,24));if([0,1,3].some(i=>nn[i]))u.searchParams.set('pn',[0,1,3].map(i=>nn[i]).join('|'));if(act[2]&&nn[2])u.searchParams.set('pn5',nn[2]);
-   if(cmp){u.searchParams.set('c','1');u.searchParams.set('ck',ckey);if($('cn').value.trim())u.searchParams.set('cn',$('cn').value.trim().slice(0,28));u.searchParams.set('cp',cpv.toFixed(2));u.searchParams.set('cr',S.cr);
+   if(cmp){u.searchParams.set('c','1');u.searchParams.set('ck',ckey);if($('cn').value.trim())u.searchParams.set('cn',$('cn').value.trim().slice(0,28));if($('cm').value.trim())u.searchParams.set('cm',$('cm').value.trim().slice(0,24));if($('ct').value.trim())u.searchParams.set('ct',$('ct').value.trim().slice(0,400));u.searchParams.set('cp',cpv.toFixed(2));u.searchParams.set('cr',S.cr);
      if(S.cr==='x')u.searchParams.set('cx',['cx1','cx2','cx3'].map(id=>{const v=num($(id).value);return isFinite(v)?v:0;}).join(','));}
    const tv=(s,x)=>s==='auto'?'':s==='x'?x.trim().slice(0,60):s;
    const t1=tv($('t1s').value,$('t1x').value),t2=tv($('t2s').value,$('t2x').value);if(t1)u.searchParams.set('t1',t1);if(t2)u.searchParams.set('t2',t2);
@@ -319,7 +321,7 @@ seg('segCR','cr',()=>{$('cxbox').style.display=S.cr==='x'?'':'none';});
 function lgPrev(){const k=$('ck').value;$('ckbox').style.display=k==='_'?'':'none';$('lgprev').innerHTML=k==='_'?'<span style="font-weight:700;color:var(--t2)">'+($('ckt').value.trim()||'—').replace(/</g,'&lt;')+'</span>':`<i class="lg lg-${k}"></i>`;}
 $('ck').addEventListener('change',()=>{lgPrev();build();});$('ckt').addEventListener('input',()=>{lgPrev();build();});lgPrev();
 ['t1s','t2s'].forEach(id=>$(id).addEventListener('change',()=>{$(id.replace('s','x')).style.display=$(id).value==='x'?'':'none';build();}));
-['e0','eA','e20','n0','nA','n20','cn','cp','cx1','cx2','cx3','t1x','t2x'].forEach(id=>$(id).addEventListener('input',build));
+['e0','eA','e20','n0','nA','n20','cn','cm','ct','cp','cx1','cx2','cx3','t1x','t2x'].forEach(id=>$(id).addEventListener('input',build));
 ['e0','eA','e20'].forEach(id=>$(id).addEventListener('change',build));
 $('people').addEventListener('input',e=>{const r=e.target.closest('.person');if(!r)return;const p=S.people[+r.dataset.i],f=e.target.dataset.f;
   if(f==='age'){p.age=Math.max(0,Math.min(99,parseInt(e.target.value||'0',10)));}else p[f]=e.target.value;

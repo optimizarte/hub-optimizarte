@@ -208,6 +208,7 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
 .plan.comp{border-color:var(--comp)}.plan.comp .tag{border-color:var(--comp);color:var(--comp)}.plan.comp .y{color:var(--t1)}
 .rC .p{background:var(--brand)}.rC .c{background:repeating-linear-gradient(45deg,var(--brand),var(--brand) 4px,rgba(220,0,40,.35) 4px,rgba(220,0,40,.35) 8px)}
 .rK .p{background:var(--comp)}.rK .c{background:repeating-linear-gradient(45deg,var(--comp),var(--comp) 4px,rgba(42,42,49,.35) 4px,rgba(42,42,49,.35) 8px)}
+.pills3.v{flex-direction:column;gap:6px}.pills3.v .pl{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:10px;align-items:center;text-align:left;padding:9px 14px;border-radius:18px}.pills3.v .pl .lgw{grid-column:1;grid-row:1/3;justify-self:start}.pills3.v .pl b{grid-column:2;grid-row:1;text-align:right}.pills3.v .pl>i{grid-column:2;grid-row:2;text-align:right}
 .pills3 .qs{background:var(--t3)}.pills3 .qa{background:var(--ade)}.pills3 .qc{background:var(--brand)}.pills3 .qk{background:var(--comp)}
 .pills3 .qs{background:var(--brand-ink)}.pills3 .lgw{background:#fff;border-radius:999px;padding:3px 10px;display:inline-flex;align-items:center;gap:6px;max-width:100%}.pills3 .lgw .lg{--w:76px;width:calc(var(--w) * (1 - 2 * var(--lx,0)));height:calc(var(--w) / 4);background-size:var(--w) 100%;background-position:calc(var(--lx,0) * -1 * var(--w)) center}.pills3 .lgw small{font-size:10px;color:var(--t2);font-weight:600}.cmphd .cmpn{display:block;font-size:11px;color:var(--t3);font-weight:600;margin-top:2px}/* comparativa: la competencia en gris/negro y TODO Occident en rojo (antes «Sin copago» salía gris) */.app.hc .rS .p,.app.hc .rA .p,.app.hc .rF .p{background:var(--brand)}.app.hc .rS .c,.app.hc .rA .c,.app.hc .rF .c{background:repeating-linear-gradient(45deg,var(--brand),var(--brand) 4px,rgba(220,0,40,.35) 4px,rgba(220,0,40,.35) 8px)}.app.hc .pills3 .qs,.app.hc .pills3 .qa,.app.hc .pills3 .qf{background:var(--brand)}
 .app{--c5:#B26A00}.rF .p{background:var(--c5)}.rF .c{background:repeating-linear-gradient(45deg,var(--c5),var(--c5) 4px,rgba(178,106,0,.35) 4px,rgba(178,106,0,.35) 8px)}.pills3 .qf{background:var(--c5)}.pb.c5x{background:var(--c5)}.pb+.pb{margin-left:-4px}
@@ -346,6 +347,8 @@ input[type=range]::-moz-range-thumb{width:48px;height:48px;border-radius:50%;bor
      cp = prima anual             prima anual de la competencia
      cr = s | c | x               copagos de la competencia: s = sin copago · c = como Copago 20 · x = personalizado
      cx = €visita,€actoGrande,gratis/persona   (solo con cr=x)
+     cm = texto corto             modalidad de la competencia: línea bajo el logo (p. ej. Sin copago · Con copagos)
+     ct = texto libre             detalle de la competencia: sustituye al texto bajo el precio (máx. 400)
      t1 = cmp | cop | opt | none | texto  titular grande (por defecto: cop si hay Copago 5 o 20, si no opt);  t2 = lo mismo para el titular pequeño
      a  = H50,M42,M5,H1           asegurados (sexo H/M + edad)
      n  = nombres (encodeURIComponent, separados por comas, mismo orden que a)
@@ -384,7 +387,7 @@ const PRODS=(function(){
     const ck=(Q.get('ck')||'').trim().slice(0,24), cn=(Q.get('cn')||'').trim().slice(0,28), key=LOGOKEYS.includes(ck.toLowerCase())?ck.toLowerCase():'';
     const cr=Q.get('cr');let rule=RULES.s;if(cr==='c')rule=RULES.c;
     if(cr==='x'){const z=(Q.get('cx')||'').split(',').map(parseFloat);rule={cop:z[0]>=0?z[0]:COPAGO,alto:z[1]>=0?z[1]:ALTO,free:z[2]>=0?z[2]:0};}
-    return [{id:'k',comp:true,key,company:ck,name:cn||ck||(L==='ca'?'La teva assegurança actual':'Tu seguro actual'),annual:cp,rule},...occ.slice(0,3)];
+    return [{id:'k',comp:true,key,company:ck,name:cn||ck||(L==='ca'?'La teva assegurança actual':'Tu seguro actual'),annual:cp,rule,modal:(Q.get('cm')||'').trim().slice(0,24),detail:(Q.get('ct')||'').trim().slice(0,400)},...occ.slice(0,3)];
   }
   return occ;
 })();
@@ -632,7 +635,7 @@ const setP=el=>el.style.setProperty('--p',((el.value-el.min)/(el.max-el.min)*100
 const YR_PER_ICON=2;   // 12 iconos en una sola línea = 24 años
 const STAR=CMPD[0]||PRODS[0];
 const OCC=PRODS.filter(p=>!p.comp);
-const ruleDesc=p=>same(p.rule,RULES.s)?T.dSin:same(p.rule,RULES.a)?T.dAdv(NP):same(p.rule,RULES.c)?T.d20t:same(p.rule,RULES.f)?T.d5t:T.dCust(p.rule);
+const ruleDesc=p=>p.comp&&p.detail?esc(p.detail):same(p.rule,RULES.s)?T.dSin:same(p.rule,RULES.a)?T.dAdv(NP):same(p.rule,RULES.c)?T.d20t:same(p.rule,RULES.f)?T.d5t:T.dCust(p.rule);
 
 /* ---------- colapsables: actos médicos ---------- */
 function actsHTML(){
@@ -654,6 +657,25 @@ function actsHTML(){
 }
 
 /* ---------- pintado estático ---------- */
+/* alturas iguales fila a fila entre las cards (logo, modalidad, titulo, precio, texto, pie) */
+/* «Recuerda los precios»: 2 y 3 precios en fila si caben sin romperse; 4 o más, en vertical */
+function fitPills(){
+  const el=document.getElementById('pills3'); if(!el)return; const n=el.children.length; el.classList.remove('v');
+  if(n>=4){el.classList.add('v');return;}
+  if(n===3){const bad=[...el.children].some(p=>{const g=p.querySelector('.lgw'),sm=g&&g.querySelector('small'),b=p.querySelector('b'),a=p.lastElementChild;
+    return p.scrollWidth>p.clientWidth+1||(g&&g.scrollWidth>g.clientWidth+1)||(sm&&sm.getBoundingClientRect().height>16)||(b&&(b.scrollWidth>b.clientWidth+1||b.getBoundingClientRect().height>26))||(a&&(a.scrollWidth>a.clientWidth+1||a.getBoundingClientRect().height>16));});
+    if(bad)el.classList.add('v');}
+}
+function eqCards(){
+  fitPills();
+  const cs=[...document.querySelectorAll('#swipe .plan')]; if(cs.length<2)return;
+  ['.cmphd','.top','.y','.m',':scope > p','.d'].forEach(s=>{
+    const els=cs.map(c=>c.querySelector(s)).filter(Boolean); els.forEach(e=>e.style.minHeight='');
+    if(els.length<2)return; const mx=Math.max(...els.map(e=>e.offsetHeight)); els.forEach(e=>e.style.minHeight=mx+'px');});
+}
+addEventListener('resize',()=>eqCards());
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>eqCards());
+if(window.__logosReady)window.__logosReady.then(()=>eqCards());
 function renderStatic(){
   document.documentElement.lang=L;
   if(NOVIS){$('secSim').classList.add('novis');$('secSim').querySelector('[data-t=simH]').dataset.t='simHf';$('secSim').querySelector('[data-t=simS]').dataset.t='simSf';}
@@ -686,7 +708,7 @@ function renderStatic(){
     const d=p===BASE?(COMP?T.dNow:T.dRef):(BASE?(BASE.annual>=p.annual?T.menos(eur(BASE.annual-p.annual)):T.mas(eur(p.annual-BASE.annual))):'');
     const cls=p.comp?' comp':p===bestOcc&&PRODS.length>1?' best':p.id==='a'?' mid':'';
     const icon=COMP?'':`<i class="ic i-${ICON[p.id]}"></i>`;
-    return `<div class="plan${cls}" style="${PRODS.length===1?'flex-basis:100%':''}">${COMP?`<div class="cmphd">${logoEl(p)}${!p.comp&&OCCN>1?`<small class="cmpn">${esc(p.name)}</small>`:''}</div>`:''}<div class="top">${icon}<div><h3>${esc(p.name)}</h3>${tag?`<span class="tag">${tag}</span>`:''}</div></div><div class="y">${eur(mes(p),2)}<small>${T.mes}</small></div><div class="m">${eur(p.annual,2)} ${T.alAnio}</div><p>${ruleDesc(p)}</p>${d?`<div class="d${p!==BASE&&BASE&&BASE.annual>=p.annual?' g':''}">${d}</div>`:''}</div>`;}).join('');
+    return `<div class="plan${cls}" style="${PRODS.length===1?'flex-basis:100%':''}">${COMP?`<div class="cmphd">${logoEl(p)}${p.comp?(p.modal?`<small class="cmpn">${esc(p.modal)}</small>`:''):OCCN>1?`<small class="cmpn">${esc(p.name)}</small>`:''}</div>`:''}<div class="top">${icon}<div><h3>${esc(p.name)}</h3>${tag?`<span class="tag">${tag}</span>`:''}</div></div><div class="y">${eur(mes(p),2)}<small>${T.mes}</small></div><div class="m">${eur(p.annual,2)} ${T.alAnio}</div><p>${ruleDesc(p)}</p>${d?`<div class="d${p!==BASE&&BASE&&BASE.annual>=p.annual?' g':''}">${d}</div>`:''}</div>`;}).join('');
   $('dots').innerHTML=PRODS.map((_,i)=>`<i${i?'':' class="on"'}></i>`).join('');$('dots').style.display=PRODS.length>1?'':'none';
   $('planCap').textContent=(MODE==='c'?T.capC:T.capE)(NP);
   /* barras del simulador */
@@ -716,6 +738,7 @@ function renderStatic(){
     {n:27+NP,h:2,ic:'fractura',t:T.pFrac,s:T.pFracS(27+NP)}];
   $('presets').innerHTML=pr.map(p=>`<button class="pre" data-n="${p.n}" data-h="${p.h}"><i class="ic i-${p.ic}"></i><span>${p.t}<small>${p.s}</small></span></button>`).join('');
   $('sN').max=Math.max(40,20*NP);$('sN').value=st.N;
+  eqCards();
 }
 
 /* ---------- pintado dinámico ---------- */

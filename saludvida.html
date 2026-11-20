@@ -758,7 +758,7 @@ function persona(p,i){
   return {ic,lb:(names[i]&&names[i].trim())||lb,age:a};
 }
 
-const st={N:15+NP,H:0,Y:10};
+const st={N:HAS20?Math.round(1.5*NP):15+NP,H:0,Y:10};   // con Advance o Copago 20, el uso por defecto es «Año tranquilo»
 const setP=el=>el.style.setProperty('--p',((el.value-el.min)/(el.max-el.min)*100)+'%');
 const YR_PER_ICON=2;   // 12 iconos en una sola línea = 24 años
 const STAR=CMPD[0]||PRODS[0];

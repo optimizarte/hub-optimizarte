@@ -234,6 +234,62 @@ textarea{min-height:92px;resize:vertical;line-height:1.45}
 <div class="toast" id="toast"></div>
 
 <script>
+/* SHZ · enllaç curt comú dels simuladors (#z=…). Paràmetres → JSON → deflate (Huffman fix) → base64url. Síncron i sense dependències.
+   El valor va al fragment (#z=1.…): no viatja al servidor ni als logs. Llegeix també els enllaços antics (?l=…&a=…) i ?z=… */
+const SHZ=(()=>{
+  const LB=[3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258],
+        LE=[0,0,0,0,0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,0],
+        DB=[1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577],
+        DE=[0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13];
+  const b64=by=>{let s='';for(let i=0;i<by.length;i++)s+=String.fromCharCode(by[i]);return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');};
+  const unb64=s=>{const b=atob(s.replace(/-/g,'+').replace(/_/g,'/'));const a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a;};
+  function deflate(d){
+    const o=[];let acc=0,n=0;
+    const bits=(v,k)=>{acc|=v<<n;n+=k;while(n>=8){o.push(acc&255);acc>>>=8;n-=8;}};
+    const rev=(v,k)=>{let r=0;for(let i=0;i<k;i++){r=(r<<1)|(v&1);v>>=1;}return r;};
+    const lit=v=>{if(v<144)bits(rev(0x30+v,8),8);else if(v<256)bits(rev(0x190+v-144,9),9);else if(v<280)bits(rev(v-256,7),7);else bits(rev(0xC0+v-280,8),8);};
+    bits(1,1);bits(1,2);
+    const h=new Map(),L=d.length,key=i=>(d[i]<<16)|(d[i+1]<<8)|d[i+2];
+    for(let i=0;i<L;){
+      let bl=0,bd=0;
+      if(i+2<L){const j=h.get(key(i));if(j!==undefined&&i-j<=32768){let l=0;while(l<258&&i+l<L&&d[j+l]===d[i+l])l++;if(l>=3){bl=l;bd=i-j;}}}
+      const step=bl>=3?bl:1;
+      if(bl>=3){let c=28;while(LB[c]>bl)c--;lit(257+c);bits(bl-LB[c],LE[c]);let e=29;while(DB[e]>bd)e--;bits(rev(e,5),5);bits(bd-DB[e],DE[e]);}
+      else lit(d[i]);
+      for(let t=0;t<step;t++)if(i+t+2<L)h.set(key(i+t),i+t);
+      i+=step;
+    }
+    lit(256);if(n>0)o.push(acc&255);return new Uint8Array(o);
+  }
+  function inflate(b){
+    let p=0,acc=0,n=0;
+    const get=k=>{while(n<k){acc|=(b[p++]||0)<<n;n+=8;}const v=acc&((1<<k)-1);acc>>>=k;n-=k;return v;};
+    if(get(1)!==1||get(2)!==1)throw new Error('z');
+    const readLit=()=>{let c=0;for(let k=1;k<=9;k++){c=(c<<1)|get(1);
+      if(k===7&&c<=23)return 256+c;
+      if(k===8){if(c>=48&&c<=191)return c-48;if(c>=192&&c<=199)return 280+c-192;}
+      if(k===9&&c>=400&&c<=511)return 144+c-400;}
+      throw new Error('z');};
+    const out=[];
+    for(;;){
+      const v=readLit();
+      if(v<256)out.push(v);
+      else if(v===256)break;
+      else{const c=v-257;if(c>28)throw new Error('z');const l=LB[c]+get(LE[c]);let e=0;for(let k=0;k<5;k++)e=(e<<1)|get(1);if(e>29)throw new Error('z');const dd=DB[e]+get(DE[e]);if(dd>out.length)throw new Error('z');for(let t=0;t<l;t++)out.push(out[out.length-dd]);}
+      if(out.length>200000)throw new Error('z');
+    }
+    return new Uint8Array(out);
+  }
+  /* URLSearchParams → «1.xxxx» (deflate) o «0.xxxx» (sense comprimir si no guanya) */
+  function pack(q){const o={};q.forEach((v,k)=>{o[k]=v;});const raw=new TextEncoder().encode(JSON.stringify(o));const z=deflate(raw);return z.length<raw.length?'1.'+b64(z):'0.'+b64(raw);}
+  function unpack(s){const by=unb64(s.slice(2));const raw=s.charAt(0)==='1'?inflate(by):by;const o=JSON.parse(new TextDecoder().decode(raw));const q=new URLSearchParams();for(const k in o)if(typeof o[k]==='string')q.set(k,o[k]);return q;}
+  /* paràmetres de la pàgina: #z=… (nou), ?z=… o ?l=…&a=… (antic) */
+  function params(){const m=/^#z=([01]\.[A-Za-z0-9_-]*)$/.exec(location.hash)||/[?&]z=([01]\.[A-Za-z0-9_-]*)/.exec(location.search);if(m){try{return unpack(m[1]);}catch(e){}}return new URLSearchParams(location.search);}
+  /* enllaç curt a partir d'una URL base i uns paràmetres (sense paràmetres, la base sola) */
+  function link(base,q){q=new URLSearchParams(q);q.delete('v');return q.toString()?base.split(/[?#]/)[0]+'#z='+pack(q):base.split(/[?#]/)[0];}
+  const live=()=>addEventListener('hashchange',()=>location.reload());
+  return {pack,unpack,params,link,live};
+})();
 const $=id=>document.getElementById(id);
 const S={l:'es',m:'e',t:'a',c:'0',cr:'s',lm:null,people:[{sex:'H',age:50,name:'Papá'},{sex:'M',age:42,name:'Mamá'},{sex:'M',age:5,name:'Niña'},{sex:'H',age:1,name:'Bebé'}]};
 const num=s=>{s=String(s).replace(/[\s€]/g,'');if(s.includes(','))s=s.replace(/\./g,'').replace(',','.');const v=parseFloat(s);return isFinite(v)?v:NaN;};
@@ -283,8 +339,8 @@ function build(){
    if(S.people.some(p=>(p.name||'').trim()))u.searchParams.set('n',S.people.map(p=>encodeURIComponent((p.name||'').trim().slice(0,18))).join(','));
    const r=parseFloat($('rent').value);if(isFinite(r)&&r!==3)u.searchParams.set('r',r);
   }
-  const uv=new URL('copago-video.html',location.href);u.searchParams.forEach((val,k)=>uv.searchParams.set(k,val));const urlvid=uv.toString();
-  u.searchParams.delete('v');const url=u.toString();
+  const urlvid=w.length?'':SHZ.link(new URL('copago-video.html',location.href).href,u.searchParams);
+  const url=w.length?u.href.split(/[?#]/)[0]:SHZ.link(u.href,u.searchParams);
   $('url').value=w.length?'':url;$('open').href=w.length?'#':url;
   $('urlvid').value=w.length?'':urlvid;$('openvid').href=w.length?'#':urlvid;
   if($('pv').dataset.u!==url&&!w.length){$('pv').dataset.u=url;$('pv').src=url;}
